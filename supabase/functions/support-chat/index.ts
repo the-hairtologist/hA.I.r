@@ -1,12 +1,13 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
 };
 
-serve(async (req) => {
+serve(async req => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -20,17 +21,20 @@ serve(async (req) => {
     if (!LOVABLE_API_KEY) {
       throw new Error('LOVABLE_API_KEY not configured');
     }
-    
+
     const supabase = createClient(supabaseUrl, supabaseKey, {
       global: { headers: { Authorization: authHeader } },
-      auth: { persistSession: false }
+      auth: { persistSession: false },
     });
 
     const { message } = await req.json();
-    
+
     // Get user info
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
-    
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
     if (userError || !user) {
       throw new Error('Authentication required');
     }
@@ -55,22 +59,25 @@ serve(async (req) => {
     const messages = [
       { role: 'system', content: systemPrompt },
       ...previousMessages,
-      { role: 'user', content: message }
+      { role: 'user', content: message },
     ];
 
-    const aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
-        messages,
-        temperature: 0.7,
-        max_tokens: 500,
-      }),
-    });
+    const aiResponse = await fetch(
+      'https://ai.gateway.lovable.dev/v1/chat/completions',
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${LOVABLE_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'google/gemini-2.5-flash',
+          messages,
+          temperature: 0.7,
+          max_tokens: 500,
+        }),
+      }
+    );
 
     if (!aiResponse.ok) {
       const errorText = await aiResponse.text();
@@ -79,13 +86,19 @@ serve(async (req) => {
     }
 
     const aiData = await aiResponse.json();
-    const response = aiData.choices[0]?.message?.content || 'I apologize, but I need more information to help you.';
+    const response =
+      aiData.choices[0]?.message?.content ||
+      'I apologize, but I need more information to help you.';
 
     // Save conversation to database
     const updatedMessages = [
       ...previousMessages,
       { role: 'user', content: message, timestamp: new Date().toISOString() },
-      { role: 'assistant', content: response, timestamp: new Date().toISOString() }
+      {
+        role: 'assistant',
+        content: response,
+        timestamp: new Date().toISOString(),
+      },
     ];
 
     // Keep only last 20 messages to avoid token limits
@@ -94,45 +107,40 @@ serve(async (req) => {
     if (conversation) {
       await supabase
         .from('ai_conversations')
-        .update({ 
+        .update({
           messages: trimmedMessages,
           context: context,
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
         .eq('id', conversation.id);
     } else {
-      await supabase
-        .from('ai_conversations')
-        .insert({
-          user_id: user.id,
-          messages: trimmedMessages,
-          context: context
-        });
+      await supabase.from('ai_conversations').insert({
+        user_id: user.id,
+        messages: trimmedMessages,
+        context: context,
+      });
     }
 
-    return new Response(
-      JSON.stringify({ response }),
-      { 
-        headers: { 
-          ...corsHeaders, 
-          'Content-Type': 'application/json' 
-        } 
-      }
-    );
-
+    return new Response(JSON.stringify({ response }), {
+      headers: {
+        ...corsHeaders,
+        'Content-Type': 'application/json',
+      },
+    });
   } catch (error) {
     console.error('Support chat error:', error);
     return new Response(
-      JSON.stringify({ 
+      JSON.stringify({
         error: error instanceof Error ? error.message : 'Unknown error',
-        response: "I'm having trouble processing your request right now. Please try again or contact support directly."
+        response:
+          "I'm having trouble processing your request right now. Please try again or contact support directly.",
       }),
-      { 
-        status: 500, 
-        headers: { 
-          ...corsHeaders, 
-          'Content-Type': 'application/json' 
-        } 
+      {
+        status: 500,
+        headers: {
+          ...corsHeaders,
+          'Content-Type': 'application/json',
+        },
       }
     );
   }
@@ -160,12 +168,13 @@ async function fetchUserContext(supabase: any, userId: string) {
     // Build OR condition safely by fetching separately and merging
     if (clientIds.length > 0 || stylistIds.length > 0) {
       const promises = [];
-      
+
       if (clientIds.length > 0) {
         promises.push(
           supabase
             .from('appointments')
-            .select(`
+            .select(
+              `
               id,
               appointment_date,
               status,
@@ -174,19 +183,21 @@ async function fetchUserContext(supabase: any, userId: string) {
               stylist_profiles (
                 business_name
               )
-            `)
+            `
+            )
             .in('client_id', clientIds)
             .gte('appointment_date', new Date().toISOString())
             .order('appointment_date', { ascending: true })
             .limit(5)
         );
       }
-      
+
       if (stylistIds.length > 0) {
         promises.push(
           supabase
             .from('appointments')
-            .select(`
+            .select(
+              `
               id,
               appointment_date,
               status,
@@ -195,7 +206,8 @@ async function fetchUserContext(supabase: any, userId: string) {
               stylist_profiles (
                 business_name
               )
-            `)
+            `
+            )
             .in('stylist_id', stylistIds)
             .gte('appointment_date', new Date().toISOString())
             .order('appointment_date', { ascending: true })
@@ -206,8 +218,10 @@ async function fetchUserContext(supabase: any, userId: string) {
       const results = await Promise.all(promises);
       const allAppointments = results
         .flatMap(result => result.data || [])
-        .sort((a: any, b: any) => 
-          new Date(a.appointment_date).getTime() - new Date(b.appointment_date).getTime()
+        .sort(
+          (a: any, b: any) =>
+            new Date(a.appointment_date).getTime() -
+            new Date(b.appointment_date).getTime()
         )
         .slice(0, 5);
 
@@ -240,7 +254,11 @@ async function fetchUserContext(supabase: any, userId: string) {
       services: services || [],
       stylistProfile,
       clientProfile,
-      userRole: stylistProfile ? 'stylist' : clientProfile ? 'client' : 'unknown'
+      userRole: stylistProfile
+        ? 'stylist'
+        : clientProfile
+          ? 'client'
+          : 'unknown',
     };
   } catch (error) {
     console.error('Error fetching context:', error);
@@ -249,13 +267,14 @@ async function fetchUserContext(supabase: any, userId: string) {
       services: [],
       stylistProfile: null,
       clientProfile: null,
-      userRole: 'unknown'
+      userRole: 'unknown',
     };
   }
 }
 
 function buildSystemPrompt(context: any): string {
-  const { appointments, services, stylistProfile, clientProfile, userRole } = context;
+  const { appointments, services, stylistProfile, clientProfile, userRole } =
+    context;
 
   let prompt = `You are a helpful AI support assistant for hA.I.r, a salon management platform. Be friendly, professional, and concise.
 
@@ -295,9 +314,12 @@ IMPORTANT RULES:
 
   if (stylistProfile) {
     prompt += `\n\nBusiness Info:`;
-    if (stylistProfile.location) prompt += `\nLocation: ${stylistProfile.location}`;
-    if (stylistProfile.business_phone) prompt += `\nPhone: ${stylistProfile.business_phone}`;
-    if (stylistProfile.business_email) prompt += `\nEmail: ${stylistProfile.business_email}`;
+    if (stylistProfile.location)
+      prompt += `\nLocation: ${stylistProfile.location}`;
+    if (stylistProfile.business_phone)
+      prompt += `\nPhone: ${stylistProfile.business_phone}`;
+    if (stylistProfile.business_email)
+      prompt += `\nEmail: ${stylistProfile.business_email}`;
   }
 
   return prompt;

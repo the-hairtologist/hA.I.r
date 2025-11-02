@@ -1,22 +1,22 @@
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Layout, Sparkles, Copy } from "lucide-react";
-import { useAuth } from "@/hooks/useAuth";
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Layout, Sparkles, Copy } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
 
 export const EmailTemplates = () => {
   const { user } = useAuth();
 
   const { data: templates, isLoading } = useQuery({
-    queryKey: ["email_templates"],
+    queryKey: ['email_templates'],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("email_templates")
-        .select("*")
-        .eq("is_global", true)
-        .order("created_at", { ascending: false });
+        .from('email_templates')
+        .select('*')
+        .eq('is_global', true)
+        .order('created_at', { ascending: false });
 
       if (error) throw error;
       return data;
@@ -51,19 +51,25 @@ export const EmailTemplates = () => {
       ) : (
         <div className="grid gap-6 md:grid-cols-2">
           {templates?.map((template: any) => (
-            <Card key={template.id} className="p-6 border-2 hover:shadow-lg transition-all">
+            <Card
+              key={template.id}
+              className="p-6 border-2 hover:shadow-lg transition-all"
+            >
               <div className="space-y-4">
                 <div className="flex items-start justify-between">
                   <div>
                     <div className="flex items-center gap-2 mb-1">
                       <h3 className="font-bold text-lg">{template.name}</h3>
-                      <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
+                      <Badge
+                        variant="outline"
+                        className="bg-primary/10 text-primary border-primary/20"
+                      >
                         <Sparkles className="h-3 w-3 mr-1" />
                         Global
                       </Badge>
                     </div>
                     <p className="text-sm text-muted-foreground">
-                      {template.description || "No description"}
+                      {template.description || 'No description'}
                     </p>
                   </div>
                 </div>
@@ -80,7 +86,9 @@ export const EmailTemplates = () => {
                 </div>
 
                 <div className="pt-2 border-t">
-                  <p className="text-xs font-semibold text-muted-foreground mb-1">SUBJECT:</p>
+                  <p className="text-xs font-semibold text-muted-foreground mb-1">
+                    SUBJECT:
+                  </p>
                   <p className="text-sm">{template.subject_template}</p>
                 </div>
 

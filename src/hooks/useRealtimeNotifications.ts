@@ -22,14 +22,18 @@ export const useRealtimeNotifications = (userId: string | undefined) => {
           schema: 'public',
           table: 'appointments',
         },
-        (payload) => {
-          logger.debug('Appointment change detected', 'realtimeNotifications', payload);
-          
+        payload => {
+          logger.debug(
+            'Appointment change detected',
+            'realtimeNotifications',
+            payload
+          );
+
           toast({
-            title: "Appointment Updated",
-            description: "An appointment has been updated",
+            title: 'Appointment Updated',
+            description: 'An appointment has been updated',
           });
-          
+
           queryClient.invalidateQueries({ queryKey: ['appointments'] });
         }
       )
@@ -46,16 +50,20 @@ export const useRealtimeNotifications = (userId: string | undefined) => {
           table: 'messages',
           filter: `recipient_id=eq.${userId}`,
         },
-        (payload) => {
-          logger.debug('New message received', 'realtimeNotifications', payload);
-          
-          setUnreadCount((prev) => prev + 1);
-          
+        payload => {
+          logger.debug(
+            'New message received',
+            'realtimeNotifications',
+            payload
+          );
+
+          setUnreadCount(prev => prev + 1);
+
           toast({
-            title: "New Message",
-            description: "You have received a new message",
+            title: 'New Message',
+            description: 'You have received a new message',
           });
-          
+
           // Invalidate messages query to refresh data
           queryClient.invalidateQueries({ queryKey: ['messages'] });
         }
@@ -69,7 +77,7 @@ export const useRealtimeNotifications = (userId: string | undefined) => {
         .select('*', { count: 'exact', head: true })
         .eq('recipient_id', userId)
         .eq('is_read', false);
-      
+
       if (count !== null) {
         setUnreadCount(count);
       }

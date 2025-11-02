@@ -1,34 +1,45 @@
-import { Scissors, Instagram, Facebook, Twitter, Youtube, Mail, Smartphone } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useState } from "react";
-import { useToast } from "@/hooks/use-toast";
+import {
+  Scissors,
+  Instagram,
+  Facebook,
+  Twitter,
+  Youtube,
+  Mail,
+  Smartphone,
+} from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
 
 export const EnhancedFooter = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
 
   const handleNewsletterSignup = (e: React.FormEvent) => {
     e.preventDefault();
     if (email) {
       toast({
-        title: "SUBSCRIBED!",
+        title: 'SUBSCRIBED!',
         description: "We'll keep you updated!",
       });
-      setEmail("");
+      setEmail('');
     }
   };
 
   return (
-    <footer className="border-t-4 border-secondary bg-foreground" style={{
-      backgroundImage: `
+    <footer
+      className="border-t-4 border-secondary bg-foreground"
+      style={{
+        backgroundImage: `
         linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
         linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
       `,
-      backgroundSize: '8px 8px'
-    }}>
+        backgroundSize: '8px 8px',
+      }}
+    >
       <div className="container mx-auto px-4 sm:px-6 md:px-8 py-6 sm:py-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-6 sm:mb-8">
           {/* Brand Column */}
@@ -37,7 +48,9 @@ export const EnhancedFooter = () => {
               <div className="w-11 h-11 brutal-border bg-secondary flex items-center justify-center brutal-shadow-sm">
                 <Scissors className="h-5 w-5 text-secondary-foreground" />
               </div>
-              <span className="font-pixel text-xl text-background uppercase">hA.I.r</span>
+              <span className="font-pixel text-xl text-background uppercase">
+                hA.I.r
+              </span>
             </div>
             <p className="text-sm font-sans text-background/80 leading-relaxed">
               Your hair, smarter. Your salon, effortless.
@@ -80,37 +93,52 @@ export const EnhancedFooter = () => {
                 <Youtube className="h-4 w-4 sm:h-5 sm:w-5 text-secondary-foreground" />
               </a>
             </div>
-            
+
             {/* App Badges */}
             <div className="flex flex-wrap gap-2 pt-3">
               <div className="w-11 h-11 sm:w-12 sm:h-12 brutal-border bg-accent flex items-center justify-center brutal-shadow-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer">
                 <Smartphone className="h-4 w-4 sm:h-5 sm:w-5 text-accent-foreground" />
               </div>
               <div className="px-3 sm:px-4 h-11 sm:h-12 brutal-border bg-secondary flex items-center justify-center brutal-shadow-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer">
-                <span className="font-pixel text-xs sm:text-sm text-secondary-foreground">iOS</span>
+                <span className="font-pixel text-xs sm:text-sm text-secondary-foreground">
+                  iOS
+                </span>
               </div>
               <div className="px-3 sm:px-4 h-11 sm:h-12 brutal-border bg-accent flex items-center justify-center brutal-shadow-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer">
-                <span className="font-pixel text-xs sm:text-sm text-accent-foreground">ANDROID</span>
+                <span className="font-pixel text-xs sm:text-sm text-accent-foreground">
+                  ANDROID
+                </span>
               </div>
             </div>
           </div>
 
           {/* Product Column */}
           <div>
-            <h3 className="font-pixel text-sm uppercase mb-4 text-background">PRODUCT</h3>
+            <h3 className="font-pixel text-sm uppercase mb-4 text-background">
+              PRODUCT
+            </h3>
             <ul className="space-y-2.5">
               <li>
-                <button onClick={() => navigate("/auth")} className="font-sans text-sm text-background/90 hover:text-background hover:translate-x-1 transition-all inline-block">
+                <button
+                  onClick={() => navigate('/auth')}
+                  className="font-sans text-sm text-background/90 hover:text-background hover:translate-x-1 transition-all inline-block"
+                >
                   Features
                 </button>
               </li>
               <li>
-                <button onClick={() => navigate("/auth")} className="font-sans text-sm text-background/90 hover:text-background hover:translate-x-1 transition-all inline-block">
+                <button
+                  onClick={() => navigate('/auth')}
+                  className="font-sans text-sm text-background/90 hover:text-background hover:translate-x-1 transition-all inline-block"
+                >
                   Demo
                 </button>
               </li>
               <li>
-                <button onClick={() => navigate("/auth")} className="font-sans text-sm text-background/90 hover:text-background hover:translate-x-1 transition-all inline-block">
+                <button
+                  onClick={() => navigate('/auth')}
+                  className="font-sans text-sm text-background/90 hover:text-background hover:translate-x-1 transition-all inline-block"
+                >
                   Integrations
                 </button>
               </li>
@@ -119,20 +147,31 @@ export const EnhancedFooter = () => {
 
           {/* Company Column */}
           <div>
-            <h3 className="font-pixel text-sm uppercase mb-4 text-background">COMPANY</h3>
+            <h3 className="font-pixel text-sm uppercase mb-4 text-background">
+              COMPANY
+            </h3>
             <ul className="space-y-2.5">
               <li>
-                <button onClick={() => navigate("/auth")} className="font-sans text-sm text-background/90 hover:text-background hover:translate-x-1 transition-all inline-block">
+                <button
+                  onClick={() => navigate('/auth')}
+                  className="font-sans text-sm text-background/90 hover:text-background hover:translate-x-1 transition-all inline-block"
+                >
                   About
                 </button>
               </li>
               <li>
-                <a href="mailto:support@hair-ai.com" className="font-sans text-sm text-background/90 hover:text-background hover:translate-x-1 transition-all inline-block">
+                <a
+                  href="mailto:support@hair-ai.com"
+                  className="font-sans text-sm text-background/90 hover:text-background hover:translate-x-1 transition-all inline-block"
+                >
                   Contact
                 </a>
               </li>
               <li>
-                <button onClick={() => navigate("/terms")} className="font-sans text-sm text-background/90 hover:text-background hover:translate-x-1 transition-all inline-block">
+                <button
+                  onClick={() => navigate('/terms')}
+                  className="font-sans text-sm text-background/90 hover:text-background hover:translate-x-1 transition-all inline-block"
+                >
                   Terms
                 </button>
               </li>
@@ -141,7 +180,9 @@ export const EnhancedFooter = () => {
 
           {/* Newsletter Column */}
           <div>
-            <h3 className="font-pixel text-sm uppercase mb-4 text-background">UPDATES</h3>
+            <h3 className="font-pixel text-sm uppercase mb-4 text-background">
+              UPDATES
+            </h3>
             <p className="text-sm font-sans text-background/80 mb-3 leading-relaxed">
               Get tips and exclusive offers.
             </p>
@@ -150,12 +191,12 @@ export const EnhancedFooter = () => {
                 type="email"
                 placeholder="your@email.com"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={e => setEmail(e.target.value)}
                 className="brutal-border rounded-none brutal-shadow-sm h-11 sm:h-12 bg-background text-foreground"
                 required
               />
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 className="w-full font-pixel text-xs uppercase bg-secondary text-secondary-foreground hover:bg-secondary/90 brutal-border brutal-shadow-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all rounded-none h-11 sm:h-12"
               >
                 <Mail className="h-4 w-4 mr-2" />
@@ -168,26 +209,41 @@ export const EnhancedFooter = () => {
         <div className="border-t-4 border-secondary pt-4 sm:pt-6 mt-2">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-6 mb-4 sm:mb-6">
             {/* Copyright */}
-            <p className="font-pixel text-sm text-background/80">© 2025 hA.I.r</p>
+            <p className="font-pixel text-sm text-background/80">
+              © 2025 hA.I.r
+            </p>
 
             {/* Footer Links */}
             <div className="flex flex-wrap justify-center gap-4 sm:gap-6 text-sm font-sans">
-              <button onClick={() => navigate("/dmca")} className="text-background/80 hover:text-background transition-colors">
+              <button
+                onClick={() => navigate('/dmca')}
+                className="text-background/80 hover:text-background transition-colors"
+              >
                 DMCA
               </button>
-              <button onClick={() => navigate("/help")} className="text-background/80 hover:text-background transition-colors">
+              <button
+                onClick={() => navigate('/help')}
+                className="text-background/80 hover:text-background transition-colors"
+              >
                 Help
               </button>
-              <button onClick={() => navigate("/terms")} className="text-background/80 hover:text-background transition-colors">
+              <button
+                onClick={() => navigate('/terms')}
+                className="text-background/80 hover:text-background transition-colors"
+              >
                 Terms
               </button>
             </div>
           </div>
-          
+
           {/* Legal Disclaimer */}
           <div className="border-t-2 border-secondary/20 pt-4 mt-4">
             <p className="text-xs font-sans text-background/70 leading-relaxed text-center max-w-4xl mx-auto">
-              <span>Disclaimer:</span> Individual results may vary. AI recommendations are assistive tools only and not professional advice. Stylists are independent contractors responsible for maintaining their own professional liability insurance and state licenses.
+              <span>Disclaimer:</span> Individual results may vary. AI
+              recommendations are assistive tools only and not professional
+              advice. Stylists are independent contractors responsible for
+              maintaining their own professional liability insurance and state
+              licenses.
             </p>
           </div>
         </div>

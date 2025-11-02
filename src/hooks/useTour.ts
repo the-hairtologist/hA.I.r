@@ -36,14 +36,20 @@ export function useTour() {
   const markTourCompleted = useCallback((tourId: string) => {
     const completed = getCompletedTours();
     if (!completed.includes(tourId)) {
-      localStorage.setItem(TOUR_STORAGE_KEY, JSON.stringify([...completed, tourId]));
+      localStorage.setItem(
+        TOUR_STORAGE_KEY,
+        JSON.stringify([...completed, tourId])
+      );
     }
   }, []);
 
   const markTourDismissed = useCallback((tourId: string) => {
     const dismissed = getDismissedTours();
     if (!dismissed.includes(tourId)) {
-      localStorage.setItem(TOUR_DISMISSED_KEY, JSON.stringify([...dismissed, tourId]));
+      localStorage.setItem(
+        TOUR_DISMISSED_KEY,
+        JSON.stringify([...dismissed, tourId])
+      );
     }
   }, []);
 
@@ -55,17 +61,23 @@ export function useTour() {
     return getDismissedTours().includes(tourId);
   }, []);
 
-  const shouldShowTour = useCallback((tourId: string): boolean => {
-    return !isTourCompleted(tourId) && !isTourDismissed(tourId);
-  }, [isTourCompleted, isTourDismissed]);
+  const shouldShowTour = useCallback(
+    (tourId: string): boolean => {
+      return !isTourCompleted(tourId) && !isTourDismissed(tourId);
+    },
+    [isTourCompleted, isTourDismissed]
+  );
 
-  const startTour = useCallback((tourId?: string) => {
-    const tour = tourId ? { id: tourId } : getTourByPath(location.pathname);
-    if (tour) {
-      setCurrentTour(tour.id);
-      setIsRunning(true);
-    }
-  }, [location.pathname]);
+  const startTour = useCallback(
+    (tourId?: string) => {
+      const tour = tourId ? { id: tourId } : getTourByPath(location.pathname);
+      if (tour) {
+        setCurrentTour(tour.id);
+        setIsRunning(true);
+      }
+    },
+    [location.pathname]
+  );
 
   const endTour = useCallback(() => {
     if (currentTour) {

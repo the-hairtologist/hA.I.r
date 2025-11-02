@@ -44,17 +44,17 @@ export const useRealtimeMessages = (userId?: string) => {
         );
 
         if (result.error) throw result.error;
-        
+
         setMessages(result.data || []);
-        
+
         // Count unread messages
         const unread = (result.data || []).filter(
-          (msg) => msg.recipient_id === userId && !msg.is_read
+          msg => msg.recipient_id === userId && !msg.is_read
         ).length;
         setUnreadCount(unread);
       } catch (error) {
-        logger.error('Error fetching messages', error, { 
-          component: 'useRealtimeMessages' 
+        logger.error('Error fetching messages', error, {
+          component: 'useRealtimeMessages',
         });
       } finally {
         setIsLoading(false);
@@ -74,33 +74,33 @@ export const useRealtimeMessages = (userId?: string) => {
           table: 'messages',
           filter: `recipient_id=eq.${userId}`,
         },
-        (payload) => {
-          logger.debug('Message change received', { 
+        payload => {
+          logger.debug('Message change received', {
             component: 'useRealtimeMessages',
             eventType: payload.eventType,
-            id: (payload.new as any)?.id || (payload.old as any)?.id
+            id: (payload.new as any)?.id || (payload.old as any)?.id,
           });
 
           if (payload.eventType === 'INSERT') {
-            setMessages((prev) => [payload.new as Message, ...prev]);
-            
+            setMessages(prev => [payload.new as Message, ...prev]);
+
             // Increment unread count if message is for current user and unread
             if (payload.new.recipient_id === userId && !payload.new.is_read) {
-              setUnreadCount((prev) => prev + 1);
+              setUnreadCount(prev => prev + 1);
             }
           } else if (payload.eventType === 'UPDATE') {
-            setMessages((prev) =>
-              prev.map((msg) =>
+            setMessages(prev =>
+              prev.map(msg =>
                 msg.id === payload.new.id ? (payload.new as Message) : msg
               )
             );
-            
+
             // Update unread count if message was marked as read
             if (payload.new.recipient_id === userId && payload.new.is_read) {
-              setUnreadCount((prev) => Math.max(0, prev - 1));
+              setUnreadCount(prev => Math.max(0, prev - 1));
             }
           } else if (payload.eventType === 'DELETE') {
-            setMessages((prev) => prev.filter((msg) => msg.id !== payload.old.id));
+            setMessages(prev => prev.filter(msg => msg.id !== payload.old.id));
           }
         }
       )
@@ -130,9 +130,9 @@ export const useRealtimeMessages = (userId?: string) => {
         { messageId }
       );
     } catch (error) {
-      logger.error('Error marking message as read', error, { 
+      logger.error('Error marking message as read', error, {
         component: 'useRealtimeMessages',
-        messageId 
+        messageId,
       });
     }
   };

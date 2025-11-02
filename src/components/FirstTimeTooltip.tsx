@@ -4,22 +4,22 @@
  * Uses localStorage to track which tooltips have been seen
  */
 
-import { useState, useEffect, ReactNode } from "react";
+import { useState, useEffect, ReactNode } from 'react';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { X, Lightbulb } from "lucide-react";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/tooltip';
+import { X, Lightbulb } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface FirstTimeTooltipProps {
   id: string; // Unique identifier for this tooltip
   children: ReactNode; // Element to attach tooltip to
   content: string; // Tooltip message
-  side?: "top" | "right" | "bottom" | "left";
-  align?: "start" | "center" | "end";
+  side?: 'top' | 'right' | 'bottom' | 'left';
+  align?: 'start' | 'center' | 'end';
   delayMs?: number; // Delay before showing tooltip
 }
 
@@ -27,8 +27,8 @@ export const FirstTimeTooltip = ({
   id,
   children,
   content,
-  side = "right",
-  align = "center",
+  side = 'right',
+  align = 'center',
   delayMs = 500,
 }: FirstTimeTooltipProps) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -37,8 +37,10 @@ export const FirstTimeTooltip = ({
   useEffect(() => {
     // Check if user has seen this tooltip before
     try {
-      const seenTooltips = JSON.parse(localStorage.getItem("seenTooltips") || "{}");
-      
+      const seenTooltips = JSON.parse(
+        localStorage.getItem('seenTooltips') || '{}'
+      );
+
       if (!seenTooltips[id]) {
         // Show tooltip after delay
         const timer = setTimeout(() => {
@@ -56,12 +58,14 @@ export const FirstTimeTooltip = ({
   const handleDismiss = () => {
     setIsOpen(false);
     setIsVisible(false);
-    
+
     // Mark tooltip as seen
     try {
-      const seenTooltips = JSON.parse(localStorage.getItem("seenTooltips") || "{}");
+      const seenTooltips = JSON.parse(
+        localStorage.getItem('seenTooltips') || '{}'
+      );
       seenTooltips[id] = true;
-      localStorage.setItem("seenTooltips", JSON.stringify(seenTooltips));
+      localStorage.setItem('seenTooltips', JSON.stringify(seenTooltips));
     } catch {
       // If localStorage write fails (quota exceeded, etc.), gracefully fail
     }
@@ -74,11 +78,9 @@ export const FirstTimeTooltip = ({
   return (
     <TooltipProvider>
       <Tooltip open={isOpen} onOpenChange={setIsOpen}>
-        <TooltipTrigger asChild>
-          {children}
-        </TooltipTrigger>
-        <TooltipContent 
-          side={side} 
+        <TooltipTrigger asChild>{children}</TooltipTrigger>
+        <TooltipContent
+          side={side}
           align={align}
           className="max-w-xs p-4 border-2 border-foreground shadow-brutal bg-warning/20 dark:bg-warning/30 text-foreground animate-fade-in"
           sideOffset={8}
@@ -109,7 +111,7 @@ export const FirstTimeTooltip = ({
  */
 export const resetAllTooltips = () => {
   try {
-    localStorage.removeItem("seenTooltips");
+    localStorage.removeItem('seenTooltips');
   } catch {
     // Silent fail
   }

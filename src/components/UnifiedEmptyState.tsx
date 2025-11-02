@@ -23,7 +23,7 @@ const variantClasses = {
 /**
  * Unified Empty State Component
  * Replaces: EmptyState, HelpfulEmptyState, AIEnhancedEmptyState, EmptyStateEnhanced, modern-empty-state
- * 
+ *
  * Usage:
  * <UnifiedEmptyState
  *   icon={Search}
@@ -43,18 +43,22 @@ export const UnifiedEmptyState: React.FC<UnifiedEmptyStateProps> = ({
   variant = 'yellow',
 }) => {
   return (
-    <Card className={`border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] ${variantClasses[variant]}`}>
+    <Card
+      className={`border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] ${variantClasses[variant]}`}
+    >
       <CardContent className="pt-8 pb-8 text-center">
         <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-card border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] flex items-center justify-center">
           <Icon className="h-8 w-8 text-foreground" />
         </div>
-        <h3 className="text-lg font-bold text-foreground mb-2 font-pixel">{title}</h3>
+        <h3 className="text-lg font-bold text-foreground mb-2 font-pixel">
+          {title}
+        </h3>
         <p className="font-sans text-foreground/80 font-medium mb-4 max-w-sm mx-auto">
           {description}
         </p>
         {actionLabel && onAction && (
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             onClick={onAction}
             className="border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:-translate-y-0.5 transition-all"
           >

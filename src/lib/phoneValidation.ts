@@ -9,7 +9,7 @@ export const phoneSchema = z
   .string()
   .regex(
     /^\+?[1-9]\d{1,14}$/,
-    "Please enter a valid phone number (e.g., +1234567890)"
+    'Please enter a valid phone number (e.g., +1234567890)'
   )
   .optional()
   .or(z.literal(''));

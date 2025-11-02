@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
-import { Search, Clock, X } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { useSearchHistory } from "@/hooks/useSearchHistory";
-import { cn } from "@/lib/utils";
+import { useState, useEffect } from 'react';
+import { Search, Clock, X } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { useSearchHistory } from '@/hooks/useSearchHistory';
+import { cn } from '@/lib/utils';
 
 interface SearchWithHistoryProps {
   value: string;
@@ -16,7 +16,7 @@ interface SearchWithHistoryProps {
 export const SearchWithHistory = ({
   value,
   onChange,
-  placeholder = "Search...",
+  placeholder = 'Search...',
   suggestions = [],
   className,
 }: SearchWithHistoryProps) => {
@@ -39,18 +39,18 @@ export const SearchWithHistory = ({
   };
 
   const combinedItems = [
-    ...history.map(h => ({ type: "history" as const, value: h })),
-    ...suggestions.map(s => ({ type: "suggestion" as const, value: s })),
+    ...history.map(h => ({ type: 'history' as const, value: h })),
+    ...suggestions.map(s => ({ type: 'suggestion' as const, value: s })),
   ].slice(0, 5);
 
   return (
-    <div className={cn("relative", className)}>
+    <div className={cn('relative', className)}>
       <form onSubmit={handleSubmit}>
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             value={value}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={e => onChange(e.target.value)}
             onFocus={() => {
               setFocused(true);
               setShowDropdown(true);
@@ -68,7 +68,7 @@ export const SearchWithHistory = ({
               variant="ghost"
               size="icon"
               className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8"
-              onClick={() => onChange("")}
+              onClick={() => onChange('')}
             >
               <X className="h-4 w-4" />
             </Button>
@@ -84,7 +84,7 @@ export const SearchWithHistory = ({
               className="w-full px-3 py-2 text-left text-sm hover:bg-muted flex items-center gap-2 transition-colors min-h-[44px]"
               onClick={() => handleSelect(item.value)}
             >
-              {item.type === "history" ? (
+              {item.type === 'history' ? (
                 <Clock className="h-4 w-4 text-muted-foreground" />
               ) : (
                 <Search className="h-4 w-4 text-muted-foreground" />
@@ -92,7 +92,7 @@ export const SearchWithHistory = ({
               <span className="flex-1 truncate">{item.value}</span>
             </button>
           ))}
-          
+
           {history.length > 0 && (
             <button
               className="w-full px-3 py-2 text-left text-xs text-muted-foreground hover:bg-muted border-t min-h-[44px]"

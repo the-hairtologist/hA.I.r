@@ -27,24 +27,27 @@ export const useProactiveInsights = (stylistId?: string, enabled = true) => {
     if (!enabled || !stylistId) return;
 
     // Auto-generate insights daily
-    const shouldGenerate = !lastGenerated || 
-      differenceInDays(new Date(), lastGenerated) >= 1;
+    const shouldGenerate =
+      !lastGenerated || differenceInDays(new Date(), lastGenerated) >= 1;
 
     if (shouldGenerate) {
       generateInsights();
     }
 
     // Set up interval for daily generation
-    const interval = setInterval(() => {
-      generateInsights();
-    }, 24 * 60 * 60 * 1000); // 24 hours
+    const interval = setInterval(
+      () => {
+        generateInsights();
+      },
+      24 * 60 * 60 * 1000
+    ); // 24 hours
 
     return () => clearInterval(interval);
   }, [stylistId, enabled, lastGenerated]);
 
   const generateInsights = async () => {
     if (!stylistId) return;
-    
+
     setLoading(true);
     try {
       const newInsights: ProactiveInsight[] = [];
@@ -79,7 +82,9 @@ export const useProactiveInsights = (stylistId?: string, enabled = true) => {
     }
   };
 
-  const detectChurnRisk = async (stylistId: string): Promise<ProactiveInsight | null> => {
+  const detectChurnRisk = async (
+    stylistId: string
+  ): Promise<ProactiveInsight | null> => {
     const { data: clients } = await supabase
       .from('client_retention_scores')
       .select('*, client:client_profiles(user:profiles(full_name))')
@@ -103,15 +108,20 @@ export const useProactiveInsights = (stylistId?: string, enabled = true) => {
       confidence: 85,
       actionItems: [
         { title: 'View at-risk clients', url: '/clients?filter=at-risk' },
-        { title: 'Send win-back messages', url: '/messages?template=winback' }
+        { title: 'Send win-back messages', url: '/messages?template=winback' },
       ],
-      potentialRevenue: clients.length * 150 // Avg appointment value
+      potentialRevenue: clients.length * 150, // Avg appointment value
     };
   };
 
-  const detectRevenueOpportunities = async (stylistId: string): Promise<ProactiveInsight | null> => {
-    const thisWeek = { start: startOfWeek(new Date()), end: endOfWeek(new Date()) };
-    
+  const detectRevenueOpportunities = async (
+    stylistId: string
+  ): Promise<ProactiveInsight | null> => {
+    const thisWeek = {
+      start: startOfWeek(new Date()),
+      end: endOfWeek(new Date()),
+    };
+
     const { data: thisWeekAppts } = await supabase
       .from('appointments')
       .select('*')
@@ -123,7 +133,12 @@ export const useProactiveInsights = (stylistId?: string, enabled = true) => {
       .from('appointments')
       .select('*')
       .eq('stylist_id', stylistId)
-      .gte('appointment_date', new Date(thisWeek.start.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString())
+      .gte(
+        'appointment_date',
+        new Date(
+          thisWeek.start.getTime() - 7 * 24 * 60 * 60 * 1000
+        ).toISOString()
+      )
       .lte('appointment_date', thisWeek.start.toISOString());
 
     if (!thisWeekAppts || !lastWeekAppts) return null;
@@ -139,23 +154,31 @@ export const useProactiveInsights = (stylistId?: string, enabled = true) => {
         priority: 'high',
         confidence: 90,
         actionItems: [
-          { title: 'Send batch reminders', url: '/messages?action=batch-reminder' },
-          { title: 'View schedule', url: '/calendar' }
+          {
+            title: 'Send batch reminders',
+            url: '/messages?action=batch-reminder',
+          },
+          { title: 'View schedule', url: '/calendar' },
         ],
-        potentialRevenue: openSlots * avgRevenue
+        potentialRevenue: openSlots * avgRevenue,
       };
     }
 
     return null;
   };
 
-  const detectEfficiencyIssues = async (stylistId: string): Promise<ProactiveInsight | null> => {
+  const detectEfficiencyIssues = async (
+    stylistId: string
+  ): Promise<ProactiveInsight | null> => {
     const { data: recentAppts } = await supabase
       .from('appointments')
       .select('*')
       .eq('stylist_id', stylistId)
       .eq('status', 'no_show')
-      .gte('appointment_date', new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString())
+      .gte(
+        'appointment_date',
+        new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
+      )
       .order('appointment_date', { ascending: false });
 
     if (!recentAppts || recentAppts.length < 3) return null;
@@ -171,16 +194,18 @@ export const useProactiveInsights = (stylistId?: string, enabled = true) => {
         confidence: 75,
         actionItems: [
           { title: 'Enable SMS reminders', url: '/settings/notifications' },
-          { title: 'Review no-show policy', url: '/settings/policies' }
+          { title: 'Review no-show policy', url: '/settings/policies' },
         ],
-        potentialRevenue: recentAppts.length * 100 // Revenue lost to no-shows
+        potentialRevenue: recentAppts.length * 100, // Revenue lost to no-shows
       };
     }
 
     return null;
   };
 
-  const detectRetentionWins = async (stylistId: string): Promise<ProactiveInsight | null> => {
+  const detectRetentionWins = async (
+    stylistId: string
+  ): Promise<ProactiveInsight | null> => {
     const { data: retentionScores } = await supabase
       .from('client_retention_scores')
       .select('*')
@@ -197,12 +222,15 @@ export const useProactiveInsights = (stylistId?: string, enabled = true) => {
       confidence: 95,
       actionItems: [
         { title: 'Send referral requests', url: '/referrals' },
-        { title: 'View top clients', url: '/clients?filter=top' }
-      ]
+        { title: 'View top clients', url: '/clients?filter=top' },
+      ],
     };
   };
 
-  const saveInsightsToDatabase = async (stylistId: string, insights: ProactiveInsight[]) => {
+  const saveInsightsToDatabase = async (
+    stylistId: string,
+    insights: ProactiveInsight[]
+  ) => {
     const insightsToSave = insights.map(insight => ({
       stylist_id: stylistId,
       insight_type: insight.type,
@@ -212,7 +240,7 @@ export const useProactiveInsights = (stylistId?: string, enabled = true) => {
       confidence_score: insight.confidence,
       action_items: insight.actionItems,
       potential_revenue: insight.potentialRevenue || 0,
-      expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString() // Expire in 7 days
+      expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // Expire in 7 days
     }));
 
     await supabase.from('ai_insights').insert(insightsToSave);
@@ -222,6 +250,6 @@ export const useProactiveInsights = (stylistId?: string, enabled = true) => {
     insights,
     loading,
     lastGenerated,
-    regenerate: generateInsights
+    regenerate: generateInsights,
   };
 };

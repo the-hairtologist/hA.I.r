@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -6,13 +6,13 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
-import { Camera, Mic, Shield, AlertCircle } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { logger } from "@/lib/logging/productionLogger";
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
+import { Camera, Mic, Shield, AlertCircle } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface PrivacyConsentDialogProps {
   open: boolean;
@@ -35,7 +35,10 @@ export const getStoredConsent = (type: 'camera' | 'microphone'): boolean => {
   }
 };
 
-export const setStoredConsent = (type: 'camera' | 'microphone', granted: boolean) => {
+export const setStoredConsent = (
+  type: 'camera' | 'microphone',
+  granted: boolean
+) => {
   try {
     const stored = localStorage.getItem(CONSENT_STORAGE_KEY);
     const consent = stored ? JSON.parse(stored) : {};
@@ -43,7 +46,10 @@ export const setStoredConsent = (type: 'camera' | 'microphone', granted: boolean
     consent[`${type}_timestamp`] = new Date().toISOString();
     localStorage.setItem(CONSENT_STORAGE_KEY, JSON.stringify(consent));
   } catch (error) {
-    logger.error('Failed to store consent', error, { component: 'PrivacyConsentDialog', type });
+    logger.error('Failed to store consent', error, {
+      component: 'PrivacyConsentDialog',
+      type,
+    });
   }
 };
 
@@ -52,7 +58,7 @@ export const PrivacyConsentDialog = ({
   onOpenChange,
   type,
   onConsent,
-  context = "this feature"
+  context = 'this feature',
 }: PrivacyConsentDialogProps) => {
   const [understood, setUnderstood] = useState(false);
   const [dataRetention, setDataRetention] = useState(false);
@@ -76,55 +82,58 @@ export const PrivacyConsentDialog = ({
   const permissionDetails = {
     camera: {
       icon: Camera,
-      title: "Camera Access Required",
-      description: "We need camera access to capture photos for your hair portfolio and analysis.",
+      title: 'Camera Access Required',
+      description:
+        'We need camera access to capture photos for your hair portfolio and analysis.',
       usage: [
-        "Capture professional work photos",
-        "Take client selfies for records",
-        "Analyze hair condition with AI",
-        "Store images securely in your account"
+        'Capture professional work photos',
+        'Take client selfies for records',
+        'Analyze hair condition with AI',
+        'Store images securely in your account',
       ],
       protection: [
-        "Photos are encrypted during transfer",
-        "Only you and assigned stylists can view",
-        "Stored securely on our servers",
-        "You can delete photos anytime"
-      ]
+        'Photos are encrypted during transfer',
+        'Only you and assigned stylists can view',
+        'Stored securely on our servers',
+        'You can delete photos anytime',
+      ],
     },
     microphone: {
       icon: Mic,
-      title: "Microphone Access Required",
-      description: "We need microphone access to transcribe your voice notes and commands.",
+      title: 'Microphone Access Required',
+      description:
+        'We need microphone access to transcribe your voice notes and commands.',
       usage: [
-        "Add voice notes to appointments",
-        "Dictate formula instructions",
-        "Use voice commands for navigation",
-        "Send voice messages to clients"
+        'Add voice notes to appointments',
+        'Dictate formula instructions',
+        'Use voice commands for navigation',
+        'Send voice messages to clients',
       ],
       protection: [
-        "Audio is transcribed then deleted",
-        "No recordings are permanently stored",
-        "Transcriptions are encrypted",
-        "You control all voice data"
-      ]
+        'Audio is transcribed then deleted',
+        'No recordings are permanently stored',
+        'Transcriptions are encrypted',
+        'You control all voice data',
+      ],
     },
     both: {
       icon: Shield,
-      title: "Camera & Microphone Access",
-      description: "We need both camera and microphone access for the complete experience.",
+      title: 'Camera & Microphone Access',
+      description:
+        'We need both camera and microphone access for the complete experience.',
       usage: [
-        "Capture photos with voice notes",
-        "Full hands-free operation",
-        "AI-powered hair analysis with voice",
-        "Professional portfolio building"
+        'Capture photos with voice notes',
+        'Full hands-free operation',
+        'AI-powered hair analysis with voice',
+        'Professional portfolio building',
       ],
       protection: [
-        "All data encrypted in transit",
-        "No permanent audio storage",
-        "Complete privacy controls",
-        "Delete data anytime"
-      ]
-    }
+        'All data encrypted in transit',
+        'No permanent audio storage',
+        'Complete privacy controls',
+        'Delete data anytime',
+      ],
+    },
   };
 
   const details = permissionDetails[type];
@@ -153,7 +162,7 @@ export const PrivacyConsentDialog = ({
               How we'll use {type === 'both' ? 'these features' : 'this'}:
             </h4>
             <ul className="space-y-1.5 text-sm text-muted-foreground">
-              {details.usage.map((item) => (
+              {details.usage.map(item => (
                 <li key={item} className="flex items-start gap-2">
                   <span className="text-primary mt-0.5">•</span>
                   <span>{item}</span>
@@ -169,7 +178,7 @@ export const PrivacyConsentDialog = ({
               Your privacy is protected:
             </h4>
             <ul className="space-y-1.5 text-sm text-muted-foreground">
-              {details.protection.map((item) => (
+              {details.protection.map(item => (
                 <li key={item} className="flex items-start gap-2">
                   <span className="text-success mt-0.5">✓</span>
                   <span>{item}</span>
@@ -184,11 +193,22 @@ export const PrivacyConsentDialog = ({
               <AlertCircle className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
               <div className="text-xs text-muted-foreground">
                 <p>
-                  Your browser will ask for permission separately. We'll only access {type === 'both' ? 'your camera and microphone' : `your ${type}`} when you explicitly use {type === 'both' ? 'these features' : 'this feature'}.
+                  Your browser will ask for permission separately. We'll only
+                  access{' '}
+                  {type === 'both'
+                    ? 'your camera and microphone'
+                    : `your ${type}`}{' '}
+                  when you explicitly use{' '}
+                  {type === 'both' ? 'these features' : 'this feature'}.
                 </p>
                 <p className="mt-2">
-                  Read our full{" "}
-                  <a href="/privacy" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                  Read our full{' '}
+                  <a
+                    href="/privacy"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary hover:underline"
+                  >
                     Privacy Policy
                   </a>
                 </p>
@@ -202,22 +222,35 @@ export const PrivacyConsentDialog = ({
               <Checkbox
                 id="understand"
                 checked={understood}
-                onCheckedChange={(checked) => setUnderstood(checked as boolean)}
+                onCheckedChange={checked => setUnderstood(checked as boolean)}
                 className="mt-1"
               />
-              <Label htmlFor="understand" className="text-sm font-normal leading-snug cursor-pointer">
-                I understand how my {type === 'both' ? 'camera and microphone data' : `${type} data`} will be used and protected
+              <Label
+                htmlFor="understand"
+                className="text-sm font-normal leading-snug cursor-pointer"
+              >
+                I understand how my{' '}
+                {type === 'both'
+                  ? 'camera and microphone data'
+                  : `${type} data`}{' '}
+                will be used and protected
               </Label>
             </div>
             <div className="flex items-start gap-3">
               <Checkbox
                 id="retention"
                 checked={dataRetention}
-                onCheckedChange={(checked) => setDataRetention(checked as boolean)}
+                onCheckedChange={checked =>
+                  setDataRetention(checked as boolean)
+                }
                 className="mt-1"
               />
-              <Label htmlFor="retention" className="text-sm font-normal leading-snug cursor-pointer">
-                I acknowledge that I can revoke this permission and delete my data at any time in Settings
+              <Label
+                htmlFor="retention"
+                className="text-sm font-normal leading-snug cursor-pointer"
+              >
+                I acknowledge that I can revoke this permission and delete my
+                data at any time in Settings
               </Label>
             </div>
           </div>
@@ -235,8 +268,8 @@ export const PrivacyConsentDialog = ({
             onClick={handleGrant}
             disabled={!understood || !dataRetention}
             className={cn(
-              "w-full sm:w-auto",
-              (!understood || !dataRetention) && "opacity-50"
+              'w-full sm:w-auto',
+              (!understood || !dataRetention) && 'opacity-50'
             )}
           >
             Grant Permission

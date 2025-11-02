@@ -1,42 +1,52 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { DollarSign, TrendingUp, Calendar, Star } from "lucide-react";
-import { Progress } from "@/components/ui/progress";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { DollarSign, TrendingUp, Calendar, Star } from 'lucide-react';
+import { Progress } from '@/components/ui/progress';
 
 export function ClientLifetimeValue() {
   const topClients = [
     {
-      name: "Sample Client A",
+      name: 'Sample Client A',
       totalSpent: 2400,
       visits: 12,
       avgPerVisit: 200,
-      memberSince: "Jan 2024",
-      tier: "Platinum"
+      memberSince: 'Jan 2024',
+      tier: 'Platinum',
     },
     {
-      name: "Sample Client B",
+      name: 'Sample Client B',
       totalSpent: 1800,
       visits: 9,
       avgPerVisit: 200,
-      memberSince: "Mar 2024",
-      tier: "Gold"
+      memberSince: 'Mar 2024',
+      tier: 'Gold',
     },
     {
-      name: "Sample Client C",
+      name: 'Sample Client C',
       totalSpent: 1200,
       visits: 8,
       avgPerVisit: 150,
-      memberSince: "Apr 2024",
-      tier: "Silver"
+      memberSince: 'Apr 2024',
+      tier: 'Silver',
     },
   ];
 
   const getTierColor = (tier: string) => {
     switch (tier) {
-      case "Platinum": return "text-purple-500";
-      case "Gold": return "text-amber-500";
-      case "Silver": return "text-gray-400";
-      default: return "text-muted-foreground";
+      case 'Platinum':
+        return 'text-purple-500';
+      case 'Gold':
+        return 'text-amber-500';
+      case 'Silver':
+        return 'text-gray-400';
+      default:
+        return 'text-muted-foreground';
     }
   };
 
@@ -55,15 +65,21 @@ export function ClientLifetimeValue() {
         <CardContent>
           <div className="grid gap-4 sm:grid-cols-3 mb-6">
             <div className="p-4 rounded-lg bg-muted">
-              <div className="text-sm text-muted-foreground mb-1">Average LTV</div>
+              <div className="text-sm text-muted-foreground mb-1">
+                Average LTV
+              </div>
               <div className="text-2xl font-bold">$0</div>
             </div>
             <div className="p-4 rounded-lg bg-muted">
-              <div className="text-sm text-muted-foreground mb-1">Top 10% LTV</div>
+              <div className="text-sm text-muted-foreground mb-1">
+                Top 10% LTV
+              </div>
               <div className="text-2xl font-bold">$0</div>
             </div>
             <div className="p-4 rounded-lg bg-muted">
-              <div className="text-sm text-muted-foreground mb-1">Avg Visits/Client</div>
+              <div className="text-sm text-muted-foreground mb-1">
+                Avg Visits/Client
+              </div>
               <div className="text-2xl font-bold">0</div>
             </div>
           </div>
@@ -86,9 +102,14 @@ export function ClientLifetimeValue() {
                 >
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-2">
-                      <span className="text-2xl font-bold text-muted-foreground">#{idx + 1}</span>
+                      <span className="text-2xl font-bold text-muted-foreground">
+                        #{idx + 1}
+                      </span>
                       <h3 className="font-semibold">{client.name}</h3>
-                      <Badge variant="outline" className={getTierColor(client.tier)}>
+                      <Badge
+                        variant="outline"
+                        className={getTierColor(client.tier)}
+                      >
                         {client.tier}
                       </Badge>
                     </div>
@@ -102,8 +123,8 @@ export function ClientLifetimeValue() {
                         {client.visits} visits
                       </span>
                       <span className="flex items-center gap-1">
-                        <DollarSign className="h-3 w-3" />
-                        ${client.avgPerVisit}/visit
+                        <DollarSign className="h-3 w-3" />${client.avgPerVisit}
+                        /visit
                       </span>
                       <span className="font-semibold text-success">
                         Total: ${client.totalSpent}
@@ -111,7 +132,10 @@ export function ClientLifetimeValue() {
                     </div>
                   </div>
                   <div className="sm:w-32">
-                    <Progress value={(client.totalSpent / 3000) * 100} className="h-2" />
+                    <Progress
+                      value={(client.totalSpent / 3000) * 100}
+                      className="h-2"
+                    />
                   </div>
                 </div>
               ))

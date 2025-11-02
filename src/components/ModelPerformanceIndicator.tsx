@@ -1,11 +1,11 @@
-import { Badge } from "@/components/ui/badge";
-import { Zap, Clock, Sparkles } from "lucide-react";
+import { Badge } from '@/components/ui/badge';
+import { Zap, Clock, Sparkles } from 'lucide-react';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from '@/components/ui/tooltip';
 
 interface ModelPerformanceIndicatorProps {
   modelUsed?: string;
@@ -13,59 +13,65 @@ interface ModelPerformanceIndicatorProps {
   showDetails?: boolean;
 }
 
-export const ModelPerformanceIndicator = ({ 
-  modelUsed, 
+export const ModelPerformanceIndicator = ({
+  modelUsed,
   responseTimeMs,
-  showDetails = true 
+  showDetails = true,
 }: ModelPerformanceIndicatorProps) => {
   if (!modelUsed && !responseTimeMs) return null;
 
   const getModelInfo = (model: string) => {
     if (model.includes('flash-lite')) {
-      return { 
-        name: 'Flash Lite', 
-        color: 'bg-info text-info-foreground', 
+      return {
+        name: 'Flash Lite',
+        color: 'bg-info text-info-foreground',
         icon: Zap,
-        description: 'Fastest model for simple queries'
+        description: 'Fastest model for simple queries',
       };
     }
     if (model.includes('flash')) {
-      return { 
-        name: 'Flash', 
-        color: 'bg-primary text-primary-foreground', 
+      return {
+        name: 'Flash',
+        color: 'bg-primary text-primary-foreground',
         icon: Zap,
-        description: 'Balanced model for most queries'
+        description: 'Balanced model for most queries',
       };
     }
     if (model.includes('pro')) {
-      return { 
-        name: 'Pro', 
-        color: 'bg-gradient-primary text-primary-foreground', 
+      return {
+        name: 'Pro',
+        color: 'bg-gradient-primary text-primary-foreground',
         icon: Sparkles,
-        description: 'Most powerful model for complex reasoning'
+        description: 'Most powerful model for complex reasoning',
       };
     }
     if (model.includes('gpt-5')) {
-      return { 
-        name: 'GPT-5', 
-        color: 'bg-success text-success-foreground', 
+      return {
+        name: 'GPT-5',
+        color: 'bg-success text-success-foreground',
         icon: Sparkles,
-        description: 'Premium model for advanced tasks'
+        description: 'Premium model for advanced tasks',
       };
     }
-    return { 
-      name: 'AI', 
-      color: 'bg-muted text-muted-foreground', 
+    return {
+      name: 'AI',
+      color: 'bg-muted text-muted-foreground',
       icon: Sparkles,
-      description: 'AI model'
+      description: 'AI model',
     };
   };
 
   const getSpeedBadge = (timeMs: number) => {
-    if (timeMs < 1000) return { text: 'Instant', color: 'bg-success text-success-foreground' };
-    if (timeMs < 3000) return { text: 'Fast', color: 'bg-info text-info-foreground' };
-    if (timeMs < 5000) return { text: 'Normal', color: 'bg-warning text-warning-foreground' };
-    return { text: 'Slow', color: 'bg-destructive text-destructive-foreground' };
+    if (timeMs < 1000)
+      return { text: 'Instant', color: 'bg-success text-success-foreground' };
+    if (timeMs < 3000)
+      return { text: 'Fast', color: 'bg-info text-info-foreground' };
+    if (timeMs < 5000)
+      return { text: 'Normal', color: 'bg-warning text-warning-foreground' };
+    return {
+      text: 'Slow',
+      color: 'bg-destructive text-destructive-foreground',
+    };
   };
 
   const modelInfo = modelUsed ? getModelInfo(modelUsed) : null;
@@ -105,7 +111,9 @@ export const ModelPerformanceIndicator = ({
             <TooltipContent>
               <p className="text-sm">{modelInfo.description}</p>
               {modelUsed && (
-                <p className="text-xs text-muted-foreground mt-1">Model: {modelUsed}</p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Model: {modelUsed}
+                </p>
               )}
             </TooltipContent>
           </Tooltip>

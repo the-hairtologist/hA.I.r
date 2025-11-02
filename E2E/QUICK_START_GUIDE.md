@@ -6,8 +6,10 @@ Before running tests, ensure you have:
 
 1. **Node.js** installed (v18 or higher)
 2. **npm** or **bun** package manager
-3. **Dev server running** on `http://localhost:5173`
+3. **Dev server running** on `http://localhost:8080`
 4. **Test credentials active** (see below)
+
+> **Note:** Playwright configuration is at **root `playwright.config.ts`** (consolidated from duplicate configs)
 
 ## 📋 Test Credentials Setup
 
@@ -207,17 +209,18 @@ use: {
 ## 📁 Test File Structure
 
 ```
-E2E/
-├── playwright.config.ts           # Playwright configuration
-├── run-tests.sh                   # Test runner script
-├── QUICK_START_GUIDE.md          # This file
-├── TEST_RESULTS_REPORT.md        # Comprehensive documentation
-└── tests/
-    ├── comprehensive-role-tests.spec.ts    # Desktop tests (36)
-    ├── comprehensive-mobile-tests.spec.ts  # Mobile tests (36)
-    ├── mobile.spec.ts                      # Additional mobile tests
-    ├── new-features-mobile.spec.ts         # Feature-specific tests
-    └── system-health.spec.ts               # System monitoring
+Root/
+├── playwright.config.ts           # Playwright configuration (root level)
+└── E2E/
+    ├── run-tests.sh              # Test runner script
+    ├── QUICK_START_GUIDE.md      # This file
+    ├── TEST_RESULTS_REPORT.md    # Comprehensive documentation
+    └── tests/
+        ├── comprehensive-role-tests.spec.ts    # Desktop tests (36)
+        ├── comprehensive-mobile-tests.spec.ts  # Mobile tests (36)
+        ├── mobile.spec.ts                      # Additional mobile tests
+        ├── new-features-mobile.spec.ts         # Feature-specific tests
+        └── system-health.spec.ts               # System monitoring
 ```
 
 ## 🎯 Test Coverage

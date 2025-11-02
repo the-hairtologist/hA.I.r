@@ -22,7 +22,7 @@ export function HairHealthScore({
   texture,
   porosity,
   colorFadePercentage,
-  recommendations = []
+  recommendations = [],
 }: HairHealthScoreProps) {
   const healthScore = conditionScore * 10; // Convert 1-10 to 10-100
 
@@ -34,10 +34,14 @@ export function HairHealthScore({
 
   const getDamageBadgeVariant = (level: string) => {
     switch (level) {
-      case 'minimal': return 'default';
-      case 'moderate': return 'secondary';
-      case 'severe': return 'destructive';
-      default: return 'outline';
+      case 'minimal':
+        return 'default';
+      case 'moderate':
+        return 'secondary';
+      case 'severe':
+        return 'destructive';
+      default:
+        return 'outline';
     }
   };
 

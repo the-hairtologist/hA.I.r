@@ -34,15 +34,17 @@ class SmartCacheAISystem {
 
     if (existing) {
       const timeSinceLastAccess = now - existing.lastAccessed;
-      const newAvg = (existing.avgTimeBetweenAccess * existing.accessCount + timeSinceLastAccess) 
-        / (existing.accessCount + 1);
+      const newAvg =
+        (existing.avgTimeBetweenAccess * existing.accessCount +
+          timeSinceLastAccess) /
+        (existing.accessCount + 1);
 
       this.accessPatterns.set(key, {
         key,
         accessCount: existing.accessCount + 1,
         lastAccessed: now,
         avgTimeBetweenAccess: newAvg,
-        priority: this.calculatePriority(existing.accessCount + 1, newAvg)
+        priority: this.calculatePriority(existing.accessCount + 1, newAvg),
       });
     } else {
       this.accessPatterns.set(key, {
@@ -50,7 +52,7 @@ class SmartCacheAISystem {
         accessCount: 1,
         lastAccessed: now,
         avgTimeBetweenAccess: 0,
-        priority: 1
+        priority: 1,
       });
     }
   }
@@ -58,16 +60,20 @@ class SmartCacheAISystem {
   /**
    * Calculate cache priority based on patterns
    */
-  private calculatePriority(accessCount: number, avgTimeBetweenAccess: number): number {
+  private calculatePriority(
+    accessCount: number,
+    avgTimeBetweenAccess: number
+  ): number {
     // High access count = high priority
     const frequencyScore = Math.min(accessCount / 10, 5);
-    
-    // Short time between access = high priority
-    const recencyScore = avgTimeBetweenAccess > 0 
-      ? Math.max(0, 5 - (avgTimeBetweenAccess / (60 * 1000))) // Normalize to minutes
-      : 5;
 
-    return (frequencyScore * 0.6 + recencyScore * 0.4);
+    // Short time between access = high priority
+    const recencyScore =
+      avgTimeBetweenAccess > 0
+        ? Math.max(0, 5 - avgTimeBetweenAccess / (60 * 1000)) // Normalize to minutes
+        : 5;
+
+    return frequencyScore * 0.6 + recencyScore * 0.4;
   }
 
   /**
@@ -85,39 +91,43 @@ class SmartCacheAISystem {
           action: 'cache',
           key: pattern.key,
           reason: 'Frequently accessed data',
-          priority: 'high'
+          priority: 'high',
         });
       }
 
       // Predictable pattern - preload before expected access
       if (pattern.accessCount > 3 && pattern.avgTimeBetweenAccess > 0) {
         const timeSinceLastAccess = now - pattern.lastAccessed;
-        const expectedNextAccess = pattern.lastAccessed + pattern.avgTimeBetweenAccess;
-        
+        const expectedNextAccess =
+          pattern.lastAccessed + pattern.avgTimeBetweenAccess;
+
         // If we're within 10% of expected next access time, preload
         if (now >= expectedNextAccess * 0.9 && now < expectedNextAccess) {
           recommendations.push({
             action: 'preload',
             key: pattern.key,
             reason: 'Predicted access based on pattern',
-            priority: 'medium'
+            priority: 'medium',
           });
         }
       }
 
       // Stale data - invalidate
-      if (pattern.accessCount < 2 && (now - pattern.lastAccessed) > this.LEARNING_WINDOW) {
+      if (
+        pattern.accessCount < 2 &&
+        now - pattern.lastAccessed > this.LEARNING_WINDOW
+      ) {
         recommendations.push({
           action: 'invalidate',
           key: pattern.key,
           reason: 'Infrequently accessed, stale data',
-          priority: 'low'
+          priority: 'low',
         });
       }
     }
 
     logger.info('Generated cache recommendations', 'SmartCacheAI', {
-      recommendations: recommendations.length
+      recommendations: recommendations.length,
     });
 
     return recommendations;
@@ -126,7 +136,9 @@ class SmartCacheAISystem {
   /**
    * Auto-apply cache recommendations
    */
-  async applyRecommendations(recommendations?: CacheRecommendation[]): Promise<number> {
+  async applyRecommendations(
+    recommendations?: CacheRecommendation[]
+  ): Promise<number> {
     const recs = recommendations || this.getRecommendations();
     let appliedCount = 0;
 
@@ -137,13 +149,13 @@ class SmartCacheAISystem {
             queryCache.invalidate(rec.key);
             appliedCount++;
             break;
-          
+
           case 'cache':
             // Ensure high-priority items stay cached
             // This would be implemented based on your specific caching needs
             appliedCount++;
             break;
-          
+
           case 'preload':
             // Preload data before it's needed
             // Implementation depends on data source
@@ -151,13 +163,17 @@ class SmartCacheAISystem {
             break;
         }
       } catch (error) {
-        logger.error('Failed to apply cache recommendation', 'SmartCacheAI', error);
+        logger.error(
+          'Failed to apply cache recommendation',
+          'SmartCacheAI',
+          error
+        );
       }
     }
 
     logger.info('Applied cache recommendations', 'SmartCacheAI', {
       applied: appliedCount,
-      total: recs.length
+      total: recs.length,
     });
 
     return appliedCount;
@@ -174,8 +190,8 @@ class SmartCacheAISystem {
   } {
     const patterns = Array.from(this.accessPatterns.values());
     const highPriority = patterns.filter(p => p.priority > 4).length;
-    const predictable = patterns.filter(p => 
-      p.accessCount > 3 && p.avgTimeBetweenAccess > 0
+    const predictable = patterns.filter(
+      p => p.accessCount > 3 && p.avgTimeBetweenAccess > 0
     ).length;
     const recommendations = this.getRecommendations().length;
 
@@ -183,7 +199,7 @@ class SmartCacheAISystem {
       totalPatterns: patterns.length,
       highPriorityData: highPriority,
       predictablePatterns: predictable,
-      recommendations
+      recommendations,
     };
   }
 
@@ -198,7 +214,10 @@ class SmartCacheAISystem {
     const applied = await this.applyRecommendations(recommendations);
     const insights = this.getInsights();
 
-    logger.info('Cache optimization complete', 'SmartCacheAI', { applied, insights });
+    logger.info('Cache optimization complete', 'SmartCacheAI', {
+      applied,
+      insights,
+    });
 
     return { applied, insights };
   }
@@ -208,7 +227,7 @@ class SmartCacheAISystem {
    */
   cleanup() {
     const now = Date.now();
-    const cutoff = now - (this.LEARNING_WINDOW * 2); // Keep 48 hours
+    const cutoff = now - this.LEARNING_WINDOW * 2; // Keep 48 hours
 
     for (const [key, pattern] of this.accessPatterns.entries()) {
       if (pattern.lastAccessed < cutoff) {

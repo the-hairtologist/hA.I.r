@@ -32,12 +32,12 @@ class ColorSystemValidatorClass {
       '--accent',
       '--muted',
       '--card',
-      '--border'
+      '--border',
     ];
 
     criticalVars.forEach(varName => {
       const value = styles.getPropertyValue(varName).trim();
-      
+
       if (!value) {
         issues.push(`Missing CSS variable: ${varName}`);
       } else if (!this.isValidHSL(value)) {
@@ -48,10 +48,10 @@ class ColorSystemValidatorClass {
     // Check for direct color usage in computed styles
     const directColorPatterns = [
       'rgb(255, 255, 255)', // white
-      'rgb(0, 0, 0)',       // black
-      '#ffffff',            // hex white
-      '#000000',            // hex black
-      'yellow'              // named colors
+      'rgb(0, 0, 0)', // black
+      '#ffffff', // hex white
+      '#000000', // hex black
+      'yellow', // named colors
     ];
 
     // Recommendations for best practices
@@ -67,13 +67,13 @@ class ColorSystemValidatorClass {
 
     logger.info('Color system validation complete', 'ColorValidator', {
       valid,
-      issues: issues.length
+      issues: issues.length,
     });
 
     return {
       valid,
       issues,
-      recommendations
+      recommendations,
     };
   }
 
@@ -92,7 +92,7 @@ class ColorSystemValidatorClass {
   scanForDirectColors(): string[] {
     const issues: string[] = [];
     const elements = document.querySelectorAll('*');
-    
+
     const directColorPatterns = [
       /rgb\(255,\s*255,\s*255\)/i,
       /rgb\(0,\s*0,\s*0\)/i,
@@ -102,7 +102,7 @@ class ColorSystemValidatorClass {
       /#000\b/i,
       /\byellow\b/i,
       /\bwhite\b/i,
-      /\bblack\b/i
+      /\bblack\b/i,
     ];
 
     elements.forEach((el, index) => {
@@ -127,12 +127,12 @@ class ColorSystemValidatorClass {
   getHealthScore(): number {
     const validation = this.validateColorSystem();
     const domIssues = this.scanForDirectColors();
-    
+
     const totalIssues = validation.issues.length + domIssues.length;
     const maxIssues = 20; // Maximum expected issues
-    
-    const score = Math.max(0, 100 - (totalIssues / maxIssues * 100));
-    
+
+    const score = Math.max(0, 100 - (totalIssues / maxIssues) * 100);
+
     return Math.round(score);
   }
 
@@ -164,7 +164,7 @@ class ColorSystemValidatorClass {
       score,
       validation,
       domIssues,
-      summary
+      summary,
     };
   }
 }

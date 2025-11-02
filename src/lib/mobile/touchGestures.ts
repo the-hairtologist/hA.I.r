@@ -32,9 +32,15 @@ export class TouchGestureHandler {
       ...options,
     };
 
-    element.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: false });
-    element.addEventListener('touchend', this.handleTouchEnd.bind(this), { passive: false });
-    element.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: false });
+    element.addEventListener('touchstart', this.handleTouchStart.bind(this), {
+      passive: false,
+    });
+    element.addEventListener('touchend', this.handleTouchEnd.bind(this), {
+      passive: false,
+    });
+    element.addEventListener('touchmove', this.handleTouchMove.bind(this), {
+      passive: false,
+    });
   }
 
   private handleTouchStart(event: TouchEvent) {

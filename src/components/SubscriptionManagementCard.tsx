@@ -1,12 +1,18 @@
-import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { CreditCard, Sparkles, Calendar, ExternalLink } from "lucide-react";
-import { useSubscription } from "@/contexts/SubscriptionContext";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
-import { format } from "date-fns";
+import { useState } from 'react';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { CreditCard, Sparkles, Calendar, ExternalLink } from 'lucide-react';
+import { useSubscription } from '@/contexts/SubscriptionContext';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
+import { format } from 'date-fns';
 
 export const SubscriptionManagementCard = () => {
   const { subscribed, inTrial, subscriptionEnd, loading } = useSubscription();
@@ -16,27 +22,32 @@ export const SubscriptionManagementCard = () => {
   const handleManageSubscription = async () => {
     setManagingSubscription(true);
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (!session) {
-        toast.error("Please sign in to manage subscription");
+        toast.error('Please sign in to manage subscription');
         return;
       }
 
-      const { data, error } = await supabase.functions.invoke("customer-portal", {
-        headers: {
-          Authorization: `Bearer ${session.access_token}`,
-        },
-      });
+      const { data, error } = await supabase.functions.invoke(
+        'customer-portal',
+        {
+          headers: {
+            Authorization: `Bearer ${session.access_token}`,
+          },
+        }
+      );
 
       if (error) throw error;
 
       if (data?.url) {
         window.open(data.url, '_blank');
-        toast.success("Opening subscription management...");
+        toast.success('Opening subscription management...');
       }
     } catch (error: any) {
-      console.error("Portal error:", error);
-      toast.error("Failed to open subscription management");
+      console.error('Portal error:', error);
+      toast.error('Failed to open subscription management');
     } finally {
       setManagingSubscription(false);
     }
@@ -45,27 +56,32 @@ export const SubscriptionManagementCard = () => {
   const handleSubscribe = async () => {
     setSubscribing(true);
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (!session) {
-        toast.error("Please sign in to subscribe");
+        toast.error('Please sign in to subscribe');
         return;
       }
 
-      const { data, error } = await supabase.functions.invoke("create-checkout", {
-        headers: {
-          Authorization: `Bearer ${session.access_token}`,
-        },
-      });
+      const { data, error } = await supabase.functions.invoke(
+        'create-checkout',
+        {
+          headers: {
+            Authorization: `Bearer ${session.access_token}`,
+          },
+        }
+      );
 
       if (error) throw error;
 
       if (data?.url) {
         window.open(data.url, '_blank');
-        toast.success("Redirecting to checkout...");
+        toast.success('Redirecting to checkout...');
       }
     } catch (error: any) {
-      console.error("Subscription error:", error);
-      toast.error("Failed to start subscription process");
+      console.error('Subscription error:', error);
+      toast.error('Failed to start subscription process');
     } finally {
       setSubscribing(false);
     }
@@ -84,18 +100,16 @@ export const SubscriptionManagementCard = () => {
             <CardTitle>Subscription</CardTitle>
           </div>
           {subscribed && (
-            <Badge variant={inTrial ? "secondary" : "default"}>
-              {inTrial ? "Free Trial" : "Active"}
+            <Badge variant={inTrial ? 'secondary' : 'default'}>
+              {inTrial ? 'Free Trial' : 'Active'}
             </Badge>
           )}
-          {!subscribed && (
-            <Badge variant="outline">Inactive</Badge>
-          )}
+          {!subscribed && <Badge variant="outline">Inactive</Badge>}
         </div>
         <CardDescription>
-          {subscribed 
-            ? "Manage your Stylist Pro subscription" 
-            : "Unlock all professional features"}
+          {subscribed
+            ? 'Manage your Stylist Pro subscription'
+            : 'Unlock all professional features'}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -107,27 +121,28 @@ export const SubscriptionManagementCard = () => {
                 <span className="font-semibold">Stylist Pro</span>
               </div>
               <p className="text-sm text-muted-foreground mb-3">
-                {inTrial 
-                  ? "You're currently on a free trial with full access to all features" 
-                  : "You have full access to all professional stylist features"}
+                {inTrial
+                  ? "You're currently on a free trial with full access to all features"
+                  : 'You have full access to all professional stylist features'}
               </p>
               {subscriptionEnd && (
                 <div className="flex items-center gap-2 text-xs text-muted-foreground">
                   <Calendar className="h-4 w-4" />
                   <span>
-                    {inTrial ? "Trial ends" : "Renews"} on {format(new Date(subscriptionEnd), "MMM d, yyyy")}
+                    {inTrial ? 'Trial ends' : 'Renews'} on{' '}
+                    {format(new Date(subscriptionEnd), 'MMM d, yyyy')}
                   </span>
                 </div>
               )}
             </div>
-            <Button 
+            <Button
               onClick={handleManageSubscription}
               disabled={managingSubscription}
               variant="outline"
               className="w-full"
             >
               <ExternalLink className="h-4 w-4 mr-2" />
-              {managingSubscription ? "Opening..." : "Manage Subscription"}
+              {managingSubscription ? 'Opening...' : 'Manage Subscription'}
             </Button>
           </>
         ) : (
@@ -140,13 +155,13 @@ export const SubscriptionManagementCard = () => {
                 7-day free trial • Full access to all features
               </p>
             </div>
-            <Button 
+            <Button
               onClick={handleSubscribe}
               disabled={subscribing}
               className="w-full"
               size="lg"
             >
-              {subscribing ? "Starting trial..." : "Start 7-Day Free Trial"}
+              {subscribing ? 'Starting trial...' : 'Start 7-Day Free Trial'}
             </Button>
           </>
         )}

@@ -1,31 +1,34 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import { Resend } from "https://esm.sh/resend@2.0.0";
+import { Resend } from 'https://esm.sh/resend@2.0.0';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
 };
 
 const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
 const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const resend = new Resend(Deno.env.get('RESEND_API_KEY'));
-const FROM_EMAIL = Deno.env.get('FROM_EMAIL') || 'hA.I.r <onboarding@resend.dev>';
+const FROM_EMAIL =
+  Deno.env.get('FROM_EMAIL') || 'hA.I.r <onboarding@resend.dev>';
 
-serve(async (req) => {
+serve(async req => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
-    
+
     console.log('📧 Processing email sequences...');
-    
+
     // Get all active enrollments that need to send next email
     const { data: enrollments, error: enrollError } = await supabase
       .from('email_sequence_enrollments')
-      .select(`
+      .select(
+        `
         *,
         client:client_profiles!email_sequence_enrollments_client_id_fkey(
           id,
@@ -45,14 +48,17 @@ serve(async (req) => {
           id,
           name
         )
-      `)
+      `
+      )
       .eq('status', 'active')
       .lte('next_send_at', new Date().toISOString())
       .limit(50); // Process 50 at a time
 
     if (enrollError) throw enrollError;
 
-    console.log(`Found ${enrollments?.length || 0} enrollments ready to process`);
+    console.log(
+      `Found ${enrollments?.length || 0} enrollments ready to process`
+    );
 
     const results = {
       processed: 0,
@@ -73,7 +79,7 @@ serve(async (req) => {
 
         if (stepError || !step) {
           console.warn(`Step not found for enrollment ${enrollment.id}`);
-          
+
           // Mark as completed if no more steps
           await supabase
             .from('email_sequence_enrollments')
@@ -82,7 +88,7 @@ serve(async (req) => {
               completed_at: new Date().toISOString(),
             })
             .eq('id', enrollment.id);
-          
+
           results.completed++;
           continue;
         }
@@ -94,7 +100,7 @@ serve(async (req) => {
             enrollment.client_id,
             step.stop_on_conditions
           );
-          
+
           if (shouldStop) {
             console.log(`Stop condition met for enrollment ${enrollment.id}`);
             await supabase
@@ -105,7 +111,7 @@ serve(async (req) => {
                 unenrolled_reason: 'Stop condition met',
               })
               .eq('id', enrollment.id);
-            
+
             results.processed++;
             continue;
           }
@@ -114,7 +120,8 @@ serve(async (req) => {
         // Get client email
         const clientEmail = enrollment.client?.user?.email;
         const clientName = enrollment.client?.full_name || 'Valued Client';
-        const stylistName = enrollment.stylist?.user?.full_name || 'Your Stylist';
+        const stylistName =
+          enrollment.stylist?.user?.full_name || 'Your Stylist';
 
         if (!clientEmail) {
           console.error(`No email found for enrollment ${enrollment.id}`);
@@ -137,16 +144,23 @@ serve(async (req) => {
         });
 
         // Send email via Resend
-        const { data: emailData, error: emailError } = await resend.emails.send({
-          from: FROM_EMAIL,
-          to: [clientEmail],
-          subject,
-          html: body,
-        });
+        const { data: emailData, error: emailError } = await resend.emails.send(
+          {
+            from: FROM_EMAIL,
+            to: [clientEmail],
+            subject,
+            html: body,
+          }
+        );
 
         if (emailError) {
-          console.error(`Failed to send email for enrollment ${enrollment.id}:`, emailError);
-          results.errors.push(`Email failed for ${enrollment.id}: ${emailError.message}`);
+          console.error(
+            `Failed to send email for enrollment ${enrollment.id}:`,
+            emailError
+          );
+          results.errors.push(
+            `Email failed for ${enrollment.id}: ${emailError.message}`
+          );
           continue;
         }
 
@@ -195,16 +209,16 @@ serve(async (req) => {
               completed_at: new Date().toISOString(),
             })
             .eq('id', enrollment.id);
-          
+
           results.completed++;
         }
 
         results.processed++;
         results.sent++;
-
       } catch (error) {
         console.error(`Error processing enrollment ${enrollment.id}:`, error);
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        const errorMessage =
+          error instanceof Error ? error.message : 'Unknown error';
         results.errors.push(`Enrollment ${enrollment.id}: ${errorMessage}`);
       }
     }
@@ -221,23 +235,23 @@ serve(async (req) => {
         status: 200,
       }
     );
-
   } catch (error) {
     console.error('❌ Error in process-email-sequences:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-    return new Response(
-      JSON.stringify({ error: errorMessage }),
-      {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 500,
-      }
-    );
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown error occurred';
+    return new Response(JSON.stringify({ error: errorMessage }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      status: 500,
+    });
   }
 });
 
 // Helper functions
 
-function replaceVariables(text: string, variables: Record<string, string>): string {
+function replaceVariables(
+  text: string,
+  variables: Record<string, string>
+): string {
   let result = text;
   for (const [key, value] of Object.entries(variables)) {
     const regex = new RegExp(`{{${key}}}`, 'g');
@@ -248,7 +262,7 @@ function replaceVariables(text: string, variables: Record<string, string>): stri
 
 function calculateNextSendTime(amount: number, unit: string): string {
   const now = new Date();
-  
+
   switch (unit) {
     case 'minutes':
       now.setMinutes(now.getMinutes() + amount);
@@ -260,12 +274,12 @@ function calculateNextSendTime(amount: number, unit: string): string {
       now.setDate(now.getDate() + amount);
       break;
     case 'weeks':
-      now.setDate(now.getDate() + (amount * 7));
+      now.setDate(now.getDate() + amount * 7);
       break;
     default:
       now.setDate(now.getDate() + amount);
   }
-  
+
   return now.toISOString();
 }
 
@@ -283,9 +297,9 @@ async function checkStopConditions(
       .gte('appointment_date', new Date().toISOString())
       .limit(1)
       .maybeSingle();
-    
+
     return !!data;
   }
-  
+
   return false;
 }

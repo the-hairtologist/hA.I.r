@@ -42,7 +42,7 @@ class CustomMetricsTracker {
 
     try {
       const measure = performance.measure(name, startMark, endMark);
-      
+
       const customMeasure: PerformanceMeasure = {
         name,
         duration: measure.duration,
@@ -53,7 +53,10 @@ class CustomMetricsTracker {
       this.measures.push(customMeasure);
 
       if (import.meta.env.DEV) {
-        logger.debug(`⏱️ ${name}: ${Math.round(measure.duration)}ms`, 'customMetrics');
+        logger.debug(
+          `⏱️ ${name}: ${Math.round(measure.duration)}ms`,
+          'customMetrics'
+        );
       }
 
       return customMeasure;
@@ -101,8 +104,10 @@ class CustomMetricsTracker {
   trackNavigation() {
     if (!performance.getEntriesByType) return;
 
-    const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-    
+    const navigation = performance.getEntriesByType(
+      'navigation'
+    )[0] as PerformanceNavigationTiming;
+
     if (!navigation) return;
 
     const metrics = {
@@ -110,7 +115,9 @@ class CustomMetricsTracker {
       tcpConnection: navigation.connectEnd - navigation.connectStart,
       requestTime: navigation.responseStart - navigation.requestStart,
       responseTime: navigation.responseEnd - navigation.responseStart,
-      domProcessing: navigation.domContentLoadedEventEnd - navigation.domContentLoadedEventStart,
+      domProcessing:
+        navigation.domContentLoadedEventEnd -
+        navigation.domContentLoadedEventStart,
       fullPageLoad: navigation.loadEventEnd - navigation.loadEventStart,
     };
 
@@ -133,7 +140,7 @@ class CustomMetricsTracker {
   clear() {
     this.marks.clear();
     this.measures = [];
-    
+
     if (performance.clearMarks) {
       performance.clearMarks();
     }

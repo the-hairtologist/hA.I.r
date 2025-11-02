@@ -22,11 +22,11 @@ export const loadFeatureIfEnabled = async <T = any>(
   loader: () => Promise<T>
 ): Promise<T | null> => {
   const features = import.meta.env.VITE_ENABLED_FEATURES?.split(',') || [];
-  
+
   if (features.includes(featureName) || import.meta.env.DEV) {
     return await loader();
   }
-  
+
   return null;
 };
 
@@ -45,12 +45,9 @@ export const loadPolyfills = async () => {
  * Preconnect to critical third-party domains
  */
 export const preconnectCriticalDomains = () => {
-  const domains = [
-    'https://fonts.googleapis.com',
-    'https://fonts.gstatic.com',
-  ];
+  const domains = ['https://fonts.googleapis.com', 'https://fonts.gstatic.com'];
 
-  domains.forEach((domain) => {
+  domains.forEach(domain => {
     const link = document.createElement('link');
     link.rel = 'preconnect';
     link.href = domain;
@@ -65,7 +62,7 @@ export const preconnectCriticalDomains = () => {
 export const prefetchOnIdle = (resources: string[]) => {
   if ('requestIdleCallback' in window) {
     requestIdleCallback(() => {
-      resources.forEach((resource) => {
+      resources.forEach(resource => {
         const link = document.createElement('link');
         link.rel = 'prefetch';
         link.href = resource;
@@ -89,13 +86,21 @@ import { log } from '@/lib/logger';
 
 export const devLog = (...args: any[]) => {
   if (import.meta.env.DEV) {
-    log.debug(String(args[0]), 'dev', args.length > 1 ? { data: args.slice(1) } : undefined);
+    log.debug(
+      String(args[0]),
+      'dev',
+      args.length > 1 ? { data: args.slice(1) } : undefined
+    );
   }
 };
 
 export const devWarn = (...args: any[]) => {
   if (import.meta.env.DEV) {
-    log.warn(String(args[0]), 'dev', args.length > 1 ? { data: args.slice(1) } : undefined);
+    log.warn(
+      String(args[0]),
+      'dev',
+      args.length > 1 ? { data: args.slice(1) } : undefined
+    );
   }
 };
 

@@ -5,12 +5,18 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { 
-  DollarSign, 
-  TrendingUp, 
-  Users, 
+import {
+  DollarSign,
+  TrendingUp,
+  Users,
   Calendar,
   Target,
   Award,
@@ -18,7 +24,7 @@ import {
   Crown,
   BarChart3,
   PieChart,
-  Activity
+  Activity,
 } from 'lucide-react';
 import { format, startOfMonth, endOfMonth, subMonths } from 'date-fns';
 
@@ -47,7 +53,7 @@ export const AdminFinancialDashboard = () => {
     appointmentsCompleted: 0,
     averageTicket: 0,
     revenueGrowth: 0,
-    topStylist: null
+    topStylist: null,
   });
   const [loading, setLoading] = useState(true);
 
@@ -69,14 +75,14 @@ export const AdminFinancialDashboard = () => {
         { data: appointments },
         { data: stylists },
         { data: clients },
-        { data: lastMonthAppointments }
+        { data: lastMonthAppointments },
       ] = await Promise.all([
         // Total commissions
         supabase
           .from('commissions')
           .select('commission_amount')
           .eq('status', 'paid'),
-        
+
         // Current month appointments
         supabase
           .from('appointments')
@@ -84,32 +90,31 @@ export const AdminFinancialDashboard = () => {
           .eq('status', 'completed')
           .gte('appointment_date', monthStart.toISOString())
           .lte('appointment_date', monthEnd.toISOString()),
-        
+
         // Active stylists
         supabase
           .from('stylist_profiles')
           .select('id, user_id')
           .eq('is_available', true),
-        
+
         // Total clients
-        supabase
-          .from('client_profiles')
-          .select('id', { count: 'exact' }),
-        
+        supabase.from('client_profiles').select('id', { count: 'exact' }),
+
         // Last month appointments for growth calculation
         supabase
           .from('appointments')
           .select('id')
           .eq('status', 'completed')
           .gte('appointment_date', lastMonthStart.toISOString())
-          .lte('appointment_date', lastMonthEnd.toISOString())
+          .lte('appointment_date', lastMonthEnd.toISOString()),
       ]);
 
       // Calculate total commissions
-      const totalCommissions = commissions?.reduce(
-        (sum, c) => sum + Number(c.commission_amount || 0), 
-        0
-      ) || 0;
+      const totalCommissions =
+        commissions?.reduce(
+          (sum, c) => sum + Number(c.commission_amount || 0),
+          0
+        ) || 0;
 
       // Estimate revenue (assuming 10% commission rate on average)
       const estimatedMonthlyRevenue = (appointments?.length || 0) * 150; // $150 avg per appointment
@@ -118,9 +123,10 @@ export const AdminFinancialDashboard = () => {
       // Calculate growth
       const currentMonthCount = appointments?.length || 0;
       const lastMonthCount = lastMonthAppointments?.length || 0;
-      const revenueGrowth = lastMonthCount > 0 
-        ? ((currentMonthCount - lastMonthCount) / lastMonthCount) * 100 
-        : 0;
+      const revenueGrowth =
+        lastMonthCount > 0
+          ? ((currentMonthCount - lastMonthCount) / lastMonthCount) * 100
+          : 0;
 
       // Get top stylist by appointments this month
       const stylistAppointments = appointments?.reduce((acc: any, appt) => {
@@ -130,19 +136,20 @@ export const AdminFinancialDashboard = () => {
 
       let topStylist = null;
       if (stylistAppointments && Object.keys(stylistAppointments).length > 0) {
-        const topStylistId = Object.entries(stylistAppointments)
-          .sort((a: any, b: any) => b[1] - a[1])[0][0];
-        
+        const topStylistId = Object.entries(stylistAppointments).sort(
+          (a: any, b: any) => b[1] - a[1]
+        )[0][0];
+
         const { data: topStylistData } = await supabase
           .from('stylist_profiles')
           .select('user:profiles(full_name)')
           .eq('id', topStylistId)
           .maybeSingle();
-        
+
         if (topStylistData) {
           topStylist = {
             name: (topStylistData as any).user?.full_name || 'Unknown',
-            revenue: stylistAppointments[topStylistId] * 150
+            revenue: stylistAppointments[topStylistId] * 150,
           };
         }
       }
@@ -154,9 +161,12 @@ export const AdminFinancialDashboard = () => {
         activeStylists: stylists?.length || 0,
         totalClients: clients?.length || 0,
         appointmentsCompleted: currentMonthCount,
-        averageTicket: currentMonthCount > 0 ? estimatedMonthlyRevenue / currentMonthCount : 0,
+        averageTicket:
+          currentMonthCount > 0
+            ? estimatedMonthlyRevenue / currentMonthCount
+            : 0,
         revenueGrowth,
-        topStylist
+        topStylist,
       });
     } catch (error) {
       console.error('Error loading financial data:', error);
@@ -170,12 +180,16 @@ export const AdminFinancialDashboard = () => {
       style: 'currency',
       currency: 'USD',
       minimumFractionDigits: 0,
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     }).format(amount);
   };
 
   if (loading) {
-    return <div className="text-center py-8 text-muted-foreground">Loading financial data...</div>;
+    return (
+      <div className="text-center py-8 text-muted-foreground">
+        Loading financial data...
+      </div>
+    );
   }
 
   return (
@@ -187,7 +201,9 @@ export const AdminFinancialDashboard = () => {
         </div>
         <div>
           <h2 className="text-2xl font-bold">Financial Command Center</h2>
-          <p className="text-muted-foreground">Complete business intelligence at your fingertips</p>
+          <p className="text-muted-foreground">
+            Complete business intelligence at your fingertips
+          </p>
         </div>
       </div>
 
@@ -205,11 +221,17 @@ export const AdminFinancialDashboard = () => {
               {formatCurrency(metrics.monthlyRevenue)}
             </div>
             <div className="flex items-center gap-2 mt-2">
-              <Badge variant={metrics.revenueGrowth >= 0 ? "default" : "destructive"} className="text-xs">
+              <Badge
+                variant={metrics.revenueGrowth >= 0 ? 'default' : 'destructive'}
+                className="text-xs"
+              >
                 <TrendingUp className="h-3 w-3 mr-1" />
-                {metrics.revenueGrowth >= 0 ? '+' : ''}{metrics.revenueGrowth.toFixed(1)}%
+                {metrics.revenueGrowth >= 0 ? '+' : ''}
+                {metrics.revenueGrowth.toFixed(1)}%
               </Badge>
-              <span className="text-xs text-muted-foreground">vs last month</span>
+              <span className="text-xs text-muted-foreground">
+                vs last month
+              </span>
             </div>
           </CardContent>
         </Card>
@@ -225,7 +247,9 @@ export const AdminFinancialDashboard = () => {
             <div className="text-3xl font-bold text-blue-600">
               {formatCurrency(metrics.totalRevenue)}
             </div>
-            <p className="text-xs text-muted-foreground mt-2">All-time estimated</p>
+            <p className="text-xs text-muted-foreground mt-2">
+              All-time estimated
+            </p>
           </CardContent>
         </Card>
 
@@ -240,7 +264,9 @@ export const AdminFinancialDashboard = () => {
             <div className="text-3xl font-bold text-purple-600">
               {formatCurrency(metrics.averageTicket)}
             </div>
-            <p className="text-xs text-muted-foreground mt-2">Per appointment</p>
+            <p className="text-xs text-muted-foreground mt-2">
+              Per appointment
+            </p>
           </CardContent>
         </Card>
 
@@ -255,7 +281,9 @@ export const AdminFinancialDashboard = () => {
             <div className="text-3xl font-bold text-amber-600">
               {formatCurrency(metrics.totalCommissions)}
             </div>
-            <p className="text-xs text-muted-foreground mt-2">Paid to stylists</p>
+            <p className="text-xs text-muted-foreground mt-2">
+              Paid to stylists
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -271,7 +299,9 @@ export const AdminFinancialDashboard = () => {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold">{metrics.activeStylists}</div>
-            <p className="text-xs text-muted-foreground mt-2">Revenue generators</p>
+            <p className="text-xs text-muted-foreground mt-2">
+              Revenue generators
+            </p>
           </CardContent>
         </Card>
 
@@ -296,8 +326,12 @@ export const AdminFinancialDashboard = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold">{metrics.appointmentsCompleted}</div>
-            <p className="text-xs text-muted-foreground mt-2">Completed this month</p>
+            <div className="text-3xl font-bold">
+              {metrics.appointmentsCompleted}
+            </div>
+            <p className="text-xs text-muted-foreground mt-2">
+              Completed this month
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -322,7 +356,9 @@ export const AdminFinancialDashboard = () => {
                 <p className="text-3xl font-bold text-amber-600">
                   {formatCurrency(metrics.topStylist.revenue)}
                 </p>
-                <p className="text-xs text-muted-foreground">Estimated revenue</p>
+                <p className="text-xs text-muted-foreground">
+                  Estimated revenue
+                </p>
               </div>
             </div>
           </CardContent>
@@ -343,31 +379,37 @@ export const AdminFinancialDashboard = () => {
             <div>
               <p className="font-semibold">Revenue Per Stylist</p>
               <p className="text-sm text-muted-foreground">
-                {metrics.activeStylists > 0 
-                  ? formatCurrency(metrics.monthlyRevenue / metrics.activeStylists) 
-                  : '$0'} average per active stylist
+                {metrics.activeStylists > 0
+                  ? formatCurrency(
+                      metrics.monthlyRevenue / metrics.activeStylists
+                    )
+                  : '$0'}{' '}
+                average per active stylist
               </p>
             </div>
           </div>
-          
+
           <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/50">
             <Target className="h-5 w-5 text-primary mt-0.5" />
             <div>
               <p className="font-semibold">Client Monetization</p>
               <p className="text-sm text-muted-foreground">
-                {metrics.totalClients > 0 
-                  ? formatCurrency(metrics.monthlyRevenue / metrics.totalClients) 
-                  : '$0'} revenue per client this month
+                {metrics.totalClients > 0
+                  ? formatCurrency(
+                      metrics.monthlyRevenue / metrics.totalClients
+                    )
+                  : '$0'}{' '}
+                revenue per client this month
               </p>
             </div>
           </div>
-          
+
           <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/50">
             <BarChart3 className="h-5 w-5 text-primary mt-0.5" />
             <div>
               <p className="font-semibold">Platform Health</p>
               <p className="text-sm text-muted-foreground">
-                {metrics.appointmentsCompleted > 0 
+                {metrics.appointmentsCompleted > 0
                   ? `${(metrics.appointmentsCompleted / metrics.activeStylists).toFixed(1)} appointments per stylist`
                   : 'No appointments yet'}
               </p>

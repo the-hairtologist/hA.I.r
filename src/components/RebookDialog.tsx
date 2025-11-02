@@ -1,12 +1,18 @@
-import { useState, useEffect } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
-import { addWeeks, format, isSameDay, isBefore, startOfDay } from "date-fns";
-import { Calendar, Clock, AlertCircle, CheckCircle } from "lucide-react";
-import { Label } from "@/components/ui/label";
-import { triggerAppointmentBooked } from "@/lib/zapierTriggers";
+import { useState, useEffect } from 'react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
+import { addWeeks, format, isSameDay, isBefore, startOfDay } from 'date-fns';
+import { Calendar, Clock, AlertCircle, CheckCircle } from 'lucide-react';
+import { Label } from '@/components/ui/label';
+import { triggerAppointmentBooked } from '@/lib/zapierTriggers';
 
 interface RebookDialogProps {
   open: boolean;
@@ -15,7 +21,12 @@ interface RebookDialogProps {
   onSuccess: () => void;
 }
 
-export const RebookDialog = ({ open, onOpenChange, appointment, onSuccess }: RebookDialogProps) => {
+export const RebookDialog = ({
+  open,
+  onOpenChange,
+  appointment,
+  onSuccess,
+}: RebookDialogProps) => {
   const [selectedWeeks, setSelectedWeeks] = useState<number | null>(null);
   const [availableTimeSlots, setAvailableTimeSlots] = useState<string[]>([]);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
@@ -45,16 +56,16 @@ export const RebookDialog = ({ open, onOpenChange, appointment, onSuccess }: Reb
   const loadStylistSchedule = async () => {
     try {
       const { data: schedule } = await supabase
-        .from("stylist_profiles")
-        .select("weekly_schedule")
-        .eq("id", appointment.stylist_id)
+        .from('stylist_profiles')
+        .select('weekly_schedule')
+        .eq('id', appointment.stylist_id)
         .maybeSingle();
 
       if (schedule) {
         setStylistSchedule(schedule.weekly_schedule);
       }
     } catch (error) {
-      console.error("Error loading schedule:", error);
+      console.error('Error loading schedule:', error);
     }
   };
 
@@ -71,7 +82,7 @@ export const RebookDialog = ({ open, onOpenChange, appointment, onSuccess }: Reb
     try {
       // Check if date is in the past
       if (isBefore(startOfDay(proposedDate), startOfDay(new Date()))) {
-        toast.error("Cannot book appointments in the past");
+        toast.error('Cannot book appointments in the past');
         setAvailableTimeSlots([]);
         setSelectedTime(null);
         setChecking(false);
@@ -79,7 +90,7 @@ export const RebookDialog = ({ open, onOpenChange, appointment, onSuccess }: Reb
       }
 
       // Get day of week schedule
-      const dayName = format(proposedDate, "EEEE").toLowerCase();
+      const dayName = format(proposedDate, 'EEEE').toLowerCase();
       const daySchedule = stylistSchedule[dayName];
 
       if (!daySchedule || !daySchedule.enabled) {
@@ -90,26 +101,36 @@ export const RebookDialog = ({ open, onOpenChange, appointment, onSuccess }: Reb
       }
 
       // Generate time slots
-      const slots = generateTimeSlots(daySchedule.startTime, daySchedule.endTime);
+      const slots = generateTimeSlots(
+        daySchedule.startTime,
+        daySchedule.endTime
+      );
 
       // Check existing appointments for that day
       const { data: existingAppointments } = await supabase
-        .from("appointments")
-        .select("appointment_date, duration_minutes")
-        .eq("stylist_id", appointment.stylist_id)
-        .gte("appointment_date", format(proposedDate, "yyyy-MM-dd"))
-        .lt("appointment_date", format(addWeeks(proposedDate, 1), "yyyy-MM-dd"))
-        .neq("status", "cancelled");
+        .from('appointments')
+        .select('appointment_date, duration_minutes')
+        .eq('stylist_id', appointment.stylist_id)
+        .gte('appointment_date', format(proposedDate, 'yyyy-MM-dd'))
+        .lt('appointment_date', format(addWeeks(proposedDate, 1), 'yyyy-MM-dd'))
+        .neq('status', 'cancelled');
 
       // Filter out booked slots
-      const availableSlots = slots.filter((slot) => {
-        const slotDateTime = new Date(`${format(proposedDate, "yyyy-MM-dd")}T${slot}:00`);
-        
+      const availableSlots = slots.filter(slot => {
+        const slotDateTime = new Date(
+          `${format(proposedDate, 'yyyy-MM-dd')}T${slot}:00`
+        );
+
         return !existingAppointments?.some((apt: any) => {
           const aptStart = new Date(apt.appointment_date);
-          const aptEnd = new Date(aptStart.getTime() + apt.duration_minutes * 60000);
-          const slotEnd = new Date(slotDateTime.getTime() + (appointment.duration_minutes || 90) * 60000);
-          
+          const aptEnd = new Date(
+            aptStart.getTime() + apt.duration_minutes * 60000
+          );
+          const slotEnd = new Date(
+            slotDateTime.getTime() +
+              (appointment.duration_minutes || 90) * 60000
+          );
+
           return (
             (slotDateTime >= aptStart && slotDateTime < aptEnd) ||
             (slotEnd > aptStart && slotEnd <= aptEnd) ||
@@ -119,9 +140,12 @@ export const RebookDialog = ({ open, onOpenChange, appointment, onSuccess }: Reb
       });
 
       setAvailableTimeSlots(availableSlots);
-      
+
       // Auto-select the first available slot or the same time as original appointment
-      const originalTime = format(new Date(appointment.appointment_date), "HH:mm");
+      const originalTime = format(
+        new Date(appointment.appointment_date),
+        'HH:mm'
+      );
       if (availableSlots.includes(originalTime)) {
         setSelectedTime(originalTime);
       } else if (availableSlots.length > 0) {
@@ -130,8 +154,8 @@ export const RebookDialog = ({ open, onOpenChange, appointment, onSuccess }: Reb
         setSelectedTime(null);
       }
     } catch (error) {
-      console.error("Error checking availability:", error);
-      toast.error("Error checking availability");
+      console.error('Error checking availability:', error);
+      toast.error('Error checking availability');
     } finally {
       setChecking(false);
     }
@@ -139,27 +163,32 @@ export const RebookDialog = ({ open, onOpenChange, appointment, onSuccess }: Reb
 
   const generateTimeSlots = (startTime: string, endTime: string): string[] => {
     const slots: string[] = [];
-    const [startHour, startMin] = startTime.split(":").map(Number);
-    const [endHour, endMin] = endTime.split(":").map(Number);
-    
+    const [startHour, startMin] = startTime.split(':').map(Number);
+    const [endHour, endMin] = endTime.split(':').map(Number);
+
     let currentHour = startHour;
     let currentMin = startMin;
-    
-    while (currentHour < endHour || (currentHour === endHour && currentMin < endMin)) {
-      slots.push(`${String(currentHour).padStart(2, "0")}:${String(currentMin).padStart(2, "0")}`);
+
+    while (
+      currentHour < endHour ||
+      (currentHour === endHour && currentMin < endMin)
+    ) {
+      slots.push(
+        `${String(currentHour).padStart(2, '0')}:${String(currentMin).padStart(2, '0')}`
+      );
       currentMin += 30;
       if (currentMin >= 60) {
         currentMin = 0;
         currentHour++;
       }
     }
-    
+
     return slots;
   };
 
   const handleRebook = async () => {
     if (!selectedWeeks || !selectedTime) {
-      toast.error("Please select a time");
+      toast.error('Please select a time');
       return;
     }
 
@@ -168,19 +197,23 @@ export const RebookDialog = ({ open, onOpenChange, appointment, onSuccess }: Reb
 
     setLoading(true);
     try {
-      const appointmentDateTime = new Date(`${format(proposedDate, "yyyy-MM-dd")}T${selectedTime}:00`);
+      const appointmentDateTime = new Date(
+        `${format(proposedDate, 'yyyy-MM-dd')}T${selectedTime}:00`
+      );
 
-      const { data: newAppointment, error } = await supabase.from("appointments").insert({
-        stylist_id: appointment.stylist_id,
-        client_id: appointment.client_id,
-        service_type: appointment.service_type,
-        appointment_date: appointmentDateTime.toISOString(),
-        duration_minutes: appointment.duration_minutes,
-        status: "scheduled",
-        notes: `Rebooked from ${format(new Date(appointment.appointment_date), "MMM d, yyyy")}`,
-      })
-      .select()
-      .maybeSingle();
+      const { data: newAppointment, error } = await supabase
+        .from('appointments')
+        .insert({
+          stylist_id: appointment.stylist_id,
+          client_id: appointment.client_id,
+          service_type: appointment.service_type,
+          appointment_date: appointmentDateTime.toISOString(),
+          duration_minutes: appointment.duration_minutes,
+          status: 'scheduled',
+          notes: `Rebooked from ${format(new Date(appointment.appointment_date), 'MMM d, yyyy')}`,
+        })
+        .select()
+        .maybeSingle();
 
       if (error) throw error;
 
@@ -196,7 +229,7 @@ export const RebookDialog = ({ open, onOpenChange, appointment, onSuccess }: Reb
             is_rebook: true,
           });
         } catch (zapierError) {
-          console.error("Zapier webhook failed:", zapierError);
+          console.error('Zapier webhook failed:', zapierError);
           // Don't block success if Zapier fails
         }
       }
@@ -210,7 +243,7 @@ export const RebookDialog = ({ open, onOpenChange, appointment, onSuccess }: Reb
           },
         });
       } catch (smsError) {
-        console.error("SMS notification failed:", smsError);
+        console.error('SMS notification failed:', smsError);
       }
 
       // Send email confirmation
@@ -221,7 +254,7 @@ export const RebookDialog = ({ open, onOpenChange, appointment, onSuccess }: Reb
           },
         });
       } catch (emailError) {
-        console.error("Email notification failed:", emailError);
+        console.error('Email notification failed:', emailError);
       }
 
       // Sync to calendar
@@ -233,7 +266,7 @@ export const RebookDialog = ({ open, onOpenChange, appointment, onSuccess }: Reb
           },
         });
       } catch (calendarError) {
-        console.error("Calendar sync failed:", calendarError);
+        console.error('Calendar sync failed:', calendarError);
       }
 
       toast.success(
@@ -241,20 +274,22 @@ export const RebookDialog = ({ open, onOpenChange, appointment, onSuccess }: Reb
           <CheckCircle className="h-5 w-5 text-success" />
           <div>
             <p className="font-semibold">Appointment Rebooked!</p>
-            <p className="text-sm">{format(appointmentDateTime, "MMM d, yyyy 'at' h:mm a")}</p>
+            <p className="text-sm">
+              {format(appointmentDateTime, "MMM d, yyyy 'at' h:mm a")}
+            </p>
           </div>
         </div>
       );
-      
+
       onSuccess();
       onOpenChange(false);
-      
+
       // Reset state
       setSelectedWeeks(null);
       setSelectedTime(null);
     } catch (error: any) {
-      console.error("Error rebooking:", error);
-      toast.error("Failed to rebook appointment");
+      console.error('Error rebooking:', error);
+      toast.error('Failed to rebook appointment');
     } finally {
       setLoading(false);
     }
@@ -271,20 +306,27 @@ export const RebookDialog = ({ open, onOpenChange, appointment, onSuccess }: Reb
             Quick Rebook
           </DialogTitle>
           <DialogDescription>
-            Rebook {appointment?.client?.user?.full_name} for {appointment?.service_type}
+            Rebook {appointment?.client?.user?.full_name} for{' '}
+            {appointment?.service_type}
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6">
           {/* Week Selection */}
           <div>
-            <Label className="mb-3 block">How many weeks from original appointment?</Label>
+            <Label className="mb-3 block">
+              How many weeks from original appointment?
+            </Label>
             <div className="grid grid-cols-5 gap-2">
-              {weekOptions.map((weeks) => (
+              {weekOptions.map(weeks => (
                 <Button
                   key={weeks}
-                  variant={selectedWeeks === weeks ? "default" : "outline"}
-                  className={selectedWeeks === weeks ? "brutal-border border-primary" : ""}
+                  variant={selectedWeeks === weeks ? 'default' : 'outline'}
+                  className={
+                    selectedWeeks === weeks
+                      ? 'brutal-border border-primary'
+                      : ''
+                  }
                   onClick={() => setSelectedWeeks(weeks)}
                 >
                   {weeks}w
@@ -293,7 +335,7 @@ export const RebookDialog = ({ open, onOpenChange, appointment, onSuccess }: Reb
             </div>
             {proposedDate && (
               <p className="text-sm text-muted-foreground mt-2 text-center">
-                {format(proposedDate, "EEEE, MMMM d, yyyy")}
+                {format(proposedDate, 'EEEE, MMMM d, yyyy')}
               </p>
             )}
           </div>
@@ -305,7 +347,7 @@ export const RebookDialog = ({ open, onOpenChange, appointment, onSuccess }: Reb
                 <Clock className="h-4 w-4" />
                 Available Times
               </Label>
-              
+
               {checking ? (
                 <div className="text-center py-8 text-muted-foreground">
                   Checking availability...
@@ -319,14 +361,14 @@ export const RebookDialog = ({ open, onOpenChange, appointment, onSuccess }: Reb
                 </div>
               ) : (
                 <div className="grid grid-cols-4 gap-2 max-h-48 overflow-y-auto">
-                  {availableTimeSlots.map((time) => (
+                  {availableTimeSlots.map(time => (
                     <Button
                       key={time}
-                      variant={selectedTime === time ? "default" : "outline"}
+                      variant={selectedTime === time ? 'default' : 'outline'}
                       size="sm"
                       onClick={() => setSelectedTime(time)}
                     >
-                      {format(new Date(`2000-01-01T${time}`), "h:mm a")}
+                      {format(new Date(`2000-01-01T${time}`), 'h:mm a')}
                     </Button>
                   ))}
                 </div>
@@ -349,7 +391,7 @@ export const RebookDialog = ({ open, onOpenChange, appointment, onSuccess }: Reb
               onClick={handleRebook}
               disabled={!selectedTime || loading || checking}
             >
-              {loading ? "Booking..." : "Confirm Rebook"}
+              {loading ? 'Booking...' : 'Confirm Rebook'}
             </Button>
           </div>
         </div>

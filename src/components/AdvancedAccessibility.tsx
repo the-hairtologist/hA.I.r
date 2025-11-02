@@ -33,7 +33,7 @@ export function SkipLinks() {
 }
 
 // Skip Navigation Target Component
-export function SkipNavContent({ id = "main-content" }: { id?: string }) {
+export function SkipNavContent({ id = 'main-content' }: { id?: string }) {
   return <div id={id} />;
 }
 
@@ -47,7 +47,9 @@ export function useFocusTrap(isActive: boolean) {
     );
 
     const firstElement = focusableElements[0] as HTMLElement;
-    const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+    const lastElement = focusableElements[
+      focusableElements.length - 1
+    ] as HTMLElement;
 
     const handleTabKey = (e: KeyboardEvent) => {
       if (e.key !== 'Tab') return;
@@ -80,8 +82,9 @@ export function useReducedMotion() {
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
-    
+    const handler = (e: MediaQueryListEvent) =>
+      setPrefersReducedMotion(e.matches);
+
     mediaQuery.addEventListener('change', handler);
     return () => mediaQuery.removeEventListener('change', handler);
   }, []);
@@ -98,7 +101,7 @@ export function useHighContrast() {
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-contrast: high)');
     const handler = (e: MediaQueryListEvent) => setHighContrast(e.matches);
-    
+
     mediaQuery.addEventListener('change', handler);
     return () => mediaQuery.removeEventListener('change', handler);
   }, []);
@@ -159,22 +162,22 @@ export function AccessibilityPanel() {
 
   useEffect(() => {
     const root = document.documentElement;
-    
+
     // Apply font size
     const fontSizes = { normal: '16px', large: '18px', xl: '20px' };
     root.style.fontSize = fontSizes[settings.fontSize];
-    
+
     // Apply line spacing
     const lineHeights = { normal: '1.5', relaxed: '1.75', loose: '2' };
     root.style.lineHeight = lineHeights[settings.lineSpacing];
-    
+
     // Apply contrast
     if (settings.contrast === 'high') {
       root.classList.add('high-contrast');
     } else {
       root.classList.remove('high-contrast');
     }
-    
+
     // Apply dyslexia-friendly font
     if (settings.dyslexiaFont) {
       root.classList.add('dyslexia-font');
@@ -190,13 +193,15 @@ export function AccessibilityPanel() {
       className="fixed bottom-4 right-4 bg-background border-2 border-foreground shadow-lg p-4 rounded-lg z-50"
     >
       <h3 className="font-bold mb-4">Accessibility Settings</h3>
-      
+
       <div className="space-y-4">
         <div>
           <label className="block mb-2 font-medium">Font Size</label>
           <select
             value={settings.fontSize}
-            onChange={(e) => setSettings({ ...settings, fontSize: e.target.value as any })}
+            onChange={e =>
+              setSettings({ ...settings, fontSize: e.target.value as any })
+            }
             className="w-full p-2 border rounded"
             aria-label="Font size selection"
           >
@@ -210,7 +215,9 @@ export function AccessibilityPanel() {
           <label className="block mb-2 font-medium">Line Spacing</label>
           <select
             value={settings.lineSpacing}
-            onChange={(e) => setSettings({ ...settings, lineSpacing: e.target.value as any })}
+            onChange={e =>
+              setSettings({ ...settings, lineSpacing: e.target.value as any })
+            }
             className="w-full p-2 border rounded"
             aria-label="Line spacing selection"
           >
@@ -225,7 +232,12 @@ export function AccessibilityPanel() {
             <input
               type="checkbox"
               checked={settings.contrast === 'high'}
-              onChange={(e) => setSettings({ ...settings, contrast: e.target.checked ? 'high' : 'normal' })}
+              onChange={e =>
+                setSettings({
+                  ...settings,
+                  contrast: e.target.checked ? 'high' : 'normal',
+                })
+              }
               aria-label="Toggle high contrast mode"
             />
             <span>High Contrast</span>
@@ -237,7 +249,9 @@ export function AccessibilityPanel() {
             <input
               type="checkbox"
               checked={settings.dyslexiaFont}
-              onChange={(e) => setSettings({ ...settings, dyslexiaFont: e.target.checked })}
+              onChange={e =>
+                setSettings({ ...settings, dyslexiaFont: e.target.checked })
+              }
               aria-label="Toggle dyslexia-friendly font"
             />
             <span>Dyslexia-Friendly Font</span>
@@ -246,7 +260,14 @@ export function AccessibilityPanel() {
       </div>
 
       <Button
-        onClick={() => setSettings({ fontSize: 'normal', lineSpacing: 'normal', contrast: 'normal', dyslexiaFont: false })}
+        onClick={() =>
+          setSettings({
+            fontSize: 'normal',
+            lineSpacing: 'normal',
+            contrast: 'normal',
+            dyslexiaFont: false,
+          })
+        }
         variant="outline"
         size="sm"
         className="mt-4 w-full"
@@ -259,7 +280,13 @@ export function AccessibilityPanel() {
 }
 
 // Live Region for Dynamic Updates
-export function LiveRegion({ message, priority = 'polite' }: { message: string; priority?: 'polite' | 'assertive' }) {
+export function LiveRegion({
+  message,
+  priority = 'polite',
+}: {
+  message: string;
+  priority?: 'polite' | 'assertive';
+}) {
   return (
     <div
       role="status"
@@ -275,10 +302,12 @@ export function LiveRegion({ message, priority = 'polite' }: { message: string; 
 // Heading Hierarchy Validator (Development Only)
 export function validateHeadingHierarchy() {
   if (import.meta.env.DEV) {
-    const headings = Array.from(document.querySelectorAll('h1, h2, h3, h4, h5, h6'));
+    const headings = Array.from(
+      document.querySelectorAll('h1, h2, h3, h4, h5, h6')
+    );
     let lastLevel = 0;
-    
-    headings.forEach((heading) => {
+
+    headings.forEach(heading => {
       const level = parseInt(heading.tagName[1]);
       lastLevel = level;
     });

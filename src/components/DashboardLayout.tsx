@@ -1,19 +1,29 @@
-import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
-import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/AppSidebar";
-import { MobileBottomNav } from "@/components/MobileBottomNav";
-import { MobileHeader } from "@/components/MobileHeader";
-import { MobileSidebarOverlay } from "@/components/MobileSidebarOverlay";
-import { MobileQuickActions } from "@/components/MobileQuickActions";
-import { DemoModeIndicator } from "@/components/demo/DemoMode";
-import { CommandPalette } from "@/components/CommandPalette";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Scissors, User, LogOut, HelpCircle, Crown, ChevronDown, Moon, Sun, Monitor } from "lucide-react";
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
+import { useEnhancedAuth } from '@/contexts/EnhancedAuthContext';
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { AppSidebar } from '@/components/AppSidebar';
+import { MobileBottomNav } from '@/components/MobileBottomNav';
+import { MobileHeader } from '@/components/MobileHeader';
+import { MobileSidebarOverlay } from '@/components/MobileSidebarOverlay';
+import { MobileQuickActions } from '@/components/MobileQuickActions';
+import { DemoModeIndicator } from '@/components/demo/DemoMode';
+import { CommandPalette } from '@/components/CommandPalette';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import {
+  Scissors,
+  User,
+  LogOut,
+  HelpCircle,
+  Crown,
+  ChevronDown,
+  Moon,
+  Sun,
+  Monitor,
+} from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,22 +31,22 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { KeyboardShortcutsDialog } from "@/components/KeyboardShortcutsDialog";
-import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { OfflineIndicator } from "@/components/OfflineIndicator";
-import { SessionExpiryWarning } from "@/components/SessionExpiryWarning";
-import { KeyboardShortcuts } from "@/components/KeyboardShortcuts";
+} from '@/components/ui/tooltip';
+import { KeyboardShortcutsDialog } from '@/components/KeyboardShortcutsDialog';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { OfflineIndicator } from '@/components/OfflineIndicator';
+import { SessionExpiryWarning } from '@/components/SessionExpiryWarning';
+import { KeyboardShortcuts } from '@/components/KeyboardShortcuts';
 
-import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
-import { useState, useEffect } from "react";
-import { authErrors } from "@/lib/errorMessages";
+import { useRealtimeNotifications } from '@/hooks/useRealtimeNotifications';
+import { useState, useEffect } from 'react';
+import { authErrors } from '@/lib/errorMessages';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -44,11 +54,12 @@ interface DashboardLayoutProps {
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const navigate = useNavigate();
-  const { user, loading, roles, isAdmin, isStylist, isClient } = useEnhancedAuth();
+  const { user, loading, roles, isAdmin, isStylist, isClient } =
+    useEnhancedAuth();
   const [showShortcuts, setShowShortcuts] = useState(false);
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
   const { unreadCount } = useRealtimeNotifications(user?.id);
-  
+
   // Determine user role - admin gets full access, no role switching needed
   const userRole = isStylist ? 'stylist' : isClient ? 'client' : 'admin';
 
@@ -70,20 +81,37 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       }
 
       // Navigation shortcuts with 'G' key (stylist only)
-      if (e.key === 'g' && !e.ctrlKey && !e.metaKey && !e.altKey && userRole === 'stylist') {
+      if (
+        e.key === 'g' &&
+        !e.ctrlKey &&
+        !e.metaKey &&
+        !e.altKey &&
+        userRole === 'stylist'
+      ) {
         const handleSecondKey = (e2: KeyboardEvent) => {
           e2.preventDefault();
           window.removeEventListener('keydown', handleSecondKey);
-          
-          switch(e2.key.toLowerCase()) {
-            case 'd': navigate('/dashboard'); break;
-            case 'c': navigate('/clients'); break;
-            case 'a': navigate('/appointments'); break;
-            case 'm': navigate('/messages'); break;
+
+          switch (e2.key.toLowerCase()) {
+            case 'd':
+              navigate('/dashboard');
+              break;
+            case 'c':
+              navigate('/clients');
+              break;
+            case 'a':
+              navigate('/appointments');
+              break;
+            case 'm':
+              navigate('/messages');
+              break;
           }
         };
         window.addEventListener('keydown', handleSecondKey);
-        setTimeout(() => window.removeEventListener('keydown', handleSecondKey), 2000);
+        setTimeout(
+          () => window.removeEventListener('keydown', handleSecondKey),
+          2000
+        );
       }
 
       // Cmd+N - New appointment (navigate to booking page)
@@ -93,7 +121,12 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       }
 
       // Cmd+Shift+C - Add new client (stylist only)
-      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'C' && userRole === 'stylist') {
+      if (
+        (e.ctrlKey || e.metaKey) &&
+        e.shiftKey &&
+        e.key === 'C' &&
+        userRole === 'stylist'
+      ) {
         e.preventDefault();
         // Dispatch custom event to open add client dialog
         window.dispatchEvent(new CustomEvent('open-add-client-dialog'));
@@ -102,10 +135,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
     // Listen for custom events (mobile triggers)
     const handleCommandPalette = () => setCommandPaletteOpen(true);
-    
+
     window.addEventListener('keydown', handleKeyPress);
     window.addEventListener('open-command-palette', handleCommandPalette);
-    
+
     return () => {
       window.removeEventListener('keydown', handleKeyPress);
       window.removeEventListener('open-command-palette', handleCommandPalette);
@@ -114,23 +147,25 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
   // Redirect if not authenticated
   if (!loading && !user) {
-    navigate("/auth");
+    navigate('/auth');
     return null;
   }
 
   const handleSignOut = async () => {
     try {
       await supabase.auth.signOut();
-      navigate("/auth");
-      toast.success("Signed out successfully");
+      navigate('/auth');
+      toast.success('Signed out successfully');
     } catch (error) {
       const errorConfig = authErrors.signOutFailed(() => handleSignOut());
       toast.error(errorConfig.title, {
         description: errorConfig.description,
-        action: errorConfig.action ? {
-          label: errorConfig.action.label,
-          onClick: errorConfig.action.onClick,
-        } : undefined,
+        action: errorConfig.action
+          ? {
+              label: errorConfig.action.label,
+              onClick: errorConfig.action.onClick,
+            }
+          : undefined,
       });
     }
   };
@@ -140,10 +175,19 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       <div className="min-h-screen flex items-center justify-center bg-[image:var(--gradient-bg-main)]">
         <div className="text-center bg-card p-8 rounded-xl brutal-border shadow-brutal-2xl animate-fade-in-fast">
           <div className="relative mb-4">
-            <Scissors className="h-12 w-12 text-primary animate-pulse mx-auto" aria-hidden="true" />
+            <Scissors
+              className="h-12 w-12 text-primary animate-pulse mx-auto"
+              aria-hidden="true"
+            />
             <div className="absolute inset-0 h-12 w-12 mx-auto rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
           </div>
-          <p className="text-muted-foreground font-medium" role="status" aria-live="polite">Loading your dashboard...</p>
+          <p
+            className="text-muted-foreground font-medium"
+            role="status"
+            aria-live="polite"
+          >
+            Loading your dashboard...
+          </p>
         </div>
       </div>
     );
@@ -159,26 +203,28 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         <AppSidebar />
         <MobileSidebarOverlay />
         <DemoModeIndicator />
-        
+
         <div className="flex-1 min-w-0 max-w-full flex flex-col overflow-x-hidden">
           {/* Mobile Header */}
-          <MobileHeader 
-            notificationCount={unreadCount}
-          />
+          <MobileHeader notificationCount={unreadCount} />
 
           {/* Desktop Header */}
-          <header className={`hidden md:flex sticky top-0 z-40 brutal-border-b ${isAdmin ? 'border-amber-500/50' : 'border-foreground'} bg-background/95 backdrop-blur-sm brutal-grid-subtle brutal-shadow-sm md:brutal-shadow-md`}>
+          <header
+            className={`hidden md:flex sticky top-0 z-40 brutal-border-b ${isAdmin ? 'border-amber-500/50' : 'border-foreground'} bg-background/95 backdrop-blur-sm brutal-grid-subtle brutal-shadow-sm md:brutal-shadow-md`}
+          >
             <div className="flex h-14 md:h-16 items-center gap-2 md:gap-4 px-3 md:px-4 w-full">
               {/* CRITICAL: Always-visible sidebar trigger */}
               <SidebarTrigger className="h-9 w-9" />
-              
-              <button 
-                onClick={() => navigate("/dashboard")}
+
+              <button
+                onClick={() => navigate('/dashboard')}
                 className="flex items-center gap-1.5 lg:gap-2 hover:opacity-80 transition-opacity"
                 aria-label="Go to dashboard home"
               >
                 <Scissors className="h-5 w-5 lg:h-6 lg:w-6 text-primary" />
-                <h1 className="text-lg lg:text-xl font-pixel uppercase tracking-wider">hA.I.r</h1>
+                <h1 className="text-lg lg:text-xl font-pixel uppercase tracking-wider">
+                  hA.I.r
+                </h1>
               </button>
 
               <div className="ml-auto flex items-center gap-1.5 md:gap-2 lg:gap-3">
@@ -192,73 +238,106 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                         </Badge>
                       </TooltipTrigger>
                       <TooltipContent side="bottom">
-                        <p className="text-xs">Administrator with full platform access</p>
+                        <p className="text-xs">
+                          Administrator with full platform access
+                        </p>
                       </TooltipContent>
                     </Tooltip>
                   )}
-                  
+
                   {!isAdmin && userRole && (
-                    <Badge variant="secondary" className="hidden sm:flex bg-primary/10 text-primary border border-primary/20">
-                      {userRole === "stylist" ? (
-                        <><Scissors className="h-3 w-3 mr-1" /> Stylist</>
+                    <Badge
+                      variant="secondary"
+                      className="hidden sm:flex bg-primary/10 text-primary border border-primary/20"
+                    >
+                      {userRole === 'stylist' ? (
+                        <>
+                          <Scissors className="h-3 w-3 mr-1" /> Stylist
+                        </>
                       ) : (
-                        <><User className="h-3 w-3 mr-1" /> Client</>
+                        <>
+                          <User className="h-3 w-3 mr-1" /> Client
+                        </>
                       )}
                     </Badge>
                   )}
-                  
+
                   <DropdownMenu>
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="sm" className="gap-2 border border-border hover:bg-muted px-2 md:px-3 transition-all">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="gap-2 border border-border hover:bg-muted px-2 md:px-3 transition-all"
+                          >
                             <Avatar className="h-6 w-6">
                               <AvatarFallback className="bg-primary/10 text-primary text-xs">
-                                {(user?.user_metadata?.full_name || user?.email || "U")
-                                  .split(" ")
+                                {(
+                                  user?.user_metadata?.full_name ||
+                                  user?.email ||
+                                  'U'
+                                )
+                                  .split(' ')
                                   .map((n: string) => n[0])
-                                  .join("")
+                                  .join('')
                                   .toUpperCase()
                                   .slice(0, 2)}
                               </AvatarFallback>
                             </Avatar>
                             <span className="hidden sm:inline truncate max-w-[100px] text-sm">
-                              {user?.user_metadata?.full_name || user?.email?.split("@")[0] || "Account"}
+                              {user?.user_metadata?.full_name ||
+                                user?.email?.split('@')[0] ||
+                                'Account'}
                             </span>
                             <ChevronDown className="h-3 w-3 opacity-50" />
                           </Button>
                         </DropdownMenuTrigger>
                       </TooltipTrigger>
                       <TooltipContent side="bottom">
-                        <p className="text-xs">Account settings and preferences</p>
+                        <p className="text-xs">
+                          Account settings and preferences
+                        </p>
                       </TooltipContent>
                     </Tooltip>
-                    <DropdownMenuContent align="end" className="w-56 z-50 bg-popover">
+                    <DropdownMenuContent
+                      align="end"
+                      className="w-56 z-50 bg-popover"
+                    >
                       <DropdownMenuLabel className="font-normal">
                         <div className="flex flex-col space-y-1">
-                          <p className="text-sm font-medium leading-none">{user?.user_metadata?.full_name || "User"}</p>
-                          <p className="text-xs leading-none text-muted-foreground truncate">{user?.email}</p>
+                          <p className="text-sm font-medium leading-none">
+                            {user?.user_metadata?.full_name || 'User'}
+                          </p>
+                          <p className="text-xs leading-none text-muted-foreground truncate">
+                            {user?.email}
+                          </p>
                         </div>
                       </DropdownMenuLabel>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={() => navigate("/profile")}>
+                      <DropdownMenuItem onClick={() => navigate('/profile')}>
                         <User className="h-4 w-4 mr-2" />
                         My Profile
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => navigate("/settings")}>
+                      <DropdownMenuItem onClick={() => navigate('/settings')}>
                         <HelpCircle className="h-4 w-4 mr-2" />
                         Settings
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={() => {
-                        localStorage.removeItem('onboarding_complete');
-                        window.location.reload();
-                      }}>
+                      <DropdownMenuItem
+                        onClick={() => {
+                          localStorage.removeItem('onboarding_complete');
+                          window.location.reload();
+                        }}
+                      >
                         <HelpCircle className="h-4 w-4 mr-2" />
                         Restart Tutorial
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={handleSignOut} className="text-destructive focus:text-destructive">
+                      <DropdownMenuItem
+                        onClick={handleSignOut}
+                        className="text-destructive focus:text-destructive"
+                      >
                         <LogOut className="h-4 w-4 mr-2" />
                         Sign Out
                       </DropdownMenuItem>
@@ -282,20 +361,23 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             </div>
           </main>
         </div>
-        
+
         <MobileBottomNav />
         <MobileQuickActions />
       </div>
-      
+
       {/* Command Palette - Global for keyboard + mobile tap */}
-      <CommandPalette open={commandPaletteOpen} onOpenChange={setCommandPaletteOpen} />
-      
-      <KeyboardShortcutsDialog 
-        open={showShortcuts} 
+      <CommandPalette
+        open={commandPaletteOpen}
+        onOpenChange={setCommandPaletteOpen}
+      />
+
+      <KeyboardShortcutsDialog
+        open={showShortcuts}
         onOpenChange={setShowShortcuts}
         userRole={userRole}
       />
-      
+
       {/* New UX Components */}
       <SessionExpiryWarning />
       <KeyboardShortcuts />

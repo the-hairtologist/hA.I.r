@@ -1,10 +1,16 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Button } from "@/components/ui/button";
-import { MessageSquare, Plus, Trash2 } from "lucide-react";
-import { formatDistanceToNow } from "date-fns";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Button } from '@/components/ui/button';
+import { MessageSquare, Plus, Trash2 } from 'lucide-react';
+import { formatDistanceToNow } from 'date-fns';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 interface ConversationSelectorProps {
   open: boolean;
@@ -23,28 +29,28 @@ export const ConversationSelector = ({
   currentConversationId,
   onSelectConversation,
   onNewConversation,
-  onConversationsChange
+  onConversationsChange,
 }: ConversationSelectorProps) => {
   const handleDelete = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    
+
     try {
       const { error } = await supabase
-        .from("ai_conversations")
+        .from('ai_conversations')
         .delete()
-        .eq("id", id);
+        .eq('id', id);
 
       if (error) throw error;
 
-      toast.success("Conversation deleted");
+      toast.success('Conversation deleted');
       onConversationsChange();
-      
+
       if (id === currentConversationId) {
         onNewConversation();
       }
     } catch (error: any) {
-      console.error("Error deleting conversation:", error);
-      toast.error("Failed to delete conversation");
+      console.error('Error deleting conversation:', error);
+      toast.error('Failed to delete conversation');
     }
   };
 
@@ -67,7 +73,7 @@ export const ConversationSelector = ({
         </DialogHeader>
 
         <div className="space-y-4">
-          <Button 
+          <Button
             onClick={() => {
               onNewConversation();
               onOpenChange(false);
@@ -85,25 +91,27 @@ export const ConversationSelector = ({
                   No previous conversations yet
                 </div>
               ) : (
-                conversations.map((conv) => (
+                conversations.map(conv => (
                   <div
                     key={conv.id}
                     onClick={() => handleSelect(conv.id)}
                     className={`group relative p-4 rounded-lg border-2 cursor-pointer transition-all ${
                       conv.id === currentConversationId
-                        ? "border-primary bg-primary/5"
-                        : "border-border hover:border-primary/40 hover:bg-muted/50"
+                        ? 'border-primary bg-primary/5'
+                        : 'border-border hover:border-primary/40 hover:bg-muted/50'
                     }`}
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium truncate">
-                          {conv.title || "Untitled Conversation"}
+                          {conv.title || 'Untitled Conversation'}
                         </p>
                         <p className="text-xs text-muted-foreground mt-1">
-                          {formatDistanceToNow(new Date(conv.updated_at), { addSuffix: true })}
+                          {formatDistanceToNow(new Date(conv.updated_at), {
+                            addSuffix: true,
+                          })}
                         </p>
-                        {conv.context_type === "client" && (
+                        {conv.context_type === 'client' && (
                           <p className="text-xs text-accent mt-1">
                             📋 Client Context
                           </p>
@@ -112,7 +120,7 @@ export const ConversationSelector = ({
                       <Button
                         variant="ghost"
                         size="icon"
-                        onClick={(e) => handleDelete(conv.id, e)}
+                        onClick={e => handleDelete(conv.id, e)}
                         className="opacity-0 group-hover:opacity-100 transition-opacity h-8 w-8"
                       >
                         <Trash2 className="h-4 w-4 text-destructive" />

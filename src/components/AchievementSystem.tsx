@@ -1,10 +1,24 @@
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { Trophy, Star, Zap, Target, Award, TrendingUp, Calendar } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { useEffect, useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import {
+  Trophy,
+  Star,
+  Zap,
+  Target,
+  Award,
+  TrendingUp,
+  Calendar,
+} from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface Achievement {
   id: string;
@@ -26,32 +40,34 @@ export const AchievementSystem = () => {
   }, []);
 
   const loadAchievements = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (!user) return;
 
     // Get appointment count
     const { count: appointmentCount } = await supabase
-      .from("appointments")
-      .select("*", { count: "exact", head: true })
-      .eq("stylist_id", user.id);
+      .from('appointments')
+      .select('*', { count: 'exact', head: true })
+      .eq('stylist_id', user.id);
 
     // Get client count
     const { count: clientCount } = await supabase
-      .from("client_profiles")
-      .select("*", { count: "exact", head: true })
-      .eq("preferred_stylist_id", user.id);
+      .from('client_profiles')
+      .select('*', { count: 'exact', head: true })
+      .eq('preferred_stylist_id', user.id);
 
     // Get formula count
     const { count: formulaCount } = await supabase
-      .from("formulas")
-      .select("*", { count: "exact", head: true })
-      .eq("stylist_id", user.id);
+      .from('formulas')
+      .select('*', { count: 'exact', head: true })
+      .eq('stylist_id', user.id);
 
     // Get reviews
     const { data: reviews } = await supabase
-      .from("reviews")
-      .select("rating")
-      .eq("stylist_id", user.id);
+      .from('reviews')
+      .select('rating')
+      .eq('stylist_id', user.id);
 
     const avgRating = reviews?.length
       ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
@@ -59,63 +75,63 @@ export const AchievementSystem = () => {
 
     const achievementsList: Achievement[] = [
       {
-        id: "first_appointment",
-        title: "First Steps",
-        description: "Complete your first appointment",
+        id: 'first_appointment',
+        title: 'First Steps',
+        description: 'Complete your first appointment',
         icon: Calendar,
         progress: Math.min(appointmentCount || 0, 1),
         maxProgress: 1,
         unlocked: (appointmentCount || 0) >= 1,
       },
       {
-        id: "appointments_10",
-        title: "Rising Star",
-        description: "Complete 10 appointments",
+        id: 'appointments_10',
+        title: 'Rising Star',
+        description: 'Complete 10 appointments',
         icon: Star,
         progress: Math.min(appointmentCount || 0, 10),
         maxProgress: 10,
         unlocked: (appointmentCount || 0) >= 10,
       },
       {
-        id: "appointments_50",
-        title: "Professional",
-        description: "Complete 50 appointments",
+        id: 'appointments_50',
+        title: 'Professional',
+        description: 'Complete 50 appointments',
         icon: Award,
         progress: Math.min(appointmentCount || 0, 50),
         maxProgress: 50,
         unlocked: (appointmentCount || 0) >= 50,
       },
       {
-        id: "appointments_100",
-        title: "Master Stylist",
-        description: "Complete 100 appointments",
+        id: 'appointments_100',
+        title: 'Master Stylist',
+        description: 'Complete 100 appointments',
         icon: Trophy,
         progress: Math.min(appointmentCount || 0, 100),
         maxProgress: 100,
         unlocked: (appointmentCount || 0) >= 100,
       },
       {
-        id: "clients_10",
-        title: "Growing Practice",
-        description: "Serve 10 unique clients",
+        id: 'clients_10',
+        title: 'Growing Practice',
+        description: 'Serve 10 unique clients',
         icon: Target,
         progress: Math.min(clientCount || 0, 10),
         maxProgress: 10,
         unlocked: (clientCount || 0) >= 10,
       },
       {
-        id: "formulas_25",
-        title: "Formula Expert",
-        description: "Create 25 hair formulas",
+        id: 'formulas_25',
+        title: 'Formula Expert',
+        description: 'Create 25 hair formulas',
         icon: Zap,
         progress: Math.min(formulaCount || 0, 25),
         maxProgress: 25,
         unlocked: (formulaCount || 0) >= 25,
       },
       {
-        id: "high_rating",
-        title: "5-Star Service",
-        description: "Maintain 4.5+ average rating",
+        id: 'high_rating',
+        title: '5-Star Service',
+        description: 'Maintain 4.5+ average rating',
         icon: TrendingUp,
         progress: Math.round(avgRating * 10),
         maxProgress: 50,
@@ -127,7 +143,7 @@ export const AchievementSystem = () => {
     setLoading(false);
   };
 
-  const unlockedCount = achievements.filter((a) => a.unlocked).length;
+  const unlockedCount = achievements.filter(a => a.unlocked).length;
   const totalCount = achievements.length;
   const completionPercentage = Math.round((unlockedCount / totalCount) * 100);
 
@@ -150,42 +166,49 @@ export const AchievementSystem = () => {
         </div>
         <div className="pt-2">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-muted-foreground">Overall Progress</span>
-            <span className="text-sm font-semibold">{completionPercentage}%</span>
+            <span className="text-sm text-muted-foreground">
+              Overall Progress
+            </span>
+            <span className="text-sm font-semibold">
+              {completionPercentage}%
+            </span>
           </div>
           <Progress value={completionPercentage} className="h-2" />
         </div>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {achievements.map((achievement) => {
+          {achievements.map(achievement => {
             const Icon = achievement.icon;
-            const progressPercent = (achievement.progress / achievement.maxProgress) * 100;
+            const progressPercent =
+              (achievement.progress / achievement.maxProgress) * 100;
 
             return (
               <div
                 key={achievement.id}
                 className={cn(
-                  "p-4 rounded-lg border-2 transition-all",
+                  'p-4 rounded-lg border-2 transition-all',
                   achievement.unlocked
-                    ? "bg-primary/5 border-primary shadow-sm"
-                    : "bg-muted/50 border-border"
+                    ? 'bg-primary/5 border-primary shadow-sm'
+                    : 'bg-muted/50 border-border'
                 )}
               >
                 <div className="flex items-start gap-3">
                   <div
                     className={cn(
-                      "p-2 rounded-lg",
+                      'p-2 rounded-lg',
                       achievement.unlocked
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-muted text-muted-foreground"
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-muted text-muted-foreground'
                     )}
                   >
                     <Icon className="h-5 w-5" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <h4 className="font-semibold text-sm">{achievement.title}</h4>
+                      <h4 className="font-semibold text-sm">
+                        {achievement.title}
+                      </h4>
                       {achievement.unlocked && (
                         <Badge variant="default" className="text-xs px-2 py-0">
                           ✓

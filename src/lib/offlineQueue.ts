@@ -1,7 +1,11 @@
-﻿import { supabase } from "@/integrations/supabase/client";
-import { logger } from "@/lib/logger";
+﻿import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
-export type QueuedActionStatus = 'pending' | 'processing' | 'failed' | 'completed';
+export type QueuedActionStatus =
+  | 'pending'
+  | 'processing'
+  | 'failed'
+  | 'completed';
 
 interface BaseQueuedAction {
   id: string;
@@ -20,7 +24,7 @@ export type InsertAction = BaseQueuedAction & {
 
 export type UpdateAction = BaseQueuedAction & {
   type: 'update';
-  data: (Record<string, unknown> & { id: string | number });
+  data: Record<string, unknown> & { id: string | number };
 };
 
 export type DeleteAction = BaseQueuedAction & {
@@ -39,7 +43,11 @@ export type UploadAction = BaseQueuedAction & {
   data: UploadActionData;
 };
 
-export type QueuedAction = InsertAction | UpdateAction | DeleteAction | UploadAction;
+export type QueuedAction =
+  | InsertAction
+  | UpdateAction
+  | DeleteAction
+  | UploadAction;
 
 export type EnqueuePayload =
   | Pick<InsertAction, 'type' | 'table' | 'data' | 'userId'>
@@ -84,25 +92,38 @@ class OfflineQueue {
         if (isQueuedActionArray(parsed)) {
           this.queue = parsed;
           this.cleanupOldItems();
-          logger.info(`Loaded ${this.queue.length} queued actions`, 'offlineQueue');
+          logger.info(
+            `Loaded ${this.queue.length} queued actions`,
+            'offlineQueue'
+          );
         } else {
-          logger.warn('Stored offline queue had unexpected shape; clearing queue', 'offlineQueue');
+          logger.warn(
+            'Stored offline queue had unexpected shape; clearing queue',
+            'offlineQueue'
+          );
           this.queue = [];
           this.saveQueue();
         }
       }
     } catch (error) {
-      logger.error('Failed to load offline queue', 'offlineQueue', toError(error));
+      logger.error(
+        'Failed to load offline queue',
+        'offlineQueue',
+        toError(error)
+      );
     }
   }
 
   private cleanupOldItems() {
-    const cutoffTime = Date.now() - (MAX_QUEUE_AGE_DAYS * 24 * 60 * 60 * 1000);
+    const cutoffTime = Date.now() - MAX_QUEUE_AGE_DAYS * 24 * 60 * 60 * 1000;
     const originalLength = this.queue.length;
     this.queue = this.queue.filter(item => item.timestamp > cutoffTime);
 
     if (originalLength !== this.queue.length) {
-      logger.info(`Cleaned up ${originalLength - this.queue.length} old queued items`, 'offlineQueue');
+      logger.info(
+        `Cleaned up ${originalLength - this.queue.length} old queued items`,
+        'offlineQueue'
+      );
       this.saveQueue();
     }
   }
@@ -113,7 +134,11 @@ class OfflineQueue {
     try {
       localStorage.removeItem(QUEUE_KEY);
     } catch (error) {
-      logger.error('Failed to clear offline queue', 'offlineQueue', toError(error));
+      logger.error(
+        'Failed to clear offline queue',
+        'offlineQueue',
+        toError(error)
+      );
     }
     this.notifyListeners();
   }
@@ -123,7 +148,11 @@ class OfflineQueue {
       localStorage.setItem(QUEUE_KEY, JSON.stringify(this.queue));
       this.notifyListeners();
     } catch (error) {
-      logger.error('Failed to save offline queue', 'offlineQueue', toError(error));
+      logger.error(
+        'Failed to save offline queue',
+        'offlineQueue',
+        toError(error)
+      );
     }
   }
 
@@ -155,11 +184,15 @@ class OfflineQueue {
     this.queue.push(queuedAction);
     this.saveQueue();
 
-    logger.debug(`Enqueued ${action.type} action for ${action.table}`, 'offlineQueue', {
-      id: queuedAction.id,
-      type: action.type,
-      table: action.table,
-    });
+    logger.debug(
+      `Enqueued ${action.type} action for ${action.table}`,
+      'offlineQueue',
+      {
+        id: queuedAction.id,
+        type: action.type,
+        table: action.table,
+      }
+    );
 
     if (navigator.onLine) {
       void this.processQueue();
@@ -174,9 +207,14 @@ class OfflineQueue {
     }
 
     this.processing = true;
-    logger.info(`Processing ${this.queue.length} queued actions...`, 'offlineQueue');
+    logger.info(
+      `Processing ${this.queue.length} queued actions...`,
+      'offlineQueue'
+    );
 
-    const pendingActions = this.queue.filter(action => action.status === 'pending');
+    const pendingActions = this.queue.filter(
+      action => action.status === 'pending'
+    );
 
     for (const action of pendingActions) {
       try {
@@ -194,10 +232,17 @@ class OfflineQueue {
         if (action.retryCount >= MAX_RETRIES) {
           action.status = 'failed';
           action.error = err.message;
-          logger.error(`Action ${action.id} failed after ${MAX_RETRIES} retries`, 'offlineQueue', err);
+          logger.error(
+            `Action ${action.id} failed after ${MAX_RETRIES} retries`,
+            'offlineQueue',
+            err
+          );
         } else {
           action.status = 'pending';
-          logger.warn(`Action ${action.id} failed, retry ${action.retryCount}/${MAX_RETRIES}`, 'offlineQueue');
+          logger.warn(
+            `Action ${action.id} failed, retry ${action.retryCount}/${MAX_RETRIES}`,
+            'offlineQueue'
+          );
           await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
         }
       }
@@ -209,7 +254,10 @@ class OfflineQueue {
     this.saveQueue();
 
     this.processing = false;
-    logger.info(`Queue processing complete. ${this.queue.length} actions remaining.`, 'offlineQueue');
+    logger.info(
+      `Queue processing complete. ${this.queue.length} actions remaining.`,
+      'offlineQueue'
+    );
   }
 
   private executeAction(action: QueuedAction) {
@@ -230,9 +278,7 @@ class OfflineQueue {
   }
 
   private async executeInsert(action: InsertAction) {
-    const { error } = await supabase
-      .from(action.table)
-      .insert(action.data);
+    const { error } = await supabase.from(action.table).insert(action.data);
 
     if (error) throw error;
   }
@@ -263,11 +309,9 @@ class OfflineQueue {
     const response = await fetch(file);
     const blob = await response.blob();
 
-    const { error } = await supabase.storage
-      .from(bucket)
-      .upload(path, blob, {
-        upsert: true,
-      });
+    const { error } = await supabase.storage.from(bucket).upload(path, blob, {
+      upsert: true,
+    });
 
     if (error) throw error;
   }

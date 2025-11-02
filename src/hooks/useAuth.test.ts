@@ -25,11 +25,11 @@ describe.skip('useAuth', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.useFakeTimers();
-    
+
     vi.mocked(supabase.auth.onAuthStateChange).mockReturnValue({
       data: { subscription: { unsubscribe: vi.fn() } },
     } as any);
-    
+
     vi.mocked(supabase.auth.getSession).mockResolvedValue({
       data: { session: null },
       error: null,
@@ -48,9 +48,12 @@ describe.skip('useAuth', () => {
       await vi.runAllTimersAsync();
     });
 
-    await waitFor(() => {
-      expect(result.current.loading).toBe(false);
-    }, { timeout: 10000 });
+    await waitFor(
+      () => {
+        expect(result.current.loading).toBe(false);
+      },
+      { timeout: 10000 }
+    );
 
     expect(result.current.user).toBeNull();
     expect(result.current.session).toBeNull();
@@ -72,9 +75,12 @@ describe.skip('useAuth', () => {
       await vi.runAllTimersAsync();
     });
 
-    await waitFor(() => {
-      expect(result.current.loading).toBe(false);
-    }, { timeout: 10000 });
+    await waitFor(
+      () => {
+        expect(result.current.loading).toBe(false);
+      },
+      { timeout: 10000 }
+    );
 
     await act(async () => {
       await result.current.signIn('test@example.com', 'password');
@@ -100,9 +106,12 @@ describe.skip('useAuth', () => {
       await vi.runAllTimersAsync();
     });
 
-    await waitFor(() => {
-      expect(result.current.loading).toBe(false);
-    }, { timeout: 10000 });
+    await waitFor(
+      () => {
+        expect(result.current.loading).toBe(false);
+      },
+      { timeout: 10000 }
+    );
 
     await expect(
       act(async () => {
@@ -126,9 +135,12 @@ describe.skip('useAuth', () => {
       await vi.runAllTimersAsync();
     });
 
-    await waitFor(() => {
-      expect(result.current.loading).toBe(false);
-    }, { timeout: 10000 });
+    await waitFor(
+      () => {
+        expect(result.current.loading).toBe(false);
+      },
+      { timeout: 10000 }
+    );
 
     await act(async () => {
       await result.current.signUp('test@example.com', 'password', 'Test User');
@@ -155,9 +167,12 @@ describe.skip('useAuth', () => {
       await vi.runAllTimersAsync();
     });
 
-    await waitFor(() => {
-      expect(result.current.loading).toBe(false);
-    }, { timeout: 10000 });
+    await waitFor(
+      () => {
+        expect(result.current.loading).toBe(false);
+      },
+      { timeout: 10000 }
+    );
 
     await act(async () => {
       await result.current.signOut();
@@ -179,9 +194,12 @@ describe.skip('useAuth', () => {
       await vi.runAllTimersAsync();
     });
 
-    await waitFor(() => {
-      expect(result.current.loading).toBe(false);
-    }, { timeout: 10000 });
+    await waitFor(
+      () => {
+        expect(result.current.loading).toBe(false);
+      },
+      { timeout: 10000 }
+    );
 
     await act(async () => {
       await result.current.resetPassword('test@example.com');
@@ -206,9 +224,12 @@ describe.skip('useAuth', () => {
       await vi.runAllTimersAsync();
     });
 
-    await waitFor(() => {
-      expect(result.current.loading).toBe(false);
-    }, { timeout: 10000 });
+    await waitFor(
+      () => {
+        expect(result.current.loading).toBe(false);
+      },
+      { timeout: 10000 }
+    );
 
     await act(async () => {
       await result.current.updatePassword('newpassword123');

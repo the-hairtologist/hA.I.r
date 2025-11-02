@@ -1,7 +1,7 @@
-import { Star, User } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { format } from "date-fns";
+import { Star, User } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { format } from 'date-fns';
 
 interface ReviewCardProps {
   clientName: string;
@@ -33,18 +33,18 @@ export const ReviewCard = ({
             <div className="flex items-center justify-between">
               <h4 className="font-semibold text-foreground">{clientName}</h4>
               <span className="text-xs text-muted-foreground">
-                {format(new Date(createdAt), "MMM d, yyyy")}
+                {format(new Date(createdAt), 'MMM d, yyyy')}
               </span>
             </div>
 
             <div className="flex items-center gap-1">
-              {[1, 2, 3, 4, 5].map((star) => (
+              {[1, 2, 3, 4, 5].map(star => (
                 <Star
                   key={star}
                   className={`h-4 w-4 ${
                     star <= rating
-                      ? "fill-amber-400 text-amber-400"
-                      : "text-muted-foreground/30"
+                      ? 'fill-amber-400 text-amber-400'
+                      : 'text-muted-foreground/30'
                   } transition-all duration-200`}
                 />
               ))}

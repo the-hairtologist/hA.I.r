@@ -43,7 +43,12 @@ class UserJourneyTracker {
   /**
    * Track API calls
    */
-  trackApiCall(method: string, endpoint: string, status: number, duration: number): void {
+  trackApiCall(
+    method: string,
+    endpoint: string,
+    status: number,
+    duration: number
+  ): void {
     this.addEvent({
       type: 'api-call',
       description: `${method} ${endpoint} - ${status} (${duration}ms)`,
@@ -98,10 +103,10 @@ class UserJourneyTracker {
     errorCount: number;
   } {
     const sessionDuration = Date.now() - this.sessionStart;
-    const errorCount = this.events.filter((e) => e.type === 'error').length;
+    const errorCount = this.events.filter(e => e.type === 'error').length;
     const lastNavigation = [...this.events]
       .reverse()
-      .find((e) => e.type === 'navigation');
+      .find(e => e.type === 'navigation');
 
     return {
       sessionDuration,
@@ -117,8 +122,11 @@ class UserJourneyTracker {
    */
   getFormattedJourney(): string {
     return this.events
-      .map((event) => {
-        const relativeTime = ((event.timestamp - this.sessionStart) / 1000).toFixed(1);
+      .map(event => {
+        const relativeTime = (
+          (event.timestamp - this.sessionStart) /
+          1000
+        ).toFixed(1);
         return `[+${relativeTime}s] ${event.type.toUpperCase()}: ${event.description}`;
       })
       .join('\n');

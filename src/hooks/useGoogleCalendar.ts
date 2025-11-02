@@ -19,10 +19,12 @@ export const useGoogleCalendar = () => {
   const connectGoogleCalendar = useCallback(async () => {
     setIsLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke('google-calendar-connect');
-      
+      const { data, error } = await supabase.functions.invoke(
+        'google-calendar-connect'
+      );
+
       if (error) throw error;
-      
+
       if (data?.authUrl) {
         window.location.href = data.authUrl;
         analytics.track('google_calendar_connect_started');
@@ -38,14 +40,19 @@ export const useGoogleCalendar = () => {
   const syncAppointment = useCallback(async (event: CalendarEvent) => {
     setIsLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke('google-calendar-sync', {
-        body: { event }
-      });
-      
+      const { data, error } = await supabase.functions.invoke(
+        'google-calendar-sync',
+        {
+          body: { event },
+        }
+      );
+
       if (error) throw error;
-      
+
       toast.success('Appointment synced to Google Calendar');
-      analytics.track('appointment_synced_to_calendar', { event_id: data?.eventId });
+      analytics.track('appointment_synced_to_calendar', {
+        event_id: data?.eventId,
+      });
       return data;
     } catch (error) {
       console.error('Error syncing to Google Calendar:', error);
@@ -59,10 +66,12 @@ export const useGoogleCalendar = () => {
   const disconnectGoogleCalendar = useCallback(async () => {
     setIsLoading(true);
     try {
-      const { error } = await supabase.functions.invoke('google-calendar-disconnect');
-      
+      const { error } = await supabase.functions.invoke(
+        'google-calendar-disconnect'
+      );
+
       if (error) throw error;
-      
+
       setIsConnected(false);
       toast.success('Disconnected from Google Calendar');
       analytics.track('google_calendar_disconnected');
@@ -79,6 +88,6 @@ export const useGoogleCalendar = () => {
     isLoading,
     connectGoogleCalendar,
     syncAppointment,
-    disconnectGoogleCalendar
+    disconnectGoogleCalendar,
   };
 };

@@ -1,6 +1,12 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { Camera, Image as ImageIcon } from 'lucide-react';
 import { BeforeAfterPhotoFlow } from '@/components/BeforeAfterPhotoFlow';
 
@@ -15,18 +21,14 @@ export const AppointmentPhotoButton: React.FC<AppointmentPhotoButtonProps> = ({
   appointmentId,
   clientId,
   stylistId,
-  serviceType
+  serviceType,
 }) => {
   const [open, setOpen] = useState(false);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button 
-          variant="outline" 
-          size="sm"
-          className="relative min-h-[44px]"
-        >
+        <Button variant="outline" size="sm" className="relative min-h-[44px]">
           <Camera className="h-4 w-4 mr-2" />
           <span className="hidden sm:inline">Progress Photos</span>
           <span className="sm:hidden">Photos</span>

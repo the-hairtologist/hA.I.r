@@ -1,6 +1,12 @@
 import React, { Component, ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logging/productionLogger';
@@ -23,8 +29,8 @@ interface State {
 export class ErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { 
-      hasError: false, 
+    this.state = {
+      hasError: false,
       error: null,
       errorCount: 0,
       lastError: 0,
@@ -32,8 +38,8 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   static getDerivedStateFromError(error: Error): State {
-    return { 
-      hasError: true, 
+    return {
+      hasError: true,
       error,
       errorCount: 0,
       lastError: Date.now(),
@@ -43,17 +49,17 @@ export class ErrorBoundary extends Component<Props, State> {
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     // Use structured logging instead of console.error
     const journeySummary = userJourney.getJourneySummary();
-    
+
     logger.error('Error caught by boundary', error, {
       componentStack: errorInfo.componentStack,
       errorCount: this.state.errorCount,
       userJourney: journeySummary.recentEvents,
       lastRoute: journeySummary.lastRoute,
     });
-    
+
     // Track error in journey
     userJourney.trackError(error, { componentStack: errorInfo.componentStack });
-    
+
     // Track error in production (could send to monitoring service)
     if (import.meta.env.PROD) {
       this.logErrorToService(error, errorInfo);
@@ -61,10 +67,10 @@ export class ErrorBoundary extends Component<Props, State> {
 
     // Call custom error handler if provided
     this.props.onError?.(error, errorInfo);
-    
+
     // Show user-friendly toast
     toast.error('Something went wrong', {
-      description: 'We\'re working to fix this issue',
+      description: "We're working to fix this issue",
     });
   }
 
@@ -73,8 +79,8 @@ export class ErrorBoundary extends Component<Props, State> {
   };
 
   handleReset = () => {
-    this.setState({ 
-      hasError: false, 
+    this.setState({
+      hasError: false,
       error: null,
       errorCount: this.state.errorCount + 1,
     });
@@ -100,7 +106,9 @@ export class ErrorBoundary extends Component<Props, State> {
                   <AlertTriangle className="h-6 w-6 text-destructive" />
                 </div>
                 <div>
-                  <CardTitle className="text-2xl font-pixel text-foreground">Oops!</CardTitle>
+                  <CardTitle className="text-2xl font-pixel text-foreground">
+                    Oops!
+                  </CardTitle>
                   <CardDescription className="font-sans text-muted-foreground font-medium">
                     Something went wrong
                   </CardDescription>
@@ -109,17 +117,19 @@ export class ErrorBoundary extends Component<Props, State> {
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-sm text-foreground/80 font-medium">
-                We encountered an unexpected error. Don't worry, your data is safe!
+                We encountered an unexpected error. Don't worry, your data is
+                safe!
               </p>
 
               {this.state.errorCount > 0 && (
                 <div className="bg-warning/10 dark:bg-warning/20 p-3 rounded-lg border-2 border-warning">
                   <p className="text-sm text-warning-foreground font-medium">
-                    This error has occurred {this.state.errorCount} time{this.state.errorCount !== 1 ? 's' : ''}
+                    This error has occurred {this.state.errorCount} time
+                    {this.state.errorCount !== 1 ? 's' : ''}
                   </p>
                 </div>
               )}
-              
+
               {this.state.error && import.meta.env.DEV && (
                 <details className="text-xs bg-muted p-3 rounded-lg brutal-border-subtle brutal-shadow-sm">
                   <summary className="cursor-pointer font-bold text-foreground mb-2">
@@ -143,8 +153,8 @@ export class ErrorBoundary extends Component<Props, State> {
                 )}
                 <div className="flex gap-2">
                   <Button
-                    onClick={() => window.location.href = '/dashboard'}
-                    variant={canRetry ? "outline" : "default"}
+                    onClick={() => (window.location.href = '/dashboard')}
+                    variant={canRetry ? 'outline' : 'default'}
                     className="flex-1 brutal-button brutal-hover"
                   >
                     Go to Dashboard

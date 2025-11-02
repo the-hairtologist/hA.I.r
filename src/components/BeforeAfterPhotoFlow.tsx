@@ -9,7 +9,16 @@ import { useRichHaptics } from '@/hooks/useRichHaptics';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Camera, Check, X, RefreshCw, Sparkles, Loader2, Image as ImageIcon, Wand2 } from 'lucide-react';
+import {
+  Camera,
+  Check,
+  X,
+  RefreshCw,
+  Sparkles,
+  Loader2,
+  Image as ImageIcon,
+  Wand2,
+} from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { removeBackground, loadImage } from '@/utils/backgroundRemoval';
 import { supabase } from '@/integrations/supabase/client';
@@ -33,9 +42,10 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
   clientId,
   appointmentId,
   serviceType,
-  onComplete
+  onComplete,
 }) => {
-  const { smartCapture, capturing, photos, comparePhotos } = useSmartPhotoCapture();
+  const { smartCapture, capturing, photos, comparePhotos } =
+    useSmartPhotoCapture();
   const haptics = useRichHaptics();
   const triggerSuccess = () => haptics.patterns.successSequence();
   const triggerError = () => haptics.patterns.warningPattern();
@@ -47,29 +57,35 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
   const [afterPhoto, setAfterPhoto] = useState<string | null>(null);
   const [showComparison, setShowComparison] = useState(false);
   const [removingBackground, setRemovingBackground] = useState(false);
-  const [currentPhotoForBgRemoval, setCurrentPhotoForBgRemoval] = useState<string | null>(null);
+  const [currentPhotoForBgRemoval, setCurrentPhotoForBgRemoval] = useState<
+    string | null
+  >(null);
 
   const capturePhotoAction = async () => {
     triggerButton();
-    
+
     const metadata = {
-      stage: (stage === 'complete' ? 'after' : stage) as 'before' | 'after' | 'progress',
+      stage: (stage === 'complete' ? 'after' : stage) as
+        | 'before'
+        | 'after'
+        | 'progress',
       clientId,
       appointmentId,
-      serviceType
+      serviceType,
     };
 
     const photo = await smartCapture(metadata);
-    
+
     if (photo) {
       triggerSuccess();
-      
+
       if (stage === 'before') {
         setBeforePhoto(photo.url);
         setCurrentPhotoForBgRemoval(photo.url);
         toast({
           title: '✨ Before photo captured!',
-          description: 'Photo optimized and saved. Remove background or capture After photo.',
+          description:
+            'Photo optimized and saved. Remove background or capture After photo.',
         });
         setStage('after');
       } else if (stage === 'after') {
@@ -80,7 +96,7 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
           description: 'Before & After photos saved.',
         });
         setStage('complete');
-        
+
         if (beforePhoto && onComplete) {
           onComplete({ before: beforePhoto, after: photo.url });
         }
@@ -90,52 +106,52 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
       toast({
         title: 'Camera Error',
         description: 'Could not capture photo. Please try again.',
-        variant: 'destructive'
+        variant: 'destructive',
       });
     }
   };
 
   const handleRemoveBackground = async () => {
     if (!currentPhotoForBgRemoval) return;
-    
+
     setRemovingBackground(true);
     triggerButton();
-    
+
     try {
       toast({
         title: 'Processing...',
         description: 'AI is removing the background (3-5 seconds)',
       });
-      
+
       // Load the image
       const response = await fetch(currentPhotoForBgRemoval);
       const blob = await response.blob();
       const img = await loadImage(blob);
-      
+
       // Remove background
       const processedBlob = await removeBackground(img);
-      
+
       // Upload processed image directly to storage
       const timestamp = Date.now();
       const clientPath = clientId || 'temp';
       const filePath = `${clientPath}/${timestamp}_nobg.png`;
-      
+
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('hair-photos')
         .upload(filePath, processedBlob, {
           contentType: 'image/png',
-          upsert: true
+          upsert: true,
         });
-      
+
       if (uploadError) throw uploadError;
-      
+
       // Get public URL
       const { data: urlData } = supabase.storage
         .from('hair-photos')
         .getPublicUrl(filePath);
-      
+
       const processedUrl = urlData.publicUrl;
-      
+
       // Update the current photo with background removed version
       if (stage === 'after' || stage === 'complete') {
         setAfterPhoto(processedUrl);
@@ -143,20 +159,19 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
         setBeforePhoto(processedUrl);
       }
       setCurrentPhotoForBgRemoval(processedUrl);
-      
+
       triggerSuccess();
       toast({
         title: '✨ Background removed!',
         description: 'Professional photo ready',
       });
-      
     } catch (error) {
       console.error('Background removal error:', error);
       triggerError();
       toast({
         title: 'Processing Failed',
         description: 'Could not remove background. Please try again.',
-        variant: 'destructive'
+        variant: 'destructive',
       });
     } finally {
       setRemovingBackground(false);
@@ -180,11 +195,15 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
 
   return (
     <div className="space-y-4">
-      <Card className={`border-2 ${
-        stage === 'before' ? 'border-blue-500' : 
-        stage === 'after' ? 'border-purple-500' : 
-        'border-green-500'
-      }`}>
+      <Card
+        className={`border-2 ${
+          stage === 'before'
+            ? 'border-blue-500'
+            : stage === 'after'
+              ? 'border-purple-500'
+              : 'border-green-500'
+        }`}
+      >
         <CardContent className="p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
@@ -195,11 +214,15 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
                 {stage === 'complete' && 'Photos Complete'}
               </h3>
             </div>
-            <Badge variant={
-              stage === 'before' ? 'secondary' : 
-              stage === 'after' ? 'default' : 
-              'outline'
-            }>
+            <Badge
+              variant={
+                stage === 'before'
+                  ? 'secondary'
+                  : stage === 'after'
+                    ? 'default'
+                    : 'outline'
+              }
+            >
               {stage === 'before' && 'Step 1/2'}
               {stage === 'after' && 'Step 2/2'}
               {stage === 'complete' && 'Done'}
@@ -209,14 +232,18 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
           {/* Photo Preview Grid */}
           <div className="grid grid-cols-2 gap-4 mb-4">
             {/* Before Photo */}
-            <div className={`relative aspect-square rounded-lg overflow-hidden border-[3px] ${
-              beforePhoto ? 'border-info shadow-[3px_3px_0px_0px_hsl(var(--info))]' : 'border-dashed border-muted'
-            }`}>
+            <div
+              className={`relative aspect-square rounded-lg overflow-hidden border-[3px] ${
+                beforePhoto
+                  ? 'border-info shadow-[3px_3px_0px_0px_hsl(var(--info))]'
+                  : 'border-dashed border-muted'
+              }`}
+            >
               {beforePhoto ? (
                 <>
-                  <OptimizedImage 
-                    src={beforePhoto} 
-                    alt="Before" 
+                  <OptimizedImage
+                    src={beforePhoto}
+                    alt="Before"
                     width={400}
                     height={400}
                     className="w-full h-full object-cover"
@@ -237,14 +264,18 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
             </div>
 
             {/* After Photo */}
-            <div className={`relative aspect-square rounded-lg overflow-hidden border-[3px] ${
-              afterPhoto ? 'border-success shadow-[3px_3px_0px_0px_hsl(var(--success))]' : 'border-dashed border-muted'
-            }`}>
+            <div
+              className={`relative aspect-square rounded-lg overflow-hidden border-[3px] ${
+                afterPhoto
+                  ? 'border-success shadow-[3px_3px_0px_0px_hsl(var(--success))]'
+                  : 'border-dashed border-muted'
+              }`}
+            >
               {afterPhoto ? (
                 <>
-                  <OptimizedImage 
-                    src={afterPhoto} 
-                    alt="After" 
+                  <OptimizedImage
+                    src={afterPhoto}
+                    alt="After"
                     width={400}
                     height={400}
                     className="w-full h-full object-cover"
@@ -275,8 +306,8 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
           <div className="flex gap-2">
             {stage !== 'complete' && (
               <>
-                <Button 
-                  onClick={capturePhotoAction} 
+                <Button
+                  onClick={capturePhotoAction}
                   disabled={capturing}
                   className="flex-1"
                   size="lg"
@@ -293,10 +324,10 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
                     </>
                   )}
                 </Button>
-                
+
                 {currentPhotoForBgRemoval && (
-                  <Button 
-                    onClick={handleRemoveBackground} 
+                  <Button
+                    onClick={handleRemoveBackground}
                     disabled={removingBackground}
                     variant="outline"
                     size="lg"
@@ -316,7 +347,7 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
                 )}
               </>
             )}
-            
+
             {stage === 'complete' && (
               <>
                 <Button onClick={viewComparison} className="flex-1" size="lg">
@@ -331,7 +362,12 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
             )}
 
             {stage === 'after' && beforePhoto && (
-              <Button onClick={resetFlow} variant="outline" size="icon" aria-label="Cancel and reset flow">
+              <Button
+                onClick={resetFlow}
+                variant="outline"
+                size="icon"
+                aria-label="Cancel and reset flow"
+              >
                 <X className="h-5 w-5" />
               </Button>
             )}
@@ -364,20 +400,24 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
           {beforePhoto && afterPhoto && (
             <div className="grid md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Badge className="bg-info text-info-foreground border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">Before</Badge>
-                <OptimizedImage 
-                  src={beforePhoto} 
-                  alt="Before" 
+                <Badge className="bg-info text-info-foreground border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
+                  Before
+                </Badge>
+                <OptimizedImage
+                  src={beforePhoto}
+                  alt="Before"
                   width={600}
                   height={600}
                   className="w-full rounded-lg border-[3px] border-info shadow-[4px_4px_0px_0px_hsl(var(--info))]"
                 />
               </div>
               <div className="space-y-2">
-                <Badge className="bg-secondary text-secondary-foreground border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">After</Badge>
-                <OptimizedImage 
-                  src={afterPhoto} 
-                  alt="After" 
+                <Badge className="bg-secondary text-secondary-foreground border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
+                  After
+                </Badge>
+                <OptimizedImage
+                  src={afterPhoto}
+                  alt="After"
                   width={600}
                   height={600}
                   className="w-full rounded-lg border-[3px] border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary))]"

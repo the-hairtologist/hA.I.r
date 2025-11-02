@@ -8,10 +8,10 @@ interface RoleBasedFeatureGateProps {
   fallback?: ReactNode;
 }
 
-export const RoleBasedFeatureGate = ({ 
-  children, 
-  allowedRoles, 
-  fallback = null 
+export const RoleBasedFeatureGate = ({
+  children,
+  allowedRoles,
+  fallback = null,
 }: RoleBasedFeatureGateProps) => {
   const { user } = useAuth();
   const { roles } = useUserRole(user?.id);

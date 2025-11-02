@@ -1,9 +1,9 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { serve } from 'https://deno.land/std@0.190.0/http/server.ts';
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
 };
 
 interface InviteRequest {
@@ -14,14 +14,21 @@ interface InviteRequest {
 }
 
 const handler = async (req: Request): Promise<Response> => {
-  if (req.method === "OPTIONS") {
+  if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { clientEmail, clientName, stylistName, customMessage }: InviteRequest = await req.json();
+    const {
+      clientEmail,
+      clientName,
+      stylistName,
+      customMessage,
+    }: InviteRequest = await req.json();
 
-    const appUrl = Deno.env.get("VITE_SUPABASE_URL")?.replace("/rest/v1", "") || "https://app.example.com";
+    const appUrl =
+      Deno.env.get('VITE_SUPABASE_URL')?.replace('/rest/v1', '') ||
+      'https://app.example.com';
 
     const emailHtml = `
       <!DOCTYPE html>
@@ -72,14 +79,14 @@ const handler = async (req: Request): Promise<Response> => {
       </html>
     `;
 
-    const emailResponse = await fetch("https://api.resend.com/emails", {
-      method: "POST",
+    const emailResponse = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${Deno.env.get("RESEND_API_KEY")}`,
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${Deno.env.get('RESEND_API_KEY')}`,
       },
       body: JSON.stringify({
-        from: "AI Hair Genius <onboarding@resend.dev>",
+        from: 'AI Hair Genius <onboarding@resend.dev>',
         to: [clientEmail],
         subject: `${stylistName} invited you to AI Hair Genius 💇‍♀️`,
         html: emailHtml,
@@ -92,24 +99,21 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     const result = await emailResponse.json();
-    console.log("Invite email sent successfully:", result);
+    console.log('Invite email sent successfully:', result);
 
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         ...corsHeaders,
       },
     });
   } catch (error: any) {
-    console.error("Error sending invite:", error);
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
-      }
-    );
+    console.error('Error sending invite:', error);
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json', ...corsHeaders },
+    });
   }
 };
 

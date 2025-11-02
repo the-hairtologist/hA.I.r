@@ -1,11 +1,18 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
-import { AlertTriangle, Clock, CheckCircle2, Save, Copy, Sparkles } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Button } from '@/components/ui/button';
+import {
+  AlertTriangle,
+  Clock,
+  CheckCircle2,
+  Save,
+  Copy,
+  Sparkles,
+} from 'lucide-react';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 interface FormulaStep {
   product?: string;
@@ -38,7 +45,10 @@ interface StructuredFormulaDisplayProps {
   onSave?: (formula: string) => void;
 }
 
-export const StructuredFormulaDisplay = ({ data, onSave }: StructuredFormulaDisplayProps) => {
+export const StructuredFormulaDisplay = ({
+  data,
+  onSave,
+}: StructuredFormulaDisplayProps) => {
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
 
   // Try to parse if it's a string
@@ -74,7 +84,7 @@ export const StructuredFormulaDisplay = ({ data, onSave }: StructuredFormulaDisp
   const copyFormula = () => {
     const text = JSON.stringify(formula, null, 2);
     navigator.clipboard.writeText(text);
-    toast.success("Formula copied to clipboard");
+    toast.success('Formula copied to clipboard');
   };
 
   const renderFormulaSection = (title: string, items?: FormulaStep[]) => {
@@ -86,14 +96,24 @@ export const StructuredFormulaDisplay = ({ data, onSave }: StructuredFormulaDisp
         {items.map((item, idx) => (
           <Card key={idx} className="bg-muted/30 border-muted">
             <CardContent className="p-3 space-y-1 text-sm">
-              {item.product && <div className="font-medium">{item.product}</div>}
+              {item.product && (
+                <div className="font-medium">{item.product}</div>
+              )}
               {item.brand && item.shade && (
                 <div className="text-muted-foreground">
                   {item.brand} {item.shade}
                 </div>
               )}
-              {item.amount && <div>Amount: <span className="font-mono">{item.amount}</span></div>}
-              {item.ratio && <div>Ratio: <span className="font-mono">{item.ratio}</span></div>}
+              {item.amount && (
+                <div>
+                  Amount: <span className="font-mono">{item.amount}</span>
+                </div>
+              )}
+              {item.ratio && (
+                <div>
+                  Ratio: <span className="font-mono">{item.ratio}</span>
+                </div>
+              )}
               {item.developer && <div>Developer: {item.developer}</div>}
               {item.mix && <div>Mix: {item.mix}</div>}
               {item.processing_minutes && (
@@ -118,7 +138,10 @@ export const StructuredFormulaDisplay = ({ data, onSave }: StructuredFormulaDisp
               <CheckCircle2 className="h-5 w-5 text-success" />
               <CardTitle className="text-lg">Professional Formula</CardTitle>
             </div>
-            <Badge variant="outline" className="w-fit text-xs border-primary/30 bg-primary/5">
+            <Badge
+              variant="outline"
+              className="w-fit text-xs border-primary/30 bg-primary/5"
+            >
               <Sparkles className="h-3 w-3 mr-1" />
               AI-Generated • Verify with Professional
             </Badge>
@@ -159,7 +182,9 @@ export const StructuredFormulaDisplay = ({ data, onSave }: StructuredFormulaDisp
           <Alert variant="destructive">
             <AlertTriangle className="h-4 w-4" />
             <AlertDescription>
-              <div className="font-semibold mb-1">Missing Required Information:</div>
+              <div className="font-semibold mb-1">
+                Missing Required Information:
+              </div>
               <ul className="list-disc list-inside text-sm">
                 {formula.missing_inputs.map((input, idx) => (
                   <li key={idx}>{input}</li>
@@ -174,10 +199,15 @@ export const StructuredFormulaDisplay = ({ data, onSave }: StructuredFormulaDisp
           <Alert className="border-warning/50 bg-warning/5">
             <AlertTriangle className="h-4 w-4 text-warning" />
             <AlertDescription>
-              <div className="font-semibold mb-2 text-warning">⚠️ Important Cautions:</div>
+              <div className="font-semibold mb-2 text-warning">
+                ⚠️ Important Cautions:
+              </div>
               <ul className="space-y-1">
                 {formula.cautions.map((caution, idx) => (
-                  <li key={idx} className="text-sm text-foreground/80 flex items-start">
+                  <li
+                    key={idx}
+                    className="text-sm text-foreground/80 flex items-start"
+                  >
                     <span className="mr-2">•</span>
                     <span>{caution}</span>
                   </li>
@@ -190,16 +220,18 @@ export const StructuredFormulaDisplay = ({ data, onSave }: StructuredFormulaDisp
         {/* Formula Components */}
         {formula.formula && (
           <div className="space-y-4">
-            {renderFormulaSection("Base/Color", formula.formula.base)}
-            {renderFormulaSection("Lightening", formula.formula.lighten)}
-            {renderFormulaSection("Toning", formula.formula.tone)}
+            {renderFormulaSection('Base/Color', formula.formula.base)}
+            {renderFormulaSection('Lightening', formula.formula.lighten)}
+            {renderFormulaSection('Toning', formula.formula.tone)}
           </div>
         )}
 
         {/* Application Steps */}
         {formula.application_steps && formula.application_steps.length > 0 && (
           <div className="space-y-2">
-            <h4 className="font-semibold text-sm text-foreground/90">Application Steps</h4>
+            <h4 className="font-semibold text-sm text-foreground/90">
+              Application Steps
+            </h4>
             <div className="space-y-2">
               {formula.application_steps.map((step, idx) => (
                 <div
@@ -213,7 +245,9 @@ export const StructuredFormulaDisplay = ({ data, onSave }: StructuredFormulaDisp
                   />
                   <span
                     className={`text-sm flex-1 ${
-                      completedSteps.has(idx) ? "line-through text-muted-foreground" : ""
+                      completedSteps.has(idx)
+                        ? 'line-through text-muted-foreground'
+                        : ''
                     }`}
                   >
                     {idx + 1}. {step}
@@ -227,10 +261,15 @@ export const StructuredFormulaDisplay = ({ data, onSave }: StructuredFormulaDisp
         {/* Aftercare */}
         {formula.aftercare && formula.aftercare.length > 0 && (
           <div className="space-y-2">
-            <h4 className="font-semibold text-sm text-foreground/90">Aftercare</h4>
+            <h4 className="font-semibold text-sm text-foreground/90">
+              Aftercare
+            </h4>
             <ul className="space-y-1">
               {formula.aftercare.map((tip, idx) => (
-                <li key={idx} className="text-sm text-foreground/80 flex items-start">
+                <li
+                  key={idx}
+                  className="text-sm text-foreground/80 flex items-start"
+                >
                   <span className="mr-2">✓</span>
                   <span>{tip}</span>
                 </li>

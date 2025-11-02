@@ -16,9 +16,15 @@ describe('csvExport', () => {
       style: {},
     };
 
-    createElementSpy = vi.spyOn(document, 'createElement').mockReturnValue(linkElement as any);
-    appendChildSpy = vi.spyOn(document.body, 'appendChild').mockImplementation(() => linkElement as any);
-    removeChildSpy = vi.spyOn(document.body, 'removeChild').mockImplementation(() => linkElement as any);
+    createElementSpy = vi
+      .spyOn(document, 'createElement')
+      .mockReturnValue(linkElement as any);
+    appendChildSpy = vi
+      .spyOn(document.body, 'appendChild')
+      .mockImplementation(() => linkElement as any);
+    removeChildSpy = vi
+      .spyOn(document.body, 'removeChild')
+      .mockImplementation(() => linkElement as any);
 
     // Mock URL methods
     global.URL.createObjectURL = vi.fn(() => 'blob:mock-url');
@@ -53,9 +59,7 @@ describe('csvExport', () => {
     });
 
     it('should handle null and undefined values', () => {
-      const data = [
-        { name: 'John', email: null, phone: undefined },
-      ];
+      const data = [{ name: 'John', email: null, phone: undefined }];
 
       exportToCSV(data, 'contacts');
       expect(clickSpy).toHaveBeenCalled();
@@ -71,9 +75,7 @@ describe('csvExport', () => {
     });
 
     it('should handle special characters', () => {
-      const data = [
-        { note: 'Quote: "Hello"', message: 'Line\nBreak' },
-      ];
+      const data = [{ note: 'Quote: "Hello"', message: 'Line\nBreak' }];
 
       exportToCSV(data, 'notes');
       expect(clickSpy).toHaveBeenCalled();
@@ -86,8 +88,10 @@ describe('csvExport', () => {
       exportToCSV(data, 'export');
 
       const setAttributeCalls = linkElement.setAttribute.mock.calls;
-      const downloadCall = setAttributeCalls.find((call: any) => call[0] === 'download');
-      
+      const downloadCall = setAttributeCalls.find(
+        (call: any) => call[0] === 'download'
+      );
+
       expect(downloadCall[1]).toMatch(/^export_\d{4}-\d{2}-\d{2}\.csv$/);
     });
 

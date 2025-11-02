@@ -54,12 +54,16 @@ class ClientRetentionAISystem {
 
       logger.info('Client retention analysis complete', 'ClientRetentionAI', {
         totalClients: riskScores.length,
-        atRisk: riskScores.filter(s => s.riskLevel !== 'low').length
+        atRisk: riskScores.filter(s => s.riskLevel !== 'low').length,
       });
 
       return riskScores;
     } catch (error) {
-      logger.error('Failed to analyze client retention', 'ClientRetentionAI', error);
+      logger.error(
+        'Failed to analyze client retention',
+        'ClientRetentionAI',
+        error
+      );
       return [];
     }
   }
@@ -69,12 +73,16 @@ class ClientRetentionAISystem {
    */
   private calculateRiskScore(appointments: any[]): ClientRiskScore {
     const now = new Date();
-    const lastAppointment = appointments[0] ? new Date(appointments[0].appointment_date) : null;
+    const lastAppointment = appointments[0]
+      ? new Date(appointments[0].appointment_date)
+      : null;
     const totalVisits = appointments.length;
-    
+
     // Calculate days since last appointment
-    const daysSinceLastVisit = lastAppointment 
-      ? Math.floor((now.getTime() - lastAppointment.getTime()) / (1000 * 60 * 60 * 24))
+    const daysSinceLastVisit = lastAppointment
+      ? Math.floor(
+          (now.getTime() - lastAppointment.getTime()) / (1000 * 60 * 60 * 24)
+        )
       : 999;
 
     // Calculate average gap between appointments
@@ -122,11 +130,13 @@ class ClientRetentionAISystem {
 
     // Factor 4: Visit frequency declining (0-10 points)
     if (appointments.length >= 3) {
-      const recentGap = appointments[0] && appointments[1] 
-        ? (new Date(appointments[0].appointment_date).getTime() - 
-           new Date(appointments[1].appointment_date).getTime()) / (1000 * 60 * 60 * 24)
-        : 0;
-      
+      const recentGap =
+        appointments[0] && appointments[1]
+          ? (new Date(appointments[0].appointment_date).getTime() -
+              new Date(appointments[1].appointment_date).getTime()) /
+            (1000 * 60 * 60 * 24)
+          : 0;
+
       if (recentGap > avgGap * 1.3) {
         score += 10;
         reasons.push('Visit frequency declining');
@@ -141,7 +151,11 @@ class ClientRetentionAISystem {
     else riskLevel = 'low';
 
     // Generate recommendations
-    const recommendations = this.generateRecommendations(riskLevel, reasons, daysSinceLastVisit);
+    const recommendations = this.generateRecommendations(
+      riskLevel,
+      reasons,
+      daysSinceLastVisit
+    );
 
     return {
       clientId: appointments[0]?.client_id,
@@ -151,7 +165,7 @@ class ClientRetentionAISystem {
       recommendations,
       lastAppointment: lastAppointment || undefined,
       appointmentGap: daysSinceLastVisit,
-      totalVisits
+      totalVisits,
     };
   }
 
@@ -196,29 +210,37 @@ class ClientRetentionAISystem {
    */
   async getAIRetentionInsights(riskScores: ClientRiskScore[]): Promise<string> {
     try {
-      const highRiskClients = riskScores.filter(s => 
-        s.riskLevel === 'high' || s.riskLevel === 'critical'
+      const highRiskClients = riskScores.filter(
+        s => s.riskLevel === 'high' || s.riskLevel === 'critical'
       );
 
-      const { data, error } = await supabase.functions.invoke('hair-assistant-chat', {
-        body: {
-          messages: [
-            {
-              role: 'system',
-              content: 'You are a client retention expert for hair stylists. Provide actionable insights and strategies.'
-            },
-            {
-              role: 'user',
-              content: `Analyze client retention data: ${highRiskClients.length} high-risk clients out of ${riskScores.length} total. Provide top 3 retention strategies.`
-            }
-          ]
+      const { data, error } = await supabase.functions.invoke(
+        'hair-assistant-chat',
+        {
+          body: {
+            messages: [
+              {
+                role: 'system',
+                content:
+                  'You are a client retention expert for hair stylists. Provide actionable insights and strategies.',
+              },
+              {
+                role: 'user',
+                content: `Analyze client retention data: ${highRiskClients.length} high-risk clients out of ${riskScores.length} total. Provide top 3 retention strategies.`,
+              },
+            ],
+          },
         }
-      });
+      );
 
       if (error) throw error;
       return data.response || 'AI insights unavailable';
     } catch (error) {
-      logger.error('Failed to get AI retention insights', 'ClientRetentionAI', error);
+      logger.error(
+        'Failed to get AI retention insights',
+        'ClientRetentionAI',
+        error
+      );
       return 'Unable to generate AI insights';
     }
   }
@@ -226,14 +248,18 @@ class ClientRetentionAISystem {
   /**
    * Auto-send retention messages to at-risk clients
    */
-  async sendRetentionMessages(stylistId: string, riskScores: ClientRiskScore[]): Promise<number> {
+  async sendRetentionMessages(
+    stylistId: string,
+    riskScores: ClientRiskScore[]
+  ): Promise<number> {
     let sentCount = 0;
 
-    const highRiskClients = riskScores.filter(s => 
-      s.riskLevel === 'high' || s.riskLevel === 'critical'
+    const highRiskClients = riskScores.filter(
+      s => s.riskLevel === 'high' || s.riskLevel === 'critical'
     );
 
-    for (const client of highRiskClients.slice(0, 5)) { // Limit to 5 at a time
+    for (const client of highRiskClients.slice(0, 5)) {
+      // Limit to 5 at a time
       try {
         // Get client profile
         const { data: profile } = await supabase
@@ -251,13 +277,19 @@ class ClientRetentionAISystem {
         await supabase.from('messages').insert({
           sender_id: stylistId,
           recipient_id: profile.user_id,
-          message_text: message
+          message_text: message,
         });
 
         sentCount++;
-        logger.info('Sent retention message', 'ClientRetentionAI', { clientId: client.clientId });
+        logger.info('Sent retention message', 'ClientRetentionAI', {
+          clientId: client.clientId,
+        });
       } catch (error) {
-        logger.error('Failed to send retention message', 'ClientRetentionAI', error);
+        logger.error(
+          'Failed to send retention message',
+          'ClientRetentionAI',
+          error
+        );
       }
     }
 
@@ -267,7 +299,10 @@ class ClientRetentionAISystem {
   /**
    * Generate personalized retention message
    */
-  private generateRetentionMessage(client: ClientRiskScore, profile: any): string {
+  private generateRetentionMessage(
+    client: ClientRiskScore,
+    profile: any
+  ): string {
     const name = profile.user?.full_name || 'there';
     const daysSince = client.appointmentGap || 0;
 

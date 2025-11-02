@@ -3,9 +3,9 @@
  * Prefetch data on hover, during idle time, or based on patterns
  */
 
-import { useQueryClient } from "@tanstack/react-query";
-import { useCallback } from "react";
-import { queryKeys } from "@/lib/queryCache";
+import { useQueryClient } from '@tanstack/react-query';
+import { useCallback } from 'react';
+import { queryKeys } from '@/lib/queryCache';
 
 interface PrefetchOptions {
   enabled?: boolean;
@@ -80,7 +80,7 @@ export function usePrefetch(options: PrefetchOptions = {}) {
     (callback: () => void) => {
       if (!enabled) return;
 
-      if ("requestIdleCallback" in window) {
+      if ('requestIdleCallback' in window) {
         const id = requestIdleCallback(callback, { timeout: 2000 });
         return () => cancelIdleCallback(id);
       } else {
@@ -101,13 +101,13 @@ export function usePrefetch(options: PrefetchOptions = {}) {
       if (!enabled) return;
 
       prefetchOnIdle(() => {
-        if (currentRoute.includes("/clients")) {
+        if (currentRoute.includes('/clients')) {
           // If viewing clients, prefetch appointments
           queryClient.prefetchQuery({
             queryKey: queryKeys.appointments.list(userId),
             staleTime: 1000 * 60 * 5,
           });
-        } else if (currentRoute.includes("/appointments")) {
+        } else if (currentRoute.includes('/appointments')) {
           // If viewing appointments, prefetch clients
           queryClient.prefetchQuery({
             queryKey: queryKeys.clients.list(userId),

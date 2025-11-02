@@ -15,13 +15,10 @@ class RequestDeduplicator {
   /**
    * Execute a request, or return existing promise if already in flight
    */
-  async deduplicate<T>(
-    key: string,
-    requestFn: () => Promise<T>
-  ): Promise<T> {
+  async deduplicate<T>(key: string, requestFn: () => Promise<T>): Promise<T> {
     // Check if request is already pending
     const existing = this.pendingRequests.get(key);
-    
+
     if (existing) {
       // Check if request hasn't timed out
       if (Date.now() - existing.timestamp < this.timeout) {
@@ -34,11 +31,11 @@ class RequestDeduplicator {
 
     // Create new request
     const promise = requestFn()
-      .then((result) => {
+      .then(result => {
         this.pendingRequests.delete(key);
         return result;
       })
-      .catch((error) => {
+      .catch(error => {
         this.pendingRequests.delete(key);
         throw error;
       });
@@ -88,7 +85,7 @@ class RequestDeduplicator {
 export const requestDeduplicator = new RequestDeduplicator();
 
 // Clean up timed out requests every minute
-if (typeof window !== "undefined") {
+if (typeof window !== 'undefined') {
   setInterval(() => {
     requestDeduplicator.cleanup();
   }, 60000);

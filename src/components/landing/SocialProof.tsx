@@ -1,25 +1,25 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Star, TrendingUp } from "lucide-react";
-import { LiveActivityFeed } from "@/components/social/LiveActivityFeed";
-import { cn } from "@/lib/utils";
+import { Card, CardContent } from '@/components/ui/card';
+import { Star, TrendingUp } from 'lucide-react';
+import { LiveActivityFeed } from '@/components/social/LiveActivityFeed';
+import { cn } from '@/lib/utils';
 
 const testimonials = [
   {
-    name: "Sarah M.",
-    role: "Salon Owner",
-    text: "hA.I.r cut my admin time by 40%. Now I focus on what I love - styling hair!",
+    name: 'Sarah M.',
+    role: 'Salon Owner',
+    text: 'hA.I.r cut my admin time by 40%. Now I focus on what I love - styling hair!',
     rating: 5,
   },
   {
-    name: "Alex K.",
-    role: "Independent Stylist",
-    text: "The AI formulas are game-changing. My color consistency has never been better.",
+    name: 'Alex K.',
+    role: 'Independent Stylist',
+    text: 'The AI formulas are game-changing. My color consistency has never been better.',
     rating: 5,
   },
   {
-    name: "Jamie L.",
-    role: "Barber",
-    text: "Booking management is effortless. Clients love the automated reminders.",
+    name: 'Jamie L.',
+    role: 'Barber',
+    text: 'Booking management is effortless. Clients love the automated reminders.',
     rating: 5,
   },
 ];
@@ -51,20 +51,25 @@ export const SocialProof = () => {
               <Card
                 key={idx}
                 className={cn(
-                  "brutal-border brutal-shadow-sm animate-fade-in hover:brutal-shadow-md transition-all",
+                  'brutal-border brutal-shadow-sm animate-fade-in hover:brutal-shadow-md transition-all'
                 )}
                 style={{ animationDelay: `${idx * 100}ms` }}
               >
                 <CardContent className="p-4 sm:p-6 space-y-3">
                   <div className="flex gap-1">
                     {Array.from({ length: testimonial.rating }).map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-primary text-primary" />
+                      <Star
+                        key={i}
+                        className="h-4 w-4 fill-primary text-primary"
+                      />
                     ))}
                   </div>
                   <p className="text-sm text-foreground">{testimonial.text}</p>
                   <div className="pt-2 border-t">
                     <p className="font-semibold text-sm">{testimonial.name}</p>
-                    <p className="text-xs text-muted-foreground">{testimonial.role}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {testimonial.role}
+                    </p>
                   </div>
                 </CardContent>
               </Card>
@@ -74,23 +79,27 @@ export const SocialProof = () => {
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-8">
             {[
-              { value: "2,000+", label: "Active Stylists" },
-              { value: "50k+", label: "Bookings" },
-              { value: "10k+", label: "Formulas Saved" },
-              { value: "40%", label: "Time Saved" },
+              { value: '2,000+', label: 'Active Stylists' },
+              { value: '50k+', label: 'Bookings' },
+              { value: '10k+', label: 'Formulas Saved' },
+              { value: '40%', label: 'Time Saved' },
             ].map((stat, idx) => (
               <div
                 key={idx}
                 className={cn(
-                  "text-center p-4 brutal-border bg-primary/5 animate-scale-in",
+                  'text-center p-4 brutal-border bg-primary/5 animate-scale-in'
                 )}
                 style={{ animationDelay: `${idx * 75}ms` }}
               >
                 <div className="flex items-center justify-center gap-1 mb-1">
                   <TrendingUp className="h-4 w-4 text-success" />
-                  <p className="text-xl sm:text-2xl font-pixel text-primary">{stat.value}</p>
+                  <p className="text-xl sm:text-2xl font-pixel text-primary">
+                    {stat.value}
+                  </p>
                 </div>
-                <p className="text-xs text-muted-foreground uppercase">{stat.label}</p>
+                <p className="text-xs text-muted-foreground uppercase">
+                  {stat.label}
+                </p>
               </div>
             ))}
           </div>

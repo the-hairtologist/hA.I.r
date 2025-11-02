@@ -13,7 +13,11 @@ export interface ZapierTrigger {
 }
 
 export class ZapierWebhooks {
-  async trigger({ webhookUrl, eventType, data }: ZapierTrigger): Promise<boolean> {
+  async trigger({
+    webhookUrl,
+    eventType,
+    data,
+  }: ZapierTrigger): Promise<boolean> {
     if (!webhookUrl) {
       throw new Error('Webhook URL is required');
     }

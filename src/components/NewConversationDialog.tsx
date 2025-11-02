@@ -1,12 +1,18 @@
-import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { toast } from "sonner";
-import { MessageSquare, User, Loader2, Search } from "lucide-react";
+import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { toast } from 'sonner';
+import { MessageSquare, User, Loader2, Search } from 'lucide-react';
 
 interface NewConversationDialogProps {
   open: boolean;
@@ -15,10 +21,15 @@ interface NewConversationDialogProps {
   onConversationStarted: (partnerId: string) => void;
 }
 
-export const NewConversationDialog = ({ open, onOpenChange, userRole, onConversationStarted }: NewConversationDialogProps) => {
+export const NewConversationDialog = ({
+  open,
+  onOpenChange,
+  userRole,
+  onConversationStarted,
+}: NewConversationDialogProps) => {
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState<any[]>([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     if (open) {
@@ -29,17 +40,19 @@ export const NewConversationDialog = ({ open, onOpenChange, userRole, onConversa
   const loadUsers = async () => {
     setLoading(true);
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (!session) return;
 
       // Get list of potential chat partners based on role
-      if (userRole === "stylist") {
+      if (userRole === 'stylist') {
         // Stylists can message their clients
         // Get stylist profile first
         const { data: stylistProfile } = await supabase
-          .from("stylist_profiles")
-          .select("id")
-          .eq("user_id", session.user.id)
+          .from('stylist_profiles')
+          .select('id')
+          .eq('user_id', session.user.id)
           .maybeSingle();
 
         if (!stylistProfile) {
@@ -48,27 +61,30 @@ export const NewConversationDialog = ({ open, onOpenChange, userRole, onConversa
         }
 
         const { data: appointments } = await supabase
-          .from("appointments")
-          .select(`
+          .from('appointments')
+          .select(
+            `
             client:client_profiles(
               id,
               user_id,
               user:profiles(id, full_name, email)
             )
-          `)
-          .eq("stylist_id", stylistProfile.id);
+          `
+          )
+          .eq('stylist_id', stylistProfile.id);
 
         const uniqueClients = Array.from(
           new Map(
-            appointments?.map(apt => [apt.client.user_id, apt.client.user]) || []
+            appointments?.map(apt => [apt.client.user_id, apt.client.user]) ||
+              []
           ).values()
         );
         setUsers(uniqueClients);
       } else {
         // Clients can message stylists
-        const { data: stylistProfiles } = await supabase
-          .from("stylist_profiles")
-          .select(`
+        const { data: stylistProfiles } = await supabase.from(
+          'stylist_profiles'
+        ).select(`
             id,
             user_id,
             business_name,
@@ -78,16 +94,17 @@ export const NewConversationDialog = ({ open, onOpenChange, userRole, onConversa
         setUsers(stylistProfiles?.map(s => s.user) || []);
       }
     } catch (error) {
-      console.error("Error loading users:", error);
-      toast.error("Error loading users");
+      console.error('Error loading users:', error);
+      toast.error('Error loading users');
     } finally {
       setLoading(false);
     }
   };
 
-  const filteredUsers = users.filter(user =>
-    user?.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user?.email?.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredUsers = users.filter(
+    user =>
+      user?.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user?.email?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleStartConversation = (userId: string) => {
@@ -111,7 +128,7 @@ export const NewConversationDialog = ({ open, onOpenChange, userRole, onConversa
             <Input
               placeholder="Search by name or email..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={e => setSearchTerm(e.target.value)}
               className="pl-9"
             />
           </div>
@@ -127,7 +144,7 @@ export const NewConversationDialog = ({ open, onOpenChange, userRole, onConversa
             </div>
           ) : (
             <div className="space-y-2 max-h-[min(60vh,400px)] overflow-y-auto">
-              {filteredUsers.map((user) => (
+              {filteredUsers.map(user => (
                 <div
                   key={user.id}
                   className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent cursor-pointer transition-colors"
@@ -140,7 +157,7 @@ export const NewConversationDialog = ({ open, onOpenChange, userRole, onConversa
                   </Avatar>
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-sm truncate">
-                      {user.full_name || "User"}
+                      {user.full_name || 'User'}
                     </p>
                     <p className="text-xs text-muted-foreground truncate">
                       {user.email}

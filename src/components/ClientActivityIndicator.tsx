@@ -7,9 +7,13 @@ interface ClientActivityIndicatorProps {
   clientId: string;
 }
 
-export function ClientActivityIndicator({ clientId }: ClientActivityIndicatorProps) {
+export function ClientActivityIndicator({
+  clientId,
+}: ClientActivityIndicatorProps) {
   const [isActive, setIsActive] = useState(false);
-  const [activityType, setActivityType] = useState<'viewing' | 'booking' | null>(null);
+  const [activityType, setActivityType] = useState<
+    'viewing' | 'booking' | null
+  >(null);
 
   useEffect(() => {
     const channel = supabase
@@ -17,11 +21,11 @@ export function ClientActivityIndicator({ clientId }: ClientActivityIndicatorPro
       .on('presence', { event: 'sync' }, () => {
         const state = channel.presenceState();
         const clients = Object.values(state).flat() as any[];
-        
+
         if (clients.length > 0 && clients[0]?.activity) {
           setIsActive(true);
           setActivityType(clients[0].activity as 'viewing' | 'booking');
-          
+
           // Auto-hide after 30s
           setTimeout(() => {
             setIsActive(false);
@@ -42,8 +46,8 @@ export function ClientActivityIndicator({ clientId }: ClientActivityIndicatorPro
   if (!isActive || !activityType) return null;
 
   return (
-    <Badge 
-      variant="secondary" 
+    <Badge
+      variant="secondary"
       className="bg-green-500/10 text-green-600 border-green-500/20 animate-pulse"
     >
       {activityType === 'booking' ? (

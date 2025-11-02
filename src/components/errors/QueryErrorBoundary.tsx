@@ -3,9 +3,9 @@
  * Specialized error boundary for React Query errors
  */
 
-import { Component, ReactNode } from "react";
-import { ErrorRecovery } from "@/components/ui/ErrorRecovery";
-import { logger } from "@/lib/logger";
+import { Component, ReactNode } from 'react';
+import { ErrorRecovery } from '@/components/ui/ErrorRecovery';
+import { logger } from '@/lib/logger';
 
 interface Props {
   children: ReactNode;

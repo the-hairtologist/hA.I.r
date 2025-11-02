@@ -1,11 +1,11 @@
-import { HelpCircle } from "lucide-react";
+import { HelpCircle } from 'lucide-react';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/tooltip';
+import { cn } from '@/lib/utils';
 
 interface HelpTooltipProps {
   content: string;
@@ -20,7 +20,7 @@ export const HelpTooltip = ({ content, link, className }: HelpTooltipProps) => {
         <TooltipTrigger asChild>
           <button
             className={cn(
-              "inline-flex items-center justify-center h-4 w-4 text-muted-foreground hover:text-foreground transition-colors",
+              'inline-flex items-center justify-center h-4 w-4 text-muted-foreground hover:text-foreground transition-colors',
               className
             )}
             aria-label="Help"

@@ -1,18 +1,26 @@
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Calendar, Clock, FileText, History } from "lucide-react";
-import { format } from "date-fns";
-import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
+import { useEffect, useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Calendar, Clock, FileText, History } from 'lucide-react';
+import { format } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 interface ClientHistoryTimelineProps {
   clientId: string;
 }
 
-export const ClientHistoryTimeline = ({ clientId }: ClientHistoryTimelineProps) => {
+export const ClientHistoryTimeline = ({
+  clientId,
+}: ClientHistoryTimelineProps) => {
   const [appointments, setAppointments] = useState<any[]>([]);
   const [formulas, setFormulas] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -26,20 +34,20 @@ export const ClientHistoryTimeline = ({ clientId }: ClientHistoryTimelineProps) 
     try {
       // Load appointments
       const { data: appointmentsData, error: aptError } = await supabase
-        .from("appointments")
-        .select("*")
-        .eq("client_id", clientId)
-        .order("appointment_date", { ascending: false })
+        .from('appointments')
+        .select('*')
+        .eq('client_id', clientId)
+        .order('appointment_date', { ascending: false })
         .limit(10);
 
       if (aptError) throw aptError;
 
       // Load formulas
       const { data: formulasData, error: formulasError } = await supabase
-        .from("formulas")
-        .select("*")
-        .eq("client_id", clientId)
-        .order("created_at", { ascending: false })
+        .from('formulas')
+        .select('*')
+        .eq('client_id', clientId)
+        .order('created_at', { ascending: false })
         .limit(10);
 
       if (formulasError) throw formulasError;
@@ -47,8 +55,8 @@ export const ClientHistoryTimeline = ({ clientId }: ClientHistoryTimelineProps) 
       setAppointments(appointmentsData || []);
       setFormulas(formulasData || []);
     } catch (error) {
-      console.error("Error loading client history:", error);
-      toast.error("Failed to load client history");
+      console.error('Error loading client history:', error);
+      toast.error('Failed to load client history');
     } finally {
       setLoading(false);
     }
@@ -56,12 +64,12 @@ export const ClientHistoryTimeline = ({ clientId }: ClientHistoryTimelineProps) 
 
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {
-      scheduled: "bg-info",
-      confirmed: "bg-success",
-      completed: "bg-muted",
-      cancelled: "bg-destructive",
+      scheduled: 'bg-info',
+      confirmed: 'bg-success',
+      completed: 'bg-muted',
+      cancelled: 'bg-destructive',
     };
-    return colors[status] || "bg-muted-foreground";
+    return colors[status] || 'bg-muted-foreground';
   };
 
   // Combine and sort by date
@@ -79,11 +87,13 @@ export const ClientHistoryTimeline = ({ clientId }: ClientHistoryTimelineProps) 
   ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   if (loading) {
-    return <div className="animate-pulse space-y-4">
-      {[...Array(3)].map((_, i) => (
-        <div key={i} className="h-24 bg-muted rounded-lg" />
-      ))}
-    </div>;
+    return (
+      <div className="animate-pulse space-y-4">
+        {[...Array(3)].map((_, i) => (
+          <div key={i} className="h-24 bg-muted rounded-lg" />
+        ))}
+      </div>
+    );
   }
 
   if (timeline.length === 0) {
@@ -109,17 +119,24 @@ export const ClientHistoryTimeline = ({ clientId }: ClientHistoryTimelineProps) 
       <CardContent>
         <div className="space-y-4">
           {timeline.map((item, idx) => (
-            <div key={item.data.id || `${item.type}-${item.date}-${idx}`} className="flex gap-4 relative">
+            <div
+              key={item.data.id || `${item.type}-${item.date}-${idx}`}
+              className="flex gap-4 relative"
+            >
               {/* Timeline connector */}
               {idx < timeline.length - 1 && (
                 <div className="absolute left-4 top-10 bottom-0 w-0.5 bg-border" />
               )}
-              
+
               {/* Icon */}
-              <div className={cn(
-                "h-8 w-8 rounded-full flex items-center justify-center flex-shrink-0 border-2 border-foreground z-10",
-                item.type === 'appointment' ? getStatusColor(item.data.status) : "bg-primary"
-              )}>
+              <div
+                className={cn(
+                  'h-8 w-8 rounded-full flex items-center justify-center flex-shrink-0 border-2 border-foreground z-10',
+                  item.type === 'appointment'
+                    ? getStatusColor(item.data.status)
+                    : 'bg-primary'
+                )}
+              >
                 {item.type === 'appointment' ? (
                   <Calendar className="h-4 w-4 text-on-surface-primary" />
                 ) : (
@@ -133,7 +150,9 @@ export const ClientHistoryTimeline = ({ clientId }: ClientHistoryTimelineProps) 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="font-semibold">
-                        {item.type === 'appointment' ? 'Appointment' : 'Formula Created'}
+                        {item.type === 'appointment'
+                          ? 'Appointment'
+                          : 'Formula Created'}
                       </span>
                       {item.type === 'appointment' && (
                         <Badge variant="outline" className="text-xs">
@@ -147,7 +166,8 @@ export const ClientHistoryTimeline = ({ clientId }: ClientHistoryTimelineProps) 
                     {item.type === 'appointment' ? (
                       <p className="text-sm">
                         {item.data.service_type}
-                        {item.data.duration_minutes && ` • ${item.data.duration_minutes} min`}
+                        {item.data.duration_minutes &&
+                          ` • ${item.data.duration_minutes} min`}
                       </p>
                     ) : (
                       <p className="text-sm truncate">

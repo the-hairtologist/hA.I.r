@@ -1,33 +1,35 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { corsHeaders, compressedJsonResponse } from '../_shared/compression.ts';
 import { authenticateRequest } from '../_shared/auth.ts';
 import { handleError, validateRequestBody } from '../_shared/error-handler.ts';
 
-serve(async (req) => {
+serve(async req => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
     // SECURITY: Require stylist or admin role
-    const { user, supabase, stylistId } = await authenticateRequest(req, { allowStylistOrAdmin: true });
-    
+    const { user, supabase, stylistId } = await authenticateRequest(req, {
+      allowStylistOrAdmin: true,
+    });
+
     if (!stylistId) {
       throw new Error('Stylist profile not found');
     }
 
     const body = await req.json();
     validateRequestBody(body, ['formulaId', 'outcomeRating']);
-    
-    const { 
-      formulaId, 
+
+    const {
+      formulaId,
       conversationMessageId,
       clientId,
-      outcomeRating, 
-      outcomeNotes, 
-      whatWorked, 
+      outcomeRating,
+      outcomeNotes,
+      whatWorked,
       whatDidntWork,
-      wouldUseAgain 
+      wouldUseAgain,
     } = body;
 
     console.log('Recording formula outcome:', { formulaId, outcomeRating });
@@ -77,26 +79,35 @@ serve(async (req) => {
       .select('outcome_rating')
       .eq('stylist_id', stylistId);
 
-    const successRate = allOutcomes && allOutcomes.length > 0
-      ? parseFloat((allOutcomes.filter(o => ['perfect', 'good'].includes(o.outcome_rating)).length / allOutcomes.length * 100).toFixed(1))
-      : 0;
+    const successRate =
+      allOutcomes && allOutcomes.length > 0
+        ? parseFloat(
+            (
+              (allOutcomes.filter(o =>
+                ['perfect', 'good'].includes(o.outcome_rating)
+              ).length /
+                allOutcomes.length) *
+              100
+            ).toFixed(1)
+          )
+        : 0;
 
     return new Response(
       JSON.stringify({
         success: true,
         outcome,
         success_rate: successRate,
-        message: 'Thank you for your feedback! This helps improve our AI.'
+        message: 'Thank you for your feedback! This helps improve our AI.',
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
-
   } catch (error) {
     console.error('Track outcome error:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-    return new Response(
-      JSON.stringify({ error: errorMessage }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown error occurred';
+    return new Response(JSON.stringify({ error: errorMessage }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
   }
 });

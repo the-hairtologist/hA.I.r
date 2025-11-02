@@ -16,7 +16,9 @@ type NotificationFeedback = 'success' | 'warning' | 'error';
  * Medium: For standard interactions (button taps)
  * Heavy: For important actions (confirmations, deletions)
  */
-export const impact = async (weight: ImpactWeight = 'medium'): Promise<void> => {
+export const impact = async (
+  weight: ImpactWeight = 'medium'
+): Promise<void> => {
   if (Platform.isMobile) {
     try {
       const styleMap = {
@@ -24,7 +26,7 @@ export const impact = async (weight: ImpactWeight = 'medium'): Promise<void> => 
         medium: ImpactStyle.Medium,
         heavy: ImpactStyle.Heavy,
       };
-      
+
       await Haptics.impact({ style: styleMap[weight] });
     } catch (error) {
       console.warn('Haptic feedback failed:', error);
@@ -48,7 +50,9 @@ export const impact = async (weight: ImpactWeight = 'medium'): Promise<void> => 
  * Warning: For cautionary actions
  * Error: For failed actions or errors
  */
-export const notification = async (type: NotificationFeedback = 'success'): Promise<void> => {
+export const notification = async (
+  type: NotificationFeedback = 'success'
+): Promise<void> => {
   if (Platform.isMobile) {
     try {
       const typeMap = {
@@ -56,7 +60,7 @@ export const notification = async (type: NotificationFeedback = 'success'): Prom
         warning: NotificationType.Warning,
         error: NotificationType.Error,
       };
-      
+
       await Haptics.notification({ type: typeMap[type] });
     } catch (error) {
       console.warn('Haptic notification failed:', error);
@@ -121,22 +125,22 @@ export const vibratePattern = (pattern: number[]): void => {
 export const haptic = {
   /** Light tap for subtle interactions */
   tap: () => impact('light'),
-  
+
   /** Standard button press */
   button: () => impact('medium'),
-  
+
   /** Heavy feedback for important actions */
   confirm: () => impact('heavy'),
-  
+
   /** Success notification */
   success: () => notification('success'),
-  
+
   /** Warning notification */
   warning: () => notification('warning'),
-  
+
   /** Error notification */
   error: () => notification('error'),
-  
+
   /** Selection change */
   select: () => selection(),
 };

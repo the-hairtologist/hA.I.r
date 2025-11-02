@@ -53,7 +53,7 @@ export const isWebGPUAvailable = async (): Promise<boolean> => {
   if (!('gpu' in navigator)) {
     return false;
   }
-  
+
   try {
     const gpu = (navigator as any).gpu;
     const adapter = await gpu.requestAdapter();
@@ -74,12 +74,10 @@ export const removeBackground = async (
   onProgress?: (stage: string, progress: number) => void
 ): Promise<Blob> => {
   try {
-    console.log('[BG Removal] Starting background removal process');
     onProgress?.('Initializing AI model...', 10);
 
     // Check WebGPU availability
     const hasWebGPU = await isWebGPUAvailable();
-    console.log(`[BG Removal] WebGPU ${hasWebGPU ? 'available' : 'not available'}`);
 
     // Load the segmentation model
     const segmenter = await pipeline(
@@ -87,71 +85,73 @@ export const removeBackground = async (
       'Xenova/segformer-b0-finetuned-ade-512-512',
       { device: hasWebGPU ? 'webgpu' : 'wasm' }
     );
-    
+
     onProgress?.('Model loaded', 30);
-    console.log('[BG Removal] Model loaded successfully');
 
     // Convert HTMLImageElement to canvas
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
-    
+
     if (!ctx) throw new Error('Could not get canvas context');
-    
+
     // Resize image if needed and draw it to canvas
-    const wasResized = resizeImageIfNeeded(canvas, ctx, imageElement);
-    console.log(
-      `[BG Removal] Image ${wasResized ? 'resized' : 'processed'} - Dimensions: ${canvas.width}x${canvas.height}`
-    );
-    
+    resizeImageIfNeeded(canvas, ctx, imageElement);
+
     onProgress?.('Processing image...', 50);
 
     // Get image data as base64
     const imageData = canvas.toDataURL('image/jpeg', 0.9);
-    
+
     // Process the image with the segmentation model
-    console.log('[BG Removal] Running AI segmentation...');
     const result = await segmenter(imageData);
-    
+
     onProgress?.('Applying mask...', 70);
-    console.log('[BG Removal] Segmentation complete');
-    
-    if (!result || !Array.isArray(result) || result.length === 0 || !result[0].mask) {
+
+    if (
+      !result ||
+      !Array.isArray(result) ||
+      result.length === 0 ||
+      !result[0].mask
+    ) {
       throw new Error('Invalid segmentation result');
     }
-    
+
     // Create output canvas
     const outputCanvas = document.createElement('canvas');
     outputCanvas.width = canvas.width;
     outputCanvas.height = canvas.height;
     const outputCtx = outputCanvas.getContext('2d');
-    
+
     if (!outputCtx) throw new Error('Could not get output canvas context');
-    
+
     // Draw original image
     outputCtx.drawImage(canvas, 0, 0);
-    
+
     // Apply the mask to remove background
-    const outputImageData = outputCtx.getImageData(0, 0, outputCanvas.width, outputCanvas.height);
+    const outputImageData = outputCtx.getImageData(
+      0,
+      0,
+      outputCanvas.width,
+      outputCanvas.height
+    );
     const data = outputImageData.data;
-    
+
     // Apply inverted mask to alpha channel
     // (1 - mask value) to keep subject instead of background
     for (let i = 0; i < result[0].mask.data.length; i++) {
       const alpha = Math.round((1 - result[0].mask.data[i]) * 255);
       data[i * 4 + 3] = alpha; // Set alpha channel
     }
-    
+
     outputCtx.putImageData(outputImageData, 0, 0);
-    console.log('[BG Removal] Mask applied successfully');
-    
+
     onProgress?.('Finalizing...', 90);
 
     // Convert canvas to blob
     return new Promise((resolve, reject) => {
       outputCanvas.toBlob(
-        (blob) => {
+        blob => {
           if (blob) {
-            console.log('[BG Removal] Successfully created final blob');
             onProgress?.('Complete!', 100);
             resolve(blob);
           } else {

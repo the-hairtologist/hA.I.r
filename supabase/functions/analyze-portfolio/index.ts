@@ -1,12 +1,13 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.58.0";
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.58.0';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
 };
 
-serve(async (req) => {
+serve(async req => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -42,28 +43,35 @@ serve(async (req) => {
 
     if (!photos || photos.length === 0) {
       return new Response(
-        JSON.stringify({ 
+        JSON.stringify({
           error: 'No portfolio photos found',
           suggestions: [
             'Upload at least 3-5 photos to get meaningful insights',
             'Include before & after photos to showcase transformations',
-            'Add captions to help AI understand your work'
-          ]
+            'Add captions to help AI understand your work',
+          ],
         }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
       );
     }
 
-    console.log(`Analyzing ${photos.length} portfolio photos with Gemini 2.5 Pro...`);
+    console.log(
+      `Analyzing ${photos.length} portfolio photos with Gemini 2.5 Pro...`
+    );
 
     // Create a detailed prompt with portfolio context
-    const portfolioSummary = photos.map((photo, idx) => {
-      return `Photo ${idx + 1}:
+    const portfolioSummary = photos
+      .map((photo, idx) => {
+        return `Photo ${idx + 1}:
 - Type: ${photo.is_before_after ? 'Before & After' : 'Single Shot'}
 - Caption: ${photo.caption || 'No caption'}
 - URL: ${photo.photo_url}
 ${photo.before_photo_url ? `- Before URL: ${photo.before_photo_url}` : ''}`;
-    }).join('\n\n');
+      })
+      .join('\n\n');
 
     const systemPrompt = `You are an expert hair stylist portfolio analyst. Analyze the stylist's work and provide actionable insights.`;
 
@@ -87,10 +95,8 @@ Be specific, actionable, and encouraging. Reference specific photos by number.`;
       { role: 'system', content: systemPrompt },
       {
         role: 'user',
-        content: [
-          { type: 'text', text: userPrompt }
-        ]
-      }
+        content: [{ type: 'text', text: userPrompt }],
+      },
     ];
 
     // Add up to 20 images (Gemini's reasonable limit for analysis)
@@ -98,52 +104,68 @@ Be specific, actionable, and encouraging. Reference specific photos by number.`;
     for (const photo of imagesToAnalyze) {
       messages[1].content.push({
         type: 'image_url',
-        image_url: { url: photo.photo_url }
+        image_url: { url: photo.photo_url },
       });
-      
+
       if (photo.before_photo_url) {
         messages[1].content.push({
           type: 'image_url',
-          image_url: { url: photo.before_photo_url }
+          image_url: { url: photo.before_photo_url },
         });
       }
     }
 
     // Call Gemini 2.5 Pro with long context
     // Use Pro only for large portfolios (>20 images), Flash for most cases
-    const modelToUse = messages.length > 25 ? 'google/gemini-2.5-pro' : 'google/gemini-2.5-flash';
-    
-    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: modelToUse, // Adaptive based on portfolio size
-        messages,
-        max_tokens: 2000,
-      }),
-    });
+    const modelToUse =
+      messages.length > 25
+        ? 'google/gemini-2.5-pro'
+        : 'google/gemini-2.5-flash';
+
+    const response = await fetch(
+      'https://ai.gateway.lovable.dev/v1/chat/completions',
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${LOVABLE_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: modelToUse, // Adaptive based on portfolio size
+          messages,
+          max_tokens: 2000,
+        }),
+      }
+    );
 
     if (!response.ok) {
       const errorText = await response.text();
       console.error('AI Gateway error:', response.status, errorText);
-      
+
       if (response.status === 429) {
         return new Response(
-          JSON.stringify({ error: 'Rate limit exceeded. Please try again in a moment.' }),
-          { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          JSON.stringify({
+            error: 'Rate limit exceeded. Please try again in a moment.',
+          }),
+          {
+            status: 429,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          }
         );
       }
-      
+
       if (response.status === 402) {
         return new Response(
-          JSON.stringify({ error: 'AI usage limit reached. Please add credits to continue.' }),
-          { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          JSON.stringify({
+            error: 'AI usage limit reached. Please add credits to continue.',
+          }),
+          {
+            status: 402,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          }
         );
       }
-      
+
       throw new Error(`AI Gateway error: ${response.status}`);
     }
 
@@ -153,23 +175,25 @@ Be specific, actionable, and encouraging. Reference specific photos by number.`;
     console.log('Portfolio analysis completed successfully');
 
     return new Response(
-      JSON.stringify({ 
+      JSON.stringify({
         analysis,
         photosAnalyzed: imagesToAnalyze.length,
-        totalPhotos: photos.length
+        totalPhotos: photos.length,
       }),
-      { 
-        status: 200, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+      {
+        status: 200,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       }
     );
   } catch (error: any) {
     console.error('Error in analyze-portfolio function:', error);
     return new Response(
-      JSON.stringify({ error: error.message || 'An unexpected error occurred' }),
-      { 
-        status: 500, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+      JSON.stringify({
+        error: error.message || 'An unexpected error occurred',
+      }),
+      {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       }
     );
   }

@@ -6,7 +6,13 @@
 import React from 'react';
 import { AlertCircle, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 
 interface Props {
   children: React.ReactNode;
@@ -46,7 +52,8 @@ export class FormErrorBoundary extends React.Component<Props, State> {
               <CardTitle className="text-destructive">Form Error</CardTitle>
             </div>
             <CardDescription>
-              {this.props.fallbackMessage || 'Something went wrong with this form. Please try again.'}
+              {this.props.fallbackMessage ||
+                'Something went wrong with this form. Please try again.'}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -56,7 +63,11 @@ export class FormErrorBoundary extends React.Component<Props, State> {
                   {this.state.error.message}
                 </div>
               )}
-              <Button onClick={this.handleReset} variant="outline" className="w-full">
+              <Button
+                onClick={this.handleReset}
+                variant="outline"
+                className="w-full"
+              >
                 <RefreshCw className="mr-2 h-4 w-4" />
                 Try Again
               </Button>

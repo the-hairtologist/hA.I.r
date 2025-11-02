@@ -3,7 +3,7 @@
  * Provides instant UI feedback before server response
  */
 
-import { useState, useCallback } from "react";
+import { useState, useCallback } from 'react';
 
 interface OptimisticConfig<T> {
   onSuccess?: (data: T) => void;
@@ -11,7 +11,7 @@ interface OptimisticConfig<T> {
   rollbackDelay?: number;
 }
 
-export const useOptimisticUpdate = <T,>(
+export const useOptimisticUpdate = <T>(
   initialData: T,
   mutationFn: (data: T) => Promise<T>,
   config?: OptimisticConfig<T>
@@ -23,7 +23,7 @@ export const useOptimisticUpdate = <T,>(
   const update = useCallback(
     async (newData: T) => {
       const previousData = data;
-      
+
       // Optimistically update UI immediately
       setData(newData);
       setIsOptimistic(true);
@@ -32,7 +32,7 @@ export const useOptimisticUpdate = <T,>(
       try {
         // Perform actual mutation
         const result = await mutationFn(newData);
-        
+
         // Success - keep the new data
         setData(result);
         config?.onSuccess?.(result);
@@ -40,7 +40,7 @@ export const useOptimisticUpdate = <T,>(
         // Error - rollback to previous state
         const error = err as Error;
         setError(error);
-        
+
         // Rollback with delay for better UX
         setTimeout(() => {
           setData(previousData);

@@ -1,9 +1,10 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.57.2';
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-zapier-signature",
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type, x-zapier-signature',
 };
 
 // Input validation schema
@@ -16,14 +17,23 @@ const VALID_EVENT_TYPES = [
   'review.created',
 ];
 
-function validateInput(event: string, data: any): { valid: boolean; error?: string } {
+function validateInput(
+  event: string,
+  data: any
+): { valid: boolean; error?: string } {
   // Validate event type
   if (!event || typeof event !== 'string') {
-    return { valid: false, error: 'Event type is required and must be a string' };
+    return {
+      valid: false,
+      error: 'Event type is required and must be a string',
+    };
   }
-  
+
   if (!VALID_EVENT_TYPES.includes(event)) {
-    return { valid: false, error: `Invalid event type. Must be one of: ${VALID_EVENT_TYPES.join(', ')}` };
+    return {
+      valid: false,
+      error: `Invalid event type. Must be one of: ${VALID_EVENT_TYPES.join(', ')}`,
+    };
   }
 
   // Validate data
@@ -33,7 +43,8 @@ function validateInput(event: string, data: any): { valid: boolean; error?: stri
 
   // Validate data size (prevent DoS)
   const dataSize = JSON.stringify(data).length;
-  if (dataSize > 100000) { // 100KB limit
+  if (dataSize > 100000) {
+    // 100KB limit
     return { valid: false, error: 'Data payload too large (max 100KB)' };
   }
 
@@ -76,8 +87,8 @@ async function triggerWebhookWithRetry(
 
   try {
     const response = await fetch(webhook.webhook_url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
       signal: controller.signal,
     });
@@ -85,54 +96,63 @@ async function triggerWebhookWithRetry(
     clearTimeout(timeoutId);
 
     if (!response.ok && attemptNumber < MAX_RETRIES) {
-      console.log(`[Zapier] Webhook ${webhook.id} failed (attempt ${attemptNumber}), retrying...`);
+      console.log(
+        `[Zapier] Webhook ${webhook.id} failed (attempt ${attemptNumber}), retrying...`
+      );
       await new Promise(resolve => setTimeout(resolve, 1000 * attemptNumber)); // Exponential backoff
       return triggerWebhookWithRetry(webhook, payload, attemptNumber + 1);
     }
 
-    return { 
-      success: response.ok, 
+    return {
+      success: response.ok,
       status: response.status,
-      error: response.ok ? undefined : `HTTP ${response.status}`
+      error: response.ok ? undefined : `HTTP ${response.status}`,
     };
   } catch (error) {
     clearTimeout(timeoutId);
-    
+
     if (error instanceof Error && error.name === 'AbortError') {
       if (attemptNumber < MAX_RETRIES) {
-        console.log(`[Zapier] Webhook ${webhook.id} timeout (attempt ${attemptNumber}), retrying...`);
+        console.log(
+          `[Zapier] Webhook ${webhook.id} timeout (attempt ${attemptNumber}), retrying...`
+        );
         await new Promise(resolve => setTimeout(resolve, 1000 * attemptNumber));
         return triggerWebhookWithRetry(webhook, payload, attemptNumber + 1);
       }
-      return { success: false, error: "Timeout after retries" };
+      return { success: false, error: 'Timeout after retries' };
     }
-    
+
     if (attemptNumber < MAX_RETRIES) {
-      console.log(`[Zapier] Webhook ${webhook.id} error (attempt ${attemptNumber}), retrying...`);
+      console.log(
+        `[Zapier] Webhook ${webhook.id} error (attempt ${attemptNumber}), retrying...`
+      );
       await new Promise(resolve => setTimeout(resolve, 1000 * attemptNumber));
       return triggerWebhookWithRetry(webhook, payload, attemptNumber + 1);
     }
-    
+
     const errorMessage = error instanceof Error ? error.message : String(error);
     return { success: false, error: errorMessage };
   }
 }
 
-serve(async (req) => {
-  if (req.method === "OPTIONS") {
+serve(async req => {
+  if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
     // Rate limiting check
-    const clientIp = req.headers.get("x-forwarded-for") || req.headers.get("cf-connecting-ip") || "unknown";
+    const clientIp =
+      req.headers.get('x-forwarded-for') ||
+      req.headers.get('cf-connecting-ip') ||
+      'unknown';
     if (!checkRateLimit(clientIp)) {
       console.warn(`[Zapier] Rate limit exceeded for ${clientIp}`);
       return new Response(
-        JSON.stringify({ error: "Rate limit exceeded. Try again later." }),
-        { 
-          status: 429, 
-          headers: { ...corsHeaders, "Content-Type": "application/json" } 
+        JSON.stringify({ error: 'Rate limit exceeded. Try again later.' }),
+        {
+          status: 429,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         }
       );
     }
@@ -142,46 +162,46 @@ serve(async (req) => {
     // Validate input
     const validation = validateInput(event, data);
     if (!validation.valid) {
-      console.error("[Zapier] Validation failed:", validation.error);
-      return new Response(
-        JSON.stringify({ error: validation.error }),
-        { 
-          status: 400, 
-          headers: { ...corsHeaders, "Content-Type": "application/json" } 
-        }
-      );
+      console.error('[Zapier] Validation failed:', validation.error);
+      return new Response(JSON.stringify({ error: validation.error }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
-    console.log("[Zapier] Triggering webhook (validated):", event);
+    console.log('[Zapier] Triggering webhook (validated):', event);
 
     const supabaseClient = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
     // Get active Zapier webhooks for this event
     const { data: webhooks, error: webhookError } = await supabaseClient
-      .from("zapier_webhooks")
-      .select("*")
-      .eq("event_type", event)
-      .eq("is_active", true);
+      .from('zapier_webhooks')
+      .select('*')
+      .eq('event_type', event)
+      .eq('is_active', true);
 
     if (webhookError) {
-      console.error("[Zapier] Error fetching webhooks:", webhookError);
+      console.error('[Zapier] Error fetching webhooks:', webhookError);
       throw webhookError;
     }
 
     if (!webhooks || webhooks.length === 0) {
-      console.log("[Zapier] No active webhooks found for event:", event);
+      console.log('[Zapier] No active webhooks found for event:', event);
       return new Response(
-        JSON.stringify({ success: true, message: "No webhooks configured" }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200 }
+        JSON.stringify({ success: true, message: 'No webhooks configured' }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 200,
+        }
       );
     }
 
     // Trigger all webhooks for this event
     const results = await Promise.allSettled(
-      webhooks.map(async (webhook) => {
+      webhooks.map(async webhook => {
         const payload = {
           event,
           timestamp: new Date().toISOString(),
@@ -208,35 +228,36 @@ serve(async (req) => {
         }
 
         await supabaseClient
-          .from("zapier_webhooks")
+          .from('zapier_webhooks')
           .update(updates)
-          .eq("id", webhook.id);
+          .eq('id', webhook.id);
 
         // Log delivery
-        await supabaseClient
-          .from("zapier_delivery_log")
-          .insert({
-            webhook_id: webhook.id,
-            event_type: event,
-            payload,
-            status: result.success ? 'success' : 'failed',
-            http_status: result.status,
-            error_message: result.error,
-            attempt_number: result.success ? 1 : MAX_RETRIES,
-          });
+        await supabaseClient.from('zapier_delivery_log').insert({
+          webhook_id: webhook.id,
+          event_type: event,
+          payload,
+          status: result.success ? 'success' : 'failed',
+          http_status: result.status,
+          error_message: result.error,
+          attempt_number: result.success ? 1 : MAX_RETRIES,
+        });
 
-        console.log(`[Zapier] Webhook ${webhook.id} ${result.success ? '✅ succeeded' : '❌ failed'}:`, result.status || result.error);
+        console.log(
+          `[Zapier] Webhook ${webhook.id} ${result.success ? '✅ succeeded' : '❌ failed'}:`,
+          result.status || result.error
+        );
 
-        return { 
-          success: result.success, 
+        return {
+          success: result.success,
           webhook_id: webhook.id,
           status: result.status,
-          error: result.error 
+          error: result.error,
         };
       })
     );
 
-    console.log("[Zapier] All webhooks triggered:", results);
+    console.log('[Zapier] All webhooks triggered:', results);
 
     return new Response(
       JSON.stringify({
@@ -245,19 +266,16 @@ serve(async (req) => {
         results,
       }),
       {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 200,
       }
     );
   } catch (error) {
-    console.error("[Zapier] Error:", error);
+    console.error('[Zapier] Error:', error);
     const errorMessage = error instanceof Error ? error.message : String(error);
-    return new Response(
-      JSON.stringify({ error: errorMessage }),
-      {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 500,
-      }
-    );
+    return new Response(JSON.stringify({ error: errorMessage }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      status: 500,
+    });
   }
 });

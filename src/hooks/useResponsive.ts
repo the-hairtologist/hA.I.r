@@ -11,7 +11,7 @@ interface ResponsiveState {
   isMobile: boolean;
   isTablet: boolean;
   isDesktop: boolean;
-  
+
   // Specific breakpoints
   isXs: boolean;
   isSm: boolean;
@@ -19,19 +19,19 @@ interface ResponsiveState {
   isLg: boolean;
   isXl: boolean;
   is2Xl: boolean;
-  
+
   // Device capabilities
   isTouchDevice: boolean;
   hasHover: boolean;
-  
+
   // Orientation
   isPortrait: boolean;
   isLandscape: boolean;
-  
+
   // Dimensions
   width: number;
   height: number;
-  
+
   // Pixel density
   pixelRatio: number;
   isRetina: boolean;
@@ -51,13 +51,13 @@ export const useResponsive = (): ResponsiveState => {
     const width = window.innerWidth;
     const height = window.innerHeight;
     const pixelRatio = window.devicePixelRatio || 1;
-    
+
     return {
       // Device type
       isMobile: width < BREAKPOINTS.md,
       isTablet: width >= BREAKPOINTS.md && width < BREAKPOINTS.lg,
       isDesktop: width >= BREAKPOINTS.lg,
-      
+
       // Specific breakpoints
       isXs: width >= BREAKPOINTS.xs,
       isSm: width >= BREAKPOINTS.sm,
@@ -65,19 +65,19 @@ export const useResponsive = (): ResponsiveState => {
       isLg: width >= BREAKPOINTS.lg,
       isXl: width >= BREAKPOINTS.xl,
       is2Xl: width >= BREAKPOINTS['2xl'],
-      
+
       // Device capabilities
       isTouchDevice: 'ontouchstart' in window || navigator.maxTouchPoints > 0,
       hasHover: window.matchMedia('(hover: hover)').matches,
-      
+
       // Orientation
       isPortrait: height > width,
       isLandscape: width > height,
-      
+
       // Dimensions
       width,
       height,
-      
+
       // Pixel density
       pixelRatio,
       isRetina: pixelRatio >= 2,
@@ -104,13 +104,15 @@ export const useResponsive = (): ResponsiveState => {
 };
 
 // Hook for specific breakpoint
-export const useBreakpoint = (breakpoint: keyof typeof BREAKPOINTS): boolean => {
+export const useBreakpoint = (
+  breakpoint: keyof typeof BREAKPOINTS
+): boolean => {
   const [matches, setMatches] = useState(false);
 
   useEffect(() => {
     const query = `(min-width: ${BREAKPOINTS[breakpoint]}px)`;
     const media = window.matchMedia(query);
-    
+
     setMatches(media.matches);
 
     const listener = (e: MediaQueryListEvent) => setMatches(e.matches);

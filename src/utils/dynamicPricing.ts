@@ -1,4 +1,9 @@
-import { format, isWeekend, differenceInHours, differenceInDays } from 'date-fns';
+import {
+  format,
+  isWeekend,
+  differenceInHours,
+  differenceInDays,
+} from 'date-fns';
 
 interface PricingFactors {
   basePrice: number;
@@ -21,7 +26,7 @@ export function calculateDynamicPrice({
   basePrice,
   appointmentDate,
   clientVisitCount = 0,
-  bookingLeadTime
+  bookingLeadTime,
 }: PricingFactors): PricingBreakdown {
   let adjustedPrice = basePrice;
   const breakdown: string[] = [`Base price: $${basePrice.toFixed(2)}`];
@@ -31,7 +36,9 @@ export function calculateDynamicPrice({
   if (isWeekend(appointmentDate)) {
     peakTimeAdjustment = basePrice * 0.2;
     adjustedPrice += peakTimeAdjustment;
-    breakdown.push(`Weekend premium (+20%): +$${peakTimeAdjustment.toFixed(2)}`);
+    breakdown.push(
+      `Weekend premium (+20%): +$${peakTimeAdjustment.toFixed(2)}`
+    );
   }
 
   // Off-peak discount (Monday/Tuesday -15%)
@@ -48,7 +55,9 @@ export function calculateDynamicPrice({
   if (hoursUntilAppointment < 24 && hoursUntilAppointment > 0) {
     lastMinuteSurcharge = basePrice * 0.3;
     adjustedPrice += lastMinuteSurcharge;
-    breakdown.push(`Last-minute booking (+30%): +$${lastMinuteSurcharge.toFixed(2)}`);
+    breakdown.push(
+      `Last-minute booking (+30%): +$${lastMinuteSurcharge.toFixed(2)}`
+    );
   }
 
   // Advance booking discount (>2 weeks -10%)
@@ -57,7 +66,9 @@ export function calculateDynamicPrice({
   if (daysUntilAppointment > 14) {
     advanceBookingDiscount = basePrice * 0.1;
     adjustedPrice -= advanceBookingDiscount;
-    breakdown.push(`Early booking discount (-10%): -$${advanceBookingDiscount.toFixed(2)}`);
+    breakdown.push(
+      `Early booking discount (-10%): -$${advanceBookingDiscount.toFixed(2)}`
+    );
   }
 
   // VIP client discount (>10 visits -10%)
@@ -75,7 +86,7 @@ export function calculateDynamicPrice({
     lastMinuteSurcharge,
     vipDiscount,
     finalPrice: Math.max(adjustedPrice, basePrice * 0.5), // Never less than 50% of base
-    breakdown
+    breakdown,
   };
 }
 

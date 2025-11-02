@@ -6,7 +6,7 @@ vi.mock('@/platform', () => ({
   Platform: {
     isMobile: true,
     isIOS: true,
-  }
+  },
 }));
 
 describe('Mobile Optimizations', () => {
@@ -20,7 +20,7 @@ describe('Mobile Optimizations', () => {
   it('prevents elastic scroll on iOS', async () => {
     const { preventElasticScroll } = await import('./mobileOptimizations');
     preventElasticScroll();
-    
+
     expect(document.body.style.overscrollBehavior).toBe('none');
   });
 
@@ -29,10 +29,10 @@ describe('Mobile Optimizations', () => {
     const viewport = document.createElement('meta');
     viewport.setAttribute('name', 'viewport');
     document.head.appendChild(viewport);
-    
+
     const { ensureZoomEnabled } = await import('./mobileOptimizations');
     ensureZoomEnabled();
-    
+
     const content = viewport.getAttribute('content');
     expect(content).toContain('user-scalable=yes');
     expect(content).toContain('maximum-scale=5.0');
@@ -41,14 +41,14 @@ describe('Mobile Optimizations', () => {
   it('enables smooth scrolling on mobile', async () => {
     const { enableSmoothScrolling } = await import('./mobileOptimizations');
     enableSmoothScrolling();
-    
+
     const style = document.documentElement.style as any;
     expect(style.webkitOverflowScrolling).toBe('touch');
   });
 
   it('initializes mobile optimizations', async () => {
     const { initMobileOptimizations } = await import('./mobileOptimizations');
-    
+
     // Should not throw
     expect(() => initMobileOptimizations()).not.toThrow();
   });

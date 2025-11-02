@@ -20,32 +20,42 @@ export function useVisualAnalysis() {
   const [analyzing, setAnalyzing] = useState(false);
   const [analysis, setAnalysis] = useState<HairAnalysis | null>(null);
 
-  const analyzeHairPhoto = async (photoUrl: string, clientId: string, context?: string) => {
+  const analyzeHairPhoto = async (
+    photoUrl: string,
+    clientId: string,
+    context?: string
+  ) => {
     if (!photoUrl || !clientId) {
       toast.error('Photo URL and client ID required');
       return null;
     }
 
     setAnalyzing(true);
-    
-    try {
-      logger.info('Analyzing hair photo', 'VisualAnalysis', { clientId, context });
 
-      const { data, error } = await supabase.functions.invoke('ai-visual-analysis', {
-        body: { 
-          photoUrl, 
-          clientId, 
-          context: context || 'General hair analysis'
-        },
+    try {
+      logger.info('Analyzing hair photo', 'VisualAnalysis', {
+        clientId,
+        context,
       });
+
+      const { data, error } = await supabase.functions.invoke(
+        'ai-visual-analysis',
+        {
+          body: {
+            photoUrl,
+            clientId,
+            context: context || 'General hair analysis',
+          },
+        }
+      );
 
       if (error) throw error;
 
       if (data) {
         setAnalysis(data);
-        logger.info('Visual analysis complete', 'VisualAnalysis', { 
+        logger.info('Visual analysis complete', 'VisualAnalysis', {
           condition: data.condition_score,
-          damage: data.damage_level 
+          damage: data.damage_level,
         });
         toast.success('Hair analysis complete');
         return data;

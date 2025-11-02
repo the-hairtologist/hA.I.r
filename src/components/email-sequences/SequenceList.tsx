@@ -1,15 +1,30 @@
-import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { useToast } from "@/hooks/useToast";
-import { Plus, Edit, Copy, Trash2, Play, Pause, Sparkles, Mail } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { SequenceBuilder } from "./SequenceBuilder";
-import { useAuth } from "@/hooks/useAuth";
-import { useUserRole } from "@/hooks/useUserRole";
+import { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { useToast } from '@/hooks/useToast';
+import {
+  Plus,
+  Edit,
+  Copy,
+  Trash2,
+  Play,
+  Pause,
+  Sparkles,
+  Mail,
+} from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { SequenceBuilder } from './SequenceBuilder';
+import { useAuth } from '@/hooks/useAuth';
+import { useUserRole } from '@/hooks/useUserRole';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,7 +35,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+} from '@/components/ui/alert-dialog';
 
 export const SequenceList = () => {
   const toast = useToast();
@@ -32,26 +47,30 @@ export const SequenceList = () => {
 
   // Fetch sequences
   const { data: sequences, isLoading } = useQuery({
-    queryKey: ["email_sequences"],
+    queryKey: ['email_sequences'],
     queryFn: async () => {
       const { data: stylistProfile } = await supabase
-        .from("stylist_profiles")
-        .select("id")
-        .eq("user_id", user?.id)
+        .from('stylist_profiles')
+        .select('id')
+        .eq('user_id', user?.id)
         .maybeSingle();
 
       let query = supabase
-        .from("email_sequences")
-        .select(`
+        .from('email_sequences')
+        .select(
+          `
           *,
           steps:email_sequence_steps(count),
           enrollments:email_sequence_enrollments(count)
-        `)
-        .order("created_at", { ascending: false });
+        `
+        )
+        .order('created_at', { ascending: false });
 
       if (!isAdmin && stylistProfile) {
         // Stylists see their own + global templates
-        query = query.or(`stylist_id.eq.${stylistProfile.id},is_global_template.eq.true`);
+        query = query.or(
+          `stylist_id.eq.${stylistProfile.id},is_global_template.eq.true`
+        );
       }
 
       const { data, error } = await query;
@@ -65,14 +84,14 @@ export const SequenceList = () => {
   const toggleActiveMutation = useMutation({
     mutationFn: async (sequence: any) => {
       const { error } = await supabase
-        .from("email_sequences")
+        .from('email_sequences')
         .update({ is_active: !sequence.is_active })
-        .eq("id", sequence.id);
+        .eq('id', sequence.id);
       if (error) throw error;
     },
     onSuccess: () => {
-      toast.success("Status updated");
-      queryClient.invalidateQueries({ queryKey: ["email_sequences"] });
+      toast.success('Status updated');
+      queryClient.invalidateQueries({ queryKey: ['email_sequences'] });
     },
   });
 
@@ -80,17 +99,17 @@ export const SequenceList = () => {
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
       const { error } = await supabase
-        .from("email_sequences")
+        .from('email_sequences')
         .delete()
-        .eq("id", id);
+        .eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
-      toast.success("Sequence deleted");
-      queryClient.invalidateQueries({ queryKey: ["email_sequences"] });
+      toast.success('Sequence deleted');
+      queryClient.invalidateQueries({ queryKey: ['email_sequences'] });
     },
     onError: (error: Error) => {
-      toast.error("Failed to delete", error.message);
+      toast.error('Failed to delete', error.message);
     },
   });
 
@@ -98,16 +117,16 @@ export const SequenceList = () => {
   const copyTemplateMutation = useMutation({
     mutationFn: async (sequence: any) => {
       const { data: stylistProfile } = await supabase
-        .from("stylist_profiles")
-        .select("id")
-        .eq("user_id", user?.id)
+        .from('stylist_profiles')
+        .select('id')
+        .eq('user_id', user?.id)
         .maybeSingle();
 
-      if (!stylistProfile) throw new Error("Stylist profile not found");
+      if (!stylistProfile) throw new Error('Stylist profile not found');
 
       // Copy sequence
       const { data: newSequence, error: seqError } = await supabase
-        .from("email_sequences")
+        .from('email_sequences')
         .insert({
           name: `${sequence.name} (Copy)`,
           description: sequence.description,
@@ -124,10 +143,10 @@ export const SequenceList = () => {
 
       // Copy steps
       const { data: steps } = await supabase
-        .from("email_sequence_steps")
-        .select("*")
-        .eq("sequence_id", sequence.id)
-        .order("step_order");
+        .from('email_sequence_steps')
+        .select('*')
+        .eq('sequence_id', sequence.id)
+        .order('step_order');
 
       if (steps && steps.length > 0) {
         const newSteps = steps.map((step: any) => ({
@@ -143,30 +162,33 @@ export const SequenceList = () => {
         }));
 
         const { error: stepsError } = await supabase
-          .from("email_sequence_steps")
+          .from('email_sequence_steps')
           .insert(newSteps);
 
         if (stepsError) throw stepsError;
       }
     },
     onSuccess: () => {
-      toast.success("Template copied", "You can now customize it for your practice");
-      queryClient.invalidateQueries({ queryKey: ["email_sequences"] });
+      toast.success(
+        'Template copied',
+        'You can now customize it for your practice'
+      );
+      queryClient.invalidateQueries({ queryKey: ['email_sequences'] });
     },
     onError: (error: Error) => {
-      toast.error("Failed to copy template", error.message);
+      toast.error('Failed to copy template', error.message);
     },
   });
 
   const getTriggerLabel = (trigger: string) => {
     const labels: Record<string, string> = {
-      manual: "📝 Manual",
-      new_client: "🆕 New Client",
-      post_appointment: "✅ Post-Appointment",
-      inactive_client: "💤 Inactive Client",
-      birthday: "🎂 Birthday",
-      anniversary: "🎉 Anniversary",
-      pre_appointment: "⏰ Pre-Appointment",
+      manual: '📝 Manual',
+      new_client: '🆕 New Client',
+      post_appointment: '✅ Post-Appointment',
+      inactive_client: '💤 Inactive Client',
+      birthday: '🎂 Birthday',
+      anniversary: '🎉 Anniversary',
+      pre_appointment: '⏰ Pre-Appointment',
     };
     return labels[trigger] || trigger;
   };
@@ -191,7 +213,7 @@ export const SequenceList = () => {
           <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto w-[95vw] sm:w-full">
             <DialogHeader>
               <DialogTitle>
-                {selectedSequence ? "Edit Sequence" : "Create New Sequence"}
+                {selectedSequence ? 'Edit Sequence' : 'Create New Sequence'}
               </DialogTitle>
             </DialogHeader>
             <SequenceBuilder
@@ -233,7 +255,10 @@ export const SequenceList = () => {
       {/* Sequence Cards */}
       <div className="grid gap-6 md:grid-cols-2">
         {sequences?.map((sequence: any) => (
-          <Card key={sequence.id} className="p-6 border-2 hover:shadow-lg transition-all">
+          <Card
+            key={sequence.id}
+            className="p-6 border-2 hover:shadow-lg transition-all"
+          >
             <div className="space-y-4">
               {/* Header */}
               <div className="flex items-start justify-between">
@@ -241,14 +266,17 @@ export const SequenceList = () => {
                   <div className="flex items-center gap-2 mb-1">
                     <h3 className="font-bold text-lg">{sequence.name}</h3>
                     {sequence.is_global_template && (
-                      <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
+                      <Badge
+                        variant="outline"
+                        className="bg-primary/10 text-primary border-primary/20"
+                      >
                         <Sparkles className="h-3 w-3 mr-1" />
                         Global
                       </Badge>
                     )}
                   </div>
                   <p className="text-sm text-muted-foreground line-clamp-2">
-                    {sequence.description || "No description"}
+                    {sequence.description || 'No description'}
                   </p>
                 </div>
               </div>
@@ -263,20 +291,24 @@ export const SequenceList = () => {
                     {sequence.category}
                   </Badge>
                 )}
-                <Badge variant={sequence.is_active ? "default" : "secondary"}>
-                  {sequence.is_active ? "🟢 Active" : "⏸️ Paused"}
+                <Badge variant={sequence.is_active ? 'default' : 'secondary'}>
+                  {sequence.is_active ? '🟢 Active' : '⏸️ Paused'}
                 </Badge>
               </div>
 
               {/* Stats */}
               <div className="flex gap-4 text-sm">
                 <div>
-                  <span className="text-muted-foreground">Steps:</span>{" "}
-                  <span className="font-semibold">{sequence.steps?.[0]?.count || 0}</span>
+                  <span className="text-muted-foreground">Steps:</span>{' '}
+                  <span className="font-semibold">
+                    {sequence.steps?.[0]?.count || 0}
+                  </span>
                 </div>
                 <div>
-                  <span className="text-muted-foreground">Enrolled:</span>{" "}
-                  <span className="font-semibold">{sequence.enrollments?.[0]?.count || 0}</span>
+                  <span className="text-muted-foreground">Enrolled:</span>{' '}
+                  <span className="font-semibold">
+                    {sequence.enrollments?.[0]?.count || 0}
+                  </span>
                 </div>
               </div>
 
@@ -303,9 +335,13 @@ export const SequenceList = () => {
                       className="gap-2"
                     >
                       {sequence.is_active ? (
-                        <><Pause className="h-4 w-4" /> Pause</>
+                        <>
+                          <Pause className="h-4 w-4" /> Pause
+                        </>
                       ) : (
-                        <><Play className="h-4 w-4" /> Activate</>
+                        <>
+                          <Play className="h-4 w-4" /> Activate
+                        </>
                       )}
                     </Button>
                     <Button
@@ -322,7 +358,11 @@ export const SequenceList = () => {
                     </Button>
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
-                        <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-destructive hover:text-destructive"
+                        >
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </AlertDialogTrigger>
@@ -330,8 +370,9 @@ export const SequenceList = () => {
                         <AlertDialogHeader>
                           <AlertDialogTitle>Delete Sequence?</AlertDialogTitle>
                           <AlertDialogDescription>
-                            This will remove the sequence and all its steps. Active enrollments will be stopped.
-                            This action cannot be undone.
+                            This will remove the sequence and all its steps.
+                            Active enrollments will be stopped. This action
+                            cannot be undone.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>

@@ -1,13 +1,13 @@
-import { useState } from "react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Shield, Download, RefreshCw } from "lucide-react";
-import { SecurityMetricsCards } from "@/components/admin/SecurityMetricsCards";
-import { RecentAuditLog } from "@/components/admin/RecentAuditLog";
-import { ThreatTimeline } from "@/components/admin/ThreatTimeline";
-import { SecurityHealthScore } from "@/components/admin/SecurityHealthScore";
-import { toast } from "sonner";
+import { useState } from 'react';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Shield, Download, RefreshCw } from 'lucide-react';
+import { SecurityMetricsCards } from '@/components/admin/SecurityMetricsCards';
+import { RecentAuditLog } from '@/components/admin/RecentAuditLog';
+import { ThreatTimeline } from '@/components/admin/ThreatTimeline';
+import { SecurityHealthScore } from '@/components/admin/SecurityHealthScore';
+import { toast } from 'sonner';
 
 /**
  * Security Dashboard - Real-time threat monitoring and audit logs
@@ -19,17 +19,17 @@ export default function SecurityDashboard() {
   const handleRefresh = async () => {
     setIsRefreshing(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      toast.success("Security data refreshed");
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      toast.success('Security data refreshed');
     } catch (error) {
-      toast.error("Failed to refresh data");
+      toast.error('Failed to refresh data');
     } finally {
       setIsRefreshing(false);
     }
   };
 
   const handleExport = () => {
-    toast.success("Exporting security report...");
+    toast.success('Exporting security report...');
   };
 
   return (
@@ -58,7 +58,9 @@ export default function SecurityDashboard() {
             disabled={isRefreshing}
             className="w-full sm:w-auto font-bold transition-all hover:scale-105 active:scale-95"
           >
-            <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
+            <RefreshCw
+              className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`}
+            />
             Refresh
           </Button>
           <Button
@@ -82,14 +84,14 @@ export default function SecurityDashboard() {
       {/* Tabs for Details */}
       <Tabs defaultValue="timeline" className="w-full">
         <TabsList className="grid w-full grid-cols-2 h-auto border-2 border-border shadow-sm">
-          <TabsTrigger 
-            value="timeline" 
+          <TabsTrigger
+            value="timeline"
             className="text-xs sm:text-sm font-bold uppercase tracking-wider data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all"
           >
             Threat Timeline
           </TabsTrigger>
-          <TabsTrigger 
-            value="audit" 
+          <TabsTrigger
+            value="audit"
             className="text-xs sm:text-sm font-bold uppercase tracking-wider data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all"
           >
             Audit Log

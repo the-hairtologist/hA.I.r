@@ -1,24 +1,30 @@
 /**
  * Enhanced Authentication Context
- * 
+ *
  * Improvements over the basic useAuth hook:
  * - Pre-loads user + role + profile in ONE request
  * - Provides loading states for each piece
  * - Caches data to prevent re-fetching
  * - Handles auth state changes properly
  * - Provides helper methods
- * 
+ *
  * This solves the problem of every page loading auth independently
  */
 
-import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
-import { User } from "@supabase/supabase-js";
-import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
-import { logger } from "@/lib/logging/productionLogger";
-import { userJourney } from "@/lib/logging/userJourneyTracker";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+} from 'react';
+import { User } from '@supabase/supabase-js';
+import { supabase } from '@/integrations/supabase/client';
+import { useNavigate } from 'react-router-dom';
+import { logger } from '@/lib/logging/productionLogger';
+import { userJourney } from '@/lib/logging/userJourneyTracker';
 
-export type AppRole = "stylist" | "client" | "admin";
+export type AppRole = 'stylist' | 'client' | 'admin';
 
 interface Profile {
   id: string;
@@ -87,38 +93,49 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
   /**
    * Verify role consistency (defense-in-depth against state manipulation)
    */
-  const verifyRoleIntegrity = useCallback(async (userId: string, currentRoles: AppRole[]): Promise<boolean> => {
-    try {
-      // Only verify critical roles periodically
-      const criticalRoles = currentRoles.filter(r => r === 'admin' || r === 'stylist');
-      if (criticalRoles.length === 0) return true;
+  const verifyRoleIntegrity = useCallback(
+    async (userId: string, currentRoles: AppRole[]): Promise<boolean> => {
+      try {
+        // Only verify critical roles periodically
+        const criticalRoles = currentRoles.filter(
+          r => r === 'admin' || r === 'stylist'
+        );
+        if (criticalRoles.length === 0) return true;
 
-      // Re-fetch roles directly from database
-      const { data, error } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", userId);
+        // Re-fetch roles directly from database
+        const { data, error } = await supabase
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', userId);
 
-      if (error) {
-        logger.error("Role verification failed", error, { component: 'EnhancedAuthContext' });
+        if (error) {
+          logger.error('Role verification failed', error, {
+            component: 'EnhancedAuthContext',
+          });
+          return false;
+        }
+
+        const verifiedRoles = (data || []).map(r => r.role as AppRole);
+
+        // Check if all critical roles are still valid
+        const isValid = criticalRoles.every(role =>
+          verifiedRoles.includes(role)
+        );
+
+        if (!isValid) {
+          return false;
+        }
+
+        return true;
+      } catch (error) {
+        logger.error('Error verifying roles', error, {
+          component: 'EnhancedAuthContext',
+        });
         return false;
       }
-
-      const verifiedRoles = (data || []).map(r => r.role as AppRole);
-      
-      // Check if all critical roles are still valid
-      const isValid = criticalRoles.every(role => verifiedRoles.includes(role));
-      
-      if (!isValid) {
-        return false;
-      }
-
-      return true;
-    } catch (error) {
-      logger.error("Error verifying roles", error, { component: 'EnhancedAuthContext' });
-      return false;
-    }
-  }, []);
+    },
+    []
+  );
 
   /**
    * Load all auth data in ONE optimized request
@@ -126,57 +143,54 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const loadAuthData = useCallback(async (user: User) => {
     try {
       // Start all queries in parallel
-      const [profileResult, rolesResult, stylistResult, clientResult] = await Promise.all([
-        // Load profile
-        supabase
-          .from("profiles")
-          .select("*")
-          .eq("id", user.id)
-          .maybeSingle(),
+      const [profileResult, rolesResult, stylistResult, clientResult] =
+        await Promise.all([
+          // Load profile
+          supabase.from('profiles').select('*').eq('id', user.id).maybeSingle(),
 
-        // Load roles
-        supabase
-          .from("user_roles")
-          .select("role")
-          .eq("user_id", user.id),
+          // Load roles
+          supabase.from('user_roles').select('role').eq('user_id', user.id),
 
-        // Load stylist profile
-        supabase
-          .from("stylist_profiles")
-          .select("*")
-          .eq("user_id", user.id)
-          .maybeSingle(),
+          // Load stylist profile
+          supabase
+            .from('stylist_profiles')
+            .select('*')
+            .eq('user_id', user.id)
+            .maybeSingle(),
 
-        // Load client profile
-        supabase
-          .from("client_profiles")
-          .select("*")
-          .eq("user_id", user.id)
-          .maybeSingle(),
-      ]);
+          // Load client profile
+          supabase
+            .from('client_profiles')
+            .select('*')
+            .eq('user_id', user.id)
+            .maybeSingle(),
+        ]);
 
       const profile = profileResult.data;
-      const roles = (rolesResult.data || []).map((r) => r.role as AppRole);
+      const roles = (rolesResult.data || []).map(r => r.role as AppRole);
       const stylistProfile = stylistResult.data;
       const clientProfile = clientResult.data;
 
       // Determine primary role (prefer stylist if user has both)
-      const primaryRole = roles.includes("stylist")
-        ? "stylist"
-        : roles.includes("admin")
-        ? "admin"
-        : roles.includes("client")
-        ? "client"
-        : null;
+      const primaryRole = roles.includes('stylist')
+        ? 'stylist'
+        : roles.includes('admin')
+          ? 'admin'
+          : roles.includes('client')
+            ? 'client'
+            : null;
 
       logger.info('Auth data loaded successfully', {
         component: 'EnhancedAuthContext',
         userId: user.id,
         roles,
-        primaryRole
+        primaryRole,
       });
-      userJourney.trackAction('Auth Data Loaded', { userId: user.id, primaryRole });
-      
+      userJourney.trackAction('Auth Data Loaded', {
+        userId: user.id,
+        primaryRole,
+      });
+
       setState({
         user,
         profile,
@@ -188,9 +202,11 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
         initialized: true,
       });
     } catch (error) {
-      logger.error("Error loading auth data", error, { component: 'EnhancedAuthContext' });
+      logger.error('Error loading auth data', error, {
+        component: 'EnhancedAuthContext',
+      });
       userJourney.trackError(error as Error, { action: 'loadAuthData' });
-      setState((prev) => ({ ...prev, loading: false, initialized: true }));
+      setState(prev => ({ ...prev, loading: false, initialized: true }));
     }
   }, []);
 
@@ -202,20 +218,24 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
     const initAuth = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
 
         if (!isMounted) return;
 
         if (session?.user) {
           await loadAuthData(session.user);
         } else {
-          setState((prev) => ({ ...prev, loading: false, initialized: true }));
+          setState(prev => ({ ...prev, loading: false, initialized: true }));
         }
       } catch (error) {
-        logger.error("Error initializing auth", error, { component: 'EnhancedAuthContext' });
+        logger.error('Error initializing auth', error, {
+          component: 'EnhancedAuthContext',
+        });
         userJourney.trackError(error as Error, { action: 'initAuth' });
         if (isMounted) {
-          setState((prev) => ({ ...prev, loading: false, initialized: true }));
+          setState(prev => ({ ...prev, loading: false, initialized: true }));
         }
       }
     };
@@ -231,39 +251,39 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
    * Listen for auth state changes
    */
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        logger.debug("Auth state changed", { 
-          component: 'EnhancedAuthContext',
-          event,
-          userId: session?.user?.id 
-        });
-        userJourney.trackAction(`Auth State: ${event}`, { 
-          userId: session?.user?.id 
-        });
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      logger.debug('Auth state changed', {
+        component: 'EnhancedAuthContext',
+        event,
+        userId: session?.user?.id,
+      });
+      userJourney.trackAction(`Auth State: ${event}`, {
+        userId: session?.user?.id,
+      });
 
-        // CRITICAL: No async calls in callback - use setTimeout
-        if (event === "SIGNED_IN" && session?.user) {
-          setState(prev => ({ ...prev, loading: true }));
-          setTimeout(() => {
-            loadAuthData(session.user);
-          }, 0);
-        } else if (event === "SIGNED_OUT") {
-          logger.info('User signed out', { component: 'EnhancedAuthContext' });
-          userJourney.trackAction('User Signed Out');
-          setState({
-            user: null,
-            profile: null,
-            roles: [],
-            primaryRole: null,
-            stylistProfile: null,
-            clientProfile: null,
-            loading: false,
-            initialized: true,
-          });
-        }
+      // CRITICAL: No async calls in callback - use setTimeout
+      if (event === 'SIGNED_IN' && session?.user) {
+        setState(prev => ({ ...prev, loading: true }));
+        setTimeout(() => {
+          loadAuthData(session.user);
+        }, 0);
+      } else if (event === 'SIGNED_OUT') {
+        logger.info('User signed out', { component: 'EnhancedAuthContext' });
+        userJourney.trackAction('User Signed Out');
+        setState({
+          user: null,
+          profile: null,
+          roles: [],
+          primaryRole: null,
+          stylistProfile: null,
+          clientProfile: null,
+          loading: false,
+          initialized: true,
+        });
       }
-    );
+    });
 
     return () => {
       subscription.unsubscribe();
@@ -276,13 +296,13 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const signOut = useCallback(async () => {
     logger.info('Sign out initiated', { component: 'EnhancedAuthContext' });
     userJourney.trackAction('Sign Out Initiated');
-    
+
     // Clear offline queue data before signing out
     const { offlineQueue } = await import('@/lib/offlineQueue');
     offlineQueue.clearOnLogout();
-    
+
     await supabase.auth.signOut();
-    navigate("/auth");
+    navigate('/auth');
   }, [navigate]);
 
   /**
@@ -292,25 +312,38 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
     if (!state.user || !state.initialized || state.roles.length === 0) return;
 
     // Verify role integrity every 5 minutes for critical roles
-    const criticalRoles = state.roles.filter(r => r === 'admin' || r === 'stylist');
+    const criticalRoles = state.roles.filter(
+      r => r === 'admin' || r === 'stylist'
+    );
     if (criticalRoles.length === 0) return;
 
-    const intervalId = setInterval(async () => {
-      const isValid = await verifyRoleIntegrity(state.user!.id, state.roles);
-      if (!isValid) {
-        // Force re-authentication if role verification fails
-        await signOut();
-      }
-    }, 5 * 60 * 1000); // 5 minutes
+    const intervalId = setInterval(
+      async () => {
+        const isValid = await verifyRoleIntegrity(state.user!.id, state.roles);
+        if (!isValid) {
+          // Force re-authentication if role verification fails
+          await signOut();
+        }
+      },
+      5 * 60 * 1000
+    ); // 5 minutes
 
     return () => clearInterval(intervalId);
-  }, [state.user, state.initialized, state.roles, verifyRoleIntegrity, signOut]);
+  }, [
+    state.user,
+    state.initialized,
+    state.roles,
+    verifyRoleIntegrity,
+    signOut,
+  ]);
 
   /**
    * Refresh auth data (for profile updates)
    */
   const refreshAuth = useCallback(async () => {
-    const { data: { session } } = await supabase.auth.getSession();
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
     if (session?.user) {
       await loadAuthData(session.user);
     }
@@ -320,9 +353,9 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
     ...state,
     signOut,
     refreshAuth,
-    isStylist: state.roles.includes("stylist"),
-    isClient: state.roles.includes("client"),
-    isAdmin: state.roles.includes("admin"),
+    isStylist: state.roles.includes('stylist'),
+    isClient: state.roles.includes('client'),
+    isAdmin: state.roles.includes('admin'),
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
@@ -334,7 +367,7 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
 export const useEnhancedAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error("useEnhancedAuth must be used within EnhancedAuthProvider");
+    throw new Error('useEnhancedAuth must be used within EnhancedAuthProvider');
   }
   return context;
 };
@@ -349,12 +382,19 @@ export const useRequireAuth = (requiredRole?: AppRole) => {
   useEffect(() => {
     if (!auth.loading && auth.initialized) {
       if (!auth.user) {
-        navigate("/auth");
+        navigate('/auth');
       } else if (requiredRole && !auth.roles.includes(requiredRole)) {
-        navigate("/dashboard");
+        navigate('/dashboard');
       }
     }
-  }, [auth.loading, auth.initialized, auth.user, auth.roles, requiredRole, navigate]);
+  }, [
+    auth.loading,
+    auth.initialized,
+    auth.user,
+    auth.roles,
+    requiredRole,
+    navigate,
+  ]);
 
   return auth;
 };

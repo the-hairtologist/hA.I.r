@@ -18,7 +18,9 @@ vi.mock('@/integrations/supabase/client', () => ({
 
 // Mock DashboardLayout
 vi.mock('@/components/DashboardLayout', () => ({
-  default: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  default: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
 }));
 
 const renderAppointments = () => {
@@ -41,7 +43,7 @@ const renderAppointments = () => {
 describe.skip('Appointments - Bulk Actions Double Submit Prevention', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    
+
     (supabase.auth.getUser as any).mockResolvedValue({
       data: { user: { id: 'stylist-123' } },
       error: null,
@@ -100,7 +102,9 @@ describe.skip('Appointments - Bulk Actions Double Submit Prevention', () => {
     await user.click(checkboxes[1]); // First appointment
     await user.click(checkboxes[2]); // Second appointment
 
-    const completeButton = screen.getByRole('button', { name: /mark.*completed/i });
+    const completeButton = screen.getByRole('button', {
+      name: /mark.*completed/i,
+    });
 
     // First click
     await user.click(completeButton);
@@ -111,7 +115,9 @@ describe.skip('Appointments - Bulk Actions Double Submit Prevention', () => {
     // Should only call update once
     await waitFor(() => {
       const fromCalls = (supabase.from as any).mock.calls;
-      const updateCalls = fromCalls.filter((call: any) => call[0] === 'appointments');
+      const updateCalls = fromCalls.filter(
+        (call: any) => call[0] === 'appointments'
+      );
       expect(updateCalls.length).toBeLessThanOrEqual(1);
     });
   });
@@ -127,7 +133,9 @@ describe.skip('Appointments - Bulk Actions Double Submit Prevention', () => {
     const checkboxes = screen.getAllByRole('checkbox');
     await user.click(checkboxes[1]);
 
-    const completeButton = screen.getByRole('button', { name: /mark.*completed/i });
+    const completeButton = screen.getByRole('button', {
+      name: /mark.*completed/i,
+    });
     expect(completeButton).not.toBeDisabled();
 
     await user.click(completeButton);
@@ -149,7 +157,9 @@ describe.skip('Appointments - Bulk Actions Double Submit Prevention', () => {
     const checkboxes = screen.getAllByRole('checkbox');
     await user.click(checkboxes[1]);
 
-    const completeButton = screen.getByRole('button', { name: /mark.*completed/i });
+    const completeButton = screen.getByRole('button', {
+      name: /mark.*completed/i,
+    });
     await user.click(completeButton);
 
     // Should show loading spinner
@@ -169,7 +179,9 @@ describe.skip('Appointments - Bulk Actions Double Submit Prevention', () => {
     const checkboxes = screen.getAllByRole('checkbox');
     await user.click(checkboxes[1]);
 
-    const completeButton = screen.getByRole('button', { name: /mark.*completed/i });
+    const completeButton = screen.getByRole('button', {
+      name: /mark.*completed/i,
+    });
     await user.click(completeButton);
 
     // Wait for submission to complete
@@ -182,7 +194,7 @@ describe.skip('Appointments - Bulk Actions Double Submit Prevention', () => {
 describe.skip('Appointments - Loading State Visibility', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    
+
     (supabase.auth.getUser as any).mockResolvedValue({
       data: { user: { id: 'stylist-123' } },
       error: null,
@@ -230,7 +242,9 @@ describe.skip('Appointments - Loading State Visibility', () => {
     const checkboxes = screen.getAllByRole('checkbox');
     await user.click(checkboxes[1]);
 
-    const completeButton = screen.getByRole('button', { name: /mark.*completed/i });
+    const completeButton = screen.getByRole('button', {
+      name: /mark.*completed/i,
+    });
     await user.click(completeButton);
 
     // Should show loading state
@@ -248,7 +262,9 @@ describe.skip('Appointments - Loading State Visibility', () => {
     const checkboxes = screen.getAllByRole('checkbox');
     await user.click(checkboxes[1]);
 
-    const completeButton = screen.getByRole('button', { name: /mark.*completed/i });
+    const completeButton = screen.getByRole('button', {
+      name: /mark.*completed/i,
+    });
     await user.click(completeButton);
 
     await waitFor(() => {
@@ -260,7 +276,7 @@ describe.skip('Appointments - Loading State Visibility', () => {
 describe.skip('Appointments - Button Disabled States', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    
+
     (supabase.auth.getUser as any).mockResolvedValue({
       data: { user: { id: 'stylist-123' } },
       error: null,
@@ -304,7 +320,9 @@ describe.skip('Appointments - Button Disabled States', () => {
       expect(screen.getByText('Jane Doe')).toBeInTheDocument();
     });
 
-    const completeButton = screen.getByRole('button', { name: /mark.*completed/i });
+    const completeButton = screen.getByRole('button', {
+      name: /mark.*completed/i,
+    });
     expect(completeButton).toBeDisabled();
   });
 
@@ -319,7 +337,9 @@ describe.skip('Appointments - Button Disabled States', () => {
     const checkboxes = screen.getAllByRole('checkbox');
     await user.click(checkboxes[1]);
 
-    const completeButton = screen.getByRole('button', { name: /mark.*completed/i });
+    const completeButton = screen.getByRole('button', {
+      name: /mark.*completed/i,
+    });
     expect(completeButton).not.toBeDisabled();
   });
 });
@@ -331,7 +351,7 @@ describe.skip('Appointments - Form Re-enabling', () => {
 
   it('should re-enable form after successful bulk action', async () => {
     const user = userEvent.setup();
-    
+
     (supabase.auth.getUser as any).mockResolvedValue({
       data: { user: { id: 'stylist-123' } },
       error: null,
@@ -376,7 +396,9 @@ describe.skip('Appointments - Form Re-enabling', () => {
     const checkboxes = screen.getAllByRole('checkbox');
     await user.click(checkboxes[1]);
 
-    const completeButton = screen.getByRole('button', { name: /mark.*completed/i });
+    const completeButton = screen.getByRole('button', {
+      name: /mark.*completed/i,
+    });
     await user.click(completeButton);
 
     await waitFor(() => {
@@ -386,7 +408,7 @@ describe.skip('Appointments - Form Re-enabling', () => {
 
   it('should re-enable form after bulk action error', async () => {
     const user = userEvent.setup();
-    
+
     (supabase.auth.getUser as any).mockResolvedValue({
       data: { user: { id: 'stylist-123' } },
       error: null,
@@ -417,8 +439,8 @@ describe.skip('Appointments - Form Re-enabling', () => {
         }),
       }),
       update: vi.fn().mockReturnValue({
-        in: vi.fn().mockResolvedValue({ 
-          error: new Error('Update failed') 
+        in: vi.fn().mockResolvedValue({
+          error: new Error('Update failed'),
         }),
       }),
     });
@@ -433,7 +455,9 @@ describe.skip('Appointments - Form Re-enabling', () => {
     const checkboxes = screen.getAllByRole('checkbox');
     await user.click(checkboxes[1]);
 
-    const completeButton = screen.getByRole('button', { name: /mark.*completed/i });
+    const completeButton = screen.getByRole('button', {
+      name: /mark.*completed/i,
+    });
     await user.click(completeButton);
 
     // Wait for error state

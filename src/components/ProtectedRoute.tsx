@@ -1,14 +1,17 @@
-import { Navigate, useLocation } from "react-router-dom";
-import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
-import { useEffect } from "react";
-import { useGlobalLoading } from "@/hooks/useGlobalLoading";
+import { Navigate, useLocation } from 'react-router-dom';
+import { useEnhancedAuth } from '@/contexts/EnhancedAuthContext';
+import { useEffect } from 'react';
+import { useGlobalLoading } from '@/hooks/useGlobalLoading';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
-  allowedRoles?: ("admin" | "stylist" | "client")[];
+  allowedRoles?: ('admin' | 'stylist' | 'client')[];
 }
 
-export const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) => {
+export const ProtectedRoute = ({
+  children,
+  allowedRoles,
+}: ProtectedRouteProps) => {
   const { user, loading, roles } = useEnhancedAuth();
   const location = useLocation();
   const { setLoading } = useGlobalLoading();
@@ -18,7 +21,7 @@ export const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) 
 
   // Sync loading state with global loader
   useEffect(() => {
-    setLoading(isStillLoading, "Verifying access...");
+    setLoading(isStillLoading, 'Verifying access...');
   }, [isStillLoading, setLoading]);
 
   if (isStillLoading) {
@@ -36,8 +39,8 @@ export const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) 
   }
 
   // Check if user has any of the allowed roles
-  const userHasAllowedRole = roles.some(role => 
-    allowedRoles.includes(role as "admin" | "stylist" | "client")
+  const userHasAllowedRole = roles.some(role =>
+    allowedRoles.includes(role as 'admin' | 'stylist' | 'client')
   );
 
   if (!userHasAllowedRole) {

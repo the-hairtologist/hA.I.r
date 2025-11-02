@@ -1,25 +1,25 @@
-import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
-import { logger } from "@/lib/logging/productionLogger";
-import { userJourney } from "@/lib/logging/userJourneyTracker";
-import { trackSelect, trackInsert } from "@/lib/logging/supabaseTracker";
+import { useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { Button } from '@/components/ui/button';
+import { logger } from '@/lib/logging/productionLogger';
+import { userJourney } from '@/lib/logging/userJourneyTracker';
+import { trackSelect, trackInsert } from '@/lib/logging/supabaseTracker';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
-import { UserPlus, Loader2 } from "lucide-react";
-import { clientSchema, type ClientInput } from "@/lib/validation";
-import { StandardFormField } from "@/components/forms/StandardFormField";
-import { useFormSubmit } from "@/hooks/useFormSubmit";
-import { MedicalDisclaimer } from "@/components/MedicalDisclaimer";
-import { dataErrors } from "@/lib/errorMessages";
+} from '@/components/ui/dialog';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
+import { toast } from 'sonner';
+import { UserPlus, Loader2 } from 'lucide-react';
+import { clientSchema, type ClientInput } from '@/lib/validation';
+import { StandardFormField } from '@/components/forms/StandardFormField';
+import { useFormSubmit } from '@/hooks/useFormSubmit';
+import { MedicalDisclaimer } from '@/components/MedicalDisclaimer';
+import { dataErrors } from '@/lib/errorMessages';
 
 interface AddClientDialogProps {
   open: boolean;
@@ -34,7 +34,7 @@ export const AddClientDialog = ({
   stylistId,
   onClientAdded,
 }: AddClientDialogProps) => {
-  const [allergies, setAllergies] = useState("");
+  const [allergies, setAllergies] = useState('');
   const [medicalConsent, setMedicalConsent] = useState(false);
 
   const {
@@ -47,47 +47,51 @@ export const AddClientDialog = ({
     handleSubmit,
     reset,
   } = useFormSubmit<ClientInput>(
-    async (data) => {
+    async data => {
       // Check if email already exists (only if email provided)
       if (data.email) {
         const result = await trackSelect(
-          async () => await supabase
-            .from("client_profiles")
-            .select("id, user:profiles(full_name)")
-            .eq("email", data.email)
-            .maybeSingle(),
+          async () =>
+            await supabase
+              .from('client_profiles')
+              .select('id, user:profiles(full_name)')
+              .eq('email', data.email)
+              .maybeSingle(),
           'client_profiles',
           'AddClientDialog',
           { email: data.email }
         );
 
         if (result.error) {
-          logger.error('Error checking email', result.error, { component: 'AddClientDialog' });
+          logger.error('Error checking email', result.error, {
+            component: 'AddClientDialog',
+          });
         }
 
         if (result.data) {
-          toast.error("Email already exists", {
-            description: `This email is already registered for ${result.data.user?.full_name || "another client"}`,
+          toast.error('Email already exists', {
+            description: `This email is already registered for ${result.data.user?.full_name || 'another client'}`,
           });
-          throw new Error("Email already exists");
+          throw new Error('Email already exists');
         }
       }
 
       // Create the client profile
       const clientResult = await trackInsert(
-        async () => await supabase
-          .from("client_profiles")
-          .insert({
-            full_name: data.full_name,
-            email: data.email || null,
-            phone: data.phone || null,
-            notes: data.notes || null,
-            allergies: allergies || null,
-            medical_info_consent: medicalConsent,
-            preferred_stylist_id: stylistId,
-          })
-          .select()
-          .maybeSingle(),
+        async () =>
+          await supabase
+            .from('client_profiles')
+            .insert({
+              full_name: data.full_name,
+              email: data.email || null,
+              phone: data.phone || null,
+              notes: data.notes || null,
+              allergies: allergies || null,
+              medical_info_consent: medicalConsent,
+              preferred_stylist_id: stylistId,
+            })
+            .select()
+            .maybeSingle(),
         'client_profiles',
         'AddClientDialog',
         { clientName: data.full_name }
@@ -96,14 +100,14 @@ export const AddClientDialog = ({
       if (clientResult.error) throw clientResult.error;
       const newClient = clientResult.data as any;
 
-      userJourney.trackAction('Client Added', { 
-        clientId: newClient.id, 
-        clientName: data.full_name 
+      userJourney.trackAction('Client Added', {
+        clientId: newClient.id,
+        clientName: data.full_name,
       });
 
       // Trigger Zapier webhook
       try {
-        const { triggerNewClient } = await import("@/lib/zapierTriggers");
+        const { triggerNewClient } = await import('@/lib/zapierTriggers');
         await triggerNewClient(stylistId, {
           client_id: newClient.id,
           client_name: data.full_name,
@@ -111,9 +115,9 @@ export const AddClientDialog = ({
           client_phone: data.phone,
         });
       } catch (error) {
-        logger.error('[Zapier] Failed to trigger new client webhook', error, { 
+        logger.error('[Zapier] Failed to trigger new client webhook', error, {
           component: 'AddClientDialog',
-          clientId: newClient.id 
+          clientId: newClient.id,
         });
       }
 
@@ -123,16 +127,16 @@ export const AddClientDialog = ({
     {
       schema: clientSchema,
       initialValues: {
-        full_name: "",
-        email: "",
-        phone: "",
-        notes: "",
-        allergies: "",
+        full_name: '',
+        email: '',
+        phone: '',
+        notes: '',
+        allergies: '',
         medical_info_consent: false,
       },
-      successMessage: "Client added successfully! ✨",
+      successMessage: 'Client added successfully! ✨',
       onSuccess: () => {
-        setAllergies("");
+        setAllergies('');
         setMedicalConsent(false);
         reset();
         onOpenChange(false);
@@ -141,18 +145,21 @@ export const AddClientDialog = ({
   );
 
   const resetForm = () => {
-    setAllergies("");
+    setAllergies('');
     setMedicalConsent(false);
     reset();
   };
 
   return (
-    <Dialog open={open} onOpenChange={(isOpen) => {
-      if (!isOpen) {
-        resetForm();
-      }
-      onOpenChange(isOpen);
-    }}>
+    <Dialog
+      open={open}
+      onOpenChange={isOpen => {
+        if (!isOpen) {
+          resetForm();
+        }
+        onOpenChange(isOpen);
+      }}
+    >
       <DialogContent className="max-w-lg brutal-border brutal-shadow-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
@@ -170,8 +177,8 @@ export const AddClientDialog = ({
             label="Full Name"
             type="text"
             value={values.full_name}
-            onChange={(value) => setFieldValue("full_name", value)}
-            onBlur={() => setFieldTouched("full_name")}
+            onChange={value => setFieldValue('full_name', value)}
+            onBlur={() => setFieldTouched('full_name')}
             error={errors.full_name}
             touched={touched.full_name}
             required
@@ -183,9 +190,9 @@ export const AddClientDialog = ({
             name="email"
             label="Email"
             type="email"
-            value={values.email || ""}
-            onChange={(value) => setFieldValue("email", value)}
-            onBlur={() => setFieldTouched("email")}
+            value={values.email || ''}
+            onChange={value => setFieldValue('email', value)}
+            onBlur={() => setFieldTouched('email')}
             error={errors.email}
             touched={touched.email}
             placeholder="e.g., sarah@example.com"
@@ -197,9 +204,9 @@ export const AddClientDialog = ({
             name="phone"
             label="Phone"
             type="tel"
-            value={values.phone || ""}
-            onChange={(value) => setFieldValue("phone", value)}
-            onBlur={() => setFieldTouched("phone")}
+            value={values.phone || ''}
+            onChange={value => setFieldValue('phone', value)}
+            onBlur={() => setFieldTouched('phone')}
             error={errors.phone}
             touched={touched.phone}
             placeholder="e.g., (555) 123-4567"
@@ -210,9 +217,9 @@ export const AddClientDialog = ({
             name="notes"
             label="Notes"
             type="textarea"
-            value={values.notes || ""}
-            onChange={(value) => setFieldValue("notes", value)}
-            onBlur={() => setFieldTouched("notes")}
+            value={values.notes || ''}
+            onChange={value => setFieldValue('notes', value)}
+            onBlur={() => setFieldTouched('notes')}
             error={errors.notes}
             touched={touched.notes}
             placeholder="Add any special notes about this client..."
@@ -239,17 +246,20 @@ export const AddClientDialog = ({
               <Checkbox
                 id="medical-consent"
                 checked={medicalConsent}
-                onCheckedChange={(checked) => setMedicalConsent(checked as boolean)}
+                onCheckedChange={checked =>
+                  setMedicalConsent(checked as boolean)
+                }
               />
               <div className="space-y-1">
-                <Label 
-                  htmlFor="medical-consent" 
+                <Label
+                  htmlFor="medical-consent"
                   className="text-sm font-normal cursor-pointer leading-none"
                 >
                   I consent to sharing allergy information with my stylist
                 </Label>
                 <p className="text-xs text-muted-foreground">
-                  This information will only be visible to your assigned stylist for safety purposes
+                  This information will only be visible to your assigned stylist
+                  for safety purposes
                 </p>
               </div>
             </div>

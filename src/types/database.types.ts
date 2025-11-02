@@ -1,6 +1,6 @@
 /**
  * Database Type Definitions
- * 
+ *
  * Properly typed interfaces for all database tables.
  * These should be auto-generated from Supabase types, but we're
  * defining them manually for now with proper strictness.
@@ -115,7 +115,11 @@ export interface Appointment {
   updated_at: string;
 }
 
-export type AppointmentStatus = "scheduled" | "confirmed" | "completed" | "cancelled";
+export type AppointmentStatus =
+  | 'scheduled'
+  | 'confirmed'
+  | 'completed'
+  | 'cancelled';
 
 /**
  * Appointment with relationships
@@ -123,11 +127,11 @@ export type AppointmentStatus = "scheduled" | "confirmed" | "completed" | "cance
 export interface AppointmentWithRelations extends Appointment {
   client: {
     id: string;
-    user: Pick<Profile, "full_name" | "email" | "phone">;
+    user: Pick<Profile, 'full_name' | 'email' | 'phone'>;
   } | null;
   stylist?: {
     id: string;
-    user: Pick<Profile, "full_name" | "email">;
+    user: Pick<Profile, 'full_name' | 'email'>;
   } | null;
 }
 
@@ -151,7 +155,7 @@ export interface Formula {
  * Formula with relationships
  */
 export interface FormulaWithRelations extends Formula {
-  client: Pick<ClientProfile, "id" | "full_name" | "email"> | null;
+  client: Pick<ClientProfile, 'id' | 'full_name' | 'email'> | null;
 }
 
 /**
@@ -171,8 +175,8 @@ export interface Message {
  * Message with relationships
  */
 export interface MessageWithRelations extends Message {
-  sender: Pick<Profile, "id" | "full_name" | "email"> | null;
-  recipient?: Pick<Profile, "id" | "full_name" | "email"> | null;
+  sender: Pick<Profile, 'id' | 'full_name' | 'email'> | null;
+  recipient?: Pick<Profile, 'id' | 'full_name' | 'email'> | null;
 }
 
 /**
@@ -194,7 +198,7 @@ export interface Review {
  */
 export interface ReviewWithRelations extends Review {
   client: {
-    user: Pick<Profile, "full_name"> | null;
+    user: Pick<Profile, 'full_name'> | null;
   } | null;
 }
 
@@ -205,7 +209,7 @@ export interface ClientMilestone {
   id: string;
   client_id: string;
   stylist_id: string;
-  milestone_type: "appointments" | "anniversary";
+  milestone_type: 'appointments' | 'anniversary';
   milestone_value: number;
   discount_code: string | null;
   discount_amount: number | null;
@@ -216,7 +220,7 @@ export interface ClientMilestone {
 /**
  * User Role
  */
-export type AppRole = "stylist" | "client" | "admin";
+export type AppRole = 'stylist' | 'client' | 'admin';
 
 export interface UserRole {
   id: string;

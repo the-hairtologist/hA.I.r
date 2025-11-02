@@ -1,6 +1,6 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Star } from "lucide-react";
-import { format } from "date-fns";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Star } from 'lucide-react';
+import { format } from 'date-fns';
 
 interface Review {
   id: string;
@@ -33,7 +33,9 @@ export const RecentReviews = ({ reviews }: RecentReviewsProps) => {
             <div className="inline-flex p-4 rounded-2xl bg-warning/10 mb-4 brutal-border brutal-shadow-xs">
               <Star className="h-10 w-10 text-warning" />
             </div>
-            <h4 className="font-pixel font-semibold text-base mb-2">No Reviews Yet</h4>
+            <h4 className="font-pixel font-semibold text-base mb-2">
+              No Reviews Yet
+            </h4>
             <p className="font-sans text-foreground/70 text-sm max-w-xs mx-auto">
               Your first client review will appear here once completed
             </p>
@@ -60,24 +62,28 @@ export const RecentReviews = ({ reviews }: RecentReviewsProps) => {
           >
             <div className="flex items-center justify-between mb-3">
               <span className="font-pixel font-semibold">
-                {review.client?.user?.full_name || "Anonymous"}
+                {review.client?.user?.full_name || 'Anonymous'}
               </span>
               <div className="flex gap-1">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Star
                     key={i}
                     className={`h-4 w-4 transition-colors ${
-                      i < review.rating ? "fill-warning text-warning" : "text-foreground/20"
+                      i < review.rating
+                        ? 'fill-warning text-warning'
+                        : 'text-foreground/20'
                     }`}
                   />
                 ))}
               </div>
             </div>
             {review.review_text && (
-              <p className="text-sm text-foreground/70 mb-2 leading-relaxed">{review.review_text}</p>
+              <p className="text-sm text-foreground/70 mb-2 leading-relaxed">
+                {review.review_text}
+              </p>
             )}
             <p className="text-xs text-foreground/60 font-mono">
-              {format(new Date(review.created_at), "MMM d, yyyy")}
+              {format(new Date(review.created_at), 'MMM d, yyyy')}
             </p>
           </div>
         ))}

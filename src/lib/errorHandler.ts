@@ -1,55 +1,61 @@
 /**
  * Enhanced Error Handling Utility
- * 
+ *
  * Provides centralized error handling with:
  * - User-friendly error messages
  * - Automatic retry logic for network errors
  * - Error logging and tracking
  * - Toast notifications
- * 
+ *
  * @module errorHandler
  */
 
-import { toast } from "sonner";
-import { log } from "./logger";
-import { PostgrestError } from "@supabase/supabase-js";
-import type { AppError, ErrorContext, RetryOptions, ErrorHandlerOptions, ErrorRecoveryContext } from "@/types/errors";
-import { shouldAttemptRecovery, recoverFromError } from "./errorRecovery";
+import { toast } from 'sonner';
+import { log } from './logger';
+import { PostgrestError } from '@supabase/supabase-js';
+import type {
+  AppError,
+  ErrorContext,
+  RetryOptions,
+  ErrorHandlerOptions,
+  ErrorRecoveryContext,
+} from '@/types/errors';
+import { shouldAttemptRecovery, recoverFromError } from './errorRecovery';
 
 /**
  * Maps common error codes to user-friendly messages
  */
 const ERROR_MESSAGES: Record<string, string> = {
   // Auth errors
-  'invalid_credentials': 'Invalid email or password',
-  'email_exists': 'An account with this email already exists',
-  'weak_password': 'Password must be at least 6 characters',
-  'invalid_email': 'Please enter a valid email address',
-  'email_not_confirmed': 'Please verify your email address',
-  
+  invalid_credentials: 'Invalid email or password',
+  email_exists: 'An account with this email already exists',
+  weak_password: 'Password must be at least 6 characters',
+  invalid_email: 'Please enter a valid email address',
+  email_not_confirmed: 'Please verify your email address',
+
   // Database errors
   '23505': 'This record already exists',
   '23503': 'Cannot delete - related records exist',
-  'PGRST116': 'No records found',
-  
+  PGRST116: 'No records found',
+
   // Network errors
-  'fetch_error': 'Network error - please check your connection',
-  'timeout': 'Request timed out - please try again',
-  
+  fetch_error: 'Network error - please check your connection',
+  timeout: 'Request timed out - please try again',
+
   // Permission errors
-  'insufficient_permissions': 'You do not have permission to perform this action',
-  'unauthorized': 'Please log in to continue',
-  
+  insufficient_permissions: 'You do not have permission to perform this action',
+  unauthorized: 'Please log in to continue',
+
   // Generic
-  'unknown': 'An unexpected error occurred',
+  unknown: 'An unexpected error occurred',
 };
 
 /**
  * Extracts a user-friendly error message from various error types
- * 
+ *
  * Handles Supabase errors, PostgreSQL errors, auth errors, and generic errors
  * by mapping them to user-friendly messages.
- * 
+ *
  * @param error - Error object of any type
  * @returns User-friendly error message
  */
@@ -62,7 +68,11 @@ export function getErrorMessage(error: unknown): string {
 
   // Handle Supabase errors
   if (typeof err.code === 'string') {
-    return ERROR_MESSAGES[err.code] || (err.message as string) || ERROR_MESSAGES.unknown;
+    return (
+      ERROR_MESSAGES[err.code] ||
+      (err.message as string) ||
+      ERROR_MESSAGES.unknown
+    );
   }
 
   // Handle PostgreSQL errors
@@ -74,10 +84,12 @@ export function getErrorMessage(error: unknown): string {
   // Handle auth errors
   if (typeof err.message === 'string') {
     const msg = err.message.toLowerCase();
-    if (msg.includes('invalid login')) return ERROR_MESSAGES.invalid_credentials;
+    if (msg.includes('invalid login'))
+      return ERROR_MESSAGES.invalid_credentials;
     if (msg.includes('already registered')) return ERROR_MESSAGES.email_exists;
     if (msg.includes('weak password')) return ERROR_MESSAGES.weak_password;
-    if (msg.includes('email not confirmed')) return ERROR_MESSAGES.email_not_confirmed;
+    if (msg.includes('email not confirmed'))
+      return ERROR_MESSAGES.email_not_confirmed;
   }
 
   // Return the error message or fallback
@@ -88,18 +100,18 @@ export function getErrorMessage(error: unknown): string {
 
 /**
  * Centralized error handler with logging and user notification
- * 
+ *
  * @param error - Error object to handle
  * @param context - Context where error occurred (e.g., "loadClients")
  * @param options - Configuration options
  * @returns Structured AppError object
- * 
+ *
  * @example
  * ```ts
  * try {
  *   await saveData();
  * } catch (error) {
- *   handleError(error, 'saveData', { 
+ *   handleError(error, 'saveData', {
  *     showToast: true,
  *     retryable: true,
  *     onRetry: () => saveData()
@@ -131,7 +143,12 @@ export async function handleError(
     context,
     originalError: error instanceof Error ? error : undefined,
     retryable: isRetryable,
-    statusCode: typeof err.statusCode === 'number' ? err.statusCode : typeof err.status === 'number' ? err.status : undefined,
+    statusCode:
+      typeof err.statusCode === 'number'
+        ? err.statusCode
+        : typeof err.status === 'number'
+          ? err.status
+          : undefined,
   };
 
   // Log the error
@@ -142,18 +159,24 @@ export async function handleError(
   // Attempt automatic recovery if applicable
   if (shouldAttemptRecovery(appError, recoveryContext)) {
     try {
-      const recoveryResult = await recoverFromError(appError, recoveryContext || {});
-      
+      const recoveryResult = await recoverFromError(
+        appError,
+        recoveryContext || {}
+      );
+
       if (recoveryResult.recovered) {
-        log.info(`Error recovered using ${recoveryResult.strategy}`, 'errorHandler');
-        
+        log.info(
+          `Error recovered using ${recoveryResult.strategy}`,
+          'errorHandler'
+        );
+
         // Show recovery success toast
         if (showToast) {
           toast.success(recoveryResult.message, {
             duration: 3000,
           });
         }
-        
+
         return appError;
       }
     } catch (recoveryError) {
@@ -164,18 +187,19 @@ export async function handleError(
   // Show toast notification with retry option (but not for module import errors)
   if (showToast) {
     // Skip toast for module import errors to prevent spam
-    const isModuleError = errorMessage.includes('Importing a module script failed') || 
-                          errorMessage.includes('Failed to fetch dynamically imported module');
-    
+    const isModuleError =
+      errorMessage.includes('Importing a module script failed') ||
+      errorMessage.includes('Failed to fetch dynamically imported module');
+
     if (isModuleError) {
       // Log silently instead of showing toast
       return appError;
     }
-    
+
     if (isRetryable && onRetry) {
       toast.error(errorMessage, {
         action: {
-          label: "Retry",
+          label: 'Retry',
           onClick: onRetry,
         },
         duration: 5000,
@@ -196,7 +220,10 @@ function isNetworkError(error: unknown): boolean {
     return error.message.includes('fetch') || error.message.includes('network');
   }
   const err = error as Record<string, unknown>;
-  return typeof err.message === 'string' && err.message.toLowerCase().includes('timeout');
+  return (
+    typeof err.message === 'string' &&
+    err.message.toLowerCase().includes('timeout')
+  );
 }
 
 /**
@@ -217,11 +244,11 @@ export function withErrorHandling<T extends (...args: any[]) => Promise<any>>(
       const appError = await handleError(error, context, {
         showToast: options?.showToast ?? true,
       });
-      
+
       if (options?.onError) {
         options.onError(appError);
       }
-      
+
       throw appError;
     }
   }) as T;
@@ -236,7 +263,7 @@ export async function validateRequired(
   context?: string
 ): Promise<void> {
   const missing = requiredFields.filter(field => !data[field]);
-  
+
   if (missing.length > 0) {
     const error = new Error(`Missing required fields: ${missing.join(', ')}`);
     await handleError(error, context);
@@ -262,16 +289,16 @@ export function createSafeHandler<T extends (...args: any[]) => Promise<void>>(
 
 /**
  * Retry logic with exponential backoff
- * 
+ *
  * Automatically retries failed operations with increasing delays between attempts.
  * Useful for network requests or transient failures.
- * 
+ *
  * @template T - Return type of the operation
  * @param operation - Async function to retry
  * @param options - Retry configuration
  * @returns Result of successful operation
  * @throws Last error if all retries fail
- * 
+ *
  * @example
  * ```ts
  * const data = await withRetry(
@@ -284,12 +311,7 @@ export async function withRetry<T>(
   operation: () => Promise<T>,
   options: RetryOptions = {}
 ): Promise<T> {
-  const {
-    maxRetries = 3,
-    delay = 1000,
-    backoff = true,
-    onRetry,
-  } = options;
+  const { maxRetries = 3, delay = 1000, backoff = true, onRetry } = options;
 
   let lastError: Error;
 
@@ -298,15 +320,17 @@ export async function withRetry<T>(
       return await operation();
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error));
-      
+
       if (attempt === maxRetries) {
         throw lastError;
       }
 
       // Calculate delay with optional exponential backoff
       const currentDelay = backoff ? delay * Math.pow(2, attempt - 1) : delay;
-      
-      log.debug(`Retry attempt ${attempt}/${maxRetries} after ${currentDelay}ms`);
+
+      log.debug(
+        `Retry attempt ${attempt}/${maxRetries} after ${currentDelay}ms`
+      );
       onRetry?.(attempt);
 
       await new Promise(resolve => setTimeout(resolve, currentDelay));

@@ -1,19 +1,19 @@
-import { useState } from "react";
-import { Star, Send, Sparkles, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useState } from 'react';
+import { Star, Send, Sparkles, Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
-import { useFormSubmit } from "@/hooks/useFormSubmit";
-import { reviewSchema, type ReviewInput } from "@/lib/validation";
-import { StandardFormField } from "@/components/forms/StandardFormField";
+} from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
+import { useFormSubmit } from '@/hooks/useFormSubmit';
+import { reviewSchema, type ReviewInput } from '@/lib/validation';
+import { StandardFormField } from '@/components/forms/StandardFormField';
 
 interface ReviewDialogProps {
   open: boolean;
@@ -47,8 +47,8 @@ export const ReviewDialog = ({
     handleSubmit,
     reset,
   } = useFormSubmit<ReviewInput>(
-    async (data) => {
-      const { error } = await supabase.from("reviews").insert({
+    async data => {
+      const { error } = await supabase.from('reviews').insert({
         appointment_id: appointmentId,
         client_id: clientId,
         stylist_id: stylistId,
@@ -60,7 +60,7 @@ export const ReviewDialog = ({
 
       // Trigger Zapier webhook (non-blocking)
       try {
-        const { triggerReviewReceived } = await import("@/lib/zapierTriggers");
+        const { triggerReviewReceived } = await import('@/lib/zapierTriggers');
         await triggerReviewReceived(stylistId, {
           review_id: appointmentId,
           rating: data.rating,
@@ -69,17 +69,20 @@ export const ReviewDialog = ({
           client_id: clientId,
         });
       } catch (error) {
-        console.error("[Zapier] Failed to trigger review received webhook:", error);
+        console.error(
+          '[Zapier] Failed to trigger review received webhook:',
+          error
+        );
       }
     },
     {
       schema: reviewSchema,
       initialValues: {
         rating: 0,
-        review_text: "",
+        review_text: '',
         appointment_id: appointmentId,
       },
-      successMessage: "Thank you for your review! ⭐",
+      successMessage: 'Thank you for your review! ⭐',
       onSuccess: () => {
         reset();
         setRating(0);
@@ -95,7 +98,9 @@ export const ReviewDialog = ({
   );
 
   const displayRating = hoveredRating || rating;
-  const stylistName = appointment?.stylist?.user?.full_name || appointment?.stylist?.business_name;
+  const stylistName =
+    appointment?.stylist?.user?.full_name ||
+    appointment?.stylist?.business_name;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -106,7 +111,8 @@ export const ReviewDialog = ({
             How was your experience?
           </DialogTitle>
           <DialogDescription>
-            Share your thoughts about your appointment with <span className="font-semibold">{stylistName}</span>
+            Share your thoughts about your appointment with{' '}
+            <span className="font-semibold">{stylistName}</span>
           </DialogDescription>
         </DialogHeader>
 
@@ -115,13 +121,13 @@ export const ReviewDialog = ({
           <div className="space-y-3">
             <Label className="text-base font-semibold">Your Rating *</Label>
             <div className="flex items-center gap-2 justify-center py-4">
-              {[1, 2, 3, 4, 5].map((star) => (
+              {[1, 2, 3, 4, 5].map(star => (
                 <button
                   key={star}
                   type="button"
                   onClick={() => {
                     setRating(star);
-                    setFieldValue("rating", star);
+                    setFieldValue('rating', star);
                   }}
                   onMouseEnter={() => setHoveredRating(star)}
                   onMouseLeave={() => setHoveredRating(0)}
@@ -130,8 +136,8 @@ export const ReviewDialog = ({
                   <Star
                     className={`h-10 w-10 transition-all duration-200 ${
                       star <= displayRating
-                        ? "fill-amber-400 text-amber-400 drop-shadow-md"
-                        : "text-muted-foreground/30 hover:text-muted-foreground/50"
+                        ? 'fill-amber-400 text-amber-400 drop-shadow-md'
+                        : 'text-muted-foreground/30 hover:text-muted-foreground/50'
                     }`}
                   />
                 </button>
@@ -140,14 +146,17 @@ export const ReviewDialog = ({
             {rating > 0 && (
               <p className="text-center text-sm text-muted-foreground animate-fade-in">
                 {rating === 5 && "⭐ Amazing! We're so glad you loved it!"}
-                {rating === 4 && "😊 Great! Thanks for the positive feedback!"}
-                {rating === 3 && "👍 Good! We appreciate your honesty!"}
-                {rating === 2 && "🤔 Thanks for your feedback. We'll do better!"}
+                {rating === 4 && '😊 Great! Thanks for the positive feedback!'}
+                {rating === 3 && '👍 Good! We appreciate your honesty!'}
+                {rating === 2 &&
+                  "🤔 Thanks for your feedback. We'll do better!"}
                 {rating === 1 && "😔 We're sorry. Let us make it right!"}
               </p>
             )}
             {touched.rating && errors.rating && (
-              <p className="text-sm text-destructive text-center">{errors.rating}</p>
+              <p className="text-sm text-destructive text-center">
+                {errors.rating}
+              </p>
             )}
           </div>
 
@@ -155,9 +164,9 @@ export const ReviewDialog = ({
             name="review_text"
             label="Your Review"
             type="textarea"
-            value={values.review_text || ""}
-            onChange={(value) => setFieldValue("review_text", value)}
-            onBlur={() => setFieldTouched("review_text")}
+            value={values.review_text || ''}
+            onChange={value => setFieldValue('review_text', value)}
+            onBlur={() => setFieldTouched('review_text')}
             error={errors.review_text}
             touched={touched.review_text}
             placeholder="Share details about your experience... What did you love? Any suggestions?"

@@ -28,7 +28,10 @@ export interface EnrichedAIError extends AppError {
 }
 
 // Track AI call success/failure counts
-const aiCallStats = new Map<string, { success: number; failure: number; lastSuccess: number }>();
+const aiCallStats = new Map<
+  string,
+  { success: number; failure: number; lastSuccess: number }
+>();
 
 /**
  * Wrapper for AI edge function calls with context enrichment
@@ -40,19 +43,23 @@ export async function wrapAICall<T>(
   const startTime = performance.now();
   const feature = context.feature;
   const model = context.model || 'gemini-2.5-flash';
-  
+
   // Get previous stats for this feature
-  const stats = aiCallStats.get(feature) || { success: 0, failure: 0, lastSuccess: 0 };
-  
+  const stats = aiCallStats.get(feature) || {
+    success: 0,
+    failure: 0,
+    lastSuccess: 0,
+  };
+
   log.info(`AI call starting: ${feature}`, 'aiErrorContext', {
     model,
     estimatedTokens: context.estimatedTokens,
   });
-  
+
   try {
     const result = await aiFunction();
     const executionTimeMs = Math.round(performance.now() - startTime);
-    
+
     if (result.error) {
       // Error occurred, enrich it
       const enrichedError = enrichAIError(result.error, {
@@ -61,18 +68,18 @@ export async function wrapAICall<T>(
         executionTimeMs,
         previousSuccessCount: stats.success,
       });
-      
+
       // Update stats
       aiCallStats.set(feature, {
         ...stats,
         failure: stats.failure + 1,
       });
-      
+
       log.error(`AI call failed: ${feature}`, 'aiErrorContext', enrichedError);
-      
+
       return { data: null, error: enrichedError };
     }
-    
+
     // Success
     const now = Date.now();
     aiCallStats.set(feature, {
@@ -80,31 +87,31 @@ export async function wrapAICall<T>(
       success: stats.success + 1,
       lastSuccess: now,
     });
-    
+
     log.info(`AI call succeeded: ${feature}`, 'aiErrorContext', {
       executionTimeMs,
       dataReceived: !!result.data,
     });
-    
+
     return { data: result.data, error: null };
   } catch (error: any) {
     const executionTimeMs = Math.round(performance.now() - startTime);
-    
+
     const enrichedError = enrichAIError(error, {
       feature,
       model,
       executionTimeMs,
       previousSuccessCount: stats.success,
     });
-    
+
     // Update stats
     aiCallStats.set(feature, {
       ...stats,
       failure: stats.failure + 1,
     });
-    
+
     log.error(`AI call exception: ${feature}`, 'aiErrorContext', enrichedError);
-    
+
     return { data: null, error: enrichedError };
   }
 }
@@ -122,11 +129,17 @@ function enrichAIError(
   }
 ): EnrichedAIError {
   // Extract status code from error
-  const statusCode = error.status || error.statusCode || (error.message?.includes('429') ? 429 : undefined);
-  
+  const statusCode =
+    error.status ||
+    error.statusCode ||
+    (error.message?.includes('429') ? 429 : undefined);
+
   // Determine error type and suggested action
-  const { code, message, suggestedAction, retryAfterSeconds } = classifyAIError(error, context);
-  
+  const { code, message, suggestedAction, retryAfterSeconds } = classifyAIError(
+    error,
+    context
+  );
+
   const enrichedError: EnrichedAIError = {
     message,
     code,
@@ -142,7 +155,7 @@ function enrichAIError(
       retryAfterSeconds,
     },
   };
-  
+
   return enrichedError;
 }
 
@@ -160,7 +173,7 @@ function classifyAIError(
 } {
   const errorMessage = error.message || error.error || String(error);
   const statusCode = error.status || error.statusCode;
-  
+
   // Rate limit exceeded (429)
   if (statusCode === 429 || errorMessage.toLowerCase().includes('rate limit')) {
     return {
@@ -170,27 +183,35 @@ function classifyAIError(
       retryAfterSeconds: 60,
     };
   }
-  
+
   // Payment required (402) - credits depleted
   if (statusCode === 402 || errorMessage.toLowerCase().includes('credits')) {
     return {
       code: 'payment_required',
       message: 'AI credits used up. Add more credits to continue.',
-      suggestedAction: 'Add credits in Settings → Billing, or try again next month.',
+      suggestedAction:
+        'Add credits in Settings → Billing, or try again next month.',
     };
   }
-  
+
   // Network timeout
-  if (errorMessage.toLowerCase().includes('timeout') || context.executionTimeMs > 25000) {
+  if (
+    errorMessage.toLowerCase().includes('timeout') ||
+    context.executionTimeMs > 25000
+  ) {
     return {
       code: 'timeout',
       message: 'AI request took too long to complete.',
-      suggestedAction: 'Try a simpler prompt, or check your internet connection.',
+      suggestedAction:
+        'Try a simpler prompt, or check your internet connection.',
     };
   }
-  
+
   // Network error
-  if (errorMessage.toLowerCase().includes('network') || errorMessage.toLowerCase().includes('connection')) {
+  if (
+    errorMessage.toLowerCase().includes('network') ||
+    errorMessage.toLowerCase().includes('connection')
+  ) {
     return {
       code: 'network_error',
       message: 'Network connection issue. Will retry automatically.',
@@ -198,16 +219,19 @@ function classifyAIError(
       retryAfterSeconds: 5,
     };
   }
-  
+
   // Authentication error
-  if (statusCode === 401 || errorMessage.toLowerCase().includes('unauthorized')) {
+  if (
+    statusCode === 401 ||
+    errorMessage.toLowerCase().includes('unauthorized')
+  ) {
     return {
       code: 'unauthorized',
       message: 'Authentication required. Please log in again.',
       suggestedAction: 'You will be redirected to log in.',
     };
   }
-  
+
   // Validation error (400)
   if (statusCode === 400 || errorMessage.toLowerCase().includes('invalid')) {
     return {
@@ -216,7 +240,7 @@ function classifyAIError(
       suggestedAction: 'Check your input and try again.',
     };
   }
-  
+
   // Server error (500)
   if (statusCode && statusCode >= 500) {
     return {
@@ -226,7 +250,7 @@ function classifyAIError(
       retryAfterSeconds: 30,
     };
   }
-  
+
   // Generic AI error
   return {
     code: 'ai_error',
@@ -241,13 +265,13 @@ function classifyAIError(
 function isRetryableAIError(statusCode?: number, code?: string): boolean {
   // Rate limits are retryable after waiting
   if (statusCode === 429 || code === 'rate_limit_exceeded') return true;
-  
+
   // Network errors are retryable
   if (code === 'network_error' || code === 'timeout') return true;
-  
+
   // Server errors are retryable
   if (statusCode && statusCode >= 500) return true;
-  
+
   // Auth errors, payment errors, validation errors are not retryable
   return false;
 }
@@ -275,12 +299,12 @@ export function resetAICallStats(feature?: string): void {
  */
 export function getAIErrorMessage(error: EnrichedAIError): string {
   const { message, aiContext } = error;
-  
+
   // Add retry information if available
   if (aiContext.retryAfterSeconds) {
     return `${message} (Retrying in ${aiContext.retryAfterSeconds}s)`;
   }
-  
+
   return message;
 }
 

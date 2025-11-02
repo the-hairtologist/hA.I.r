@@ -1,19 +1,30 @@
-import { useState } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-import { Scissors, User } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "@/hooks/use-toast";
+import { useState } from 'react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
+import { Scissors, User } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from '@/hooks/use-toast';
 
 interface RoleSelectionDialogProps {
   open: boolean;
   onComplete: () => void;
 }
 
-export const RoleSelectionDialog = ({ open, onComplete }: RoleSelectionDialogProps) => {
-  const [selectedRole, setSelectedRole] = useState<"stylist" | "client" | null>(null);
+export const RoleSelectionDialog = ({
+  open,
+  onComplete,
+}: RoleSelectionDialogProps) => {
+  const [selectedRole, setSelectedRole] = useState<'stylist' | 'client' | null>(
+    null
+  );
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
@@ -21,11 +32,13 @@ export const RoleSelectionDialog = ({ open, onComplete }: RoleSelectionDialogPro
 
     setLoading(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("No user found");
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) throw new Error('No user found');
 
       // Assign role
-      const { error: roleError } = await supabase.rpc("assign_user_role", {
+      const { error: roleError } = await supabase.rpc('assign_user_role', {
         _user_id: user.id,
         _role: selectedRole,
       });
@@ -33,43 +46,44 @@ export const RoleSelectionDialog = ({ open, onComplete }: RoleSelectionDialogPro
       if (roleError) throw roleError;
 
       // Create appropriate profile
-      if (selectedRole === "stylist") {
+      if (selectedRole === 'stylist') {
         const { error: profileError } = await supabase
-          .from("stylist_profiles")
+          .from('stylist_profiles')
           .insert({
             user_id: user.id,
-            business_name: "",
+            business_name: '',
             is_available: true,
           });
 
-        if (profileError && profileError.code !== "23505") {
+        if (profileError && profileError.code !== '23505') {
           throw profileError;
         }
       } else {
         const { error: profileError } = await supabase
-          .from("client_profiles")
+          .from('client_profiles')
           .insert({
             user_id: user.id,
-            full_name: user.email?.split("@")[0] || "",
+            full_name: user.email?.split('@')[0] || '',
           });
 
-        if (profileError && profileError.code !== "23505") {
+        if (profileError && profileError.code !== '23505') {
           throw profileError;
         }
       }
 
       toast({
-        title: "Welcome! 🎉",
+        title: 'Welcome! 🎉',
         description: `Your ${selectedRole} account is ready!`,
       });
 
       onComplete();
     } catch (error: any) {
-      console.error("Error assigning role:", error);
+      console.error('Error assigning role:', error);
       toast({
-        title: "Error",
-        description: error.message || "Failed to set up your account. Please try again.",
-        variant: "destructive",
+        title: 'Error',
+        description:
+          error.message || 'Failed to set up your account. Please try again.',
+        variant: 'destructive',
       });
     } finally {
       setLoading(false);
@@ -78,7 +92,10 @@ export const RoleSelectionDialog = ({ open, onComplete }: RoleSelectionDialogPro
 
   return (
     <Dialog open={open} onOpenChange={() => {}}>
-      <DialogContent className="max-w-md"  onPointerDownOutside={(e) => e.preventDefault()}>
+      <DialogContent
+        className="max-w-md"
+        onPointerDownOutside={e => e.preventDefault()}
+      >
         <DialogHeader>
           <DialogTitle className="text-2xl font-pixel text-center">
             Welcome to hA.I.r! 👋
@@ -89,14 +106,18 @@ export const RoleSelectionDialog = ({ open, onComplete }: RoleSelectionDialogPro
         </DialogHeader>
 
         <RadioGroup
-          value={selectedRole || ""}
-          onValueChange={(value) => setSelectedRole(value as "stylist" | "client")}
+          value={selectedRole || ''}
+          onValueChange={value =>
+            setSelectedRole(value as 'stylist' | 'client')
+          }
           className="space-y-4 py-6"
         >
           <Label
             htmlFor="stylist"
             className={`flex items-start gap-4 p-6 rounded-lg border-2 cursor-pointer transition-all hover:border-primary ${
-              selectedRole === "stylist" ? "border-primary bg-primary/5" : "border-border"
+              selectedRole === 'stylist'
+                ? 'border-primary bg-primary/5'
+                : 'border-border'
             }`}
           >
             <RadioGroupItem value="stylist" id="stylist" className="mt-1" />
@@ -106,7 +127,8 @@ export const RoleSelectionDialog = ({ open, onComplete }: RoleSelectionDialogPro
                 <span className="font-semibold text-lg">I'm a Stylist</span>
               </div>
               <p className="text-sm text-muted-foreground">
-                Manage clients, track formulas, build your portfolio, and grow your business.
+                Manage clients, track formulas, build your portfolio, and grow
+                your business.
               </p>
             </div>
           </Label>
@@ -114,7 +136,9 @@ export const RoleSelectionDialog = ({ open, onComplete }: RoleSelectionDialogPro
           <Label
             htmlFor="client"
             className={`flex items-start gap-4 p-6 rounded-lg border-2 cursor-pointer transition-all hover:border-primary ${
-              selectedRole === "client" ? "border-primary bg-primary/5" : "border-border"
+              selectedRole === 'client'
+                ? 'border-primary bg-primary/5'
+                : 'border-border'
             }`}
           >
             <RadioGroupItem value="client" id="client" className="mt-1" />
@@ -136,7 +160,7 @@ export const RoleSelectionDialog = ({ open, onComplete }: RoleSelectionDialogPro
           className="w-full bg-primary hover:bg-primary/90"
           size="lg"
         >
-          {loading ? "Setting up..." : "Continue"}
+          {loading ? 'Setting up...' : 'Continue'}
         </Button>
       </DialogContent>
     </Dialog>

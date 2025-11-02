@@ -24,7 +24,10 @@ describe('useResponsive', () => {
       writable: true,
       configurable: true,
       value: vi.fn().mockImplementation(query => ({
-        matches: query.includes('hover') || query.includes('min-width') || query.includes('1536'),
+        matches:
+          query.includes('hover') ||
+          query.includes('min-width') ||
+          query.includes('1536'),
         media: query,
         onchange: null,
         addListener: vi.fn(),
@@ -38,7 +41,7 @@ describe('useResponsive', () => {
 
   it('should detect desktop state', () => {
     const { result } = renderHook(() => useResponsive());
-    
+
     expect(result.current.isDesktop).toBe(true);
     expect(result.current.isMobile).toBe(false);
     expect(result.current.isTablet).toBe(false);
@@ -57,9 +60,9 @@ describe('useResponsive', () => {
       configurable: true,
       value: 812,
     });
-    
+
     const { result } = renderHook(() => useResponsive());
-    
+
     expect(result.current.isMobile).toBe(true);
     expect(result.current.isDesktop).toBe(false);
   });
@@ -70,30 +73,30 @@ describe('useResponsive', () => {
       configurable: true,
       value: 768,
     });
-    
+
     const { result } = renderHook(() => useResponsive());
-    
+
     expect(result.current.isTablet).toBe(true);
   });
 
   it('should detect breakpoints correctly', () => {
     const { result } = renderHook(() => useResponsive());
-    
-    expect(result.current.is2Xl).toBe(true); // >= 1536px  
+
+    expect(result.current.is2Xl).toBe(true); // >= 1536px
     expect(result.current.width).toBeGreaterThan(1024);
     expect(result.current.isDesktop).toBe(true);
   });
 
   it('should detect retina display', () => {
     const { result } = renderHook(() => useResponsive());
-    
+
     expect(result.current.isRetina).toBe(true);
     expect(result.current.pixelRatio).toBe(2);
   });
 
   it('should detect hover capability', () => {
     const { result } = renderHook(() => useResponsive());
-    
+
     expect(result.current.hasHover).toBe(true);
   });
 
@@ -108,9 +111,9 @@ describe('useResponsive', () => {
       configurable: true,
       value: 812,
     });
-    
+
     const { result } = renderHook(() => useResponsive());
-    
+
     expect(result.current.isPortrait).toBe(true);
     expect(result.current.isLandscape).toBe(false);
   });
@@ -123,7 +126,7 @@ describe('useBreakpoint', () => {
       configurable: true,
       value: 640,
     });
-    
+
     window.matchMedia = vi.fn().mockImplementation(query => ({
       matches: query.includes('640px'),
       media: query,
@@ -134,9 +137,9 @@ describe('useBreakpoint', () => {
       removeEventListener: vi.fn(),
       dispatchEvent: vi.fn(),
     }));
-    
+
     const { result } = renderHook(() => useBreakpoint('sm'));
-    
+
     expect(result.current).toBe(true);
   });
 
@@ -146,7 +149,7 @@ describe('useBreakpoint', () => {
       configurable: true,
       value: 768,
     });
-    
+
     window.matchMedia = vi.fn().mockImplementation(query => ({
       matches: query.includes('768px'),
       media: query,
@@ -157,9 +160,9 @@ describe('useBreakpoint', () => {
       removeEventListener: vi.fn(),
       dispatchEvent: vi.fn(),
     }));
-    
+
     const { result } = renderHook(() => useBreakpoint('md'));
-    
+
     expect(result.current).toBe(true);
   });
 });
@@ -176,9 +179,9 @@ describe('useOrientation', () => {
       configurable: true,
       value: 812,
     });
-    
+
     const { result } = renderHook(() => useOrientation());
-    
+
     expect(result.current).toBe('portrait');
   });
 
@@ -193,9 +196,9 @@ describe('useOrientation', () => {
       configurable: true,
       value: 375,
     });
-    
+
     const { result } = renderHook(() => useOrientation());
-    
+
     expect(result.current).toBe('landscape');
   });
 });

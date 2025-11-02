@@ -1,55 +1,55 @@
-import { Check, Sparkles } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { useNavigate } from "react-router-dom";
+import { Check, Sparkles } from 'lucide-react';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { useNavigate } from 'react-router-dom';
 
 const plans = [
   {
-    name: "Starter",
-    price: "Free",
-    description: "Perfect for getting started",
+    name: 'Starter',
+    price: 'Free',
+    description: 'Perfect for getting started',
     features: [
-      "AI Color Formula Generator",
-      "Basic booking calendar",
-      "Up to 20 clients",
-      "Email support"
+      'AI Color Formula Generator',
+      'Basic booking calendar',
+      'Up to 20 clients',
+      'Email support',
     ],
-    cta: "Start Free",
-    popular: false
+    cta: 'Start Free',
+    popular: false,
   },
   {
-    name: "Professional",
-    price: "$29",
-    period: "/month",
-    description: "For busy stylists",
+    name: 'Professional',
+    price: '$29',
+    period: '/month',
+    description: 'For busy stylists',
     features: [
-      "Everything in Starter",
-      "Unlimited clients",
-      "Automated reminders",
-      "Client messaging",
-      "Payment processing",
-      "Priority support"
+      'Everything in Starter',
+      'Unlimited clients',
+      'Automated reminders',
+      'Client messaging',
+      'Payment processing',
+      'Priority support',
     ],
-    cta: "Start 14-Day Trial",
-    popular: true
+    cta: 'Start 14-Day Trial',
+    popular: true,
   },
   {
-    name: "Salon",
-    price: "$79",
-    period: "/month",
-    description: "For teams & salon owners",
+    name: 'Salon',
+    price: '$79',
+    period: '/month',
+    description: 'For teams & salon owners',
     features: [
-      "Everything in Professional",
-      "Multi-stylist management",
-      "Advanced analytics",
-      "Team collaboration tools",
-      "White-label booking page",
-      "Dedicated account manager"
+      'Everything in Professional',
+      'Multi-stylist management',
+      'Advanced analytics',
+      'Team collaboration tools',
+      'White-label booking page',
+      'Dedicated account manager',
     ],
-    cta: "Contact Sales",
-    popular: false
-  }
+    cta: 'Contact Sales',
+    popular: false,
+  },
 ];
 
 export const PricingPreview = () => {
@@ -72,8 +72,8 @@ export const PricingPreview = () => {
             key={idx}
             className={`brutal-border p-6 hover-scale transition-all duration-300 flex flex-col relative ${
               plan.popular
-                ? "brutal-shadow-xl bg-primary text-primary-foreground scale-105"
-                : "brutal-shadow-lg bg-card"
+                ? 'brutal-shadow-xl bg-primary text-primary-foreground scale-105'
+                : 'brutal-shadow-lg bg-card'
             }`}
             style={{ animationDelay: `${idx * 100}ms` }}
           >
@@ -85,21 +85,41 @@ export const PricingPreview = () => {
             )}
 
             <div className="mb-6">
-              <h3 className="font-pixel font-bold text-2xl mb-2">{plan.name}</h3>
-              <p className={`text-sm font-sans mb-4 ${plan.popular ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
+              <h3 className="font-pixel font-bold text-2xl mb-2">
+                {plan.name}
+              </h3>
+              <p
+                className={`text-sm font-sans mb-4 ${plan.popular ? 'text-primary-foreground/80' : 'text-muted-foreground'}`}
+              >
                 {plan.description}
               </p>
               <div className="flex items-baseline gap-1">
-                <span className="font-display font-black text-5xl">{plan.price}</span>
-                {plan.period && <span className={plan.popular ? "text-primary-foreground/80" : "text-muted-foreground"}>{plan.period}</span>}
+                <span className="font-display font-black text-5xl">
+                  {plan.price}
+                </span>
+                {plan.period && (
+                  <span
+                    className={
+                      plan.popular
+                        ? 'text-primary-foreground/80'
+                        : 'text-muted-foreground'
+                    }
+                  >
+                    {plan.period}
+                  </span>
+                )}
               </div>
             </div>
 
             <ul className="space-y-3 mb-8 flex-1">
               {plan.features.map((feature, featureIdx) => (
                 <li key={featureIdx} className="flex items-start gap-2">
-                  <Check className={`h-5 w-5 flex-shrink-0 mt-0.5 ${plan.popular ? "text-primary-foreground" : "text-primary"}`} />
-                  <span className={`text-sm ${plan.popular ? "text-primary-foreground/90" : "text-foreground/80"}`}>
+                  <Check
+                    className={`h-5 w-5 flex-shrink-0 mt-0.5 ${plan.popular ? 'text-primary-foreground' : 'text-primary'}`}
+                  />
+                  <span
+                    className={`text-sm ${plan.popular ? 'text-primary-foreground/90' : 'text-foreground/80'}`}
+                  >
                     {feature}
                   </span>
                 </li>
@@ -107,11 +127,11 @@ export const PricingPreview = () => {
             </ul>
 
             <Button
-              onClick={() => navigate("/auth")}
+              onClick={() => navigate('/auth')}
               className={`w-full font-bold ${
                 plan.popular
-                  ? "bg-secondary text-secondary-foreground hover:bg-secondary/90 border-2 border-foreground"
-                  : "bg-primary text-primary-foreground hover:bg-primary/90"
+                  ? 'bg-secondary text-secondary-foreground hover:bg-secondary/90 border-2 border-foreground'
+                  : 'bg-primary text-primary-foreground hover:bg-primary/90'
               }`}
             >
               {plan.cta}
@@ -121,7 +141,8 @@ export const PricingPreview = () => {
       </div>
 
       <p className="text-center text-sm text-muted-foreground">
-        All plans include 14-day free trial • No credit card required • Cancel anytime
+        All plans include 14-day free trial • No credit card required • Cancel
+        anytime
       </p>
     </div>
   );

@@ -5,39 +5,71 @@
 
 import { useState } from 'react';
 import { useClientChurnPredictor } from '@/hooks/useClientChurnPredictor';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { AlertTriangle, TrendingUp, Mail, MessageSquare, Phone, ChevronRight, Loader2 } from 'lucide-react';
+import {
+  AlertTriangle,
+  TrendingUp,
+  Mail,
+  MessageSquare,
+  Phone,
+  ChevronRight,
+  Loader2,
+} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible';
 
 interface ChurnRiskWidgetProps {
   stylistId: string;
   variant?: 'compact' | 'full';
 }
 
-export const ChurnRiskWidget: React.FC<ChurnRiskWidgetProps> = ({ stylistId, variant = 'compact' }) => {
-  const { predictions, loading, criticalCount, highRiskCount, refresh } = useClientChurnPredictor(stylistId);
+export const ChurnRiskWidget: React.FC<ChurnRiskWidgetProps> = ({
+  stylistId,
+  variant = 'compact',
+}) => {
+  const { predictions, loading, criticalCount, highRiskCount, refresh } =
+    useClientChurnPredictor(stylistId);
   const [expanded, setExpanded] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
   const getRiskColor = (level: string) => {
     switch (level) {
-      case 'critical': return 'destructive';
-      case 'high': return 'secondary';
-      case 'medium': return 'secondary';
-      default: return 'outline';
+      case 'critical':
+        return 'destructive';
+      case 'high':
+        return 'secondary';
+      case 'medium':
+        return 'secondary';
+      default:
+        return 'outline';
     }
   };
 
   const getRiskIcon = (level: string) => {
-    return level === 'critical' || level === 'high' ? AlertTriangle : TrendingUp;
+    return level === 'critical' || level === 'high'
+      ? AlertTriangle
+      : TrendingUp;
   };
 
-  const handleAction = async (action: string, clientId: string, clientName: string) => {
+  const handleAction = async (
+    action: string,
+    clientId: string,
+    clientName: string
+  ) => {
     toast({
       title: `${action} for ${clientName}`,
       description: 'Opening communication tools...',
@@ -56,7 +88,9 @@ export const ChurnRiskWidget: React.FC<ChurnRiskWidgetProps> = ({ stylistId, var
       <Card>
         <CardContent className="flex items-center justify-center p-6">
           <Loader2 className="h-6 w-6 animate-spin text-primary" />
-          <span className="ml-2 text-sm text-muted-foreground">Analyzing churn risk...</span>
+          <span className="ml-2 text-sm text-muted-foreground">
+            Analyzing churn risk...
+          </span>
         </CardContent>
       </Card>
     );
@@ -89,8 +123,8 @@ export const ChurnRiskWidget: React.FC<ChurnRiskWidgetProps> = ({ stylistId, var
                 <Badge variant="destructive">{criticalCount}</Badge>
                 <span className="text-sm font-medium">Critical Risk</span>
               </div>
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 size="sm"
                 onClick={() => navigate('/retention-dashboard')}
               >
@@ -101,11 +135,13 @@ export const ChurnRiskWidget: React.FC<ChurnRiskWidgetProps> = ({ stylistId, var
           {highRiskCount > 0 && (
             <div className="flex items-center justify-between p-2 bg-warning/10 rounded-md">
               <div className="flex items-center gap-2">
-                <Badge className="bg-warning text-warning-foreground">{highRiskCount}</Badge>
+                <Badge className="bg-warning text-warning-foreground">
+                  {highRiskCount}
+                </Badge>
                 <span className="text-sm font-medium">High Risk</span>
               </div>
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 size="sm"
                 onClick={() => navigate('/retention-dashboard')}
               >
@@ -145,16 +181,25 @@ export const ChurnRiskWidget: React.FC<ChurnRiskWidgetProps> = ({ stylistId, var
                     {criticalClients.length}
                   </Badge>
                   <div>
-                    <p className="font-semibold text-destructive">Critical Risk</p>
-                    <p className="text-xs text-muted-foreground">Immediate action required</p>
+                    <p className="font-semibold text-destructive">
+                      Critical Risk
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      Immediate action required
+                    </p>
                   </div>
                 </div>
-                <ChevronRight className={`h-5 w-5 transition-transform ${expanded ? 'rotate-90' : ''}`} />
+                <ChevronRight
+                  className={`h-5 w-5 transition-transform ${expanded ? 'rotate-90' : ''}`}
+                />
               </div>
             </CollapsibleTrigger>
             <CollapsibleContent className="space-y-2 mt-2">
-              {criticalClients.map((client) => (
-                <Card key={client.clientId} className="border-l-4 border-l-destructive">
+              {criticalClients.map(client => (
+                <Card
+                  key={client.clientId}
+                  className="border-l-4 border-l-destructive"
+                >
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between">
                       <div className="space-y-2 flex-1">
@@ -166,34 +211,55 @@ export const ChurnRiskWidget: React.FC<ChurnRiskWidgetProps> = ({ stylistId, var
                         </div>
                         <div className="text-sm space-y-1">
                           <p className="text-muted-foreground">
-                            <strong>Key Factor:</strong> {client.factors[0]?.description}
+                            <strong>Key Factor:</strong>{' '}
+                            {client.factors[0]?.description}
                           </p>
                           <p className="text-muted-foreground">
-                            <strong>Predicted Loss:</strong> ${client.predictedLossValue.toFixed(0)}
+                            <strong>Predicted Loss:</strong> $
+                            {client.predictedLossValue.toFixed(0)}
                           </p>
                         </div>
                         <div className="space-y-1">
-                          <p className="text-xs font-medium">Recommended Actions:</p>
-                          {client.recommendedActions.slice(0, 2).map((action, idx) => (
-                            <div key={idx} className="flex items-start gap-2 text-xs">
-                              <div className="w-1 h-1 rounded-full bg-primary mt-1.5" />
-                              <span>{action.action}</span>
-                            </div>
-                          ))}
+                          <p className="text-xs font-medium">
+                            Recommended Actions:
+                          </p>
+                          {client.recommendedActions
+                            .slice(0, 2)
+                            .map((action, idx) => (
+                              <div
+                                key={idx}
+                                className="flex items-start gap-2 text-xs"
+                              >
+                                <div className="w-1 h-1 rounded-full bg-primary mt-1.5" />
+                                <span>{action.action}</span>
+                              </div>
+                            ))}
                         </div>
                       </div>
                       <div className="flex gap-1 ml-4">
-                        <Button 
-                          size="icon" 
+                        <Button
+                          size="icon"
                           variant="outline"
-                          onClick={() => handleAction('Email', client.clientId, client.clientName)}
+                          onClick={() =>
+                            handleAction(
+                              'Email',
+                              client.clientId,
+                              client.clientName
+                            )
+                          }
                         >
                           <Mail className="h-4 w-4" />
                         </Button>
-                        <Button 
-                          size="icon" 
+                        <Button
+                          size="icon"
                           variant="outline"
-                          onClick={() => handleAction('SMS', client.clientId, client.clientName)}
+                          onClick={() =>
+                            handleAction(
+                              'SMS',
+                              client.clientId,
+                              client.clientName
+                            )
+                          }
                         >
                           <MessageSquare className="h-4 w-4" />
                         </Button>
@@ -216,11 +282,13 @@ export const ChurnRiskWidget: React.FC<ChurnRiskWidgetProps> = ({ stylistId, var
                 </Badge>
                 <div>
                   <p className="font-semibold">High Risk</p>
-                  <p className="text-xs text-muted-foreground">Monitor closely</p>
+                  <p className="text-xs text-muted-foreground">
+                    Monitor closely
+                  </p>
                 </div>
               </div>
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 size="sm"
                 onClick={() => navigate('/retention-dashboard')}
               >

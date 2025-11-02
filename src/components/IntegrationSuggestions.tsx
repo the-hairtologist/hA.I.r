@@ -5,7 +5,13 @@
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Zap, Calendar, MessageSquare, X, Sparkles } from 'lucide-react';
@@ -88,7 +94,11 @@ export const IntegrationSuggestions = ({
     }
 
     // Context-specific suggestions
-    if (context === 'appointments' && userStats.appointmentCount && userStats.appointmentCount > 5) {
+    if (
+      context === 'appointments' &&
+      userStats.appointmentCount &&
+      userStats.appointmentCount > 5
+    ) {
       newSuggestions.push({
         id: 'calendar-integration',
         title: 'Connect Your Calendar',
@@ -102,7 +112,7 @@ export const IntegrationSuggestions = ({
 
     // Filter out dismissed suggestions
     const filtered = newSuggestions.filter(s => !dismissed.has(s.id));
-    
+
     // Sort by priority
     filtered.sort((a, b) => {
       const priorityOrder = { high: 0, medium: 1, low: 2 };
@@ -115,7 +125,7 @@ export const IntegrationSuggestions = ({
   const handleDismiss = (suggestionId: string) => {
     setDismissed(prev => new Set([...prev, suggestionId]));
     setSuggestions(prev => prev.filter(s => s.id !== suggestionId));
-    
+
     // Store dismissed state
     const dismissedList = JSON.parse(
       localStorage.getItem('dismissed_integration_suggestions') || '[]'
@@ -134,7 +144,7 @@ export const IntegrationSuggestions = ({
 
   return (
     <div className={cn('space-y-3', className)}>
-      {suggestions.map((suggestion) => {
+      {suggestions.map(suggestion => {
         const Icon = suggestion.icon;
         return (
           <Card
@@ -151,7 +161,7 @@ export const IntegrationSuggestions = ({
                 <X className="h-3 w-3" />
               </Button>
             </div>
-            
+
             <CardHeader className="pb-3">
               <div className="flex items-start gap-3">
                 <div className="p-2 rounded-lg bg-primary/10">
@@ -164,14 +174,16 @@ export const IntegrationSuggestions = ({
                       Suggested
                     </Badge>
                   </div>
-                  <CardTitle className="text-base">{suggestion.title}</CardTitle>
+                  <CardTitle className="text-base">
+                    {suggestion.title}
+                  </CardTitle>
                   <CardDescription className="text-sm mt-1">
                     {suggestion.description}
                   </CardDescription>
                 </div>
               </div>
             </CardHeader>
-            
+
             <CardContent className="pt-0">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-primary">
@@ -180,7 +192,9 @@ export const IntegrationSuggestions = ({
                 <Button
                   size="sm"
                   variant="outline"
-                  onClick={() => handleViewIntegration(suggestion.integrationId)}
+                  onClick={() =>
+                    handleViewIntegration(suggestion.integrationId)
+                  }
                 >
                   Connect
                 </Button>

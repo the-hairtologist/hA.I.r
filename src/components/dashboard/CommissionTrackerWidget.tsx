@@ -4,12 +4,12 @@
  * OPTIMIZED: Uses EnhancedAuth context to avoid duplicate queries
  */
 
-import { useState, useEffect } from "react";
-import { DollarSign, TrendingUp, Clock, CheckCircle } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { supabase } from "@/integrations/supabase/client";
-import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
-import { format } from "date-fns";
+import { useState, useEffect } from 'react';
+import { DollarSign, TrendingUp, Clock, CheckCircle } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { supabase } from '@/integrations/supabase/client';
+import { useEnhancedAuth } from '@/contexts/EnhancedAuthContext';
+import { format } from 'date-fns';
 
 interface Commission {
   id: string;
@@ -37,16 +37,16 @@ export function CommissionTrackerWidget() {
     try {
       // Get recent commissions - NO DUPLICATE QUERY
       const { data, error } = await supabase
-        .from("commissions")
-        .select("*")
-        .eq("stylist_id", stylistProfile.id)
-        .order("created_at", { ascending: false })
+        .from('commissions')
+        .select('*')
+        .eq('stylist_id', stylistProfile.id)
+        .order('created_at', { ascending: false })
         .limit(5);
 
       if (error) throw error;
       setCommissions(data || []);
     } catch (error) {
-      console.error("Error loading commissions:", error);
+      console.error('Error loading commissions:', error);
     } finally {
       setLoading(false);
     }
@@ -56,7 +56,7 @@ export function CommissionTrackerWidget() {
   const totalPending = commissions
     .filter(c => c.status === 'pending')
     .reduce((sum, c) => sum + Number(c.commission_amount), 0);
-  
+
   const totalPaid = commissions
     .filter(c => c.status === 'paid')
     .reduce((sum, c) => sum + Number(c.commission_amount), 0);
@@ -65,7 +65,10 @@ export function CommissionTrackerWidget() {
     .filter(c => {
       const date = new Date(c.created_at);
       const now = new Date();
-      return date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
+      return (
+        date.getMonth() === now.getMonth() &&
+        date.getFullYear() === now.getFullYear()
+      );
     })
     .reduce((sum, c) => sum + Number(c.commission_amount), 0);
 
@@ -118,7 +121,7 @@ export function CommissionTrackerWidget() {
           <div className="space-y-2 pt-2 border-t">
             <p className="text-sm font-medium">Recent Commissions</p>
             <div className="space-y-2">
-              {commissions.slice(0, 3).map((commission) => (
+              {commissions.slice(0, 3).map(commission => (
                 <div
                   key={commission.id}
                   className="flex items-center justify-between p-2 rounded-lg bg-muted/50"
@@ -134,7 +137,7 @@ export function CommissionTrackerWidget() {
                         {commission.product_name}
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        {format(new Date(commission.created_at), "MMM d")}
+                        {format(new Date(commission.created_at), 'MMM d')}
                       </p>
                     </div>
                   </div>

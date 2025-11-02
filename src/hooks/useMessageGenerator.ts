@@ -27,22 +27,27 @@ export function useMessageGenerator() {
 
   const generateMessage = async (context: MessageContext) => {
     setGenerating(true);
-    
+
     try {
-      logger.info('Generating message', 'MessageGenerator', { 
-        type: context.messageType, 
-        client: context.clientName 
+      logger.info('Generating message', 'MessageGenerator', {
+        type: context.messageType,
+        client: context.clientName,
       });
 
-      const { data, error } = await supabase.functions.invoke('ai-message-generator', {
-        body: context,
-      });
+      const { data, error } = await supabase.functions.invoke(
+        'ai-message-generator',
+        {
+          body: context,
+        }
+      );
 
       if (error) throw error;
 
       if (data) {
         setMessage(data);
-        logger.info('Message generated', 'MessageGenerator', { tone: data.tone });
+        logger.info('Message generated', 'MessageGenerator', {
+          tone: data.tone,
+        });
         toast.success('Message generated successfully');
         return data;
       }
@@ -60,19 +65,24 @@ export function useMessageGenerator() {
   const generateBulkMessages = async (contexts: MessageContext[]) => {
     setGenerating(true);
     const messages: GeneratedMessage[] = [];
-    
+
     try {
       for (const context of contexts) {
-        const { data } = await supabase.functions.invoke('ai-message-generator', {
-          body: context,
-        });
-        
+        const { data } = await supabase.functions.invoke(
+          'ai-message-generator',
+          {
+            body: context,
+          }
+        );
+
         if (data) {
           messages.push(data);
         }
       }
-      
-      logger.info('Bulk messages generated', 'MessageGenerator', { count: messages.length });
+
+      logger.info('Bulk messages generated', 'MessageGenerator', {
+        count: messages.length,
+      });
       toast.success(`Generated ${messages.length} messages`);
       return messages;
     } catch (error) {

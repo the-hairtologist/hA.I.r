@@ -3,24 +3,24 @@
  * Provides screen reader announcements for dynamic content changes
  */
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
 interface AccessibilityAnnouncerProps {
   message: string;
-  priority?: "polite" | "assertive";
+  priority?: 'polite' | 'assertive';
   clearOnUnmount?: boolean;
 }
 
 export function AccessibilityAnnouncer({
   message,
-  priority = "polite",
+  priority = 'polite',
   clearOnUnmount = true,
 }: AccessibilityAnnouncerProps) {
   const announcerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (announcerRef.current && message) {
-      announcerRef.current.textContent = "";
+      announcerRef.current.textContent = '';
       setTimeout(() => {
         if (announcerRef.current) {
           announcerRef.current.textContent = message;
@@ -30,7 +30,7 @@ export function AccessibilityAnnouncer({
 
     return () => {
       if (clearOnUnmount && announcerRef.current) {
-        announcerRef.current.textContent = "";
+        announcerRef.current.textContent = '';
       }
     };
   }, [message, clearOnUnmount]);
@@ -47,11 +47,14 @@ export function AccessibilityAnnouncer({
 }
 
 export function useAnnouncer() {
-  const announce = (message: string, priority: "polite" | "assertive" = "polite") => {
-    const announcer = document.getElementById("global-announcer");
+  const announce = (
+    message: string,
+    priority: 'polite' | 'assertive' = 'polite'
+  ) => {
+    const announcer = document.getElementById('global-announcer');
     if (announcer) {
-      announcer.setAttribute("aria-live", priority);
-      announcer.textContent = "";
+      announcer.setAttribute('aria-live', priority);
+      announcer.textContent = '';
       setTimeout(() => {
         announcer.textContent = message;
       }, 100);

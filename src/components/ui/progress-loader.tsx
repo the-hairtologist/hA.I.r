@@ -3,23 +3,23 @@
  * Provides visual feedback during data loading
  */
 
-import { useEffect, useState } from "react";
-import { Progress } from "@/components/ui/progress";
-import { cn } from "@/lib/utils";
-import { Loader2 } from "lucide-react";
+import { useEffect, useState } from 'react';
+import { Progress } from '@/components/ui/progress';
+import { cn } from '@/lib/utils';
+import { Loader2 } from 'lucide-react';
 
 interface ProgressLoaderProps {
   loading: boolean;
   message?: string;
   className?: string;
-  variant?: "linear" | "circular" | "skeleton";
+  variant?: 'linear' | 'circular' | 'skeleton';
 }
 
-export const ProgressLoader = ({ 
-  loading, 
-  message = "Loading...", 
+export const ProgressLoader = ({
+  loading,
+  message = 'Loading...',
   className,
-  variant = "linear" 
+  variant = 'linear',
 }: ProgressLoaderProps) => {
   const [progress, setProgress] = useState(0);
 
@@ -31,7 +31,7 @@ export const ProgressLoader = ({
 
     // Simulate progress
     const interval = setInterval(() => {
-      setProgress((prev) => {
+      setProgress(prev => {
         if (prev >= 90) return prev;
         return prev + 10;
       });
@@ -42,18 +42,23 @@ export const ProgressLoader = ({
 
   if (!loading) return null;
 
-  if (variant === "circular") {
+  if (variant === 'circular') {
     return (
-      <div className={cn("flex flex-col items-center justify-center gap-3 p-8", className)}>
+      <div
+        className={cn(
+          'flex flex-col items-center justify-center gap-3 p-8',
+          className
+        )}
+      >
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
         {message && <p className="text-sm text-muted-foreground">{message}</p>}
       </div>
     );
   }
 
-  if (variant === "skeleton") {
+  if (variant === 'skeleton') {
     return (
-      <div className={cn("space-y-3", className)}>
+      <div className={cn('space-y-3', className)}>
         {[...Array(3)].map((_, i) => (
           <div key={i} className="animate-pulse">
             <div className="h-20 bg-muted rounded-lg" />
@@ -64,7 +69,7 @@ export const ProgressLoader = ({
   }
 
   return (
-    <div className={cn("space-y-3", className)}>
+    <div className={cn('space-y-3', className)}>
       <Progress value={progress} className="h-2" />
       {message && (
         <p className="text-sm text-muted-foreground text-center animate-pulse">

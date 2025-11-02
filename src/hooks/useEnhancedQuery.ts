@@ -30,16 +30,17 @@ export function useEnhancedQuery<T>(options: EnhancedQueryOptions<T>) {
   } = options;
 
   // Create cache key if caching is enabled
-  const cacheKey = cacheTable && cacheParams 
-    ? createCacheKey(cacheTable, cacheParams)
-    : null;
+  const cacheKey =
+    cacheTable && cacheParams ? createCacheKey(cacheTable, cacheParams) : null;
 
   const enhancedQueryFn = async (): Promise<T> => {
     // Check cache first
     if (cacheKey) {
       const cached = queryCache.get<T>(cacheKey);
       if (cached !== null) {
-        logger.debug('Using cached query result', 'useEnhancedQuery', { cacheKey });
+        logger.debug('Using cached query result', 'useEnhancedQuery', {
+          cacheKey,
+        });
         return cached;
       }
     }
@@ -84,7 +85,10 @@ export function useEnhancedQuery<T>(options: EnhancedQueryOptions<T>) {
 /**
  * Invalidate query cache
  */
-export function invalidateQueryCache(table: string, params?: Record<string, any>) {
+export function invalidateQueryCache(
+  table: string,
+  params?: Record<string, any>
+) {
   if (params) {
     const key = createCacheKey(table, params);
     queryCache.invalidate(key);

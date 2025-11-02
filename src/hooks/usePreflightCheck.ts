@@ -35,12 +35,14 @@ interface PreflightCheckOptions {
 export function usePreflightCheck() {
   const networkStatus = useNetworkStatus();
   const { canMakeCall, warning } = useRateLimitWarning();
-  
+
   const checkBeforeAICall = useCallback(
-    async (options: PreflightCheckOptions = {}): Promise<PreflightCheckResult> => {
+    async (
+      options: PreflightCheckOptions = {}
+    ): Promise<PreflightCheckResult> => {
       const checks: PreflightCheckResult['checks'] = [];
       let blockingIssue: string | undefined;
-      
+
       // Network connectivity check
       if (options.requireNetwork !== false) {
         const networkPassed = networkStatus.isOnline;
@@ -49,12 +51,13 @@ export function usePreflightCheck() {
           passed: networkPassed,
           message: networkPassed ? 'Online' : 'No internet connection',
         });
-        
+
         if (!networkPassed) {
-          blockingIssue = 'You are offline. Please check your internet connection.';
+          blockingIssue =
+            'You are offline. Please check your internet connection.';
         }
       }
-      
+
       // Network quality check (for AI operations)
       if (options.requireGoodNetwork && networkStatus.isOnline) {
         const qualityPassed = isNetworkSufficientForAI(networkStatus);
@@ -65,12 +68,13 @@ export function usePreflightCheck() {
             ? `Good connection (${networkStatus.quality})`
             : `Slow connection (${networkStatus.quality})`,
         });
-        
+
         if (!qualityPassed && !blockingIssue) {
-          blockingIssue = 'Connection is too slow for AI features. Try again with better signal.';
+          blockingIssue =
+            'Connection is too slow for AI features. Try again with better signal.';
         }
       }
-      
+
       // Rate limit check
       if (options.checkRateLimit !== false) {
         const rateLimitPassed = canMakeCall();
@@ -81,14 +85,14 @@ export function usePreflightCheck() {
             ? 'Within rate limit'
             : `Rate limit exceeded${warning ? ` (resets in ${Math.ceil(warning.resetIn / 1000)}s)` : ''}`,
         });
-        
+
         if (!rateLimitPassed && !blockingIssue) {
           blockingIssue = warning
             ? `${warning.message} Try again in ${Math.ceil(warning.resetIn / 1000)} seconds.`
             : 'Rate limit exceeded. Please wait a moment.';
         }
       }
-      
+
       // Custom checks
       if (options.customChecks) {
         for (const customCheck of options.customChecks) {
@@ -99,7 +103,7 @@ export function usePreflightCheck() {
               passed: checkResult,
               message: checkResult ? 'Passed' : customCheck.message,
             });
-            
+
             if (!checkResult && !blockingIssue) {
               blockingIssue = customCheck.message;
             }
@@ -109,21 +113,21 @@ export function usePreflightCheck() {
               passed: false,
               message: `Check failed: ${error}`,
             });
-            
+
             if (!blockingIssue) {
               blockingIssue = customCheck.message;
             }
           }
         }
       }
-      
+
       const passed = checks.every(check => check.passed);
-      
+
       log.info('Preflight check completed', 'usePreflightCheck', {
         passed,
         checks: checks.map(c => ({ name: c.name, passed: c.passed })),
       });
-      
+
       return {
         passed,
         checks,
@@ -132,7 +136,7 @@ export function usePreflightCheck() {
     },
     [networkStatus, canMakeCall, warning]
   );
-  
+
   const checkBeforeImageUpload = useCallback(
     async (file: File, maxSizeMB = 10): Promise<PreflightCheckResult> => {
       return checkBeforeAICall({
@@ -153,9 +157,11 @@ export function usePreflightCheck() {
     },
     [checkBeforeAICall]
   );
-  
+
   const checkBeforeFormSubmit = useCallback(
-    async (requiredFields: Record<string, any>): Promise<PreflightCheckResult> => {
+    async (
+      requiredFields: Record<string, any>
+    ): Promise<PreflightCheckResult> => {
       return checkBeforeAICall({
         requireNetwork: true,
         checkRateLimit: false,
@@ -172,7 +178,7 @@ export function usePreflightCheck() {
     },
     [checkBeforeAICall]
   );
-  
+
   return {
     checkBeforeAICall,
     checkBeforeImageUpload,

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
 interface ShortcutConfig {
   key: string;
@@ -13,7 +13,9 @@ export const useKeyboardNav = (shortcuts: ShortcutConfig[]) => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       shortcuts.forEach(shortcut => {
-        const ctrlMatch = shortcut.ctrl ? e.ctrlKey || e.metaKey : !e.ctrlKey && !e.metaKey;
+        const ctrlMatch = shortcut.ctrl
+          ? e.ctrlKey || e.metaKey
+          : !e.ctrlKey && !e.metaKey;
         const altMatch = shortcut.alt ? e.altKey : !e.altKey;
         const shiftMatch = shortcut.shift ? e.shiftKey : !e.shiftKey;
 
@@ -29,8 +31,8 @@ export const useKeyboardNav = (shortcuts: ShortcutConfig[]) => {
       });
     };
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, [shortcuts]);
 
   return shortcuts;
@@ -38,8 +40,8 @@ export const useKeyboardNav = (shortcuts: ShortcutConfig[]) => {
 
 // Common shortcuts preset
 export const commonShortcuts = {
-  search: { key: "k", ctrl: true, description: "Open search" },
-  save: { key: "s", ctrl: true, description: "Save" },
-  close: { key: "Escape", description: "Close dialog" },
-  newItem: { key: "n", ctrl: true, description: "New item" },
+  search: { key: 'k', ctrl: true, description: 'Open search' },
+  save: { key: 's', ctrl: true, description: 'Save' },
+  close: { key: 'Escape', description: 'Close dialog' },
+  newItem: { key: 'n', ctrl: true, description: 'New item' },
 };

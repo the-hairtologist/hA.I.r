@@ -1,20 +1,34 @@
-import { DashboardLayout } from "@/components/DashboardLayout";
-import { PageHeader } from "@/components/PageHeader";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  TrendingUp, Users, Calendar, DollarSign, Share2, 
-  Eye, MousePointer, UserPlus, BarChart3, Clock 
-} from "lucide-react";
-import { useAuth } from "@/hooks/useAuth";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { DashboardLayout } from '@/components/DashboardLayout';
+import { PageHeader } from '@/components/PageHeader';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  TrendingUp,
+  Users,
+  Calendar,
+  DollarSign,
+  Share2,
+  Eye,
+  MousePointer,
+  UserPlus,
+  BarChart3,
+  Clock,
+} from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
 
 const GrowthAnalytics = () => {
   const { session } = useAuth();
-  const [timeRange, setTimeRange] = useState<"7d" | "30d" | "90d">("30d");
+  const [timeRange, setTimeRange] = useState<'7d' | '30d' | '90d'>('30d');
 
   // Fetch stylist profile
   const { data: stylistProfile } = useQuery({
@@ -36,7 +50,7 @@ const GrowthAnalytics = () => {
     queryFn: async () => {
       if (!stylistProfile?.id) return null;
 
-      const daysAgo = timeRange === "7d" ? 7 : timeRange === "30d" ? 30 : 90;
+      const daysAgo = timeRange === '7d' ? 7 : timeRange === '30d' ? 30 : 90;
       const startDate = new Date();
       startDate.setDate(startDate.getDate() - daysAgo);
 
@@ -45,7 +59,7 @@ const GrowthAnalytics = () => {
         .select('*')
         .eq('stylist_id', stylistProfile.id)
         .gte('created_at', startDate.toISOString());
-      
+
       return data || [];
     },
     enabled: !!stylistProfile?.id,
@@ -62,7 +76,7 @@ const GrowthAnalytics = () => {
         .select('*')
         .eq('stylist_id', stylistProfile.id)
         .maybeSingle();
-      
+
       return data;
     },
     enabled: !!stylistProfile?.id,
@@ -70,75 +84,84 @@ const GrowthAnalytics = () => {
 
   // Calculate analytics metrics
   const totalBookings = appointmentsData?.length || 0;
-  const confirmedBookings = appointmentsData?.filter(a => a.status === 'confirmed').length || 0;
-  const completedBookings = appointmentsData?.filter(a => a.status === 'completed').length || 0;
-  const conversionRate = totalBookings > 0 ? ((confirmedBookings / totalBookings) * 100).toFixed(1) : "0";
+  const confirmedBookings =
+    appointmentsData?.filter(a => a.status === 'confirmed').length || 0;
+  const completedBookings =
+    appointmentsData?.filter(a => a.status === 'completed').length || 0;
+  const conversionRate =
+    totalBookings > 0
+      ? ((confirmedBookings / totalBookings) * 100).toFixed(1)
+      : '0';
   const successfulReferrals = referralData?.successful_referrals || 0;
 
   // Mock data for booking page views (would be tracked via analytics in production)
   const bookingPageViews = 247;
   const uniqueVisitors = 189;
-  const avgTimeOnPage = "2:34";
+  const avgTimeOnPage = '2:34';
 
   const stats = [
     {
-      title: "Total Bookings",
+      title: 'Total Bookings',
       value: totalBookings.toString(),
-      change: totalBookings > 0 ? "+12%" : "No previous data",
-      trend: totalBookings > 0 ? "up" as const : "neutral" as const,
+      change: totalBookings > 0 ? '+12%' : 'No previous data',
+      trend: totalBookings > 0 ? ('up' as const) : ('neutral' as const),
       icon: Calendar,
-      description: `${timeRange === "7d" ? "Last 7 days" : timeRange === "30d" ? "Last 30 days" : "Last 90 days"}`,
+      description: `${timeRange === '7d' ? 'Last 7 days' : timeRange === '30d' ? 'Last 30 days' : 'Last 90 days'}`,
     },
     {
-      title: "Conversion Rate",
+      title: 'Conversion Rate',
       value: `${conversionRate}%`,
-      change: totalBookings > 0 ? "+5.2%" : "No previous data",
-      trend: totalBookings > 0 ? "up" as const : "neutral" as const,
+      change: totalBookings > 0 ? '+5.2%' : 'No previous data',
+      trend: totalBookings > 0 ? ('up' as const) : ('neutral' as const),
       icon: TrendingUp,
-      description: "Bookings to confirmations",
+      description: 'Bookings to confirmations',
     },
     {
-      title: "New Clients",
+      title: 'New Clients',
       value: confirmedBookings.toString(),
-      change: confirmedBookings > 0 ? "+8 from previous period" : "No previous data",
-      trend: confirmedBookings > 0 ? "up" as const : "neutral" as const,
+      change:
+        confirmedBookings > 0 ? '+8 from previous period' : 'No previous data',
+      trend: confirmedBookings > 0 ? ('up' as const) : ('neutral' as const),
       icon: UserPlus,
-      description: "New client bookings",
+      description: 'New client bookings',
     },
     {
-      title: "Referrals",
+      title: 'Referrals',
       value: successfulReferrals.toString(),
-      change: successfulReferrals > 0 ? "+3 from previous period" : "No previous data",
-      trend: successfulReferrals > 0 ? "up" as const : "neutral" as const,
+      change:
+        successfulReferrals > 0
+          ? '+3 from previous period'
+          : 'No previous data',
+      trend: successfulReferrals > 0 ? ('up' as const) : ('neutral' as const),
       icon: Share2,
-      description: "Successful referrals",
+      description: 'Successful referrals',
     },
   ];
 
   const bookingPageStats = [
     {
-      title: "Page Views",
+      title: 'Page Views',
       value: bookingPageViews.toString(),
       icon: Eye,
-      description: `${timeRange === "7d" ? "Last 7 days" : timeRange === "30d" ? "Last 30 days" : "Last 90 days"}`,
+      description: `${timeRange === '7d' ? 'Last 7 days' : timeRange === '30d' ? 'Last 30 days' : 'Last 90 days'}`,
     },
     {
-      title: "Unique Visitors",
+      title: 'Unique Visitors',
       value: uniqueVisitors.toString(),
       icon: Users,
-      description: "Individual visitors",
+      description: 'Individual visitors',
     },
     {
-      title: "Avg. Time on Page",
+      title: 'Avg. Time on Page',
       value: avgTimeOnPage,
       icon: Clock,
-      description: "Minutes:seconds",
+      description: 'Minutes:seconds',
     },
     {
-      title: "Click Rate",
-      value: "18.5%",
+      title: 'Click Rate',
+      value: '18.5%',
       icon: MousePointer,
-      description: "Visitors who booked",
+      description: 'Visitors who booked',
     },
   ];
 
@@ -152,23 +175,23 @@ const GrowthAnalytics = () => {
           />
           <div className="flex gap-2">
             <Button
-              variant={timeRange === "7d" ? "default" : "outline"}
+              variant={timeRange === '7d' ? 'default' : 'outline'}
               size="sm"
-              onClick={() => setTimeRange("7d")}
+              onClick={() => setTimeRange('7d')}
             >
               7 Days
             </Button>
             <Button
-              variant={timeRange === "30d" ? "default" : "outline"}
+              variant={timeRange === '30d' ? 'default' : 'outline'}
               size="sm"
-              onClick={() => setTimeRange("30d")}
+              onClick={() => setTimeRange('30d')}
             >
               30 Days
             </Button>
             <Button
-              variant={timeRange === "90d" ? "default" : "outline"}
+              variant={timeRange === '90d' ? 'default' : 'outline'}
               size="sm"
-              onClick={() => setTimeRange("90d")}
+              onClick={() => setTimeRange('90d')}
             >
               90 Days
             </Button>
@@ -184,7 +207,7 @@ const GrowthAnalytics = () => {
 
           <TabsContent value="overview" className="space-y-4 sm:space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-              {stats.map((stat) => {
+              {stats.map(stat => {
                 const Icon = stat.icon;
                 return (
                   <Card key={stat.title}>
@@ -199,7 +222,9 @@ const GrowthAnalytics = () => {
                       <p className="text-xs text-muted-foreground mt-1">
                         {stat.description}
                       </p>
-                      <div className={`text-xs mt-2 ${stat.trend === 'up' ? 'text-green-600' : 'text-red-600'}`}>
+                      <div
+                        className={`text-xs mt-2 ${stat.trend === 'up' ? 'text-green-600' : 'text-red-600'}`}
+                      >
                         {stat.change} from previous period
                       </div>
                     </CardContent>
@@ -231,8 +256,13 @@ const GrowthAnalytics = () => {
                 <CardContent>
                   <div className="space-y-4">
                     {appointmentsData?.slice(0, 5).map((appointment, i) => (
-                      <div key={i} className="flex justify-between items-center">
-                        <span className="text-sm">{appointment.service_type}</span>
+                      <div
+                        key={i}
+                        className="flex justify-between items-center"
+                      >
+                        <span className="text-sm">
+                          {appointment.service_type}
+                        </span>
                         <span className="text-sm font-semibold">{i + 1}</span>
                       </div>
                     ))}
@@ -248,7 +278,9 @@ const GrowthAnalytics = () => {
               <Card>
                 <CardHeader>
                   <CardTitle>Booking Status</CardTitle>
-                  <CardDescription>Current appointment breakdown</CardDescription>
+                  <CardDescription>
+                    Current appointment breakdown
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
@@ -266,7 +298,9 @@ const GrowthAnalytics = () => {
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-sm">Total</span>
-                      <span className="text-sm font-semibold">{totalBookings}</span>
+                      <span className="text-sm font-semibold">
+                        {totalBookings}
+                      </span>
                     </div>
                   </div>
                 </CardContent>
@@ -276,7 +310,7 @@ const GrowthAnalytics = () => {
 
           <TabsContent value="booking" className="space-y-4 sm:space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-              {bookingPageStats.map((stat) => {
+              {bookingPageStats.map(stat => {
                 const Icon = stat.icon;
                 return (
                   <Card key={stat.title}>
@@ -300,7 +334,9 @@ const GrowthAnalytics = () => {
             <Card>
               <CardHeader>
                 <CardTitle>Traffic Sources</CardTitle>
-                <CardDescription>Where your visitors are coming from</CardDescription>
+                <CardDescription>
+                  Where your visitors are coming from
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -344,7 +380,9 @@ const GrowthAnalytics = () => {
                   <CardDescription>Total Referrals</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold">{successfulReferrals}</div>
+                  <div className="text-3xl font-bold">
+                    {successfulReferrals}
+                  </div>
                   <p className="text-xs text-muted-foreground mt-1">
                     Successful referrals
                   </p>
@@ -357,7 +395,7 @@ const GrowthAnalytics = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="text-3xl font-bold font-mono">
-                    {referralData?.referral_code || "N/A"}
+                    {referralData?.referral_code || 'N/A'}
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">
                     Your unique code
@@ -371,7 +409,7 @@ const GrowthAnalytics = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="text-3xl font-bold">
-                    {referralData?.reward_tier || "None"}
+                    {referralData?.reward_tier || 'None'}
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">
                     Reward tier
@@ -397,7 +435,9 @@ const GrowthAnalytics = () => {
             <Card>
               <CardHeader>
                 <CardTitle>Sharing Methods</CardTitle>
-                <CardDescription>How clients found your referral code</CardDescription>
+                <CardDescription>
+                  How clients found your referral code
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">

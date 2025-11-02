@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { Database, Loader2, Check, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useState } from 'react';
+import { Database, Loader2, Check, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -9,11 +9,11 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { useAuth } from "@/hooks/useAuth";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
-import { notification } from "@/platform/haptics";
+} from '@/components/ui/dialog';
+import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
+import { notification } from '@/platform/haptics';
 
 export const SampleDataToggle = () => {
   const { user } = useAuth();
@@ -23,7 +23,7 @@ export const SampleDataToggle = () => {
 
   const addSampleData = async () => {
     if (!user) return;
-    
+
     setLoading(true);
     try {
       // Add sample appointments
@@ -32,31 +32,31 @@ export const SampleDataToggle = () => {
           stylist_id: user.id,
           client_id: user.id,
           appointment_date: new Date(Date.now() + 86400000).toISOString(),
-          service_type: "consultation",
-          status: "scheduled",
+          service_type: 'consultation',
+          status: 'scheduled',
         },
         {
           stylist_id: user.id,
           client_id: user.id,
           appointment_date: new Date(Date.now() + 172800000).toISOString(),
-          service_type: "haircut",
-          status: "scheduled",
+          service_type: 'haircut',
+          status: 'scheduled',
         },
       ];
 
       const { error } = await supabase
-        .from("appointments")
+        .from('appointments')
         .insert(sampleAppointments);
 
       if (error) throw error;
 
       setHasSampleData(true);
-      notification("success");
-      toast.success("Sample data added! Refresh to see it.");
+      notification('success');
+      toast.success('Sample data added! Refresh to see it.');
       setOpen(false);
     } catch (error) {
-      console.error("Error adding sample data:", error);
-      toast.error("Failed to add sample data");
+      console.error('Error adding sample data:', error);
+      toast.error('Failed to add sample data');
     } finally {
       setLoading(false);
     }
@@ -64,17 +64,17 @@ export const SampleDataToggle = () => {
 
   const removeSampleData = async () => {
     if (!user) return;
-    
+
     setLoading(true);
     try {
       // This is a simplified approach - in production you'd mark sample data
-      toast.info("Sample data cleared");
+      toast.info('Sample data cleared');
       setHasSampleData(false);
-      notification("success");
+      notification('success');
       setOpen(false);
     } catch (error) {
-      console.error("Error removing sample data:", error);
-      toast.error("Failed to remove sample data");
+      console.error('Error removing sample data:', error);
+      toast.error('Failed to remove sample data');
     } finally {
       setLoading(false);
     }
@@ -83,11 +83,7 @@ export const SampleDataToggle = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          size="sm"
-          className="brutal-border gap-2"
-        >
+        <Button variant="outline" size="sm" className="brutal-border gap-2">
           <Database className="h-4 w-4" />
           Sample Data
         </Button>
@@ -99,7 +95,8 @@ export const SampleDataToggle = () => {
             Sample Data
           </DialogTitle>
           <DialogDescription>
-            Add or remove sample data to explore the app's features without entering real information.
+            Add or remove sample data to explore the app's features without
+            entering real information.
           </DialogDescription>
         </DialogHeader>
 
@@ -121,7 +118,8 @@ export const SampleDataToggle = () => {
             <div className="flex-1">
               <p className="text-sm font-medium">Note:</p>
               <p className="text-xs text-muted-foreground mt-1">
-                Sample data is for demo purposes only. Remove it when you're ready to add real data.
+                Sample data is for demo purposes only. Remove it when you're
+                ready to add real data.
               </p>
             </div>
           </div>

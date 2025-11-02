@@ -9,7 +9,9 @@ vi.mock('@/integrations/supabase/client', () => ({
       getSession: vi.fn(),
       getUser: vi.fn(),
       signOut: vi.fn(),
-      onAuthStateChange: vi.fn().mockReturnValue({ data: { subscription: { unsubscribe: vi.fn() } } }),
+      onAuthStateChange: vi
+        .fn()
+        .mockReturnValue({ data: { subscription: { unsubscribe: vi.fn() } } }),
     },
     from: vi.fn(),
   },
@@ -46,16 +48,19 @@ describe.skip('useAuth', () => {
     });
 
     const { result } = renderHook(() => useAuth());
-    
+
     expect(result.current.loading).toBe(true);
 
     await act(async () => {
       await vi.runAllTimersAsync();
     });
 
-    await waitFor(() => {
-      expect(result.current.loading).toBe(false);
-    }, { timeout: 10000 });
+    await waitFor(
+      () => {
+        expect(result.current.loading).toBe(false);
+      },
+      { timeout: 10000 }
+    );
   });
 
   it('should load user session successfully', async () => {
@@ -78,9 +83,12 @@ describe.skip('useAuth', () => {
       await vi.runAllTimersAsync();
     });
 
-    await waitFor(() => {
-      expect(result.current.loading).toBe(false);
-    }, { timeout: 10000 });
+    await waitFor(
+      () => {
+        expect(result.current.loading).toBe(false);
+      },
+      { timeout: 10000 }
+    );
 
     expect(result.current.session).toEqual(mockSession);
     expect(result.current.user).toEqual(mockSession.user);
@@ -102,9 +110,12 @@ describe.skip('useAuth', () => {
       await vi.runAllTimersAsync();
     });
 
-    await waitFor(() => {
-      expect(result.current.loading).toBe(false);
-    }, { timeout: 10000 });
+    await waitFor(
+      () => {
+        expect(result.current.loading).toBe(false);
+      },
+      { timeout: 10000 }
+    );
 
     await act(async () => {
       await result.current.signOut();
@@ -117,7 +128,7 @@ describe.skip('useAuth', () => {
 
   it('should handle authentication errors gracefully', async () => {
     const mockError = new Error('Authentication failed');
-    
+
     (supabase.auth.getSession as any).mockRejectedValue(mockError);
 
     const { result } = renderHook(() => useAuth());
@@ -130,16 +141,19 @@ describe.skip('useAuth', () => {
       }
     });
 
-    await waitFor(() => {
-      expect(result.current.loading).toBe(false);
-    }, { timeout: 10000 });
+    await waitFor(
+      () => {
+        expect(result.current.loading).toBe(false);
+      },
+      { timeout: 10000 }
+    );
 
     expect(result.current.user).toBe(null);
   });
 
   it('should cleanup subscription on unmount', async () => {
     const unsubscribeMock = vi.fn();
-    
+
     (supabase.auth.getSession as any).mockResolvedValue({
       data: { session: null },
       error: null,

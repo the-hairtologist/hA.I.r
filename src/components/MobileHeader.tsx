@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { Menu, Scissors, Bell, Search } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
-import { haptic } from "@/platform/haptics";
-import { useSidebar } from "@/components/ui/sidebar";
-import { NotificationDot } from "./NotificationDot";
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Menu, Scissors, Bell, Search } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
+import { haptic } from '@/platform/haptics';
+import { useSidebar } from '@/components/ui/sidebar';
+import { NotificationDot } from './NotificationDot';
 
 interface MobileHeaderProps {
   notificationCount?: number;
@@ -41,53 +41,54 @@ export const MobileHeader = ({ notificationCount = 0 }: MobileHeaderProps) => {
   };
 
   return (
-    <header 
+    <header
       className={cn(
-        "lg:hidden sticky top-0 z-40 bg-background/95 backdrop-blur-md",
-        "transition-all duration-300 ease-out",
-        scrolled && "border-b-[3px] border-foreground shadow-brutal-sm"
+        'lg:hidden sticky top-0 z-40 bg-background/95 backdrop-blur-md',
+        'transition-all duration-300 ease-out',
+        scrolled && 'border-b-[3px] border-foreground shadow-brutal-sm'
       )}
       style={{
-        paddingTop: 'env(safe-area-inset-top, 0px)'
+        paddingTop: 'env(safe-area-inset-top, 0px)',
       }}
     >
-      <div 
-        className={cn(
-          "flex items-center justify-between px-4 h-16"
-        )}
-      >
+      <div className={cn('flex items-center justify-between px-4 h-16')}>
         {/* Left: Menu button with "More" indicator - ENHANCED for better discoverability */}
         <Button
           variant="ghost"
           size="icon"
           onClick={handleMenuClick}
           className={cn(
-            "min-w-[48px] min-h-[48px] touch-manipulation",
-            "relative group hover:bg-primary/10 transition-all duration-200",
-            "ring-1 ring-primary/20 hover:ring-primary/40"
+            'min-w-[48px] min-h-[48px] touch-manipulation',
+            'relative group hover:bg-primary/10 transition-all duration-200',
+            'ring-1 ring-primary/20 hover:ring-primary/40'
           )}
           aria-label="Open full navigation menu - More options available"
         >
           <div className="relative">
-            <Menu className="h-7 w-7 group-hover:text-primary transition-colors" strokeWidth={2.5} />
+            <Menu
+              className="h-7 w-7 group-hover:text-primary transition-colors"
+              strokeWidth={2.5}
+            />
             {/* "More" indicator - enhanced visibility */}
-            <div className="absolute -top-1.5 -right-1.5 w-2.5 h-2.5 bg-primary rounded-full animate-pulse shadow-lg" 
-                 title="More menu items available" 
-                 aria-hidden="true" />
+            <div
+              className="absolute -top-1.5 -right-1.5 w-2.5 h-2.5 bg-primary rounded-full animate-pulse shadow-lg"
+              title="More menu items available"
+              aria-hidden="true"
+            />
           </div>
           {/* Enhanced pulse background */}
           <div className="absolute inset-0 rounded-md bg-primary/10 animate-pulse opacity-50 group-hover:opacity-100 transition-opacity" />
         </Button>
 
         {/* Center: Logo */}
-        <button 
+        <button
           onClick={() => {
             haptic.tap();
-            navigate("/dashboard");
+            navigate('/dashboard');
           }}
           className={cn(
-            "flex items-center gap-2 transition-all duration-200 touch-manipulation",
-            "hover:opacity-80 active:scale-95"
+            'flex items-center gap-2 transition-all duration-200 touch-manipulation',
+            'hover:opacity-80 active:scale-95'
           )}
           aria-label="Go to dashboard"
         >
@@ -120,15 +121,15 @@ export const MobileHeader = ({ notificationCount = 0 }: MobileHeaderProps) => {
             size="icon"
             onClick={() => {
               haptic.tap();
-              navigate("/notifications");
+              navigate('/notifications');
             }}
             className="relative min-w-[44px] min-h-[44px] touch-manipulation"
             aria-label={`Notifications${notificationCount > 0 ? `, ${notificationCount} unread` : ''}`}
           >
             <Bell className="h-6 w-6" />
             {notificationCount > 0 && (
-              <NotificationDot 
-                count={notificationCount} 
+              <NotificationDot
+                count={notificationCount}
                 size="sm"
                 className="absolute top-1 right-1"
               />

@@ -1,16 +1,18 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { Resend } from "https://esm.sh/resend@2.0.0";
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
+import { Resend } from 'https://esm.sh/resend@2.0.0';
 
-const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
-const FROM_EMAIL = Deno.env.get('FROM_EMAIL') || 'hA.I.r <onboarding@resend.dev>';
+const resend = new Resend(Deno.env.get('RESEND_API_KEY'));
+const FROM_EMAIL =
+  Deno.env.get('FROM_EMAIL') || 'hA.I.r <onboarding@resend.dev>';
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
 };
 
-serve(async (req) => {
-  if (req.method === "OPTIONS") {
+serve(async req => {
+  if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
@@ -18,35 +20,35 @@ serve(async (req) => {
     const { email_type, recipient_email } = await req.json();
 
     if (!recipient_email) {
-      throw new Error("Recipient email is required");
+      throw new Error('Recipient email is required');
     }
 
     const emailContent = {
       from: FROM_EMAIL,
       to: [recipient_email],
-      subject: "",
-      html: "",
+      subject: '',
+      html: '',
     };
 
     switch (email_type) {
-      case "birthday":
-        emailContent.subject = "🎂 Happy Birthday Test - Special Gift Inside";
+      case 'birthday':
+        emailContent.subject = '🎂 Happy Birthday Test - Special Gift Inside';
         emailContent.html = generateBirthdayTestEmail();
         break;
-      case "review":
-        emailContent.subject = "⭐ Review Request Test";
+      case 'review':
+        emailContent.subject = '⭐ Review Request Test';
         emailContent.html = generateReviewTestEmail();
         break;
-      case "cancellation":
+      case 'cancellation':
         emailContent.subject = "💕 We Missed You Test - Let's Reschedule";
         emailContent.html = generateCancellationTestEmail();
         break;
-      case "aftercare":
-        emailContent.subject = "✨ Aftercare Guide Test";
+      case 'aftercare':
+        emailContent.subject = '✨ Aftercare Guide Test';
         emailContent.html = generateAftercareTestEmail();
         break;
       default:
-        throw new Error("Invalid email type");
+        throw new Error('Invalid email type');
     }
 
     const result = await resend.emails.send(emailContent);
@@ -59,16 +61,22 @@ serve(async (req) => {
         message: `${email_type} test email sent to ${recipient_email}`,
         email_id: result.data?.id,
       }),
-      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      {
+        status: 200,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      }
     );
   } catch (error) {
-    console.error("Error sending test email:", error);
+    console.error('Error sending test email:', error);
     return new Response(
       JSON.stringify({
         success: false,
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: error instanceof Error ? error.message : 'Unknown error',
       }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      }
     );
   }
 });

@@ -1,17 +1,20 @@
-import { useState, useRef } from "react";
-import { Upload, Video, Loader2, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import { toast } from "sonner";
-import { uploadToStorage } from "@/utils/supabaseStorageHelper";
+import { useState, useRef } from 'react';
+import { Upload, Video, Loader2, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { toast } from 'sonner';
+import { uploadToStorage } from '@/utils/supabaseStorageHelper';
 
 interface VideoUploadProps {
   onVideoUploaded: (videoUrl: string, videoBase64: string) => void;
   maxSizeMB?: number;
 }
 
-export const VideoUpload = ({ onVideoUploaded, maxSizeMB = 50 }: VideoUploadProps) => {
+export const VideoUpload = ({
+  onVideoUploaded,
+  maxSizeMB = 50,
+}: VideoUploadProps) => {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [videoPreview, setVideoPreview] = useState<string | null>(null);
@@ -49,12 +52,12 @@ export const VideoUpload = ({ onVideoUploaded, maxSizeMB = 50 }: VideoUploadProp
         'client-videos',
         undefined,
         ({ progress }) => {
-          setProgress(30 + (progress * 0.7)); // 30-100%
+          setProgress(30 + progress * 0.7); // 30-100%
         }
       );
 
       setProgress(100);
-      
+
       // For AI analysis, we still need base64 (but this is now async, not blocking upload)
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -62,7 +65,7 @@ export const VideoUpload = ({ onVideoUploaded, maxSizeMB = 50 }: VideoUploadProp
         onVideoUploaded(publicUrl, videoBase64);
       };
       reader.readAsDataURL(file);
-      
+
       toast.success('Video uploaded successfully!');
     } catch (error: any) {
       console.error('Upload error:', error);
@@ -93,7 +96,7 @@ export const VideoUpload = ({ onVideoUploaded, maxSizeMB = 50 }: VideoUploadProp
       />
 
       {!videoPreview ? (
-        <Card 
+        <Card
           className="border-2 border-dashed border-primary/30 hover:border-primary/50 transition-colors cursor-pointer"
           onClick={() => fileInputRef.current?.click()}
         >

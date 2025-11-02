@@ -1,25 +1,25 @@
-import { useEffect } from "react";
-import confetti from "canvas-confetti";
+import { useEffect } from 'react';
+import confetti from 'canvas-confetti';
 
 interface MilestoneConfettiProps {
   trigger: boolean;
-  variant?: "celebration" | "subtle" | "epic";
+  variant?: 'celebration' | 'subtle' | 'epic';
 }
 
-export const MilestoneConfetti = ({ 
-  trigger, 
-  variant = "celebration" 
+export const MilestoneConfetti = ({
+  trigger,
+  variant = 'celebration',
 }: MilestoneConfettiProps) => {
   useEffect(() => {
     if (!trigger) return;
 
-    if (variant === "subtle") {
+    if (variant === 'subtle') {
       confetti({
         particleCount: 50,
         spread: 50,
         origin: { y: 0.6 },
       });
-    } else if (variant === "epic") {
+    } else if (variant === 'epic') {
       const duration = 3000;
       const end = Date.now() + duration;
 

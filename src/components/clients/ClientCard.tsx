@@ -3,12 +3,12 @@
  * Optimized for list rendering performance
  */
 
-import React, { useMemo } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { User, Phone, Mail, Calendar } from "lucide-react";
-import { format } from "date-fns";
+import React, { useMemo } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { User, Phone, Mail, Calendar } from 'lucide-react';
+import { format } from 'date-fns';
 
 interface ClientCardProps {
   client: {
@@ -25,18 +25,23 @@ interface ClientCardProps {
   onDelete?: () => void;
 }
 
-const ClientCardComponent = ({ client, onClick, onEdit, onDelete }: ClientCardProps) => {
+const ClientCardComponent = ({
+  client,
+  onClick,
+  onEdit,
+  onDelete,
+}: ClientCardProps) => {
   // Memoize computed values
   const memberSince = useMemo(
-    () => format(new Date(client.created_at), "MMM yyyy"),
+    () => format(new Date(client.created_at), 'MMM yyyy'),
     [client.created_at]
   );
 
   const lastVisit = useMemo(
     () =>
       client.last_appointment_date
-        ? format(new Date(client.last_appointment_date), "MMM d, yyyy")
-        : "No appointments",
+        ? format(new Date(client.last_appointment_date), 'MMM d, yyyy')
+        : 'No appointments',
     [client.last_appointment_date]
   );
 
@@ -100,15 +105,20 @@ const ClientCardComponent = ({ client, onClick, onEdit, onDelete }: ClientCardPr
 };
 
 // Memoize the component with custom comparison
-export const ClientCard = React.memo(ClientCardComponent, (prevProps, nextProps) => {
-  return (
-    prevProps.client.id === nextProps.client.id &&
-    prevProps.client.full_name === nextProps.client.full_name &&
-    prevProps.client.email === nextProps.client.email &&
-    prevProps.client.phone === nextProps.client.phone &&
-    prevProps.client.total_appointments === nextProps.client.total_appointments &&
-    prevProps.client.last_appointment_date === nextProps.client.last_appointment_date
-  );
-});
+export const ClientCard = React.memo(
+  ClientCardComponent,
+  (prevProps, nextProps) => {
+    return (
+      prevProps.client.id === nextProps.client.id &&
+      prevProps.client.full_name === nextProps.client.full_name &&
+      prevProps.client.email === nextProps.client.email &&
+      prevProps.client.phone === nextProps.client.phone &&
+      prevProps.client.total_appointments ===
+        nextProps.client.total_appointments &&
+      prevProps.client.last_appointment_date ===
+        nextProps.client.last_appointment_date
+    );
+  }
+);
 
-ClientCard.displayName = "ClientCard";
+ClientCard.displayName = 'ClientCard';

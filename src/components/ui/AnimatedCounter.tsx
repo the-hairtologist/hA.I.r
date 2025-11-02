@@ -14,14 +14,32 @@ interface AnimatedCounterProps {
   textColor?: string;
 }
 
-export const AnimatedCounter = React.forwardRef<HTMLDivElement, AnimatedCounterProps>(
-  ({ end, suffix = '', icon: Icon, label, duration = 1500, bgColor = 'bg-primary', borderColor = 'border-black', textColor = 'text-primary-foreground' }, forwardedRef) => {
-    const { ref: scrollRef, isVisible } = useScrollAnimation({ threshold: 0.3 });
+export const AnimatedCounter = React.forwardRef<
+  HTMLDivElement,
+  AnimatedCounterProps
+>(
+  (
+    {
+      end,
+      suffix = '',
+      icon: Icon,
+      label,
+      duration = 1500,
+      bgColor = 'bg-primary',
+      borderColor = 'border-black',
+      textColor = 'text-primary-foreground',
+    },
+    forwardedRef
+  ) => {
+    const { ref: scrollRef, isVisible } = useScrollAnimation({
+      threshold: 0.3,
+    });
     const count = useCounter({ end, duration, isActive: isVisible });
 
     // Merge refs
     const setRefs = (element: HTMLDivElement | null) => {
-      (scrollRef as React.MutableRefObject<HTMLDivElement | null>).current = element;
+      (scrollRef as React.MutableRefObject<HTMLDivElement | null>).current =
+        element;
       if (typeof forwardedRef === 'function') {
         forwardedRef(element);
       } else if (forwardedRef) {
@@ -39,19 +57,26 @@ export const AnimatedCounter = React.forwardRef<HTMLDivElement, AnimatedCounterP
             isVisible ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
           }`}
         >
-          <Icon 
+          <Icon
             className={`h-6 w-6 xs:h-7 xs:w-7 sm:h-8 sm:w-8 ${textColor} transition-transform duration-300 ${
               isVisible ? 'animate-bounce' : ''
-            }`} 
+            }`}
             strokeWidth={2.5}
             style={{ animationIterationCount: 1, animationDuration: '0.6s' }}
           />
         </div>
         <div className="text-center">
-          <div className={`text-sm xs:text-base sm:text-lg font-pixel ${textColor}`}>
-            {count.toLocaleString()}{suffix}
+          <div
+            className={`text-sm xs:text-base sm:text-lg font-pixel ${textColor}`}
+          >
+            {count.toLocaleString()}
+            {suffix}
           </div>
-          <div className={`text-[10px] xs:text-xs font-pixel ${textColor}/90 uppercase tracking-wider`}>{label}</div>
+          <div
+            className={`text-[10px] xs:text-xs font-pixel ${textColor}/90 uppercase tracking-wider`}
+          >
+            {label}
+          </div>
         </div>
       </div>
     );

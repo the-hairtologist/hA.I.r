@@ -1,9 +1,9 @@
-import { ReactNode } from "react";
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
-import { GripVertical, Eye, EyeOff } from "lucide-react";
-import { DashboardSection } from "@/hooks/useDashboardLayout";
-import { cn } from "@/lib/utils";
+import { ReactNode } from 'react';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import { GripVertical, Eye, EyeOff } from 'lucide-react';
+import { DashboardSection } from '@/hooks/useDashboardLayout';
+import { cn } from '@/lib/utils';
 
 interface DraggableSectionProps {
   section: DashboardSection;
@@ -27,9 +27,9 @@ export function DraggableSection({
     transform,
     transition,
     isDragging,
-  } = useSortable({ 
-    id: section.id, 
-    disabled: !isEditMode || !section.enabled 
+  } = useSortable({
+    id: section.id,
+    disabled: !isEditMode || !section.enabled,
   });
 
   const style = {
@@ -48,8 +48,9 @@ export function DraggableSection({
       ref={setNodeRef}
       style={style}
       className={cn(
-        "animate-fade-in relative group transition-all",
-        isEditMode && "rounded-lg border border-primary/10 hover:border-primary/20 shadow-sm hover:shadow-md"
+        'animate-fade-in relative group transition-all',
+        isEditMode &&
+          'rounded-lg border border-primary/10 hover:border-primary/20 shadow-sm hover:shadow-md'
       )}
     >
       {isEditMode && (
@@ -70,13 +71,15 @@ export function DraggableSection({
             <button
               onClick={onToggle}
               className={cn(
-                "p-1 rounded transition-all hover:scale-105 active:scale-95",
-                section.enabled 
-                  ? "hover:bg-accent/50" 
-                  : "hover:bg-muted/50"
+                'p-1 rounded transition-all hover:scale-105 active:scale-95',
+                section.enabled ? 'hover:bg-accent/50' : 'hover:bg-muted/50'
               )}
-              aria-label={section.enabled ? "Hide section" : "Show section"}
-              title={section.enabled ? "Click to hide this section" : "Click to show this section"}
+              aria-label={section.enabled ? 'Hide section' : 'Show section'}
+              title={
+                section.enabled
+                  ? 'Click to hide this section'
+                  : 'Click to show this section'
+              }
             >
               {section.enabled ? (
                 <Eye className="h-3.5 w-3.5 text-primary" />
@@ -87,9 +90,7 @@ export function DraggableSection({
           </div>
         </div>
       )}
-      <div className={isEditMode ? "pt-4 px-2 pb-2" : ""}>
-        {children}
-      </div>
+      <div className={isEditMode ? 'pt-4 px-2 pb-2' : ''}>{children}</div>
     </div>
   );
 }

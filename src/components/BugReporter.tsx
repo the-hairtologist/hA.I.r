@@ -44,8 +44,10 @@ export function BugReporter() {
     setIsSubmitting(true);
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
       // Get recent logs
       const logs = logger.getRecentLogs(50);
 
@@ -54,13 +56,15 @@ export function BugReporter() {
       if (screenshot) {
         const blob = await (await fetch(screenshot)).blob();
         const filename = `bug-${Date.now()}.png`;
-        
+
         const { data: uploadData, error: uploadError } = await supabase.storage
           .from('hair-photos')
           .upload(`bug-reports/${filename}`, blob);
 
         if (!uploadError && uploadData) {
-          const { data: { publicUrl } } = supabase.storage
+          const {
+            data: { publicUrl },
+          } = supabase.storage
             .from('hair-photos')
             .getPublicUrl(uploadData.path);
           screenshotUrl = publicUrl;
@@ -68,30 +72,27 @@ export function BugReporter() {
       }
 
       // Submit bug report
-      const { error } = await supabase
-        .from('bug_reports' as any)
-        .insert({
-          user_id: user?.id || null,
-          title: title.trim(),
-          description: description.trim(),
-          screenshot_url: screenshotUrl,
-          logs: logs,
-          user_agent: navigator.userAgent,
-          page_url: window.location.href,
-          status: 'open',
-          priority: 'medium'
-        });
+      const { error } = await supabase.from('bug_reports' as any).insert({
+        user_id: user?.id || null,
+        title: title.trim(),
+        description: description.trim(),
+        screenshot_url: screenshotUrl,
+        logs: logs,
+        user_agent: navigator.userAgent,
+        page_url: window.location.href,
+        status: 'open',
+        priority: 'medium',
+      });
 
       if (error) throw error;
 
       toast.success('Bug report submitted. Thank you!');
-      
+
       // Reset form
       setTitle('');
       setDescription('');
       setScreenshot(null);
       setIsOpen(false);
-
     } catch (error) {
       console.error('Bug report submission error:', error);
       toast.error('Failed to submit bug report');
@@ -121,11 +122,7 @@ export function BugReporter() {
           <Bug className="w-5 h-5 text-destructive" />
           <h3 className="font-semibold">Report a Bug</h3>
         </div>
-        <Button
-          onClick={() => setIsOpen(false)}
-          size="sm"
-          variant="ghost"
-        >
+        <Button onClick={() => setIsOpen(false)} size="sm" variant="ghost">
           <X className="w-4 h-4" />
         </Button>
       </div>
@@ -134,14 +131,14 @@ export function BugReporter() {
         <Input
           placeholder="Brief title..."
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={e => setTitle(e.target.value)}
           maxLength={100}
         />
 
         <Textarea
           placeholder="Describe what happened..."
           value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          onChange={e => setDescription(e.target.value)}
           rows={4}
           maxLength={1000}
         />

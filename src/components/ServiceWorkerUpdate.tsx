@@ -17,10 +17,10 @@ export const ServiceWorkerUpdate = () => {
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.ready.then(() => {
         setOfflineReady(true);
-        
+
         // Check for updates periodically
         const checkForUpdates = () => {
-          navigator.serviceWorker.getRegistration().then((reg) => {
+          navigator.serviceWorker.getRegistration().then(reg => {
             if (reg) {
               reg.update().then(() => {
                 // Check if there's a waiting worker
@@ -62,7 +62,7 @@ export const ServiceWorkerUpdate = () => {
           <Button
             size="sm"
             onClick={() => {
-              navigator.serviceWorker.getRegistration().then((reg) => {
+              navigator.serviceWorker.getRegistration().then(reg => {
                 if (reg && reg.waiting) {
                   // Tell the waiting service worker to activate
                   reg.waiting.postMessage({ type: 'SKIP_WAITING' });

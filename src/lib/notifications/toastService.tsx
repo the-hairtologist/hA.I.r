@@ -3,10 +3,22 @@
  * Unified interface for showing toast notifications throughout the app
  */
 
-import { toast } from "sonner";
-import { CheckCircle2, XCircle, AlertCircle, Info, Loader2 } from "lucide-react";
+import { toast } from 'sonner';
+import {
+  CheckCircle2,
+  XCircle,
+  AlertCircle,
+  Info,
+  Loader2,
+} from 'lucide-react';
 
-export type ToastType = 'success' | 'error' | 'warning' | 'info' | 'loading' | 'promise';
+export type ToastType =
+  | 'success'
+  | 'error'
+  | 'warning'
+  | 'info'
+  | 'loading'
+  | 'promise';
 
 interface ToastOptions {
   description?: string;
@@ -111,47 +123,47 @@ class ToastService {
   /**
    * Common toast patterns
    */
-  savedSuccessfully(itemName: string = "Item") {
+  savedSuccessfully(itemName: string = 'Item') {
     this.success(`${itemName} saved successfully`);
   }
 
-  deletedSuccessfully(itemName: string = "Item") {
+  deletedSuccessfully(itemName: string = 'Item') {
     this.success(`${itemName} deleted successfully`);
   }
 
-  updatedSuccessfully(itemName: string = "Item") {
+  updatedSuccessfully(itemName: string = 'Item') {
     this.success(`${itemName} updated successfully`);
   }
 
-  createdSuccessfully(itemName: string = "Item") {
+  createdSuccessfully(itemName: string = 'Item') {
     this.success(`${itemName} created successfully`);
   }
 
-  saveFailed(itemName: string = "Item") {
+  saveFailed(itemName: string = 'Item') {
     this.error(`Failed to save ${itemName.toLowerCase()}`, {
-      description: "Please try again",
+      description: 'Please try again',
     });
   }
 
   networkError() {
-    this.error("Network error", {
-      description: "Please check your connection and try again",
+    this.error('Network error', {
+      description: 'Please check your connection and try again',
     });
   }
 
   permissionDenied() {
-    this.error("Permission denied", {
+    this.error('Permission denied', {
       description: "You don't have permission to perform this action",
     });
   }
 
-  featureComingSoon(featureName: string = "This feature") {
+  featureComingSoon(featureName: string = 'This feature') {
     this.info(`${featureName} coming soon`, {
       description: "We're working on it!",
     });
   }
 
-  copiedToClipboard(content: string = "Content") {
+  copiedToClipboard(content: string = 'Content') {
     this.success(`${content} copied to clipboard`);
   }
 }

@@ -7,7 +7,8 @@ import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { createBlurPlaceholder } from '@/lib/performance/imageOptimization';
 
-interface OptimizedImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+interface OptimizedImageProps
+  extends React.ImgHTMLAttributes<HTMLImageElement> {
   src: string;
   alt: string;
   width?: number;
@@ -35,8 +36,8 @@ export const OptimizedImage = ({
     if (priority) return; // Skip intersection observer for priority images
 
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
+      entries => {
+        entries.forEach(entry => {
           if (entry.isIntersecting) {
             setIsInView(true);
             observer.disconnect();
@@ -69,7 +70,13 @@ export const OptimizedImage = ({
     : '';
 
   return (
-    <div className={cn('relative overflow-hidden bg-muted', aspectRatioClass, className)}>
+    <div
+      className={cn(
+        'relative overflow-hidden bg-muted',
+        aspectRatioClass,
+        className
+      )}
+    >
       {/* Blur placeholder */}
       <img
         src={placeholderSrc}

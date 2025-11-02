@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { supabase } from "@/integrations/supabase/client";
-import { Heart, MessageSquare, Calendar } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { supabase } from '@/integrations/supabase/client';
+import { Heart, MessageSquare, Calendar } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useNavigate } from 'react-router-dom';
 
 interface FavoriteStylistsProps {
   clientId: string;
@@ -32,24 +32,32 @@ export function FavoriteStylists({ clientId }: FavoriteStylistsProps) {
     try {
       // Get stylists the client has booked with most frequently
       const { data: appointments } = await supabase
-        .from("appointments")
-        .select(`
+        .from('appointments')
+        .select(
+          `
           stylist_id,
           stylist:stylist_profiles(
             id,
             business_name,
             user:profiles(full_name, avatar_url)
           )
-        `)
-        .eq("client_id", clientId)
-        .eq("status", "completed");
+        `
+        )
+        .eq('client_id', clientId)
+        .eq('status', 'completed');
 
       if (appointments) {
-        const stylistCounts = new Map<string, { stylist: any; count: number }>();
-        
+        const stylistCounts = new Map<
+          string,
+          { stylist: any; count: number }
+        >();
+
         appointments.forEach((apt: any) => {
           if (apt.stylist) {
-            const current = stylistCounts.get(apt.stylist_id) || { stylist: apt.stylist, count: 0 };
+            const current = stylistCounts.get(apt.stylist_id) || {
+              stylist: apt.stylist,
+              count: 0,
+            };
             stylistCounts.set(apt.stylist_id, {
               stylist: apt.stylist,
               count: current.count + 1,
@@ -65,7 +73,7 @@ export function FavoriteStylists({ clientId }: FavoriteStylistsProps) {
         setStylists(topStylists);
       }
     } catch (error) {
-      console.error("Error loading favorite stylists:", error);
+      console.error('Error loading favorite stylists:', error);
     } finally {
       setLoading(false);
     }
@@ -84,19 +92,23 @@ export function FavoriteStylists({ clientId }: FavoriteStylistsProps) {
       <CardContent>
         {loading ? (
           <div className="space-y-3">
-            {[1, 2].map((i) => (
-              <div key={i} className="h-20 bg-muted/50 rounded-lg animate-pulse" />
+            {[1, 2].map(i => (
+              <div
+                key={i}
+                className="h-20 bg-muted/50 rounded-lg animate-pulse"
+              />
             ))}
           </div>
         ) : stylists.length === 0 ? (
           <div className="text-center py-4">
             <p className="text-xs sm:text-sm text-muted-foreground">
-              No favorite stylists yet. Complete some appointments to build your stylist connections!
+              No favorite stylists yet. Complete some appointments to build your
+              stylist connections!
             </p>
           </div>
         ) : (
           <div className="space-y-3">
-            {stylists.map((stylist) => (
+            {stylists.map(stylist => (
               <div
                 key={stylist.id}
                 className="p-3 rounded-lg brutal-border bg-card/80 hover:bg-card transition-colors brutal-shadow-sm"
@@ -105,7 +117,8 @@ export function FavoriteStylists({ clientId }: FavoriteStylistsProps) {
                   <Avatar className="h-12 w-12 brutal-border">
                     <AvatarImage src={stylist.user?.avatar_url} />
                     <AvatarFallback className="bg-gradient-purple-pink text-on-surface-primary font-bold">
-                      {stylist.business_name?.[0]?.toUpperCase() || stylist.user?.full_name?.[0]?.toUpperCase()}
+                      {stylist.business_name?.[0]?.toUpperCase() ||
+                        stylist.user?.full_name?.[0]?.toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0">
@@ -131,7 +144,7 @@ export function FavoriteStylists({ clientId }: FavoriteStylistsProps) {
                     size="sm"
                     variant="outline"
                     className="flex-1 gap-1 h-8 text-[11px] sm:text-xs"
-                    onClick={() => navigate("/messages")}
+                    onClick={() => navigate('/messages')}
                   >
                     <MessageSquare className="h-3 w-3" />
                     Message

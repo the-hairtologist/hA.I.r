@@ -10,40 +10,52 @@ export function useFunnelTracking(funnelName: string) {
   /**
    * Start tracking a funnel
    */
-  const startFunnel = useCallback((metadata?: Record<string, any>) => {
-    funnelTracker.startFunnel(funnelName, metadata);
-  }, [funnelName]);
+  const startFunnel = useCallback(
+    (metadata?: Record<string, any>) => {
+      funnelTracker.startFunnel(funnelName, metadata);
+    },
+    [funnelName]
+  );
 
   /**
    * Track step completion
    */
-  const completeStep = useCallback((stepName: string, stepOrder: number, metadata?: Record<string, any>) => {
-    funnelTracker.completeStep({
-      funnelName,
-      stepName,
-      stepOrder,
-      metadata,
-    });
-  }, [funnelName]);
+  const completeStep = useCallback(
+    (stepName: string, stepOrder: number, metadata?: Record<string, any>) => {
+      funnelTracker.completeStep({
+        funnelName,
+        stepName,
+        stepOrder,
+        metadata,
+      });
+    },
+    [funnelName]
+  );
 
   /**
    * Track funnel abandonment
    */
-  const abandonFunnel = useCallback((stepName: string, stepOrder: number, metadata?: Record<string, any>) => {
-    funnelTracker.abandonFunnel({
-      funnelName,
-      stepName,
-      stepOrder,
-      metadata,
-    });
-  }, [funnelName]);
+  const abandonFunnel = useCallback(
+    (stepName: string, stepOrder: number, metadata?: Record<string, any>) => {
+      funnelTracker.abandonFunnel({
+        funnelName,
+        stepName,
+        stepOrder,
+        metadata,
+      });
+    },
+    [funnelName]
+  );
 
   /**
    * Complete entire funnel
    */
-  const completeFunnel = useCallback((metadata?: Record<string, any>) => {
-    funnelTracker.completeFunnel(funnelName, metadata);
-  }, [funnelName]);
+  const completeFunnel = useCallback(
+    (metadata?: Record<string, any>) => {
+      funnelTracker.completeFunnel(funnelName, metadata);
+    },
+    [funnelName]
+  );
 
   /**
    * Track abandonment on component unmount

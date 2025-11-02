@@ -13,7 +13,7 @@ export function lazyWithPreload<T extends ComponentType<any>>(
   factory: () => Promise<{ default: T }>
 ) {
   const Component = lazy(factory);
-  
+
   return Object.assign(Component, {
     preload: factory,
   });
@@ -28,28 +28,37 @@ export function lazyWithRetry<T extends ComponentType<any>>(
   retriesLeft = 3,
   interval = 1000
 ): React.LazyExoticComponent<T> {
-  return lazy(() =>
-    new Promise<{ default: T }>((resolve, reject) => {
-      const attemptLoad = (attemptsRemaining: number, currentInterval: number) => {
-        factory()
-          .then(resolve)
-          .catch((error) => {
-            if (attemptsRemaining === 0) {
-              console.error('[LazyLoad] Failed to load chunk after retries:', error);
-              reject(error);
-              return;
-            }
+  return lazy(
+    () =>
+      new Promise<{ default: T }>((resolve, reject) => {
+        const attemptLoad = (
+          attemptsRemaining: number,
+          currentInterval: number
+        ) => {
+          factory()
+            .then(resolve)
+            .catch(error => {
+              if (attemptsRemaining === 0) {
+                console.error(
+                  '[LazyLoad] Failed to load chunk after retries:',
+                  error
+                );
+                reject(error);
+                return;
+              }
 
-            console.warn(`[LazyLoad] Chunk load failed, retrying in ${currentInterval}ms... (${attemptsRemaining} attempts left)`);
-            
-            setTimeout(() => {
-              attemptLoad(attemptsRemaining - 1, currentInterval * 2);
-            }, currentInterval);
-          });
-      };
+              console.warn(
+                `[LazyLoad] Chunk load failed, retrying in ${currentInterval}ms... (${attemptsRemaining} attempts left)`
+              );
 
-      attemptLoad(retriesLeft, interval);
-    })
+              setTimeout(() => {
+                attemptLoad(attemptsRemaining - 1, currentInterval * 2);
+              }, currentInterval);
+            });
+        };
+
+        attemptLoad(retriesLeft, interval);
+      })
   );
 }
 
@@ -71,11 +80,11 @@ interface LazyComponentProps {
   fallback?: React.ReactNode;
 }
 
-export const LazyWrapper = memo(({ children, fallback }: LazyComponentProps) => (
-  <Suspense fallback={fallback || <LoadingSpinner />}>
-    {children}
-  </Suspense>
-));
+export const LazyWrapper = memo(
+  ({ children, fallback }: LazyComponentProps) => (
+    <Suspense fallback={fallback || <LoadingSpinner />}>{children}</Suspense>
+  )
+);
 
 LazyWrapper.displayName = 'LazyWrapper';
 
@@ -84,9 +93,7 @@ LazyWrapper.displayName = 'LazyWrapper';
  */
 export const preloadCriticalResources = () => {
   // Preload critical fonts
-  const fontPreloads = [
-    { href: '/fonts/inter-var.woff2', type: 'font/woff2' },
-  ];
+  const fontPreloads = [{ href: '/fonts/inter-var.woff2', type: 'font/woff2' }];
 
   fontPreloads.forEach(({ href, type }) => {
     const link = document.createElement('link');

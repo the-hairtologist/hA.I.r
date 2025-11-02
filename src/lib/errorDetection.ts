@@ -39,11 +39,11 @@ class ErrorDetectionSystem {
    */
   reportError(error: ErrorReport): void {
     this.errors.push(error);
-    
+
     if (error.severity === 'critical') {
       safeConsole.error('🚨 CRITICAL ERROR DETECTED:', error);
     }
-    
+
     // In production, send to monitoring service
     if (!import.meta.env.DEV) {
       this.sendToMonitoring(error);
@@ -60,8 +60,14 @@ class ErrorDetectionSystem {
   /**
    * Check system health
    */
-  healthCheck(): { healthy: boolean; criticalErrors: number; totalErrors: number } {
-    const criticalErrors = this.errors.filter(e => e.severity === 'critical').length;
+  healthCheck(): {
+    healthy: boolean;
+    criticalErrors: number;
+    totalErrors: number;
+  } {
+    const criticalErrors = this.errors.filter(
+      e => e.severity === 'critical'
+    ).length;
     return {
       healthy: criticalErrors === 0,
       criticalErrors,
@@ -85,7 +91,9 @@ class ErrorDetectionSystem {
       const { captureMessage } = await import('@/lib/monitoring');
       captureMessage(
         `${error.type}: ${error.message}`,
-        error.severity === 'critical' || error.severity === 'high' ? 'error' : 'warning'
+        error.severity === 'critical' || error.severity === 'high'
+          ? 'error'
+          : 'warning'
       );
     } catch {
       // Silently fail
@@ -121,11 +129,7 @@ export function safeImport<T>(
 /**
  * Safe function wrapper - catches runtime errors
  */
-export function safeExecute<T>(
-  fn: () => T,
-  fallback: T,
-  context: string
-): T {
+export function safeExecute<T>(fn: () => T, fallback: T, context: string): T {
   try {
     return fn();
   } catch (error) {
@@ -146,7 +150,7 @@ export function safeExecute<T>(
  */
 export function initializeErrorDetection(): void {
   // Catch unhandled promise rejections
-  window.addEventListener('unhandledrejection', (event) => {
+  window.addEventListener('unhandledrejection', event => {
     errorDetection.reportError({
       type: 'runtime-error',
       severity: 'high',
@@ -157,7 +161,7 @@ export function initializeErrorDetection(): void {
   });
 
   // Catch global errors
-  window.addEventListener('error', (event) => {
+  window.addEventListener('error', event => {
     errorDetection.reportError({
       type: 'runtime-error',
       severity: 'high',

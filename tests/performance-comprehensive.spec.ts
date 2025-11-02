@@ -11,7 +11,7 @@ test.describe('Performance - Load Times', () => {
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded');
     const loadTime = Date.now() - startTime;
-    
+
     expect(loadTime).toBeLessThan(3000);
   });
 
@@ -20,7 +20,7 @@ test.describe('Performance - Load Times', () => {
     await page.goto('/dashboard');
     await page.waitForLoadState('domcontentloaded');
     const loadTime = Date.now() - startTime;
-    
+
     expect(loadTime).toBeLessThan(3000);
   });
 
@@ -29,7 +29,7 @@ test.describe('Performance - Load Times', () => {
     await page.goto('/formulas');
     await page.waitForLoadState('domcontentloaded');
     const loadTime = Date.now() - startTime;
-    
+
     expect(loadTime).toBeLessThan(3000);
   });
 
@@ -38,7 +38,7 @@ test.describe('Performance - Load Times', () => {
     await page.goto('/clients');
     await page.waitForLoadState('domcontentloaded');
     const loadTime = Date.now() - startTime;
-    
+
     expect(loadTime).toBeLessThan(3000);
   });
 
@@ -47,7 +47,7 @@ test.describe('Performance - Load Times', () => {
     await page.goto('/appointments');
     await page.waitForLoadState('domcontentloaded');
     const loadTime = Date.now() - startTime;
-    
+
     expect(loadTime).toBeLessThan(3000);
   });
 });
@@ -58,11 +58,11 @@ test.describe('Performance - Responsiveness', () => {
     await page.waitForLoadState('networkidle');
 
     const searchInput = page.locator('input[type="search"]').first();
-    if (await searchInput.count() > 0) {
+    if ((await searchInput.count()) > 0) {
       const startTime = Date.now();
       await searchInput.fill('test search');
       const responseTime = Date.now() - startTime;
-      
+
       // Should respond within 100ms
       expect(responseTime).toBeLessThan(100);
     }
@@ -73,11 +73,11 @@ test.describe('Performance - Responsiveness', () => {
     await page.waitForLoadState('networkidle');
 
     const button = page.locator('button').first();
-    if (await button.count() > 0) {
+    if ((await button.count()) > 0) {
       const startTime = Date.now();
       await button.click();
       const responseTime = Date.now() - startTime;
-      
+
       // Should respond within 200ms
       expect(responseTime).toBeLessThan(200);
     }
@@ -100,7 +100,7 @@ test.describe('Performance - Responsiveness', () => {
 test.describe('Performance - Memory & Resources', () => {
   test('should not have memory leaks on rapid navigation', async ({ page }) => {
     const pages = ['/dashboard', '/formulas', '/clients', '/appointments'];
-    
+
     for (let i = 0; i < 5; i++) {
       for (const path of pages) {
         await page.goto(path);
@@ -130,8 +130,8 @@ test.describe('Performance - Memory & Resources', () => {
 
     // Measure if there are any long tasks
     const metrics = await page.evaluate(() => {
-      return new Promise((resolve) => {
-        const observer = new PerformanceObserver((list) => {
+      return new Promise(resolve => {
+        const observer = new PerformanceObserver(list => {
           const entries = list.getEntries();
           const longTasks = entries.filter(entry => entry.duration > 50);
           resolve(longTasks.length);
@@ -160,7 +160,7 @@ test.describe('Performance - Network Efficiency', () => {
     });
 
     await page.goto('/dashboard');
-    
+
     // Should still load (within 10 seconds)
     await expect(page.locator('body')).toBeVisible({ timeout: 10000 });
   });
@@ -181,7 +181,7 @@ test.describe('Performance - Network Efficiency', () => {
 
   test('should minimize network requests', async ({ page }) => {
     const requests: string[] = [];
-    
+
     page.on('request', request => {
       requests.push(request.url());
     });
@@ -201,9 +201,9 @@ test.describe('Performance - Cumulative Layout Shift', () => {
 
     // Measure CLS
     const cls = await page.evaluate(() => {
-      return new Promise((resolve) => {
+      return new Promise(resolve => {
         let clsValue = 0;
-        const observer = new PerformanceObserver((list) => {
+        const observer = new PerformanceObserver(list => {
           for (const entry of list.getEntries()) {
             if (!(entry as any).hadRecentInput) {
               clsValue += (entry as any).value;
@@ -250,10 +250,12 @@ test.describe('Performance - First Contentful Paint', () => {
       await page.goto(path);
 
       const fcp = await page.evaluate(() => {
-        return new Promise((resolve) => {
-          const observer = new PerformanceObserver((list) => {
+        return new Promise(resolve => {
+          const observer = new PerformanceObserver(list => {
             const entries = list.getEntries();
-            const fcpEntry = entries.find(entry => entry.name === 'first-contentful-paint');
+            const fcpEntry = entries.find(
+              entry => entry.name === 'first-contentful-paint'
+            );
             if (fcpEntry) {
               resolve(fcpEntry.startTime);
               observer.disconnect();

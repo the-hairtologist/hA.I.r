@@ -3,16 +3,22 @@
  * Visual reference for all design tokens, components, and patterns
  */
 
-import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { Copy, Check, Palette, Type, Sparkles, Box } from "lucide-react";
-import { toast } from "sonner";
+import { useState } from 'react';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { Copy, Check, Palette, Type, Sparkles, Box } from 'lucide-react';
+import { toast } from 'sonner';
 
 export default function DesignSystem() {
   const [copiedToken, setCopiedToken] = useState<string | null>(null);
@@ -25,45 +31,115 @@ export default function DesignSystem() {
   };
 
   const colorTokens = [
-    { name: "Primary", var: "--primary", hsl: "8 100% 55%", desc: "Vibrant red-orange (LEGO inspired)" },
-    { name: "Secondary", var: "--secondary", hsl: "45 100% 50%", desc: "Bold yellow" },
-    { name: "Accent", var: "--accent", hsl: "215 100% 50%", desc: "Bright blue" },
-    { name: "Success", var: "--success", hsl: "142 76% 36%", desc: "AA-compliant green" },
-    { name: "Warning", var: "--warning", hsl: "38 92% 50%", desc: "Amber alert" },
-    { name: "Destructive", var: "--destructive", hsl: "0 85% 60%", desc: "Alert red" },
-    { name: "Info", var: "--info", hsl: "217 91% 60%", desc: "Sky blue" },
-    { name: "Muted", var: "--muted", hsl: "0 0% 96%", desc: "Subtle gray" },
+    {
+      name: 'Primary',
+      var: '--primary',
+      hsl: '8 100% 55%',
+      desc: 'Vibrant red-orange (LEGO inspired)',
+    },
+    {
+      name: 'Secondary',
+      var: '--secondary',
+      hsl: '45 100% 50%',
+      desc: 'Bold yellow',
+    },
+    {
+      name: 'Accent',
+      var: '--accent',
+      hsl: '215 100% 50%',
+      desc: 'Bright blue',
+    },
+    {
+      name: 'Success',
+      var: '--success',
+      hsl: '142 76% 36%',
+      desc: 'AA-compliant green',
+    },
+    {
+      name: 'Warning',
+      var: '--warning',
+      hsl: '38 92% 50%',
+      desc: 'Amber alert',
+    },
+    {
+      name: 'Destructive',
+      var: '--destructive',
+      hsl: '0 85% 60%',
+      desc: 'Alert red',
+    },
+    { name: 'Info', var: '--info', hsl: '217 91% 60%', desc: 'Sky blue' },
+    { name: 'Muted', var: '--muted', hsl: '0 0% 96%', desc: 'Subtle gray' },
   ];
 
   const gradients = [
-    { name: "Purple Pink", class: "bg-gradient-purple-pink", desc: "Sidebar icons" },
-    { name: "Cyan Blue", class: "bg-gradient-cyan-blue", desc: "Sidebar icons" },
-    { name: "Green Emerald", class: "bg-gradient-green-emerald", desc: "Sidebar icons" },
-    { name: "Pink Rose", class: "bg-gradient-pink-rose", desc: "Sidebar icons" },
-    { name: "Blue Indigo", class: "bg-gradient-blue-indigo", desc: "Sidebar icons" },
-    { name: "Amber Orange", class: "bg-gradient-amber-orange", desc: "Sidebar icons" },
+    {
+      name: 'Purple Pink',
+      class: 'bg-gradient-purple-pink',
+      desc: 'Sidebar icons',
+    },
+    {
+      name: 'Cyan Blue',
+      class: 'bg-gradient-cyan-blue',
+      desc: 'Sidebar icons',
+    },
+    {
+      name: 'Green Emerald',
+      class: 'bg-gradient-green-emerald',
+      desc: 'Sidebar icons',
+    },
+    {
+      name: 'Pink Rose',
+      class: 'bg-gradient-pink-rose',
+      desc: 'Sidebar icons',
+    },
+    {
+      name: 'Blue Indigo',
+      class: 'bg-gradient-blue-indigo',
+      desc: 'Sidebar icons',
+    },
+    {
+      name: 'Amber Orange',
+      class: 'bg-gradient-amber-orange',
+      desc: 'Sidebar icons',
+    },
   ];
 
   const shadows = [
-    { name: "Brutal XS", class: "brutal-shadow-xs", size: "1px 1px" },
-    { name: "Brutal SM", class: "brutal-shadow-sm", size: "2px 2px" },
-    { name: "Brutal MD", class: "brutal-shadow-md", size: "3px 3px" },
-    { name: "Brutal LG", class: "brutal-shadow-lg", size: "5px 5px" },
-    { name: "Brutal XL", class: "brutal-shadow-xl", size: "6px 6px" },
-    { name: "Elevation 1", class: "elevation-1", size: "Subtle lift" },
-    { name: "Elevation 2", class: "elevation-2", size: "Card hover" },
-    { name: "Elevation 3", class: "elevation-3", size: "Modal" },
+    { name: 'Brutal XS', class: 'brutal-shadow-xs', size: '1px 1px' },
+    { name: 'Brutal SM', class: 'brutal-shadow-sm', size: '2px 2px' },
+    { name: 'Brutal MD', class: 'brutal-shadow-md', size: '3px 3px' },
+    { name: 'Brutal LG', class: 'brutal-shadow-lg', size: '5px 5px' },
+    { name: 'Brutal XL', class: 'brutal-shadow-xl', size: '6px 6px' },
+    { name: 'Elevation 1', class: 'elevation-1', size: 'Subtle lift' },
+    { name: 'Elevation 2', class: 'elevation-2', size: 'Card hover' },
+    { name: 'Elevation 3', class: 'elevation-3', size: 'Modal' },
   ];
 
   const typography = [
-    { name: "Display", class: "font-display text-3xl font-bold", sample: "Space Grotesk" },
-    { name: "Heading 1", class: "text-2xl font-bold", sample: "Major Heading" },
-    { name: "Heading 2", class: "text-xl font-semibold", sample: "Section Title" },
-    { name: "Body Large", class: "text-lg", sample: "Emphasized body text" },
-    { name: "Body", class: "text-base", sample: "Standard readable text" },
-    { name: "Small", class: "text-sm text-muted-foreground", sample: "Supporting text" },
-    { name: "Caption", class: "text-xs text-muted-foreground", sample: "Metadata" },
-    { name: "Pixel", class: "font-pixel text-sm", sample: "Press Start 2P" },
+    {
+      name: 'Display',
+      class: 'font-display text-3xl font-bold',
+      sample: 'Space Grotesk',
+    },
+    { name: 'Heading 1', class: 'text-2xl font-bold', sample: 'Major Heading' },
+    {
+      name: 'Heading 2',
+      class: 'text-xl font-semibold',
+      sample: 'Section Title',
+    },
+    { name: 'Body Large', class: 'text-lg', sample: 'Emphasized body text' },
+    { name: 'Body', class: 'text-base', sample: 'Standard readable text' },
+    {
+      name: 'Small',
+      class: 'text-sm text-muted-foreground',
+      sample: 'Supporting text',
+    },
+    {
+      name: 'Caption',
+      class: 'text-xs text-muted-foreground',
+      sample: 'Metadata',
+    },
+    { name: 'Pixel', class: 'font-pixel text-sm', sample: 'Press Start 2P' },
   ];
 
   return (
@@ -96,7 +172,8 @@ export default function DesignSystem() {
               <div className="flex-1">
                 <Badge className="mb-2">Top 1% Quality</Badge>
                 <p className="text-sm text-muted-foreground">
-                  Zero hardcoded colors • WCAG AA compliant • Mobile-first responsive
+                  Zero hardcoded colors • WCAG AA compliant • Mobile-first
+                  responsive
                 </p>
               </div>
             </div>
@@ -125,7 +202,7 @@ export default function DesignSystem() {
           {/* Colors Tab */}
           <TabsContent value="colors" className="space-y-4">
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {colorTokens.map((token) => (
+              {colorTokens.map(token => (
                 <Card key={token.name} className="brutal-card">
                   <CardHeader>
                     <div className="flex items-center justify-between">
@@ -133,7 +210,9 @@ export default function DesignSystem() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => copyToClipboard(`hsl(var(${token.var}))`, token.name)}
+                        onClick={() =>
+                          copyToClipboard(`hsl(var(${token.var}))`, token.name)
+                        }
                       >
                         {copiedToken === token.name ? (
                           <Check className="h-4 w-4 text-success" />
@@ -151,7 +230,9 @@ export default function DesignSystem() {
                     />
                     <div className="space-y-1 font-mono text-xs">
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">CSS Variable:</span>
+                        <span className="text-muted-foreground">
+                          CSS Variable:
+                        </span>
                         <code className="text-foreground">{token.var}</code>
                       </div>
                       <div className="flex justify-between">
@@ -160,7 +241,9 @@ export default function DesignSystem() {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Tailwind:</span>
-                        <code className="text-foreground">bg-{token.name.toLowerCase()}</code>
+                        <code className="text-foreground">
+                          bg-{token.name.toLowerCase()}
+                        </code>
                       </div>
                     </div>
                   </CardContent>
@@ -174,12 +257,19 @@ export default function DesignSystem() {
             <Card>
               <CardHeader>
                 <CardTitle>Typography Scale</CardTitle>
-                <CardDescription>Base 16px with responsive adjustments</CardDescription>
+                <CardDescription>
+                  Base 16px with responsive adjustments
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                {typography.map((type) => (
-                  <div key={type.name} className="flex items-center gap-4 p-4 rounded-lg border">
-                    <div className="w-32 text-sm text-muted-foreground">{type.name}</div>
+                {typography.map(type => (
+                  <div
+                    key={type.name}
+                    className="flex items-center gap-4 p-4 rounded-lg border"
+                  >
+                    <div className="w-32 text-sm text-muted-foreground">
+                      {type.name}
+                    </div>
                     <div className={type.class}>{type.sample}</div>
                     <Button
                       variant="ghost"
@@ -202,14 +292,18 @@ export default function DesignSystem() {
           {/* Shadows Tab */}
           <TabsContent value="shadows" className="space-y-4">
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-              {shadows.map((shadow) => (
+              {shadows.map(shadow => (
                 <Card key={shadow.name} className="brutal-card">
                   <CardHeader>
                     <CardTitle className="text-sm">{shadow.name}</CardTitle>
-                    <CardDescription className="text-xs">{shadow.size}</CardDescription>
+                    <CardDescription className="text-xs">
+                      {shadow.size}
+                    </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className={`h-24 bg-card rounded-lg ${shadow.class} flex items-center justify-center`}>
+                    <div
+                      className={`h-24 bg-card rounded-lg ${shadow.class} flex items-center justify-center`}
+                    >
                       <span className="text-xs font-mono">.{shadow.class}</span>
                     </div>
                   </CardContent>
@@ -221,15 +315,19 @@ export default function DesignSystem() {
           {/* Gradients Tab */}
           <TabsContent value="gradients" className="space-y-4">
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {gradients.map((gradient) => (
+              {gradients.map(gradient => (
                 <Card key={gradient.name} className="brutal-card">
                   <CardHeader>
                     <CardTitle className="text-sm">{gradient.name}</CardTitle>
-                    <CardDescription className="text-xs">{gradient.desc}</CardDescription>
+                    <CardDescription className="text-xs">
+                      {gradient.desc}
+                    </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className={`h-24 rounded-lg ${gradient.class}`} />
-                    <code className="text-xs mt-2 block">.{gradient.class}</code>
+                    <code className="text-xs mt-2 block">
+                      .{gradient.class}
+                    </code>
                   </CardContent>
                 </Card>
               ))}
@@ -286,7 +384,9 @@ export default function DesignSystem() {
         <Card className="border-2 border-accent">
           <CardHeader>
             <CardTitle>System Architecture</CardTitle>
-            <CardDescription>Design system implementation details</CardDescription>
+            <CardDescription>
+              Design system implementation details
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid gap-4 md:grid-cols-3">

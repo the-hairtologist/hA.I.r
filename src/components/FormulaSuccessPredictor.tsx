@@ -1,7 +1,7 @@
-import { Badge } from "@/components/ui/badge";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { TrendingUp, AlertTriangle, Sparkles, Target } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Badge } from '@/components/ui/badge';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { TrendingUp, AlertTriangle, Sparkles, Target } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface FormulaSuccessPredictorProps {
   formulaText: string;
@@ -16,7 +16,7 @@ export const FormulaSuccessPredictor = ({
   clientHairType,
   clientAllergies,
   previousSuccessRate,
-  similarFormulasCount = 0
+  similarFormulasCount = 0,
 }: FormulaSuccessPredictorProps) => {
   const calculateSuccessProbability = () => {
     let score = 50; // Base score
@@ -38,8 +38,9 @@ export const FormulaSuccessPredictor = ({
     // Factor 3: Formula completeness
     const hasDetailed = formulaText.length > 100;
     const hasTiming = /\d+\s*(min|minutes|hour|hr)/i.test(formulaText);
-    const hasRatios = /\d+:\d+/.test(formulaText) || /\d+\s*oz/.test(formulaText);
-    
+    const hasRatios =
+      /\d+:\d+/.test(formulaText) || /\d+\s*oz/.test(formulaText);
+
     if (hasDetailed && hasTiming && hasRatios) {
       score += 15;
     } else if (hasDetailed && (hasTiming || hasRatios)) {
@@ -47,15 +48,21 @@ export const FormulaSuccessPredictor = ({
     }
 
     // Factor 4: Hair type match
-    if (clientHairType && formulaText.toLowerCase().includes(clientHairType.toLowerCase())) {
+    if (
+      clientHairType &&
+      formulaText.toLowerCase().includes(clientHairType.toLowerCase())
+    ) {
       score += 5;
     }
 
     // Factor 5: Allergy awareness (penalize if allergies exist but not mentioned)
     if (clientAllergies && clientAllergies.trim().length > 0) {
-      const allergyMentioned = clientAllergies.toLowerCase().split(',').some(allergy => 
-        formulaText.toLowerCase().includes(allergy.trim().toLowerCase())
-      );
+      const allergyMentioned = clientAllergies
+        .toLowerCase()
+        .split(',')
+        .some(allergy =>
+          formulaText.toLowerCase().includes(allergy.trim().toLowerCase())
+        );
       if (!allergyMentioned) {
         score -= 20; // Significant penalty for not addressing allergies
       } else {
@@ -76,7 +83,10 @@ export const FormulaSuccessPredictor = ({
         badge: 'success' as const,
         title: '🎯 High Success Probability',
         message: `${probability}% predicted success. This formula has excellent indicators.`,
-        tips: ['Formula has strong historical success', 'Consider making this a template']
+        tips: [
+          'Formula has strong historical success',
+          'Consider making this a template',
+        ],
       };
     } else if (probability >= 70) {
       return {
@@ -85,7 +95,10 @@ export const FormulaSuccessPredictor = ({
         badge: 'default' as const,
         title: '👍 Good Success Probability',
         message: `${probability}% predicted success. Solid formula with minor optimization potential.`,
-        tips: ['Add more specific timing if possible', 'Include product ratios for repeatability']
+        tips: [
+          'Add more specific timing if possible',
+          'Include product ratios for repeatability',
+        ],
       };
     } else if (probability >= 50) {
       return {
@@ -98,8 +111,8 @@ export const FormulaSuccessPredictor = ({
           'Add more detailed instructions',
           'Include processing time',
           'Verify product ratios',
-          clientAllergies && 'Double-check allergy considerations'
-        ].filter(Boolean) as string[]
+          clientAllergies && 'Double-check allergy considerations',
+        ].filter(Boolean) as string[],
       };
     } else {
       return {
@@ -113,8 +126,8 @@ export const FormulaSuccessPredictor = ({
           'Include all timing and measurements',
           clientAllergies && '⚠️ Address client allergies',
           'Consider consulting similar successful formulas',
-          'Add step-by-step instructions'
-        ].filter(Boolean) as string[]
+          'Add step-by-step instructions',
+        ].filter(Boolean) as string[],
       };
     }
   };
@@ -123,19 +136,23 @@ export const FormulaSuccessPredictor = ({
   const Icon = config.icon;
 
   return (
-    <Alert className={cn("border-l-4", config.color)}>
+    <Alert className={cn('border-l-4', config.color)}>
       <Icon className="h-5 w-5" />
       <AlertDescription className="space-y-3">
         <div>
           <div className="font-semibold text-base">{config.title}</div>
-          <div className="text-sm text-muted-foreground mt-1">{config.message}</div>
+          <div className="text-sm text-muted-foreground mt-1">
+            {config.message}
+          </div>
         </div>
-        
+
         {config.tips.length > 0 && (
           <div className="space-y-2 pt-2 border-t border-border/50">
-            <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Recommendations:</div>
+            <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+              Recommendations:
+            </div>
             <ul className="text-sm text-muted-foreground space-y-2">
-              {config.tips.map((tip) => (
+              {config.tips.map(tip => (
                 <li key={tip} className="flex items-start gap-2">
                   <span className="mt-1 text-primary">•</span>
                   <span className="flex-1">{tip}</span>

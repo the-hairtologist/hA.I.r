@@ -1,25 +1,44 @@
-import { useState, useEffect, lazy, Suspense } from "react";
-import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { DashboardLayout } from "@/components/DashboardLayout";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
-import { Upload, X, Image as ImageIcon, Loader2, ArrowUp, ArrowDown, Trash2, Sparkles } from "lucide-react";
-import { PageHeader } from "@/components/PageHeader";
-import { Switch } from "@/components/ui/switch";
-import { ConfirmDialog } from "@/components/ConfirmDialog";
-import { PortfolioSkeleton } from "@/components/LoadingSkeleton";
-import { useRealtimeUpdates } from "@/hooks/useRealtimeUpdates";
-import { PortfolioInsights } from "@/components/PortfolioInsights";
-import { CameraCapture } from "@/components/CameraCapture";
-import { VoiceControl } from "@/components/VoiceControl";
-import { offlineQueue } from "@/lib/offlineQueue";
-import { OptimizedImage } from "@/components/OptimizedImage";
+import { useState, useEffect, lazy, Suspense } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+import { DashboardLayout } from '@/components/DashboardLayout';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { toast } from 'sonner';
+import {
+  Upload,
+  X,
+  Image as ImageIcon,
+  Loader2,
+  ArrowUp,
+  ArrowDown,
+  Trash2,
+  Sparkles,
+} from 'lucide-react';
+import { PageHeader } from '@/components/PageHeader';
+import { Switch } from '@/components/ui/switch';
+import { ConfirmDialog } from '@/components/ConfirmDialog';
+import { PortfolioSkeleton } from '@/components/LoadingSkeleton';
+import { useRealtimeUpdates } from '@/hooks/useRealtimeUpdates';
+import { PortfolioInsights } from '@/components/PortfolioInsights';
+import { CameraCapture } from '@/components/CameraCapture';
+import { VoiceControl } from '@/components/VoiceControl';
+import { offlineQueue } from '@/lib/offlineQueue';
+import { OptimizedImage } from '@/components/OptimizedImage';
 
-const BackgroundRemovalDialog = lazy(() => import("@/components/BackgroundRemovalDialog").then(m => ({ default: m.BackgroundRemovalDialog })));
+const BackgroundRemovalDialog = lazy(() =>
+  import('@/components/BackgroundRemovalDialog').then(m => ({
+    default: m.BackgroundRemovalDialog,
+  }))
+);
 
 interface PortfolioPhoto {
   id: string;
@@ -35,23 +54,23 @@ const Portfolio = () => {
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [photos, setPhotos] = useState<PortfolioPhoto[]>([]);
-  const [stylistProfileId, setStylistProfileId] = useState<string>("");
+  const [stylistProfileId, setStylistProfileId] = useState<string>('');
   const [newPhoto, setNewPhoto] = useState<File | null>(null);
-  const [newPhotoPreview, setNewPhotoPreview] = useState<string>("");
-  const [caption, setCaption] = useState("");
+  const [newPhotoPreview, setNewPhotoPreview] = useState<string>('');
+  const [caption, setCaption] = useState('');
   const [isBeforeAfter, setIsBeforeAfter] = useState(false);
   const [beforePhoto, setBeforePhoto] = useState<File | null>(null);
-  const [beforePhotoPreview, setBeforePhotoPreview] = useState<string>("");
+  const [beforePhotoPreview, setBeforePhotoPreview] = useState<string>('');
   const [confirmDialog, setConfirmDialog] = useState<{
     open: boolean;
     title: string;
     description: string;
     onConfirm: () => void;
-  }>({ open: false, title: "", description: "", onConfirm: () => {} });
+  }>({ open: false, title: '', description: '', onConfirm: () => {} });
   const [bgRemovalDialog, setBgRemovalDialog] = useState<{
     open: boolean;
     imageUrl: string;
-  }>({ open: false, imageUrl: "" });
+  }>({ open: false, imageUrl: '' });
 
   useEffect(() => {
     checkUserAndLoadPhotos();
@@ -59,37 +78,39 @@ const Portfolio = () => {
 
   const checkUserAndLoadPhotos = async () => {
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (!session) {
-        navigate("/auth");
+        navigate('/auth');
         return;
       }
 
       // Get stylist profile
       const { data: profile, error } = await supabase
-        .from("stylist_profiles")
-        .select("id")
-        .eq("user_id", session.user.id)
+        .from('stylist_profiles')
+        .select('id')
+        .eq('user_id', session.user.id)
         .maybeSingle();
 
       if (error) {
-        console.error("Error fetching stylist profile:", error);
-        toast.error("Error loading portfolio");
-        navigate("/dashboard");
+        console.error('Error fetching stylist profile:', error);
+        toast.error('Error loading portfolio');
+        navigate('/dashboard');
         return;
       }
 
       if (!profile) {
-        toast.error("Stylist profile not found");
-        navigate("/dashboard");
+        toast.error('Stylist profile not found');
+        navigate('/dashboard');
         return;
       }
 
       setStylistProfileId(profile.id);
       await loadPhotos(profile.id);
     } catch (error) {
-      console.error("Error:", error);
-      toast.error("Error loading portfolio");
+      console.error('Error:', error);
+      toast.error('Error loading portfolio');
     } finally {
       setLoading(false);
     }
@@ -97,23 +118,30 @@ const Portfolio = () => {
 
   const loadPhotos = async (profileId: string) => {
     const { data, error } = await supabase
-      .from("portfolio_photos")
-      .select("*")
-      .eq("stylist_id", profileId)
-      .order("display_order");
+      .from('portfolio_photos')
+      .select('*')
+      .eq('stylist_id', profileId)
+      .order('display_order');
 
     if (error) {
-      console.error("Error loading photos:", error);
-      toast.error("Failed to load photos");
+      console.error('Error loading photos:', error);
+      toast.error('Failed to load photos');
     } else {
       setPhotos(data || []);
     }
   };
 
   // Real-time updates
-  useRealtimeUpdates("portfolio_photos", () => loadPhotos(stylistProfileId), stylistProfileId);
+  useRealtimeUpdates(
+    'portfolio_photos',
+    () => loadPhotos(stylistProfileId),
+    stylistProfileId
+  );
 
-  const handleFileSelect = async (imageUrl: string, isBefore: boolean = false) => {
+  const handleFileSelect = async (
+    imageUrl: string,
+    isBefore: boolean = false
+  ) => {
     if (isBefore) {
       setBeforePhotoPreview(imageUrl);
     } else {
@@ -122,31 +150,31 @@ const Portfolio = () => {
   };
 
   const uploadPhoto = async (file: File, path: string): Promise<string> => {
-    const fileExt = file.name.split(".").pop();
+    const fileExt = file.name.split('.').pop();
     const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
     const filePath = `${path}/${fileName}`;
 
     const { error: uploadError } = await supabase.storage
-      .from("hair-photos")
+      .from('hair-photos')
       .upload(filePath, file);
 
     if (uploadError) throw uploadError;
 
-    const { data: { publicUrl } } = supabase.storage
-      .from("hair-photos")
-      .getPublicUrl(filePath);
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from('hair-photos').getPublicUrl(filePath);
 
     return publicUrl;
   };
 
   const handleUpload = async () => {
     if (!newPhotoPreview) {
-      toast.error("Please capture a photo");
+      toast.error('Please capture a photo');
       return;
     }
 
     if (isBeforeAfter && !beforePhotoPreview) {
-      toast.error("Please capture a before photo");
+      toast.error('Please capture a before photo');
       return;
     }
 
@@ -154,12 +182,12 @@ const Portfolio = () => {
     try {
       // Convert data URLs to blobs
       const afterBlob = await (await fetch(newPhotoPreview)).blob();
-      const afterUrl = await uploadPhoto(afterBlob as any, "portfolio");
+      const afterUrl = await uploadPhoto(afterBlob as any, 'portfolio');
       let beforeUrl = null;
 
       if (isBeforeAfter && beforePhotoPreview) {
         const beforeBlob = await (await fetch(beforePhotoPreview)).blob();
-        beforeUrl = await uploadPhoto(beforeBlob as any, "portfolio");
+        beforeUrl = await uploadPhoto(beforeBlob as any, 'portfolio');
       }
 
       if (!navigator.onLine) {
@@ -175,75 +203,73 @@ const Portfolio = () => {
             before_photo_url: beforeUrl,
             display_order: photos.length,
           },
-          userId: (await supabase.auth.getSession()).data.session!.user.id
+          userId: (await supabase.auth.getSession()).data.session!.user.id,
         });
-        
-        toast.success("Photo queued for upload!", {
-          description: "Will sync when you're back online"
+
+        toast.success('Photo queued for upload!', {
+          description: "Will sync when you're back online",
         });
       } else {
-        const { error } = await supabase
-          .from("portfolio_photos")
-          .insert({
-            stylist_id: stylistProfileId,
-            photo_url: afterUrl,
-            caption: caption || null,
-            is_before_after: isBeforeAfter,
-            before_photo_url: beforeUrl,
-            display_order: photos.length,
-          });
+        const { error } = await supabase.from('portfolio_photos').insert({
+          stylist_id: stylistProfileId,
+          photo_url: afterUrl,
+          caption: caption || null,
+          is_before_after: isBeforeAfter,
+          before_photo_url: beforeUrl,
+          display_order: photos.length,
+        });
 
         if (error) throw error;
-        toast.success("Photo uploaded successfully!");
+        toast.success('Photo uploaded successfully!');
       }
 
       setNewPhoto(null);
-      setNewPhotoPreview("");
+      setNewPhotoPreview('');
       setBeforePhoto(null);
-      setBeforePhotoPreview("");
-      setCaption("");
+      setBeforePhotoPreview('');
+      setCaption('');
       setIsBeforeAfter(false);
       await loadPhotos(stylistProfileId);
     } catch (error: any) {
-      console.error("Upload error:", error);
-      toast.error("Failed to upload photo");
+      console.error('Upload error:', error);
+      toast.error('Failed to upload photo');
     } finally {
       setUploading(false);
     }
   };
 
   const handleDelete = async (id: string) => {
-    const photo = photos.find((p) => p.id === id);
+    const photo = photos.find(p => p.id === id);
     setConfirmDialog({
       open: true,
-      title: "Delete Photo",
-      description: photo?.is_before_after 
-        ? "This will permanently delete this before & after photo set." 
-        : "This will permanently delete this photo.",
+      title: 'Delete Photo',
+      description: photo?.is_before_after
+        ? 'This will permanently delete this before & after photo set.'
+        : 'This will permanently delete this photo.',
       onConfirm: async () => {
         try {
           const { error } = await supabase
-            .from("portfolio_photos")
+            .from('portfolio_photos')
             .delete()
-            .eq("id", id);
+            .eq('id', id);
 
           if (error) throw error;
 
-          toast.success("Photo deleted");
+          toast.success('Photo deleted');
           await loadPhotos(stylistProfileId);
         } catch (error) {
-          console.error("Delete error:", error);
-          toast.error("Failed to delete photo");
+          console.error('Delete error:', error);
+          toast.error('Failed to delete photo');
         }
       },
     });
   };
 
-  const movePhoto = async (id: string, direction: "up" | "down") => {
+  const movePhoto = async (id: string, direction: 'up' | 'down') => {
     const currentIndex = photos.findIndex(p => p.id === id);
     if (currentIndex === -1) return;
-    
-    const newIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;
+
+    const newIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
     if (newIndex < 0 || newIndex >= photos.length) return;
 
     try {
@@ -251,19 +277,19 @@ const Portfolio = () => {
       const photo2 = photos[newIndex];
 
       await supabase
-        .from("portfolio_photos")
+        .from('portfolio_photos')
         .update({ display_order: photo2.display_order })
-        .eq("id", photo1.id);
+        .eq('id', photo1.id);
 
       await supabase
-        .from("portfolio_photos")
+        .from('portfolio_photos')
         .update({ display_order: photo1.display_order })
-        .eq("id", photo2.id);
+        .eq('id', photo2.id);
 
       await loadPhotos(stylistProfileId);
     } catch (error) {
-      console.error("Reorder error:", error);
-      toast.error("Failed to reorder photos");
+      console.error('Reorder error:', error);
+      toast.error('Failed to reorder photos');
     }
   };
 
@@ -273,7 +299,9 @@ const Portfolio = () => {
         <div className="container mx-auto p-6 max-w-6xl">
           <div className="mb-8">
             <h1 className="text-4xl font-pixel mb-2">My Portfolio</h1>
-            <p className="text-muted-foreground font-sans">Showcase your best work to attract more clients</p>
+            <p className="text-muted-foreground font-sans">
+              Showcase your best work to attract more clients
+            </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[...Array(6)].map((_, i) => (
@@ -290,7 +318,9 @@ const Portfolio = () => {
       <div className="container mx-auto p-6 max-w-6xl animate-fade-in">
         <div className="mb-8">
           <h1 className="text-4xl font-pixel mb-2">My Portfolio</h1>
-          <p className="text-muted-foreground font-sans">Showcase your best work to attract more clients</p>
+          <p className="text-muted-foreground font-sans">
+            Showcase your best work to attract more clients
+          </p>
         </div>
 
         {/* AI Portfolio Insights */}
@@ -318,7 +348,10 @@ const Portfolio = () => {
                 onCheckedChange={setIsBeforeAfter}
                 id="before-after"
               />
-              <Label htmlFor="before-after" className="text-foreground font-medium">
+              <Label
+                htmlFor="before-after"
+                className="text-foreground font-medium"
+              >
                 This is a before & after photo
               </Label>
             </div>
@@ -326,17 +359,25 @@ const Portfolio = () => {
             <div className="grid md:grid-cols-2 gap-4">
               {isBeforeAfter && (
                 <div className="space-y-2">
-                  <Label className="text-foreground font-medium">Before Photo</Label>
+                  <Label className="text-foreground font-medium">
+                    Before Photo
+                  </Label>
                   {beforePhotoPreview ? (
                     <div className="relative">
-                      <OptimizedImage src={beforePhotoPreview} alt="Before preview" width={400} height={192} className="w-full h-48 object-cover rounded-lg" />
+                      <OptimizedImage
+                        src={beforePhotoPreview}
+                        alt="Before preview"
+                        width={400}
+                        height={192}
+                        className="w-full h-48 object-cover rounded-lg"
+                      />
                       <Button
                         size="sm"
                         variant="destructive"
                         className="absolute top-2 right-2"
                         onClick={() => {
                           setBeforePhoto(null);
-                          setBeforePhotoPreview("");
+                          setBeforePhotoPreview('');
                         }}
                       >
                         <X className="h-4 w-4" />
@@ -346,7 +387,7 @@ const Portfolio = () => {
                     <CameraCapture
                       context="portfolio"
                       variant="default"
-                      onCapture={(imageUrl) => handleFileSelect(imageUrl, true)}
+                      onCapture={imageUrl => handleFileSelect(imageUrl, true)}
                       maxSizeMB={3}
                       quality={0.92}
                     />
@@ -355,17 +396,25 @@ const Portfolio = () => {
               )}
 
               <div className="space-y-2">
-                <Label className="text-foreground font-medium">{isBeforeAfter ? "After Photo" : "Photo"}</Label>
+                <Label className="text-foreground font-medium">
+                  {isBeforeAfter ? 'After Photo' : 'Photo'}
+                </Label>
                 {newPhotoPreview ? (
                   <div className="relative">
-                    <OptimizedImage src={newPhotoPreview} alt="Photo preview" width={400} height={192} className="w-full h-48 object-cover rounded-lg" />
+                    <OptimizedImage
+                      src={newPhotoPreview}
+                      alt="Photo preview"
+                      width={400}
+                      height={192}
+                      className="w-full h-48 object-cover rounded-lg"
+                    />
                     <Button
                       size="sm"
                       variant="destructive"
                       className="absolute top-2 right-2"
                       onClick={() => {
                         setNewPhoto(null);
-                        setNewPhotoPreview("");
+                        setNewPhotoPreview('');
                       }}
                     >
                       <X className="h-4 w-4" />
@@ -375,7 +424,7 @@ const Portfolio = () => {
                   <CameraCapture
                     context="portfolio"
                     variant="default"
-                    onCapture={(imageUrl) => handleFileSelect(imageUrl, false)}
+                    onCapture={imageUrl => handleFileSelect(imageUrl, false)}
                     maxSizeMB={3}
                     quality={0.92}
                   />
@@ -385,18 +434,25 @@ const Portfolio = () => {
 
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="caption" className="text-foreground font-medium">Caption (Optional)</Label>
+                <Label
+                  htmlFor="caption"
+                  className="text-foreground font-medium"
+                >
+                  Caption (Optional)
+                </Label>
                 <VoiceControl
                   variant="minimal"
                   context="notes"
-                  onTranscription={(text) => setCaption(prev => prev ? `${prev}\n${text}` : text)}
+                  onTranscription={text =>
+                    setCaption(prev => (prev ? `${prev}\n${text}` : text))
+                  }
                 />
               </div>
               <Textarea
                 id="caption"
                 placeholder="Describe the style, technique, or products used... (or use voice input)"
                 value={caption}
-                onChange={(e) => setCaption(e.target.value)}
+                onChange={e => setCaption(e.target.value)}
                 rows={3}
                 className="bg-card/20 border-2 border-foreground text-foreground placeholder:text-foreground/60"
               />
@@ -404,7 +460,11 @@ const Portfolio = () => {
 
             <Button
               onClick={handleUpload}
-              disabled={uploading || !newPhotoPreview || (isBeforeAfter && !beforePhotoPreview)}
+              disabled={
+                uploading ||
+                !newPhotoPreview ||
+                (isBeforeAfter && !beforePhotoPreview)
+              }
               className="w-full"
             >
               {uploading ? (
@@ -424,14 +484,20 @@ const Portfolio = () => {
 
         {/* Gallery */}
         <div className="mb-8">
-          <h2 className="text-2xl font-pixel mb-4">Your Gallery ({photos.length} photos)</h2>
+          <h2 className="text-2xl font-pixel mb-4">
+            Your Gallery ({photos.length} photos)
+          </h2>
           {photos.length === 0 ? (
             <Card className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-yellow-300">
               <CardContent className="pt-6 text-center space-y-4">
                 <ImageIcon className="h-12 w-12 mx-auto text-foreground/60" />
                 <div>
-                  <p className="text-foreground font-sans font-bold text-lg mb-2">Start Building Your Portfolio</p>
-                  <p className="text-foreground/80 font-sans font-medium mb-4">Upload your best work to attract new clients</p>
+                  <p className="text-foreground font-sans font-bold text-lg mb-2">
+                    Start Building Your Portfolio
+                  </p>
+                  <p className="text-foreground/80 font-sans font-medium mb-4">
+                    Upload your best work to attract new clients
+                  </p>
                 </div>
                 <div className="text-left max-w-md mx-auto space-y-2 text-sm">
                   <p className="text-foreground/90">
@@ -444,7 +510,8 @@ const Portfolio = () => {
                     <li>Special occasion styles</li>
                   </ul>
                   <p className="text-foreground/70 text-xs pt-2">
-                    💡 Tip: High-quality photos with good lighting showcase your work best
+                    💡 Tip: High-quality photos with good lighting showcase your
+                    work best
                   </p>
                 </div>
               </CardContent>
@@ -452,13 +519,18 @@ const Portfolio = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {photos.map((photo, index) => (
-                <Card key={photo.id} className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all bg-card">
+                <Card
+                  key={photo.id}
+                  className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all bg-card"
+                >
                   <CardContent className="p-4">
                     <div className="relative">
                       {photo.is_before_after && photo.before_photo_url ? (
                         <div className="grid grid-cols-2 gap-2 mb-2">
                           <div>
-                            <p className="text-xs font-bold mb-1 text-center">BEFORE</p>
+                            <p className="text-xs font-bold mb-1 text-center">
+                              BEFORE
+                            </p>
                             <OptimizedImage
                               src={photo.before_photo_url}
                               alt="Before"
@@ -468,7 +540,9 @@ const Portfolio = () => {
                             />
                           </div>
                           <div>
-                            <p className="text-xs font-bold mb-1 text-center">AFTER</p>
+                            <p className="text-xs font-bold mb-1 text-center">
+                              AFTER
+                            </p>
                             <OptimizedImage
                               src={photo.photo_url}
                               alt="After"
@@ -487,19 +561,24 @@ const Portfolio = () => {
                         />
                       )}
                       {photo.caption && (
-                        <p className="text-sm text-muted-foreground mb-2 line-clamp-2">{photo.caption}</p>
+                        <p className="text-sm text-muted-foreground mb-2 line-clamp-2">
+                          {photo.caption}
+                        </p>
                       )}
                       {/* Action Buttons - Optimized for mobile */}
                       <div className="flex flex-col sm:flex-row gap-2 mb-2">
                         <Button
                           size="sm"
                           variant="secondary"
-                          onClick={() => setBgRemovalDialog({ 
-                            open: true, 
-                            imageUrl: photo.is_before_after && photo.before_photo_url 
-                              ? photo.before_photo_url 
-                              : photo.photo_url 
-                          })}
+                          onClick={() =>
+                            setBgRemovalDialog({
+                              open: true,
+                              imageUrl:
+                                photo.is_before_after && photo.before_photo_url
+                                  ? photo.before_photo_url
+                                  : photo.photo_url,
+                            })
+                          }
                           className="w-full sm:flex-1 gap-2"
                           title="Remove background with AI"
                           aria-label="Remove background with AI"
@@ -511,7 +590,7 @@ const Portfolio = () => {
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => movePhoto(photo.id, "up")}
+                            onClick={() => movePhoto(photo.id, 'up')}
                             disabled={index === 0}
                             className="flex-1"
                             aria-label="Move photo up"
@@ -521,7 +600,7 @@ const Portfolio = () => {
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => movePhoto(photo.id, "down")}
+                            onClick={() => movePhoto(photo.id, 'down')}
                             disabled={index === photos.length - 1}
                             className="flex-1"
                             aria-label="Move photo down"
@@ -549,7 +628,7 @@ const Portfolio = () => {
 
         <ConfirmDialog
           open={confirmDialog.open}
-          onOpenChange={(open) => setConfirmDialog({ ...confirmDialog, open })}
+          onOpenChange={open => setConfirmDialog({ ...confirmDialog, open })}
           onConfirm={confirmDialog.onConfirm}
           title={confirmDialog.title}
           description={confirmDialog.description}
@@ -558,10 +637,18 @@ const Portfolio = () => {
         />
 
         {bgRemovalDialog.open && (
-          <Suspense fallback={<div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin" /></div>}>
+          <Suspense
+            fallback={
+              <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center">
+                <Loader2 className="h-8 w-8 animate-spin" />
+              </div>
+            }
+          >
             <BackgroundRemovalDialog
               open={bgRemovalDialog.open}
-              onOpenChange={(open) => setBgRemovalDialog({ ...bgRemovalDialog, open })}
+              onOpenChange={open =>
+                setBgRemovalDialog({ ...bgRemovalDialog, open })
+              }
               imageUrl={bgRemovalDialog.imageUrl}
             />
           </Suspense>

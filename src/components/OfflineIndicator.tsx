@@ -3,9 +3,9 @@
  * Mobile-first design with touch-friendly positioning
  */
 
-import { useEffect, useState } from "react";
-import { WifiOff, Wifi } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { useEffect, useState } from 'react';
+import { WifiOff, Wifi } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export const OfflineIndicator = () => {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
@@ -27,12 +27,12 @@ export const OfflineIndicator = () => {
       setWasOffline(true);
     };
 
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
 
     return () => {
-      window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
     };
   }, [wasOffline]);
 
@@ -64,14 +64,14 @@ export const OfflineIndicator = () => {
     return (
       <div
         className={cn(
-          "fixed bottom-20 lg:bottom-4 left-1/2 -translate-x-1/2 z-[200]",
-          "bg-warning/95 backdrop-blur-sm text-warning-foreground",
-          "px-4 sm:px-6 py-3 rounded-full",
-          "shadow-[4px_4px_0px_0px_rgba(0,0,0,0.25)]",
-          "border-2 border-amber-600",
-          "animate-bounce",
-          "min-h-[44px] flex items-center gap-2",
-          "touch-manipulation"
+          'fixed bottom-20 lg:bottom-4 left-1/2 -translate-x-1/2 z-[200]',
+          'bg-warning/95 backdrop-blur-sm text-warning-foreground',
+          'px-4 sm:px-6 py-3 rounded-full',
+          'shadow-[4px_4px_0px_0px_rgba(0,0,0,0.25)]',
+          'border-2 border-amber-600',
+          'animate-bounce',
+          'min-h-[44px] flex items-center gap-2',
+          'touch-manipulation'
         )}
         role="alert"
         aria-live="assertive"
