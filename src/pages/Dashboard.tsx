@@ -787,7 +787,7 @@ const Dashboard = () => {
                   </span>
                 </p>
               </div>
-              <div className="flex gap-2 w-full sm:w-auto min-w-0">
+              <div className="flex gap-2 w-full sm:w-auto">
                 <Button
                   size="sm"
                   variant="outline"
@@ -800,7 +800,7 @@ const Dashboard = () => {
                 <Button
                   size="sm"
                   onClick={handleSave}
-                  className="text-[10px] xs:text-xs font-bold uppercase tracking-wide flex-1 sm:flex-none min-h-[44px]"
+                  className="text-xs sm:text-sm font-bold uppercase tracking-wide flex-1 sm:flex-none min-h-[44px]"
                 >
                   <Save className="h-3.5 w-3.5 mr-1" />
                   <span className="hidden xs:inline">Done</span>
