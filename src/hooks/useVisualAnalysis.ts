@@ -63,7 +63,7 @@ export function useVisualAnalysis() {
 
       return null;
     } catch (error) {
-      logger.error('Visual analysis failed', error);
+      logger.error('Visual analysis failed', 'VisualAnalysis', error as any);
       toast.error('Failed to analyze photo');
       return null;
     } finally {

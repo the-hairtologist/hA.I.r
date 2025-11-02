@@ -140,10 +140,11 @@ export const useSmartAutomation = (stylistId?: string) => {
 
       clients.forEach(score => {
         const timing = timingProfiles[score.client_id];
+        const churnProb = score.churn_probability ?? 0;
         const urgency =
-          score.churn_probability >= 0.7
+          churnProb >= 0.7
             ? 'high'
-            : score.churn_probability >= 0.4
+            : churnProb >= 0.4
               ? 'medium'
               : 'low';
 

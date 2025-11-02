@@ -17,7 +17,7 @@ interface UndoableActionOptions<T> {
 
 export const useUndoableAction = <T = void>() => {
   const [isUndoing, setIsUndoing] = useState(false);
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
   const executeWithUndo = useCallback(
     async <T>({
@@ -61,12 +61,13 @@ export const useUndoableAction = <T = void>() => {
         });
 
         // Auto-dismiss after timeout
-        timeoutRef.current = setTimeout(() => {
+        const timeout = setTimeout(() => {
           if (!undoTriggered) {
             // Action is now permanent
             timeoutRef.current = undefined;
           }
         }, undoTimeout);
+        timeoutRef.current = timeout;
       } catch (error) {
         console.error('Action failed:', error);
         toast.error('Action failed');

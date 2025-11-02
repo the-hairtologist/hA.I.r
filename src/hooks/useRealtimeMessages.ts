@@ -49,7 +49,7 @@ export const useRealtimeMessages = (userId?: string) => {
 
         // Count unread messages
         const unread = (result.data || []).filter(
-          msg => msg.recipient_id === userId && !msg.is_read
+          (msg: any) => msg.recipient_id === userId && !msg.is_read
         ).length;
         setUnreadCount(unread);
       } catch (error) {

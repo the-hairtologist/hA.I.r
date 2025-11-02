@@ -54,7 +54,7 @@ export function useSchedulePredictor() {
 
       return null;
     } catch (error) {
-      logger.error('Schedule prediction failed', error);
+      logger.error('Schedule prediction failed', 'SchedulePredictor', error as any);
       toast.error('Failed to predict schedule');
       return null;
     } finally {
