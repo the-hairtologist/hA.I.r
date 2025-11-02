@@ -56,7 +56,6 @@ export function useAICall<
     async (body: Body): Promise<T | null> => {
       setLoading(true);
       setError(null);
-      setData(null);
 
       log.info(`AI call invoked: ${functionName}`, 'useAICall', { body });
 
