@@ -164,7 +164,7 @@ describe('useFormSubmit', () => {
 
       await waitFor(() => expect(result.current.isSubmitting).toBe(false));
       expect(result.current.submitCount).toBe(1);
-      expect((toast as Mock).error).toHaveBeenCalledWith('Submission failed');
+      expect((toast as typeof toast).error).toHaveBeenCalledWith('Submission failed');
     });
 
     it('returns initial values after reset', async () => {
