@@ -95,7 +95,8 @@ export async function wrapAICall<T>(
         if (!lastError.retryable || attempt === maxRetries) {
           return { data: null, error: lastError };
         }
-        await new Promise(resolve => setTimeout(resolve, 100)); // Simple backoff
+        // Exponential backoff: 100ms * 2^(attempt + 1)
+        await new Promise(resolve => setTimeout(resolve, 100 * Math.pow(2, attempt + 1)));
         continue;
       }
 
@@ -131,7 +132,8 @@ export async function wrapAICall<T>(
       if (!lastError.retryable || attempt === maxRetries) {
         return { data: null, error: lastError };
       }
-      await new Promise(resolve => setTimeout(resolve, 100)); // Simple backoff
+      // Exponential backoff: 100ms * 2^(attempt + 1)
+      await new Promise(resolve => setTimeout(resolve, 100 * Math.pow(2, attempt + 1)));
     }
   }
 
