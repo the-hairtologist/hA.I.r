@@ -119,7 +119,11 @@ describe('errorHandler', () => {
   });
 
   describe('withRetry', () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
     afterEach(() => {
+      vi.useRealTimers();
       vi.restoreAllMocks();
     });
 
@@ -146,6 +150,7 @@ describe('errorHandler', () => {
     });
 
     it('should throw error after max retries', async () => {
+      vi.useFakeTimers();
       const operation = vi.fn().mockRejectedValue(new Error('Always fails'));
       const onRetry = vi.fn();
 
@@ -160,6 +165,7 @@ describe('errorHandler', () => {
 
       expect(operation).toHaveBeenCalledTimes(4); // 1 initial + 3 retries
       expect(onRetry).toHaveBeenCalledTimes(3);
+      vi.useRealTimers();
     });
 
     it('should call onRetry callback', async () => {

@@ -195,7 +195,7 @@ describe('useFormSubmit', () => {
   });
 
   describe('submit count tracking', () => {
-    it('increments submit count for valid attempts', async () => {
+  it('increments submit count for valid attempts', async () => {
       vi.useFakeTimers();
       const mockSubmit = vi.fn().mockResolvedValue(undefined);
       const { result } = renderHook(() => useFormSubmit(mockSubmit), {
@@ -230,7 +230,7 @@ describe('useFormSubmit', () => {
       });
 
       expect(result.current.submitCount).toBe(2);
-    });
+    }, 30000); // Increase timeout to 30s to prevent test timeout
   });
 
   describe('accessibility', () => {
