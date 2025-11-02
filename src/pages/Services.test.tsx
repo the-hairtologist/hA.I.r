@@ -1,25 +1,68 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { BrowserRouter } from 'react-router-dom';
+﻿import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { BrowserRouter } from 'react-router-dom';
 import Services from './Services';
 import { supabase } from '@/integrations/supabase/client';
+import { getServicesByStylist } from '@/lib/queries/serviceQueries';
 
-// Mock Supabase
+type Mock = ReturnType<typeof vi.fn>;
+
+type SupabaseMutationResult = { error: { message: string } | null };
+
+const mockStylistProfile = {
+  id: 'stylist-123',
+  user_id: 'user-123',
+};
+
+const mockService = {
+  id: '1',
+  service_name: 'Haircut',
+  description: 'Professional haircut',
+  duration_minutes: 60,
+  price: 50,
+  is_active: true,
+  require_deposit: false,
+  deposit_amount: 0,
+  deposit_type: 'fixed',
+  buffer_time_minutes: null,
+};
+
+const confirmMock = vi.fn();
+vi.stubGlobal('confirm', confirmMock);
+
 vi.mock('@/integrations/supabase/client', () => ({
   supabase: {
     auth: {
       getUser: vi.fn(),
+      getSession: vi.fn().mockResolvedValue({
+        data: {
+          session: {
+            user: {
+              id: 'user-123',
+              email: 'stylist@example.com',
+            },
+          },
+        },
+        error: null,
+      }),
+      onAuthStateChange: vi.fn().mockReturnValue({
+        data: {
+          subscription: {
+            unsubscribe: vi.fn(),
+          },
+        },
+      }),
     },
     from: vi.fn(),
   },
 }));
 
-// Mock DashboardLayout
-vi.mock('@/components/DashboardLayout', () => ({
-  default: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+vi.mock('@/lib/queries/serviceQueries', () => ({
+  getServicesByStylist: vi.fn(),
 }));
+
+const mockedGetServicesByStylist = getServicesByStylist as unknown as Mock;
 
 const renderServices = () => {
   const queryClient = new QueryClient({
@@ -30,367 +73,239 @@ const renderServices = () => {
   });
 
   return render(
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
+    <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
         <Services />
-      </BrowserRouter>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </BrowserRouter>
   );
 };
 
-describe('Services - Delete Double Submit Prevention', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-    
-    (supabase.auth.getUser as any).mockResolvedValue({
-      data: { user: { id: 'stylist-123' } },
-      error: null,
-    });
+let insertMock: Mock;
+let updateEqMock: Mock;
+let deleteEqMock: Mock;
+let serviceTypeSelectMock: Mock;
+let serviceTypeSelectEqMock: Mock;
+let serviceTypeSelectOrderMock: Mock;
+let serviceTypeUpdateMock: Mock;
+let serviceTypeUpdateEqMock: Mock;
+let serviceTypeInsertMock: Mock;
+let serviceTypeInsertSelectMock: Mock;
+let serviceTypeInsertMaybeSingleMock: Mock;
+let serviceTypeDeleteMock: Mock;
+let serviceTypeDeleteEqMock: Mock;
 
-    const mockFrom = vi.fn().mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        eq: vi.fn().mockResolvedValue({
-          data: [
-            {
-              id: 'service-1',
-              name: 'Haircut',
-              duration: 60,
-              price: 50,
-              description: 'Basic haircut',
-            },
-            {
-              id: 'service-2',
-              name: 'Color',
-              duration: 90,
-              price: 100,
-              description: 'Hair coloring',
-            },
-          ],
-          error: null,
-        }),
-      }),
-      delete: vi.fn().mockReturnValue({
-        eq: vi.fn().mockResolvedValue({ error: null }),
-      }),
-      insert: vi.fn().mockResolvedValue({ error: null }),
-      update: vi.fn().mockReturnValue({
-        eq: vi.fn().mockResolvedValue({ error: null }),
-      }),
-    });
-    (supabase.from as any).mockImplementation(mockFrom);
+beforeEach(() => {
+  vi.clearAllMocks();
+
+  confirmMock.mockClear();
+  confirmMock.mockReturnValue(true);
+
+  mockedGetServicesByStylist.mockReset();
+  mockedGetServicesByStylist.mockResolvedValue([mockService]);
+
+  insertMock = vi.fn().mockResolvedValue({ data: null, error: null });
+  updateEqMock = vi.fn().mockResolvedValue({ data: null, error: null });
+  deleteEqMock = vi.fn().mockResolvedValue({ error: null });
+  serviceTypeSelectOrderMock = vi.fn().mockResolvedValue({ data: [], error: null });
+  serviceTypeSelectEqMock = vi.fn().mockReturnValue({
+    order: serviceTypeSelectOrderMock,
   });
+  serviceTypeSelectMock = vi.fn().mockReturnValue({
+    eq: serviceTypeSelectEqMock,
+  });
+  serviceTypeUpdateEqMock = vi.fn().mockResolvedValue({ error: null });
+  serviceTypeUpdateMock = vi.fn(() => ({
+    eq: serviceTypeUpdateEqMock,
+  }));
+  serviceTypeInsertMaybeSingleMock = vi.fn().mockResolvedValue({
+    data: {
+      id: 'color-1',
+      stylist_id: mockStylistProfile.id,
+      service_type: 'Color',
+      color: 'hsl(270 85% 60%)',
+    },
+    error: null,
+  });
+  serviceTypeInsertSelectMock = vi.fn(() => ({
+    maybeSingle: serviceTypeInsertMaybeSingleMock,
+  }));
+  serviceTypeInsertMock = vi.fn(() => ({
+    select: serviceTypeInsertSelectMock,
+  }));
+  serviceTypeDeleteEqMock = vi.fn().mockResolvedValue({ error: null });
+  serviceTypeDeleteMock = vi.fn(() => ({
+    eq: serviceTypeDeleteEqMock,
+  }));
 
-  it('should prevent multiple rapid clicks on delete button', async () => {
-    const user = userEvent.setup();
-    renderServices();
+  (supabase.from as unknown as Mock).mockImplementation((table: string) => {
+    if (table === 'stylist_profiles') {
+      return {
+        select: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
+            maybeSingle: vi.fn().mockResolvedValue({
+              data: mockStylistProfile,
+              error: null,
+            }),
+          }),
+        }),
+      };
+    }
 
+    if (table === 'service_type_colors') {
+      return {
+        select: serviceTypeSelectMock,
+        update: serviceTypeUpdateMock,
+        insert: serviceTypeInsertMock,
+        delete: serviceTypeDeleteMock,
+      };
+    }
+
+    if (table === 'stylist_services') {
+      return {
+        insert: insertMock,
+        update: vi.fn(() => ({
+          eq: updateEqMock,
+        })),
+        delete: vi.fn(() => ({
+          eq: deleteEqMock,
+        })),
+      };
+    }
+
+    return {};
+  });
+});
+
+describe('Services', () => {
+  const waitForServiceList = async () => {
     await waitFor(() => {
       expect(screen.getByText('Haircut')).toBeInTheDocument();
     });
+  };
 
-    // Click delete button
-    const deleteButtons = screen.getAllByRole('button', { name: /delete/i });
-    await user.click(deleteButtons[0]);
+  describe('Services - Delete Double Submit Prevention', () => {
+    it('should prevent multiple rapid clicks on delete button', async () => {
+      renderServices();
 
-    // Confirm delete in dialog
-    const confirmButton = screen.getByRole('button', { name: /delete service/i });
-    
-    // First click
-    await user.click(confirmButton);
+      await waitForServiceList();
 
-    // Immediate second click (should be prevented)
-    await user.click(confirmButton);
+      const deleteButton = screen.getByRole('button', { name: /delete service/i });
 
-    // Should only call delete once
-    await waitFor(() => {
-      const fromCalls = (supabase.from as any).mock.calls;
-      const deleteCalls = fromCalls.filter((call: any) => {
-        const chain = (supabase.from as any)(call[0]);
-        return chain.delete !== undefined;
+      fireEvent.click(deleteButton);
+      fireEvent.click(deleteButton);
+
+      await waitFor(() => {
+        expect(deleteEqMock).toHaveBeenCalledTimes(1);
       });
-      expect(deleteCalls.length).toBeLessThanOrEqual(1);
     });
   });
 
-  it('should disable delete button during submission', async () => {
-    const user = userEvent.setup();
-    renderServices();
+  describe('Services - Loading State Visibility', () => {
+    it('should show loading spinner during delete', async () => {
+      let resolveDelete: ((value: SupabaseMutationResult) => void) | undefined;
+      deleteEqMock.mockImplementationOnce(
+        () =>
+          new Promise<SupabaseMutationResult>((resolve) => {
+            resolveDelete = resolve;
+          })
+      );
 
-    await waitFor(() => {
-      expect(screen.getByText('Haircut')).toBeInTheDocument();
+      renderServices();
+      await waitForServiceList();
+
+      const deleteButton = screen.getByRole('button', { name: /delete service/i });
+
+      fireEvent.click(deleteButton);
+
+      expect(deleteButton).toBeDisabled();
+      expect(deleteButton.querySelector('.animate-spin')).toBeTruthy();
+
+      resolveDelete?.({ error: null });
+
+      await waitFor(() => {
+        const refreshedButton = screen.getByRole('button', { name: /delete service/i });
+        expect(refreshedButton.querySelector('.animate-spin')).toBeNull();
+      });
     });
 
-    const deleteButtons = screen.getAllByRole('button', { name: /delete/i });
-    await user.click(deleteButtons[0]);
+    it('should hide loading spinner after completion', async () => {
+      renderServices();
+      await waitForServiceList();
 
-    const confirmButton = screen.getByRole('button', { name: /delete service/i });
-    expect(confirmButton).not.toBeDisabled();
+      const deleteButton = screen.getByRole('button', { name: /delete service/i });
 
-    await user.click(confirmButton);
+      fireEvent.click(deleteButton);
 
-    // Button should be disabled during submission
-    await waitFor(() => {
-      expect(confirmButton).toBeDisabled();
+      await waitFor(() => {
+        const refreshedButton = screen.getByRole('button', { name: /delete service/i });
+        expect(refreshedButton.querySelector('.animate-spin')).toBeNull();
+      });
+    });
+  });
+
+  describe('Services - Button Disabled States', () => {
+    it('should disable delete button while submission is in progress', async () => {
+      let resolveDelete: ((value: SupabaseMutationResult) => void) | undefined;
+      deleteEqMock.mockImplementationOnce(
+        () =>
+          new Promise<SupabaseMutationResult>((resolve) => {
+            resolveDelete = resolve;
+          })
+      );
+
+      renderServices();
+      await waitForServiceList();
+
+      const deleteButton = screen.getByRole('button', { name: /delete service/i });
+
+      fireEvent.click(deleteButton);
+
+      expect(deleteButton).toBeDisabled();
+
+      resolveDelete?.({ error: null });
+
+      await waitFor(() => {
+        expect(screen.getByRole('button', { name: /delete service/i })).not.toBeDisabled();
+      });
     });
   });
 
-  it('should show loading indicator during delete', async () => {
-    const user = userEvent.setup();
-    renderServices();
+  describe('Services - Form Re-enabling', () => {
+    it('should reset deleting state after successful delete', async () => {
+      renderServices();
+      await waitForServiceList();
 
-    await waitFor(() => {
-      expect(screen.getByText('Haircut')).toBeInTheDocument();
+      const deleteButton = screen.getByRole('button', { name: /delete service/i });
+
+      fireEvent.click(deleteButton);
+
+      await waitFor(() => {
+        const refreshedButton = screen.getByRole('button', { name: /delete service/i });
+        expect(refreshedButton).not.toBeDisabled();
+      }, { timeout: 2000 });
     });
 
-    const deleteButtons = screen.getAllByRole('button', { name: /delete/i });
-    await user.click(deleteButtons[0]);
+    it('should re-enable form after delete error', async () => {
+      deleteEqMock.mockResolvedValueOnce({ error: { message: 'Delete failed' } });
 
-    const confirmButton = screen.getByRole('button', { name: /delete service/i });
-    await user.click(confirmButton);
+      renderServices();
+      await waitForServiceList();
 
-    // Should show loading spinner
-    expect(confirmButton).toBeDisabled();
-  });
+      const deleteButton = screen.getByRole('button', { name: /delete service/i });
 
-  it('should re-enable form after successful delete', async () => {
-    const user = userEvent.setup();
-    renderServices();
+      fireEvent.click(deleteButton);
 
-    await waitFor(() => {
-      expect(screen.getByText('Haircut')).toBeInTheDocument();
-    });
-
-    const deleteButtons = screen.getAllByRole('button', { name: /delete/i });
-    await user.click(deleteButtons[0]);
-
-    const confirmButton = screen.getByRole('button', { name: /delete service/i });
-    await user.click(confirmButton);
-
-    // Wait for dialog to close
-    await waitFor(() => {
-      expect(screen.queryByRole('button', { name: /delete service/i })).not.toBeInTheDocument();
-    });
-  });
-});
-
-describe('Services - Loading State Visibility', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-    
-    (supabase.auth.getUser as any).mockResolvedValue({
-      data: { user: { id: 'stylist-123' } },
-      error: null,
-    });
-
-    const mockFrom = vi.fn().mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        eq: vi.fn().mockResolvedValue({
-          data: [
-            {
-              id: 'service-1',
-              name: 'Haircut',
-              duration: 60,
-              price: 50,
-              description: 'Basic haircut',
-            },
-          ],
-          error: null,
-        }),
-      }),
-      delete: vi.fn().mockReturnValue({
-        eq: vi.fn().mockResolvedValue({ error: null }),
-      }),
-    });
-    (supabase.from as any).mockImplementation(mockFrom);
-  });
-
-  it('should show loading spinner during delete', async () => {
-    const user = userEvent.setup();
-    renderServices();
-
-    await waitFor(() => {
-      expect(screen.getByText('Haircut')).toBeInTheDocument();
-    });
-
-    const deleteButtons = screen.getAllByRole('button', { name: /delete/i });
-    await user.click(deleteButtons[0]);
-
-    const confirmButton = screen.getByRole('button', { name: /delete service/i });
-    await user.click(confirmButton);
-
-    // Should show loading state
-    expect(confirmButton).toBeDisabled();
-  });
-
-  it('should hide loading indicator after completion', async () => {
-    const user = userEvent.setup();
-    renderServices();
-
-    await waitFor(() => {
-      expect(screen.getByText('Haircut')).toBeInTheDocument();
-    });
-
-    const deleteButtons = screen.getAllByRole('button', { name: /delete/i });
-    await user.click(deleteButtons[0]);
-
-    const confirmButton = screen.getByRole('button', { name: /delete service/i });
-    await user.click(confirmButton);
-
-    await waitFor(() => {
-      expect(screen.queryByRole('button', { name: /delete service/i })).not.toBeInTheDocument();
+      await waitFor(() => {
+        const refreshedButton = screen.getByRole('button', { name: /delete service/i });
+        expect(refreshedButton).not.toBeDisabled();
+      }, { timeout: 2000 });
     });
   });
 });
 
-describe('Services - Button Disabled States', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-    
-    (supabase.auth.getUser as any).mockResolvedValue({
-      data: { user: { id: 'stylist-123' } },
-      error: null,
-    });
 
-    const mockFrom = vi.fn().mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        eq: vi.fn().mockResolvedValue({
-          data: [
-            {
-              id: 'service-1',
-              name: 'Haircut',
-              duration: 60,
-              price: 50,
-              description: 'Basic haircut',
-            },
-          ],
-          error: null,
-        }),
-      }),
-      delete: vi.fn().mockReturnValue({
-        eq: vi.fn().mockResolvedValue({ error: null }),
-      }),
-    });
-    (supabase.from as any).mockImplementation(mockFrom);
-  });
 
-  it('should disable delete button during deletion', async () => {
-    const user = userEvent.setup();
-    renderServices();
 
-    await waitFor(() => {
-      expect(screen.getByText('Haircut')).toBeInTheDocument();
-    });
 
-    const deleteButtons = screen.getAllByRole('button', { name: /delete/i });
-    await user.click(deleteButtons[0]);
 
-    const confirmButton = screen.getByRole('button', { name: /delete service/i });
-    await user.click(confirmButton);
-
-    expect(confirmButton).toBeDisabled();
-  });
-});
-
-describe('Services - Form Re-enabling', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  it('should close dialog after successful delete', async () => {
-    const user = userEvent.setup();
-    
-    (supabase.auth.getUser as any).mockResolvedValue({
-      data: { user: { id: 'stylist-123' } },
-      error: null,
-    });
-
-    const mockFrom = vi.fn().mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        eq: vi.fn().mockResolvedValue({
-          data: [
-            {
-              id: 'service-1',
-              name: 'Haircut',
-              duration: 60,
-              price: 50,
-              description: 'Basic haircut',
-            },
-          ],
-          error: null,
-        }),
-      }),
-      delete: vi.fn().mockReturnValue({
-        eq: vi.fn().mockResolvedValue({ error: null }),
-      }),
-    });
-    (supabase.from as any).mockImplementation(mockFrom);
-
-    renderServices();
-
-    await waitFor(() => {
-      expect(screen.getByText('Haircut')).toBeInTheDocument();
-    });
-
-    const deleteButtons = screen.getAllByRole('button', { name: /delete/i });
-    await user.click(deleteButtons[0]);
-
-    const confirmButton = screen.getByRole('button', { name: /delete service/i });
-    await user.click(confirmButton);
-
-    await waitFor(() => {
-      expect(screen.queryByRole('button', { name: /delete service/i })).not.toBeInTheDocument();
-    });
-  });
-
-  it('should re-enable form after delete error', async () => {
-    const user = userEvent.setup();
-    
-    (supabase.auth.getUser as any).mockResolvedValue({
-      data: { user: { id: 'stylist-123' } },
-      error: null,
-    });
-
-    const mockFrom = vi.fn().mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        eq: vi.fn().mockResolvedValue({
-          data: [
-            {
-              id: 'service-1',
-              name: 'Haircut',
-              duration: 60,
-              price: 50,
-              description: 'Basic haircut',
-            },
-          ],
-          error: null,
-        }),
-      }),
-      delete: vi.fn().mockReturnValue({
-        eq: vi.fn().mockResolvedValue({ 
-          error: new Error('Delete failed') 
-        }),
-      }),
-    });
-    (supabase.from as any).mockImplementation(mockFrom);
-
-    renderServices();
-
-    await waitFor(() => {
-      expect(screen.getByText('Haircut')).toBeInTheDocument();
-    });
-
-    const deleteButtons = screen.getAllByRole('button', { name: /delete/i });
-    await user.click(deleteButtons[0]);
-
-    const confirmButton = screen.getByRole('button', { name: /delete service/i });
-    await user.click(confirmButton);
-
-    // Wait for error state
-    await waitFor(() => {
-      expect(confirmButton).not.toBeDisabled();
-    });
-
-    // Dialog should still be open for retry
-    expect(confirmButton).toBeInTheDocument();
-  });
-});

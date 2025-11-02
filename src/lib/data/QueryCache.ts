@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Simple Query Cache
  * 
  * Prevents duplicate queries when multiple components need the same data.
@@ -20,8 +20,8 @@ interface CacheEntry<T> {
 }
 
 class QueryCache {
-  private cache: Map<string, CacheEntry<any>> = new Map();
-  private pendingRequests: Map<string, Promise<any>> = new Map();
+  private cache: Map<string, CacheEntry<unknown>> = new Map();
+  private pendingRequests: Map<string, Promise<unknown>> = new Map();
 
   /**
    * Get data from cache or fetch it
@@ -53,9 +53,6 @@ class QueryCache {
       const data = await promise;
       this.set(key, data, ttl);
       return data;
-    } catch (error) {
-      // Don't cache errors
-      throw error;
     } finally {
       this.pendingRequests.delete(key);
     }
@@ -150,3 +147,5 @@ export const cacheKeys = {
     `formulas:${stylistId}${clientId ? `:${clientId}` : ''}`,
   messages: (userId: string) => `messages:${userId}`,
 };
+
+

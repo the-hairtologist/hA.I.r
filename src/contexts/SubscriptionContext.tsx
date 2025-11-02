@@ -1,6 +1,5 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+﻿import { createContext, useCallback, useContext, useEffect, useRef, useState, ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
 import { appleIAP, shouldUseAppleIAP, getPaymentMethod } from "@/lib/iap/appleIAP";
 import { logger } from "@/lib/logger";
 
@@ -17,23 +16,37 @@ interface SubscriptionContextType {
   isAppleIAP: boolean;
 }
 
+interface UserRoleRow {
+  role: string;
+}
+
+interface CheckSubscriptionResponse {
+  subscribed?: boolean;
+  in_trial?: boolean;
+  product_id?: string | null;
+  subscription_end?: string | null;
+}
+
 const SubscriptionContext = createContext<SubscriptionContextType | undefined>(undefined);
 
 const STYLIST_PRODUCT_ID = "prod_TAdxnWWlueCL0Y";
 
-// Features that require subscription for stylists
 const PREMIUM_FEATURES = [
   "clients",
   "appointments",
-  "formulas", 
+  "formulas",
   "ai-assistant",
   "payments",
   "commissions",
   "services",
   "schedule",
   "portfolio",
-  "messages"
-];
+  "messages",
+] as const;
+
+type PremiumFeature = (typeof PREMIUM_FEATURES)[number];
+
+type FeatureName = PremiumFeature | string;
 
 export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   const [subscribed, setSubscribed] = useState(false);
@@ -46,88 +59,87 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   const [hasAccessCode, setHasAccessCode] = useState(false);
   const [paymentMethod] = useState<'apple-iap' | 'stripe'>(getPaymentMethod());
   const [isAppleIAP] = useState(shouldUseAppleIAP());
+  const isCheckingRef = useRef(false);
 
-  // Initialize Apple IAP if on iOS
   useEffect(() => {
     if (isAppleIAP) {
       appleIAP.initialize().catch((error) => {
-        import('@/lib/logging/productionLogger').then(({ logger }) => {
-          logger.error('[Subscription] Failed to initialize Apple IAP', error);
+        import("@/lib/logging/productionLogger").then(({ logger }) => {
+          logger.error("[Subscription] Failed to initialize Apple IAP", error);
         });
       });
     }
   }, [isAppleIAP]);
 
-  const checkSubscription = async () => {
+  const checkSubscription = useCallback(async () => {
+    if (isCheckingRef.current) {
+      return;
+    }
+    isCheckingRef.current = true;
+    setLoading(true);
+
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
         setSubscribed(false);
         setInTrial(false);
         setIsAdmin(false);
-        setLoading(false);
+        setUserRole(null);
+        setHasAccessCode(false);
+        setProductId(null);
+        setSubscriptionEnd(null);
         return;
       }
 
-      // Check user role
-      const { data: rolesData } = await supabase
-        .from("user_roles")
+      const { data: rolesData = [] } = await supabase
+        .from<UserRoleRow>("user_roles")
         .select("role")
         .eq("user_id", session.user.id);
 
-      const isStylist = rolesData?.some(r => r.role === "stylist");
-      const adminCheck = rolesData?.some(r => r.role === "admin") || false;
-      
+      const isStylist = rolesData.some(roleRow => roleRow.role === "stylist");
+      const adminCheck = rolesData.some(roleRow => roleRow.role === "admin");
+
       setUserRole(isStylist ? "stylist" : "client");
       setIsAdmin(adminCheck);
 
-      // Admins get full access without subscription checks
       if (adminCheck) {
         setSubscribed(true);
         setInTrial(false);
-        setLoading(false);
         return;
       }
 
-      // Check if user has a valid access code
       const { data: accessCodeData } = await supabase
         .from("access_codes")
         .select("id")
         .eq("used_by", session.user.id)
         .eq("is_active", true)
         .maybeSingle();
-      
-      const hasValidAccessCode = !!accessCodeData;
+
+      const hasValidAccessCode = Boolean(accessCodeData);
       setHasAccessCode(hasValidAccessCode);
 
-      // Users with access codes get full access
       if (hasValidAccessCode) {
         setSubscribed(true);
         setInTrial(false);
-        setLoading(false);
         return;
       }
 
-      // Clients don't need subscriptions
       if (!isStylist) {
         setSubscribed(true);
-        setLoading(false);
+        setInTrial(false);
         return;
       }
 
-      // On iOS, check both Apple IAP and backend
       if (isAppleIAP) {
-        logger.debug('[Subscription] Checking Apple IAP subscription');
+        logger.debug("[Subscription] Checking Apple IAP subscription");
         const hasActiveIAP = await appleIAP.checkActiveSubscription();
-        
+
         if (hasActiveIAP) {
-          // Restore purchases to sync with backend
           await appleIAP.restorePurchases();
         }
       }
 
-      // Check subscription status for stylists (works for both Stripe and Apple IAP)
-      const { data, error } = await supabase.functions.invoke("check-subscription", {
+      const { data, error } = await supabase.functions.invoke<CheckSubscriptionResponse>("check-subscription", {
         headers: {
           Authorization: `Bearer ${session.access_token}`,
         },
@@ -135,73 +147,73 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
 
       if (error) throw error;
 
-      const isSubscribed = data.subscribed || false;
-      const isInTrial = data.in_trial || false;
-      
+      const subscriptionData = data ?? {};
+      const isSubscribed = Boolean(subscriptionData.subscribed);
+      const isInTrial = Boolean(subscriptionData.in_trial);
+
       setSubscribed(isSubscribed);
       setInTrial(isInTrial);
-      setProductId(data.product_id);
-      setSubscriptionEnd(data.subscription_end);
-      
-      // Clear subscription prompt dismissal if user becomes subscribed
+      setProductId(subscriptionData.product_id ?? null);
+      setSubscriptionEnd(subscriptionData.subscription_end ?? null);
+
       if (isSubscribed || isInTrial) {
-        localStorage.removeItem('subscription_prompt_dismissed');
+        localStorage.removeItem("subscription_prompt_dismissed");
       }
     } catch (error) {
-      import('@/lib/logging/productionLogger').then(({ logger }) => {
+      import("@/lib/logging/productionLogger").then(({ logger }) => {
         logger.error("Error checking subscription", error);
       });
       setSubscribed(false);
+      setInTrial(false);
+      setHasAccessCode(false);
     } finally {
+      isCheckingRef.current = false;
       setLoading(false);
     }
-  };
+  }, [isAppleIAP]);
 
-  const isFeatureAllowed = (feature: string): boolean => {
-    // Admins always have full access
+  const isFeatureAllowed = useCallback((feature: FeatureName): boolean => {
     if (isAdmin) return true;
-    
-    // Users with access codes have full access
     if (hasAccessCode) return true;
-    
-    // Clients have access to all features
     if (userRole === "client") return true;
-    
-    // Stylists need subscription for premium features
+
     if (userRole === "stylist") {
-      if (PREMIUM_FEATURES.includes(feature)) {
+      if ((PREMIUM_FEATURES as readonly string[]).includes(feature)) {
         return subscribed || inTrial;
       }
       return true;
     }
-    
+
     return false;
-  };
+  }, [hasAccessCode, inTrial, isAdmin, subscribed, userRole]);
 
   useEffect(() => {
-    checkSubscription();
+    void checkSubscription();
 
-    // Check subscription on auth state change
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session) {
-        setTimeout(() => {
-          checkSubscription();
-        }, 0);
+        void checkSubscription();
       } else {
         setSubscribed(false);
         setUserRole(null);
+        setInTrial(false);
+        setHasAccessCode(false);
+        setProductId(null);
+        setSubscriptionEnd(null);
+        setIsAdmin(false);
         setLoading(false);
       }
     });
 
-    // Refresh subscription status periodically (every 2 minutes)
-    const interval = setInterval(checkSubscription, 120000);
+    const interval = setInterval(() => {
+      void checkSubscription();
+    }, 120000);
 
     return () => {
       subscription.unsubscribe();
       clearInterval(interval);
     };
-  }, []);
+  }, [checkSubscription]);
 
   return (
     <SubscriptionContext.Provider

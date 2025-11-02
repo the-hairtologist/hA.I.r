@@ -1,4 +1,4 @@
-import * as React from "react";
+﻿import * as React from "react";
 import { type DialogProps } from "@radix-ui/react-dialog";
 import { Command as CommandPrimitive } from "cmdk";
 import { Search } from "lucide-react";
@@ -21,7 +21,11 @@ const Command = React.forwardRef<
 ));
 Command.displayName = CommandPrimitive.displayName;
 
-interface CommandDialogProps extends DialogProps {}
+<<<<<<< HEAD
+type CommandDialogProps = DialogProps;
+=======
+type CommandDialogProps = DialogProps; // Inherits all DialogProps without adding new properties
+>>>>>>> copilot/fix-a11y-tester-and-comments
 
 const CommandDialog = ({ children, ...props }: CommandDialogProps) => {
   return (
@@ -130,3 +134,6 @@ export {
   CommandShortcut,
   CommandSeparator,
 };
+
+
+

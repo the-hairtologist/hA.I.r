@@ -57,9 +57,17 @@ export const createMockSupabaseClient = () => ({
     single: vi.fn().mockResolvedValue({ data: null, error: null }),
   })),
   auth: {
-    getSession: vi.fn().mockResolvedValue({ data: { session: null }, error: null }),
-    signIn: vi.fn().mockResolvedValue({ data: {}, error: null }),
-    signOut: vi.fn().mockResolvedValue({ error: null }),
+      getSession: vi.fn().mockResolvedValue({ data: { session: null }, error: null }),
+      getUser: vi.fn().mockResolvedValue({ data: { user: null }, error: null }),
+      signIn: vi.fn().mockResolvedValue({ data: {}, error: null }),
+      signOut: vi.fn().mockResolvedValue({ error: null }),
+      onAuthStateChange: vi.fn().mockReturnValue({
+        data: {
+          subscription: {
+            unsubscribe: vi.fn()
+          }
+        }
+      })
   },
   storage: {
     from: vi.fn(() => ({
@@ -161,11 +169,6 @@ export const mockFormula = {
   color_line: 'Test Color Line',
 };
 
-// Re-export testing library utilities - screen queries
-export const screen = {
-  getByText: (text: string | RegExp) => document.body.querySelector(`*:not(script):not(style)`) as HTMLElement,
-  getByRole: (role: string, options?: any) => document.body.querySelector(`[role="${role}"]`) as HTMLElement,
-  getByLabelText: (text: string | RegExp) => document.body.querySelector('label') as HTMLElement,
-  getByTestId: (testId: string) => document.body.querySelector(`[data-testid="${testId}"]`) as HTMLElement,
-  queryByText: (text: string | RegExp) => document.body.querySelector(`*:not(script):not(style)`) as HTMLElement | null,
-};
+
+// Re-export testing library utilities
+export { screen } from '@testing-library/react';

@@ -1,4 +1,4 @@
-import { DashboardLayout } from "@/components/DashboardLayout";
+﻿import { DashboardLayout } from "@/components/DashboardLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -27,14 +27,55 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+interface UserRole {
+  role: string;
+}
+
+interface AdminUser {
+  id: string;
+  full_name?: string;
+  email: string;
+  created_at: string;
+  user_roles?: UserRole[];
+}
+
 export default function AdminUsers() {
   const { user, isAdmin, loading } = useEnhancedAuth();
-  const [users, setUsers] = useState<any[]>([]);
+  const [users, setUsers] = useState<AdminUser[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterRole, setFilterRole] = useState<string>('all');
-  const [selectedUser, setSelectedUser] = useState<any>(null);
+  const [selectedUser, setSelectedUser] = useState<AdminUser | null>(null);
   const [selectedUsers, setSelectedUsers] = useState<Set<string>>(new Set());
   const [bulkActionLoading, setBulkActionLoading] = useState(false);
+
+<<<<<<< HEAD
+  const loadUsers = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*, user_roles(role)')
+        .order('created_at', { ascending: false});
+
+      if (error) throw error;
+      setUsers(data || []);
+    } catch (error) {
+      console.error('Error loading users:', error);
+      toast.error('Failed to load users');
+    }
+  };
+
+  // Move useEffect BEFORE conditional returns
+  useEffect(() => {
+    if (!loading && user && isAdmin) {
+      loadUsers();
+    }
+=======
+  // Load users effect - must come before conditional returns
+  useEffect(() => {
+    if (loading || !user || !isAdmin) return;
+    loadUsers();
+>>>>>>> copilot/fix-a11y-tester-and-comments
+  }, [loading, user, isAdmin]);
 
   // Redirect non-admins
   if (!loading && (!user || !isAdmin)) {
@@ -46,10 +87,8 @@ export default function AdminUsers() {
     return <LoadingSpinner message="Verifying access..." />;
   }
 
-  useEffect(() => {
-    loadUsers();
-  }, []);
-
+<<<<<<< HEAD
+=======
   const loadUsers = async () => {
     try {
       const { data, error } = await supabase
@@ -68,11 +107,12 @@ export default function AdminUsers() {
     }
   };
 
+>>>>>>> copilot/fix-a11y-tester-and-comments
   const filteredUsers = users.filter(user => {
     const matchesSearch = user.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesRole = filterRole === 'all' ||
-      user.user_roles?.some((ur: any) => ur.role === filterRole);
+      user.user_roles?.some((ur) => ur.role === filterRole);
     return matchesSearch && matchesRole;
   });
 
@@ -97,9 +137,7 @@ export default function AdminUsers() {
   const handleBulkDelete = async () => {
     if (selectedUsers.size === 0) return;
 
-    const confirmed = window.confirm(
-      `Are you sure you want to delete ${selectedUsers.size} user(s)? This action cannot be undone.`
-    );
+    const confirmed = window.confirm("Are you sure you want to delete " + selectedUsers.size + " user(s)? This action cannot be undone.");
 
     if (!confirmed) return;
 
@@ -129,7 +167,7 @@ export default function AdminUsers() {
 
       if (error) throw error;
 
-      toast.success(`Role ${role} assigned successfully`);
+      toast.success('Role assigned successfully');
       loadUsers();
     } catch (error: any) {
       console.error("Error assigning role:", error);
@@ -233,8 +271,7 @@ export default function AdminUsers() {
               {filteredUsers.map((user) => (
                 <div
                   key={user.id}
-                  className={`p-3 sm:p-4 border-2 border-foreground rounded-lg hover:bg-muted/50 transition-colors ${selectedUsers.has(user.id) ? 'bg-primary/5 border-primary' : ''
-                    }`}
+                  className="p-3 sm:p-4 border-2 border-foreground rounded-lg hover:bg-muted/50 transition-colors"
                 >
                   <div className="flex items-start gap-3 sm:gap-4">
                     <input
@@ -254,7 +291,7 @@ export default function AdminUsers() {
 
                         {/* Roles and date */}
                         <div className="flex flex-wrap items-center gap-2">
-                          {user.user_roles?.map((ur: any) => (
+                          {user.user_roles?.map((ur) => (
                             <Badge key={ur.role} variant="secondary" className="text-xs">
                               {ur.role}
                             </Badge>
@@ -310,7 +347,7 @@ export default function AdminUsers() {
                                   <div>
                                     <p className="text-xs sm:text-sm font-medium text-muted-foreground mb-2">Roles</p>
                                     <div className="flex flex-wrap gap-2">
-                                      {selectedUser.user_roles?.map((ur: any) => (
+                                      {selectedUser.user_roles?.map((ur) => (
                                         <Badge key={ur.role} className="text-xs">{ur.role}</Badge>
                                       ))}
                                     </div>
@@ -345,3 +382,11 @@ export default function AdminUsers() {
     </DashboardLayout>
   );
 }
+
+
+
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> copilot/fix-a11y-tester-and-comments

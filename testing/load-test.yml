@@ -1,0 +1,69 @@
+﻿config:
+  target: 'http://localhost:5173'
+  phases:
+    - duration: 60
+      arrivalRate: 5
+      name: "Warm up"
+    - duration: 120
+      arrivalRate: 10
+      name: "Load test"
+    - duration: 60
+      arrivalRate: 20
+      name: "Stress test"
+
+scenarios:
+  - name: "Complete User Journey"
+    weight: 70
+    flow:
+      - get:
+          url: "/"
+          capture:
+            - header: "set-cookie"
+              as: "cookies"
+      - think: 2
+      - get:
+          url: "/auth"
+      - think: 3
+      - post:
+          url: "/api/auth/signup"
+          json:
+            email: "test{{ $randomInt(1, 10000) }}@example.com"
+            password: "TestPassword123!"
+            full_name: "Test User {{ $randomInt(1, 1000) }}"
+      - think: 2
+      - get:
+          url: "/dashboard"
+      - think: 5
+      - get:
+          url: "/appointments"
+      - think: 3
+
+  - name: "Booking Flow"
+    weight: 20
+    flow:
+      - get:
+          url: "/services"
+      - think: 3
+      - get:
+          url: "/stylists"
+      - think: 2
+      - post:
+          url: "/api/appointments"
+          json:
+            service_id: "{{ $randomUuid() }}"
+            stylist_id: "{{ $randomUuid() }}"
+            appointment_date: "2025-11-01T10:00:00Z"
+      - think: 1
+
+  - name: "Admin Dashboard"
+    weight: 10
+    flow:
+      - get:
+          url: "/admin"
+      - think: 2
+      - get:
+          url: "/admin/users"
+      - think: 3
+      - get:
+          url: "/admin/analytics"
+      - think: 2

@@ -36,7 +36,7 @@ describe('clientSchema', () => {
       notes: '',
       allergies: '',
     };
-    expect(() => clientSchema.parse(invalid)).toThrow(/invalid email/i);
+    expect(() => clientSchema.parse(invalid)).toThrow(/Please enter a valid email address|Invalid email address/i);
   });
 
   it('rejects short names', () => {
@@ -215,7 +215,7 @@ describe('invitationSchema', () => {
       clientEmail: 'not-an-email',
       customMessage: 'Test message',
     };
-    expect(() => invitationSchema.parse(invalid)).toThrow(/invalid email/i);
+    expect(() => invitationSchema.parse(invalid)).toThrow(/Please enter a valid email address|Invalid email address/i);
   });
 
   it('enforces message length limit', () => {
@@ -267,7 +267,7 @@ describe('basic field schemas', () => {
     });
 
     it('rejects invalid format', () => {
-      expect(() => emailSchema.parse('not-an-email')).toThrow(/invalid email/i);
+      expect(() => emailSchema.parse('not-an-email')).toThrow(/Please enter a valid email address|Invalid email address/i);
     });
   });
 
@@ -282,7 +282,7 @@ describe('basic field schemas', () => {
     });
 
     it('rejects invalid characters', () => {
-      expect(() => phoneSchema.parse('555-ABC-DEFG')).toThrow(/invalid phone/i);
+      expect(() => phoneSchema.parse('555-ABC-DEFG')).toThrow(/Please enter a valid phone number/i);
     });
   });
 

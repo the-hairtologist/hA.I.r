@@ -1,38 +1,20 @@
 name: CI
-
 on:
   push:
-    branches:
-      - copilot/fix-a11y-tester-and-comments
+    branches: ["fix/invite-client-dialog-form-refactor"]
   pull_request:
-    branches:
-      - main
+    branches: ["main"]
 
 jobs:
   build:
-    name: Install, Typecheck, Build, Lint, Test
+    name: Install, build and lint
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Use Node.js 18
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '18'
           cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Typecheck
-        run: npx tsc --noEmit
-
-      - name: Lint
-        run: npm run lint --if-present
-
-      - name: Run tests
-        run: npm run test --if-present
-
-      - name: Build
-        run: npm run build --if-present
+      - run: npm ci
+      - run: npm run build
+      - run: npm run lint

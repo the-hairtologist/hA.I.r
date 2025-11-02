@@ -1,18 +1,21 @@
-/**
- * Enhanced Form Submission Hook
- * Supports Zod validation, field-level errors, touched state, and prevents double submissions
- */
-
 import { useState, useRef, useCallback } from 'react';
+import type { FormEvent } from 'react';
 import { toast } from 'sonner';
 import { withRetry } from '@/lib/errorHandler';
 import { log } from '@/lib/logger';
 import { z } from 'zod';
 
-interface UseFormSubmitOptions<T = any> {
-  schema?: z.ZodSchema<T>;
-  initialValues?: Partial<T>;
-  onSuccess?: (data?: T) => void;
+type SubmitFunction<TFormData extends Record<string, unknown>, TResult> = (
+  data: TFormData,
+) => Promise<TResult>;
+
+interface UseFormSubmitOptions<
+  TFormData extends Record<string, unknown>,
+  TResult = void,
+> {
+  schema?: z.ZodSchema<TFormData>;
+  initialValues?: Partial<TFormData>;
+  onSuccess?: (data?: TResult) => void;
   onError?: (error: Error) => void;
   successMessage?: string;
   errorMessage?: string;
@@ -20,16 +23,19 @@ interface UseFormSubmitOptions<T = any> {
   preventDoubleSubmit?: boolean;
 }
 
-export const useFormSubmit = <T extends Record<string, any>>(
-  submitFn: (data: T) => Promise<any>,
-  options: UseFormSubmitOptions<T> = {}
+export const useFormSubmit = <
+  TFormData extends Record<string, unknown>,
+  TResult = void,
+>(
+  submitFn: SubmitFunction<TFormData, TResult>,
+  options: UseFormSubmitOptions<TFormData, TResult> = {},
 ) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitCount, setSubmitCount] = useState(0);
-  const [values, setValues] = useState<T>((options.initialValues || {}) as T);
+  const [values, setValues] = useState<TFormData>((options.initialValues || {}) as TFormData);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
-  const lastSubmitRef = useRef<number>(0);
+  const lastSubmitRef = useRef(0);
 
   const {
     schema,
@@ -37,22 +43,31 @@ export const useFormSubmit = <T extends Record<string, any>>(
     preventDoubleSubmit = true,
   } = options;
 
-  const setFieldValue = useCallback((field: keyof T, value: any) => {
-    setValues(prev => ({ ...prev, [field]: value }));
-    // Clear error when field changes
-    setErrors(prev => {
-      const newErrors = { ...prev };
-      delete newErrors[field as string];
-      return newErrors;
-    });
-  }, []);
+  const setFieldValue = useCallback(
+    <TKey extends keyof TFormData>(field: TKey, value: TFormData[TKey]) => {
+      setValues((prev) => ({ ...prev, [field]: value }));
 
-  const setFieldTouched = useCallback((field: keyof T, isTouched = true) => {
-    setTouched(prev => ({ ...prev, [field]: isTouched }));
+      setErrors((prev) => {
+        if (!(field in prev)) {
+          return prev;
+        }
+
+        const next = { ...prev };
+        delete next[field as string];
+        return next;
+      });
+    },
+    [],
+  );
+
+  const setFieldTouched = useCallback((field: keyof TFormData, isTouched = true) => {
+    setTouched((prev) => ({ ...prev, [field]: isTouched }));
   }, []);
 
   const validateForm = useCallback((): boolean => {
-    if (!schema) return true;
+    if (!schema) {
+      return true;
+    }
 
     const result = schema.safeParse(values);
     if (result.success) {
@@ -60,35 +75,36 @@ export const useFormSubmit = <T extends Record<string, any>>(
       return true;
     }
 
-    const newErrors: Record<string, string> = {};
-    result.error.errors.forEach((error) => {
-      const path = error.path.join('.');
-      newErrors[path] = error.message;
+    const nextErrors: Record<string, string> = {};
+    result.error.errors.forEach((issue) => {
+      const path = issue.path.join('.');
+      nextErrors[path] = issue.message;
     });
-    setErrors(newErrors);
+    setErrors(nextErrors);
     return false;
   }, [schema, values]);
 
-  const handleSubmit = async (e?: React.FormEvent) => {
-    if (e) {
-      e.preventDefault();
-    }
-
-    // Mark all fields as touched
+  const markAllTouched = useCallback(() => {
     const allTouched: Record<string, boolean> = {};
-    Object.keys(values).forEach(key => {
+    Object.keys(values).forEach((key) => {
       allTouched[key] = true;
     });
     setTouched(allTouched);
+  }, [values]);
 
-    // Validate if schema provided
+  const handleSubmit = async (event?: FormEvent) => {
+    if (event) {
+      event.preventDefault();
+    }
+
+    markAllTouched();
+
     if (schema && !validateForm()) {
       log.warn('Form validation failed', 'useFormSubmit', { errors });
       toast.error('Please fix the errors in the form');
       return;
     }
 
-    // Prevent double submissions with timestamp check
     if (preventDoubleSubmit) {
       const now = Date.now();
       if (now - lastSubmitRef.current < 1000) {
@@ -97,8 +113,7 @@ export const useFormSubmit = <T extends Record<string, any>>(
       }
       lastSubmitRef.current = now;
     }
-    
-    // Prevent concurrent submission
+
     if (isSubmitting) {
       log.warn('Form submission already in progress', 'useFormSubmit');
       toast.warning('Please wait for the current submission to complete');
@@ -106,12 +121,12 @@ export const useFormSubmit = <T extends Record<string, any>>(
     }
 
     setIsSubmitting(true);
-    setSubmitCount(prev => prev + 1);
+    setSubmitCount((prev) => prev + 1);
     setErrors({});
 
     try {
-      let result: any;
-      
+      let result: TResult;
+
       if (enableRetry) {
         result = await withRetry(() => submitFn(values), {
           maxRetries: 2,
@@ -124,29 +139,24 @@ export const useFormSubmit = <T extends Record<string, any>>(
       } else {
         result = await submitFn(values);
       }
-      
+
       if (options.successMessage) {
         toast.success(options.successMessage);
       }
-      
-      if (options.onSuccess) {
-        options.onSuccess(result);
-      }
 
+      options.onSuccess?.(result);
       return result;
     } catch (error) {
       log.error('Form submission error', 'useFormSubmit', { error });
-      
-      const errorMessage = options.errorMessage || 
-        (error instanceof Error ? error.message : 'An error occurred');
-      
+
+      const normalizedError = error instanceof Error ? error : new Error(String(error));
+      const errorMessage =
+        options.errorMessage || normalizedError.message || 'An error occurred';
+
       toast.error(errorMessage);
-      
-      if (options.onError) {
-        options.onError(error as Error);
-      }
-      
-      throw error;
+      options.onError?.(normalizedError);
+
+      throw normalizedError;
     } finally {
       setIsSubmitting(false);
     }
@@ -154,10 +164,14 @@ export const useFormSubmit = <T extends Record<string, any>>(
 
   const clearError = useCallback((field?: string) => {
     if (field) {
-      setErrors(prev => {
-        const newErrors = { ...prev };
-        delete newErrors[field];
-        return newErrors;
+      setErrors((prev) => {
+        if (!(field in prev)) {
+          return prev;
+        }
+
+        const next = { ...prev };
+        delete next[field];
+        return next;
       });
     } else {
       setErrors({});
@@ -166,7 +180,7 @@ export const useFormSubmit = <T extends Record<string, any>>(
 
   const reset = useCallback(() => {
     setIsSubmitting(false);
-    setValues((options.initialValues || {}) as T);
+    setValues((options.initialValues || {}) as TFormData);
     setErrors({});
     setTouched({});
     lastSubmitRef.current = 0;

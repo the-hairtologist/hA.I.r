@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -104,19 +104,37 @@ export const QuickAppointmentDialog = ({
         await supabase.functions.invoke('send-sms-notification', {
           body: { appointmentId: newAppointment.id, notificationType: 'confirmation' },
         });
-      } catch {}
+<<<<<<< HEAD
+      } catch { /* Ignore notification errors */ }
+=======
+      } catch (error) {
+        logger.warn("Non-critical notification failed", error, { context: "QuickAppointmentDialog" });
+      }
+>>>>>>> copilot/fix-a11y-tester-and-comments
 
       try {
         await supabase.functions.invoke('send-appointment-confirmation', {
           body: { appointmentId: newAppointment.id },
         });
-      } catch {}
+<<<<<<< HEAD
+      } catch { /* Ignore notification errors */ }
+=======
+      } catch (error) {
+        logger.warn("Non-critical notification failed", error, { context: "QuickAppointmentDialog" });
+      }
+>>>>>>> copilot/fix-a11y-tester-and-comments
 
       try {
         await supabase.functions.invoke('sync-calendar-event', {
           body: { appointment_id: newAppointment.id, action: 'create' },
         });
-      } catch {}
+<<<<<<< HEAD
+      } catch { /* Ignore notification errors */ }
+=======
+      } catch (error) {
+        logger.warn("Non-critical notification failed", error, { context: "QuickAppointmentDialog" });
+      }
+>>>>>>> copilot/fix-a11y-tester-and-comments
     },
     {
       schema: quickAppointmentSchema,
@@ -347,3 +365,5 @@ export const QuickAppointmentDialog = ({
     </Dialog>
   );
 };
+
+

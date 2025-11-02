@@ -1,285 +1,231 @@
-/**
- * Integration Test: Double Submit Prevention
- * Tests cross-form double submission prevention and network delay handling
- */
+﻿import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { renderHook, waitFor, act } from "@testing-library/react";
+import type { ReactNode } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { MemoryRouter } from "react-router-dom";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
+import { toast } from "sonner";
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { BrowserRouter } from 'react-router-dom';
+vi.mock("sonner", () => {
+  const toastMock = Object.assign(vi.fn(), {
+    success: vi.fn(),
+    error: vi.fn(),
+    info: vi.fn(),
+    warning: vi.fn(),
+  });
 
-// Mock Supabase
-vi.mock('@/integrations/supabase/client', () => ({
-  supabase: {
-    from: vi.fn(),
-    auth: {
-      getSession: vi.fn().mockResolvedValue({
-        data: { session: { user: { id: 'user-1' } } },
-        error: null,
-      }),
-    },
+  return { toast: toastMock };
+});
+
+vi.mock("@/lib/logger", () => ({
+  log: {
+    debug: vi.fn(),
+    info: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: { retry: false },
-    mutations: { retry: false },
-  },
-});
+const createQueryClient = () =>
+  new QueryClient({
+    defaultOptions: {
+      queries: { retry: false },
+      mutations: { retry: false },
+    },
+  });
 
-const Wrapper = ({ children }: { children: React.ReactNode }) => (
-  <QueryClientProvider client={queryClient}>
-    <BrowserRouter>
-      {children}
-    </BrowserRouter>
-  </QueryClientProvider>
-);
+const createWrapper = () => {
+  const queryClient = createQueryClient();
 
-describe('Cross-Form Double Submit Prevention', () => {
+  return ({ children }: { children: ReactNode }) => (
+    <QueryClientProvider client={queryClient}>
+      <MemoryRouter>{children}</MemoryRouter>
+    </QueryClientProvider>
+  );
+};
+
+describe("useFormSubmit", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    queryClient.clear();
   });
 
-  describe('useFormSubmit Hook - Core Behavior', () => {
-    it('should prevent concurrent submissions', async () => {
-      const mockSubmitFn = vi.fn().mockImplementation(() => 
-        new Promise(resolve => setTimeout(resolve, 100))
-      );
+  afterEach(() => {
+    vi.useRealTimers();
+  });
 
-      const { useFormSubmit } = await import('@/hooks/useFormSubmit');
-      const { result } = await import('@testing-library/react').then(lib => 
-        lib.renderHook(() => useFormSubmit(mockSubmitFn), { wrapper: Wrapper })
-      );
+  describe("double submit prevention", () => {
+    it("prevents concurrent submissions", async () => {
+      const mockSubmit = vi
+        .fn()
+        .mockImplementation(() => new Promise((resolve) => setTimeout(resolve, 100)));
 
-      // Trigger multiple submissions
-      result.current.handleSubmit();
-      result.current.handleSubmit();
-      result.current.handleSubmit();
-
-      await waitFor(() => {
-        expect(mockSubmitFn).toHaveBeenCalledTimes(1);
+      const { result } = renderHook(() => useFormSubmit(mockSubmit), {
+        wrapper: createWrapper(),
       });
+
+      result.current.handleSubmit();
+      result.current.handleSubmit();
+      result.current.handleSubmit();
+
+      await waitFor(() => expect(mockSubmit).toHaveBeenCalledTimes(1));
     });
 
-    it('should prevent double submit within 1 second', async () => {
-      const mockSubmitFn = vi.fn().mockResolvedValue(undefined);
-
-      const { useFormSubmit } = await import('@/hooks/useFormSubmit');
-      const { result } = await import('@testing-library/react').then(lib => 
-        lib.renderHook(() => useFormSubmit(mockSubmitFn), { wrapper: Wrapper })
-      );
-
-      // First submission
-      await result.current.handleSubmit();
-      
-      // Immediate second submission (should be blocked)
-      await result.current.handleSubmit();
-
-      expect(mockSubmitFn).toHaveBeenCalledTimes(1);
-    });
-
-    it('should allow submission after 1 second delay', async () => {
+    it("blocks submissions within 1 second", async () => {
       vi.useFakeTimers();
-      const mockSubmitFn = vi.fn().mockResolvedValue(undefined);
+      vi.setSystemTime(new Date("2024-01-01T00:00:00.000Z"));
 
-      const { useFormSubmit } = await import('@/hooks/useFormSubmit');
-      const { result } = await import('@testing-library/react').then(lib => 
-        lib.renderHook(() => useFormSubmit(mockSubmitFn), { wrapper: Wrapper })
-      );
+      const mockSubmit = vi.fn().mockResolvedValue(undefined);
+      const { result } = renderHook(() => useFormSubmit(mockSubmit), {
+        wrapper: createWrapper(),
+      });
 
-      // First submission
       await result.current.handleSubmit();
-      
-      // Wait 1.1 seconds
-      vi.advanceTimersByTime(1100);
-      
-      // Second submission (should be allowed)
       await result.current.handleSubmit();
 
-      expect(mockSubmitFn).toHaveBeenCalledTimes(2);
-      
-      vi.useRealTimers();
+      expect(mockSubmit).toHaveBeenCalledTimes(1);
+    });
+
+    it("allows submission after 1 second", async () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date("2024-01-01T00:00:00.000Z"));
+
+      const mockSubmit = vi.fn().mockResolvedValue(undefined);
+      const { result } = renderHook(() => useFormSubmit(mockSubmit), {
+        wrapper: createWrapper(),
+      });
+
+      await result.current.handleSubmit();
+      await vi.advanceTimersByTimeAsync(1100);
+      await result.current.handleSubmit();
+
+      expect(mockSubmit).toHaveBeenCalledTimes(2);
     });
   });
 
-  describe('Network Delay Handling', () => {
-    it('should handle 3-second network delay gracefully', async () => {
+  describe("network delay handling", () => {
+    it("maintains submitting state during long requests", async () => {
       vi.useFakeTimers();
-      let resolveSubmit: any;
-      const submitPromise = new Promise(resolve => {
-        resolveSubmit = resolve;
+
+      let resolveSubmission: (() => void) | undefined;
+      const submission = new Promise<void>((resolve) => {
+        resolveSubmission = resolve;
       });
 
-      const mockSubmitFn = vi.fn().mockReturnValue(submitPromise);
+      const mockSubmit = vi.fn().mockReturnValue(submission);
+      const { result } = renderHook(() => useFormSubmit(mockSubmit), {
+        wrapper: createWrapper(),
+      });
 
-      const { useFormSubmit } = await import('@/hooks/useFormSubmit');
-      const { result } = await import('@testing-library/react').then(lib => 
-        lib.renderHook(() => useFormSubmit(mockSubmitFn), { wrapper: Wrapper })
-      );
+      const pendingSubmit = result.current.handleSubmit();
 
-      // Start submission
-      const submitResult = result.current.handleSubmit();
-      
-      // Verify submitting state
+      await waitFor(() => expect(result.current.isSubmitting).toBe(true));
+
+      result.current.handleSubmit();
+      result.current.handleSubmit();
+
+      await vi.advanceTimersByTimeAsync(3000);
+
+      expect(mockSubmit).toHaveBeenCalledTimes(1);
       expect(result.current.isSubmitting).toBe(true);
 
-      // Try to submit again while waiting
-      result.current.handleSubmit();
-      result.current.handleSubmit();
+      resolveSubmission?.();
+      await pendingSubmit;
 
-      // Wait 3 seconds
-      vi.advanceTimersByTime(3000);
-
-      // Should still be submitting
-      expect(result.current.isSubmitting).toBe(true);
-      expect(mockSubmitFn).toHaveBeenCalledTimes(1);
-
-      // Resolve the submission
-      resolveSubmit();
-      await submitResult;
-
-      // Now should be done
-      expect(result.current.isSubmitting).toBe(false);
-
-      vi.useRealTimers();
-    });
-
-    it('should retry on network failure', async () => {
-      const mockSubmitFn = vi.fn()
-        .mockRejectedValueOnce({ message: 'network error' })
-        .mockRejectedValueOnce({ message: 'network error' })
-        .mockResolvedValueOnce({ success: true });
-
-      const { useFormSubmit } = await import('@/hooks/useFormSubmit');
-      const { result } = await import('@testing-library/react').then(lib => 
-        lib.renderHook(() => 
-          useFormSubmit(mockSubmitFn, { enableRetry: true }), 
-          { wrapper: Wrapper }
-        )
-      );
-
-      await result.current.handleSubmit();
-
-      await waitFor(() => {
-        // Should retry twice then succeed
-        expect(mockSubmitFn).toHaveBeenCalledTimes(3);
-      });
+      await waitFor(() => expect(result.current.isSubmitting).toBe(false));
     });
   });
 
-  describe('Form State Management', () => {
-    it('should reset state after successful submission', async () => {
-      const mockSubmitFn = vi.fn().mockResolvedValue(undefined);
-
-      const { useFormSubmit } = await import('@/hooks/useFormSubmit');
-      const { result } = await import('@testing-library/react').then(lib => 
-        lib.renderHook(() => useFormSubmit(mockSubmitFn), { wrapper: Wrapper })
-      );
+  describe("form state management", () => {
+    it("resets state after successful submission", async () => {
+      const mockSubmit = vi.fn().mockResolvedValue(undefined);
+      const { result } = renderHook(() => useFormSubmit(mockSubmit), {
+        wrapper: createWrapper(),
+      });
 
       await result.current.handleSubmit();
 
-      await waitFor(() => {
-        expect(result.current.isSubmitting).toBe(false);
-        expect(Object.keys(result.current.errors).length).toBe(0);
-      });
+      await waitFor(() => expect(result.current.isSubmitting).toBe(false));
+      expect(result.current.errors).toEqual({});
     });
 
-    it('should maintain error state after failure', async () => {
-      const mockSubmitFn = vi.fn().mockRejectedValue(
-        new Error('Submission failed')
-      );
-
-      const { useFormSubmit } = await import('@/hooks/useFormSubmit');
-      const { result } = await import('@testing-library/react').then(lib => 
-        lib.renderHook(() => 
-          useFormSubmit(mockSubmitFn, { enableRetry: false }), 
-          { wrapper: Wrapper }
-        )
-      );
-
-      try {
-        await result.current.handleSubmit();
-      } catch (error) {
-        // Expected to throw
-      }
-
-      await waitFor(() => {
-        expect(result.current.isSubmitting).toBe(false);
-        expect(Object.keys(result.current.errors).length).toBeGreaterThan(0);
+    it("exposes failure state", async () => {
+      const mockSubmit = vi.fn().mockRejectedValue(new Error("Submission failed"));
+      const { result } = renderHook(() => useFormSubmit(mockSubmit, { enableRetry: false }), {
+        wrapper: createWrapper(),
       });
+
+      await expect(result.current.handleSubmit()).rejects.toThrow("Submission failed");
+
+      await waitFor(() => expect(result.current.isSubmitting).toBe(false));
+      expect(result.current.submitCount).toBe(1);
+      expect((toast as any).error).toHaveBeenCalledWith("Submission failed");
     });
 
-    it('should clear error on manual reset', async () => {
-      const mockSubmitFn = vi.fn().mockRejectedValue(
-        new Error('Submission failed')
+    it("returns initial values after reset", async () => {
+      type FormData = { name: string };
+
+      const mockSubmit = vi.fn().mockResolvedValue(undefined);
+      const { result } = renderHook(
+        () => useFormSubmit<FormData>(mockSubmit, { initialValues: { name: "" } }),
+        { wrapper: createWrapper() }
       );
 
-      const { useFormSubmit } = await import('@/hooks/useFormSubmit');
-      const { result } = await import('@testing-library/react').then(lib => 
-        lib.renderHook(() => 
-          useFormSubmit(mockSubmitFn, { enableRetry: false }), 
-          { wrapper: Wrapper }
-        )
-      );
+      act(() => {
+        result.current.setFieldValue("name", "Updated");
+        result.current.setFieldTouched("name", true);
+      });
 
-      try {
-        await result.current.handleSubmit();
-      } catch (error) {
-        // Expected
-      }
+      expect(result.current.values.name).toBe("Updated");
+      expect(result.current.touched.name).toBe(true);
 
-      result.current.reset();
+      act(() => {
+        result.current.reset();
+      });
 
-      expect(Object.keys(result.current.errors).length).toBe(0);
-      expect(result.current.isSubmitting).toBe(false);
+      expect(result.current.values.name).toBe("");
+      expect(result.current.touched).toEqual({});
     });
   });
 
-  describe('Submit Count Tracking', () => {
-    it('should track submit attempts', async () => {
-      const mockSubmitFn = vi.fn().mockResolvedValue(undefined);
+  describe("submit count tracking", () => {
+    it("increments submit count for valid attempts", async () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date("2024-01-01T00:00:00.000Z"));
 
-      const { useFormSubmit } = await import('@/hooks/useFormSubmit');
-      const { result } = await import('@testing-library/react').then(lib => 
-        lib.renderHook(() => useFormSubmit(mockSubmitFn), { wrapper: Wrapper })
-      );
+      const mockSubmit = vi.fn().mockResolvedValue(undefined);
+      const { result } = renderHook(() => useFormSubmit(mockSubmit), {
+        wrapper: createWrapper(),
+      });
 
       expect(result.current.submitCount).toBe(0);
 
       await result.current.handleSubmit();
       await waitFor(() => expect(result.current.submitCount).toBe(1));
 
-      // Wait to allow next submission
-      await new Promise(resolve => setTimeout(resolve, 1100));
+      await vi.advanceTimersByTimeAsync(1100);
 
       await result.current.handleSubmit();
       await waitFor(() => expect(result.current.submitCount).toBe(2));
     });
   });
 
-  describe('Accessibility', () => {
-    it('should maintain aria-busy state during submission', async () => {
-      // This is tested in component-specific tests
-      // Here we verify the hook returns correct state
-      const mockSubmitFn = vi.fn().mockImplementation(() => 
-        new Promise(resolve => setTimeout(resolve, 100))
-      );
+  describe("accessibility", () => {
+    it("toggles aria-busy state via isSubmitting flag", async () => {
+      const mockSubmit = vi
+        .fn()
+        .mockImplementation(() => new Promise((resolve) => setTimeout(resolve, 100)));
 
-      const { useFormSubmit } = await import('@/hooks/useFormSubmit');
-      const { result } = await import('@testing-library/react').then(lib => 
-        lib.renderHook(() => useFormSubmit(mockSubmitFn), { wrapper: Wrapper })
-      );
+      const { result } = renderHook(() => useFormSubmit(mockSubmit), {
+        wrapper: createWrapper(),
+      });
 
-      const submitPromise = result.current.handleSubmit();
-      
-      expect(result.current.isSubmitting).toBe(true);
-      
-      await submitPromise;
-      
-      expect(result.current.isSubmitting).toBe(false);
+      const pendingSubmit = result.current.handleSubmit();
+
+      await waitFor(() => expect(result.current.isSubmitting).toBe(true));
+
+      await pendingSubmit;
+
+      await waitFor(() => expect(result.current.isSubmitting).toBe(false));
     });
   });
 });

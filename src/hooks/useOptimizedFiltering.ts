@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Optimized Filtering Hook
  * Memoizes filtering and sorting operations for better performance
  */
@@ -105,7 +105,7 @@ export function useOptimizedClientFiltering(
       switch (sortBy) {
         case "name":
           return (a.full_name || "").localeCompare(b.full_name || "");
-        case "recent":
+        case "recent": {
           const dateA = a.last_appointment_date
             ? new Date(a.last_appointment_date).getTime()
             : 0;
@@ -113,7 +113,8 @@ export function useOptimizedClientFiltering(
             ? new Date(b.last_appointment_date).getTime()
             : 0;
           return dateB - dateA;
-        case "inactive":
+        }
+        case "inactive": {
           const daysA = a.last_appointment_date
             ? Math.floor(
                 (new Date().getTime() - new Date(a.last_appointment_date).getTime()) /
@@ -127,6 +128,7 @@ export function useOptimizedClientFiltering(
               )
             : 999999;
           return daysB - daysA;
+        }
         default:
           return 0;
       }
@@ -135,3 +137,5 @@ export function useOptimizedClientFiltering(
     return filtered;
   }, [clients, searchQuery, sortBy, riskFilter]);
 }
+
+

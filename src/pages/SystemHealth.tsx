@@ -1,4 +1,4 @@
-import { DashboardLayout } from "@/components/DashboardLayout";
+﻿import { DashboardLayout } from "@/components/DashboardLayout";
 import { SelfHealingMonitor } from "@/components/SelfHealingMonitor";
 import { AIRetentionDashboard } from "@/components/AIRetentionDashboard";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,10 +12,20 @@ import { useUserRole } from "@/hooks/useUserRole";
 import { Navigate } from "react-router-dom";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 
+interface SystemStatus {
+  initialized: boolean;
+  health: {
+    status: 'healthy' | 'degraded' | 'unhealthy';
+  };
+  errorRecovery: {
+    openCircuits: string[];
+  };
+}
+
 export default function SystemHealth() {
   const { user, loading: authLoading } = useAuth();
   const { isAdmin, loading: roleLoading } = useUserRole(user?.id);
-  const [status, setStatus] = useState<any>(null);
+  const [status, setStatus] = useState<SystemStatus | null>(null);
 
   // Always define the useEffect hook before any conditional returns
   useEffect(() => {
@@ -324,3 +334,4 @@ export default function SystemHealth() {
     </DashboardLayout>
   );
 }
+

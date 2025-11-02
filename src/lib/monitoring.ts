@@ -19,7 +19,8 @@
  */
 
 import * as Sentry from "@sentry/react";
-import type { ReactNode } from 'react';
+import type { ComponentType } from 'react';
+import type { Event as SentryEvent, EventHint, Transaction } from "@sentry/types";
 import { logger } from '@/lib/logger';
 
 // Lazy environment variable access to prevent build-time issues
@@ -78,7 +79,7 @@ export const initSentry = () => {
       ],
 
       // Add custom tags
-      beforeSend(event: any, hint: any) {
+      beforeSend(event: SentryEvent, hint?: EventHint) {
         if (event.request) {
           event.tags = {
             ...event.tags,
@@ -98,7 +99,7 @@ export const initSentry = () => {
 /**
  * Manually capture an error
  */
-export const captureError = (error: Error, context?: Record<string, any>) => {
+export const captureError = (error: Error, context?: Record<string, unknown>) => {
   if (!sentryInitialized) return;
 
   Sentry.captureException(error, {
@@ -140,7 +141,7 @@ export const clearUser = () => {
 /**
  * Add breadcrumb for debugging context
  */
-export const addBreadcrumb = (message: string, category: string, data?: Record<string, any>) => {
+export const addBreadcrumb = (message: string, category: string, data?: Record<string, unknown>) => {
   if (!sentryInitialized) return;
 
   Sentry.addBreadcrumb({
@@ -154,19 +155,25 @@ export const addBreadcrumb = (message: string, category: string, data?: Record<s
 /**
  * Start a performance transaction (span)
  */
-export const startTransaction = (name: string, operation: string) => {
-  if (!sentryInitialized) return null;
+export const startTransaction = (name: string, operation: string): Transaction | null => {
+  if (!sentryInitialized) {
+    return null;
+  }
 
-  return Sentry.startSpan({ name, op: operation }, (span) => span);
+  const transaction = Sentry.getCurrentHub().startTransaction({ name, op: operation });
+  return transaction ?? null;
 };
 
 /**
  * Wrap your router with Sentry (only available after installing @sentry/react)
  * Example: const SentryRoutes = withSentryRouting(Routes);
  */
-export const withSentryRouting = (component: any) => {
-  if (!sentryInitialized) return component;
-  return Sentry.withSentryRouting?.(component) || component;
+export const withSentryRouting = <T extends ComponentType<unknown>>(component: T): T => {
+  if (!sentryInitialized || !Sentry.withSentryRouting) {
+    return component;
+  }
+
+  return Sentry.withSentryRouting(component) as T;
 };
 
 /**
@@ -208,3 +215,14 @@ export const isSentryReady = () => sentryInitialized;
  * import { addBreadcrumb } from '@/lib/monitoring';
  * addBreadcrumb('User clicked checkout', 'user_action', { cartTotal: 99.99 });
  */
+
+
+
+
+
+
+
+
+
+
+

@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { getServicesByStylist } from "@/lib/queries/serviceQueries";
+import { getServicesByStylist, type StylistServiceSummary } from "@/lib/queries/serviceQueries";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { serviceSchema, type ServiceInput } from "@/lib/validation";
 import { StandardFormField } from "@/components/forms/StandardFormField";
@@ -17,14 +17,15 @@ import { PageHeader } from "@/components/PageHeader";
 import { HelpTooltip } from "@/components/HelpTooltip";
 import { ServiceTypeColorManager } from "@/components/ServiceTypeColorManager";
 import { ServiceTemplatesDialog } from "@/components/ServiceTemplatesDialog";
+import type { StylistProfile } from "@/types/common";
 
 const Services = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [services, setServices] = useState<any[]>([]);
-  const [stylistProfile, setStylistProfile] = useState<any>(null);
+  const [services, setServices] = useState<StylistServiceSummary[]>([]);
+  const [stylistProfile, setStylistProfile] = useState<StylistProfile | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [editingService, setEditingService] = useState<any>(null);
+  const [editingService, setEditingService] = useState<StylistServiceSummary | null>(null);
   
   // UI-only state (not form data)
   const [isActive, setIsActive] = useState(true);
@@ -43,6 +44,10 @@ const Services = () => {
     reset,
   } = useFormSubmit<ServiceInput>(
     async (data) => {
+      if (!stylistProfile) {
+        throw new Error("Stylist profile not loaded. Please refresh and try again.");
+      }
+
       const serviceData = {
         stylist_id: stylistProfile.id,
         service_name: data.service_name.trim(),
@@ -51,11 +56,10 @@ const Services = () => {
         price: data.price,
         is_active: isActive,
         require_deposit: requireDeposit,
-        deposit_amount: requireDeposit ? data.deposit_amount || 0 : 0,
-        deposit_type: requireDeposit ? data.deposit_type || 'fixed' : 'fixed',
-        buffer_time_minutes: useCustomBuffer && data.buffer_time_minutes 
-          ? data.buffer_time_minutes 
-          : null,
+        deposit_amount: requireDeposit ? data.deposit_amount ?? 0 : 0,
+        deposit_type: requireDeposit ? data.deposit_type ?? "fixed" : "fixed",
+        buffer_time_minutes:
+          useCustomBuffer && data.buffer_time_minutes ? data.buffer_time_minutes : null,
       };
 
       if (editingService) {
@@ -84,8 +88,8 @@ const Services = () => {
         deposit_type: "fixed",
         buffer_time_minutes: null,
       },
-      successMessage: editingService 
-        ? "Service updated successfully!" 
+      successMessage: editingService
+        ? "Service updated successfully!"
         : "Service added successfully!",
       onSuccess: () => {
         setDialogOpen(false);
@@ -94,13 +98,11 @@ const Services = () => {
     }
   );
 
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (!session) {
         navigate("/auth");
         return;
@@ -127,16 +129,19 @@ const Services = () => {
 
       setStylistProfile(stylist);
 
-      // Use optimized query with request deduplication
       const servicesData = await getServicesByStylist(stylist.id);
-      setServices(servicesData || []);
-    } catch (error: any) {
+      setServices(servicesData);
+    } catch (error: unknown) {
       console.error("Error loading data:", error);
       toast.error("Unable to load your services. Please refresh or check your connection.");
     } finally {
       setLoading(false);
     }
-  };
+  }, [navigate]);
+
+  useEffect(() => {
+    void loadData();
+  }, [loadData]);
 
   const resetForm = () => {
     reset();
@@ -146,43 +151,43 @@ const Services = () => {
     setEditingService(null);
   };
 
-  const handleEdit = (service: any) => {
+  const handleEdit = (service: StylistServiceSummary) => {
     setEditingService(service);
-    setFieldValue('service_name', service.service_name);
-    setFieldValue('description', service.description || "");
-    setFieldValue('duration_minutes', service.duration_minutes);
-    setFieldValue('price', service.price);
-    setFieldValue('deposit_amount', service.deposit_amount || 0);
-    setFieldValue('deposit_type', service.deposit_type || "fixed");
-    setFieldValue('buffer_time_minutes', service.buffer_time_minutes || null);
+    setFieldValue("service_name", service.service_name);
+    setFieldValue("description", service.description || "");
+    setFieldValue("duration_minutes", service.duration_minutes);
+    setFieldValue("price", Number(service.price));
+    setFieldValue("deposit_amount", service.deposit_amount ?? 0);
+    setFieldValue("deposit_type", service.deposit_type ?? "fixed");
+    setFieldValue("buffer_time_minutes", service.buffer_time_minutes ?? null);
     setIsActive(service.is_active);
-    setRequireDeposit(service.require_deposit || false);
+    setRequireDeposit(service.require_deposit ?? false);
     setUseCustomBuffer(service.buffer_time_minutes !== null);
     setDialogOpen(true);
   };
 
-
   const [serviceToDelete, setServiceToDelete] = useState<string | null>(null);
+  const serviceToDeleteRef = useRef<string | null>(null);
 
   const {
     handleSubmit: confirmDelete,
     isSubmitting: isDeletingService,
   } = useFormSubmit(
     async () => {
-      if (!serviceToDelete) return;
+      const targetServiceId = serviceToDeleteRef.current;
+      if (!targetServiceId) return;
       
-      const service = services.find(s => s.id === serviceToDelete);
+      const service = services.find(s => s.id === targetServiceId);
       const serviceName = service?.service_name || "this service";
       
       const { error } = await supabase
         .from("stylist_services")
         .delete()
-        .eq("id", serviceToDelete);
+        .eq("id", targetServiceId);
 
       if (error) throw error;
       
       await loadData();
-      setServiceToDelete(null);
     },
     {
       successMessage: "Service deleted successfully",
@@ -196,8 +201,14 @@ const Services = () => {
     
     if (!confirm(`Delete "${serviceName}"?\n\nThis action cannot be undone. Clients won't be able to book this service anymore.`)) return;
 
+    serviceToDeleteRef.current = serviceId;
     setServiceToDelete(serviceId);
-    await confirmDelete();
+    try {
+      await confirmDelete();
+    } finally {
+      serviceToDeleteRef.current = null;
+      setServiceToDelete(null);
+    }
   };
 
   if (loading) {
@@ -551,12 +562,12 @@ const Services = () => {
                           )}
                         </div>
                         <div>
-                          💰 ${parseFloat(service.price).toFixed(2)}
+                          💰 ${Number(service.price).toFixed(2)}
                           {service.require_deposit && (
                             <span className="ml-2 text-xs bg-yellow-300 text-foreground px-2 py-0.5 rounded-full border-2 border-foreground font-bold">
                               Requires ${service.deposit_type === 'percentage' 
-                                ? ((parseFloat(service.price) * service.deposit_amount) / 100).toFixed(2)
-                                : parseFloat(service.deposit_amount).toFixed(2)} deposit
+                                ? ((Number(service.price) * Number(service.deposit_amount ?? 0)) / 100).toFixed(2)
+                                : Number(service.deposit_amount ?? 0).toFixed(2)} deposit
                             </span>
                           )}
                         </div>
@@ -618,3 +629,21 @@ const Services = () => {
 };
 
 export default Services;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
