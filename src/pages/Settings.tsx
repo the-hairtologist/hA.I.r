@@ -345,8 +345,8 @@ const Settings = () => {
         setHasChanges(false);
       },
       {
-        successMessage: 'Profile updated successfully',
-        errorMessage: 'Failed to save profile',
+        successMessage: 'Locked in. Your profile is updated.',
+        errorMessage: 'That didn\'t save. One more time?',
       }
     );
 
@@ -455,8 +455,8 @@ const Settings = () => {
       setPasswordErrors({});
     },
     {
-      successMessage: 'Password updated successfully',
-      errorMessage: 'Failed to change password',
+      successMessage: 'Perfect. Your password is updated.',
+      errorMessage: 'That didn\'t work. Let\'s try that again.',
     }
   );
 

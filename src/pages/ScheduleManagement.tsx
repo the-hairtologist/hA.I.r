@@ -1460,7 +1460,7 @@ const ScheduleManagement = () => {
 
           <TabsContent value="blocked" className="space-y-6">
             <div className="flex justify-end">
-              <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+              <Dialog open={dialogOpen} onOpenChange={setDialogOpen} modal={true}>
                 <DialogTrigger asChild>
                   <Button>
                     <Plus className="h-4 w-4 mr-2" />

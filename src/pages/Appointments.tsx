@@ -148,8 +148,8 @@ const Appointments = () => {
         refetchAppointments();
       },
       {
-        successMessage: `${selectedAppointments.size} appointment${selectedAppointments.size !== 1 ? 's' : ''} completed`,
-        errorMessage: 'Failed to update appointments',
+        successMessage: `Perfect. ${selectedAppointments.size} appointment${selectedAppointments.size !== 1 ? 's' : ''} marked complete.`,
+        errorMessage: 'Couldn\'t update those. Let\'s try again.',
       }
     );
 
@@ -241,7 +241,15 @@ const Appointments = () => {
 
         setProfilesLoaded(true);
       } catch (error: any) {
-        toast.error('Unable to load your profile. Please refresh the page.');
+        if (!navigator.onLine) {
+          toast.error('You\'re offline. Reconnect to see appointments.', {
+            description: 'Your changes will sync when you\'re back online.',
+          });
+        } else {
+          toast.error('Couldn\'t load your profile. Let\'s give that another shot.', {
+            description: 'Try refreshing the page.',
+          });
+        }
       }
     };
 
@@ -277,9 +285,15 @@ const Appointments = () => {
         `You are now ${!stylistProfile.is_available ? 'accepting' : 'not accepting'} appointments`
       );
     } catch (error: any) {
-      toast.error(
-        'Unable to update your availability status. Please try again.'
-      );
+      if (!navigator.onLine) {
+        toast.error('You\'re offline. Changes saved locally.', {
+          description: 'Will sync when connection returns.',
+        });
+      } else {
+        toast.error('That didn\'t stick. One more time?', {
+          description: 'Try toggling your availability again.',
+        });
+      }
     }
   };
 
@@ -830,7 +844,7 @@ const Appointments = () => {
       </main>
 
       {/* Appointment Details Dialog */}
-      <Dialog open={detailsOpen} onOpenChange={setDetailsOpen}>
+      <Dialog open={detailsOpen} onOpenChange={setDetailsOpen} modal={true}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
             <DialogTitle>Appointment Details</DialogTitle>

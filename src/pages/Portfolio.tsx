@@ -27,12 +27,15 @@ import { PageHeader } from '@/components/PageHeader';
 import { Switch } from '@/components/ui/switch';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
 import { PortfolioSkeleton } from '@/components/LoadingSkeleton';
+import { PortfolioGridSkeleton } from '@/components/skeletons/PortfolioGridSkeleton';
 import { useRealtimeUpdates } from '@/hooks/useRealtimeUpdates';
 import { PortfolioInsights } from '@/components/PortfolioInsights';
 import { CameraCapture } from '@/components/CameraCapture';
 import { VoiceControl } from '@/components/VoiceControl';
 import { offlineQueue } from '@/lib/offlineQueue';
 import { OptimizedImage } from '@/components/OptimizedImage';
+import { EmptyState } from '@/components/EmptyState';
+import { networkErrors } from '@/lib/errorMessages';
 
 const BackgroundRemovalDialog = lazy(() =>
   import('@/components/BackgroundRemovalDialog').then(m => ({
@@ -232,7 +235,15 @@ const Portfolio = () => {
       await loadPhotos(stylistProfileId);
     } catch (error: any) {
       console.error('Upload error:', error);
-      toast.error('Failed to upload photo');
+      if (!navigator.onLine) {
+        toast.error('You\'re offline. Photo will upload when you reconnect.', {
+          description: 'Keep creating - we\'ll save it locally.',
+        });
+      } else {
+        toast.error('Couldn\'t upload that photo. Mind trying again?', {
+          description: 'Make sure your connection is stable.',
+        });
+      }
     } finally {
       setUploading(false);
     }
@@ -303,11 +314,7 @@ const Portfolio = () => {
               Showcase your best work to attract more clients
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(6)].map((_, i) => (
-              <PortfolioSkeleton key={i} />
-            ))}
-          </div>
+          <PortfolioGridSkeleton />
         </div>
       </DashboardLayout>
     );
@@ -488,34 +495,13 @@ const Portfolio = () => {
             Your Gallery ({photos.length} photos)
           </h2>
           {photos.length === 0 ? (
-            <Card className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-yellow-300">
-              <CardContent className="pt-6 text-center space-y-4">
-                <ImageIcon className="h-12 w-12 mx-auto text-foreground/60" />
-                <div>
-                  <p className="text-foreground font-sans font-bold text-lg mb-2">
-                    Start Building Your Portfolio
-                  </p>
-                  <p className="text-foreground/80 font-sans font-medium mb-4">
-                    Upload your best work to attract new clients
-                  </p>
-                </div>
-                <div className="text-left max-w-md mx-auto space-y-2 text-sm">
-                  <p className="text-foreground/90">
-                    <strong>What to upload:</strong>
-                  </p>
-                  <ul className="list-disc list-inside space-y-1 text-foreground/80">
-                    <li>Before & after transformations</li>
-                    <li>Color corrections and highlights</li>
-                    <li>Haircuts and styling techniques</li>
-                    <li>Special occasion styles</li>
-                  </ul>
-                  <p className="text-foreground/70 text-xs pt-2">
-                    💡 Tip: High-quality photos with good lighting showcase your
-                    work best
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
+            <EmptyState
+              icon={ImageIcon}
+              title="Start Building Your Portfolio"
+              description="Upload your best work to attract new clients. Showcase transformations, color work, cuts, and special occasion styles."
+              aria-label="No portfolio photos found"
+              gradient="bg-gradient-to-br from-yellow-400 to-orange-400"
+            />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {photos.map((photo, index) => (

@@ -350,7 +350,7 @@ const BookingPage = () => {
         </Card>
 
         {/* QR Code Dialog */}
-        <Dialog open={showQrDialog} onOpenChange={setShowQrDialog}>
+        <Dialog open={showQrDialog} onOpenChange={setShowQrDialog} modal={true}>
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
               <DialogTitle>Booking Page QR Code</DialogTitle>

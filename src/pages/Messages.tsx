@@ -36,6 +36,8 @@ import { format } from 'date-fns';
 import { NewConversationDialog } from '@/components/NewConversationDialog';
 import { KeyboardShortcutHint } from '@/components/KeyboardShortcut';
 import { logger } from '@/lib/logging/productionLogger';
+import { EmptyState } from '@/components/EmptyState';
+import { networkErrors } from '@/lib/errorMessages';
 
 const Messages = () => {
   const navigate = useNavigate();
@@ -181,7 +183,15 @@ const Messages = () => {
       await loadConversations(sessionUser.id);
     } catch (error: any) {
       console.error('Error loading data:', error);
-      toast.error('Error loading messages');
+      if (!navigator.onLine) {
+        toast.error('You\'re offline. Reconnect to see messages.', {
+          description: 'Your messages will sync when you\'re back online.',
+        });
+      } else {
+        toast.error('Couldn\'t load messages. Let\'s try that again.', {
+          description: 'Check your connection and refresh.',
+        });
+      }
     } finally {
       setLoading(false);
     }
@@ -349,8 +359,19 @@ const Messages = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <div className="h-screen flex flex-col bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400">
+        <PageHeader
+          title="Messages"
+          icon={<MessageSquare className="h-6 w-6" />}
+          backTo="/dashboard"
+          loading={true}
+        />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-2" />
+            <p className="text-sm text-muted-foreground">Loading messages...</p>
+          </div>
+        </div>
       </div>
     );
   }
@@ -387,24 +408,14 @@ const Messages = () => {
             </CardHeader>
             <CardContent className="flex-1 overflow-y-auto space-y-2">
               {conversations.length === 0 ? (
-                <div className="text-center py-8">
-                  <MessageSquare className="h-12 w-12 mx-auto mb-3 text-foreground/40" />
-                  <p className="text-sm font-sans font-semibold text-foreground mb-1">
-                    No conversations yet
-                  </p>
-                  <p className="text-xs font-sans text-foreground/70 mb-3">
-                    Start chatting with stylists or clients
-                  </p>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => setNewConversationOpen(true)}
-                    className="border-2 border-foreground"
-                  >
-                    <Plus className="h-3 w-3 mr-2" />
-                    Start a Chat
-                  </Button>
-                </div>
+                <EmptyState
+                  icon={MessageSquare}
+                  title="No Conversations Yet"
+                  description="Start chatting with stylists or clients"
+                  actionLabel="Start a Chat"
+                  onAction={() => setNewConversationOpen(true)}
+                  aria-label="No message conversations found"
+                />
               ) : (
                 conversations.map(conv => (
                   <div

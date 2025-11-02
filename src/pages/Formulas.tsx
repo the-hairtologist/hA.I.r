@@ -53,6 +53,7 @@ import {
 } from 'lucide-react';
 import { exportToCSV, formatDataForExport } from '@/lib/csvExport';
 import { SkeletonList } from '@/components/ui/skeleton-list';
+import { FormulaCardSkeleton } from '@/components/skeletons/FormulaCardSkeleton';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { AddClientDialog } from '@/components/AddClientDialog';
@@ -507,6 +508,7 @@ const Formulas = () => {
         <PageHeader
           title="Color Formulas"
           icon={<Beaker className="h-6 w-6" />}
+          loading={true}
           backTo="/dashboard"
         />
         <div className="space-y-6 px-4 py-6">

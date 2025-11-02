@@ -1008,7 +1008,7 @@ const Knowledge = () => {
         </div>
 
         {/* Save Formula Dialog */}
-        <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
+        <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog} modal={true}>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Save Formula</DialogTitle>
