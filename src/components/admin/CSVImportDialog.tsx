@@ -146,7 +146,7 @@ John Smith,john@example.com,(555) 987-6543,1985-10-20,straight,Allergic to certa
         toast.warning(`Imported ${success} clients with ${failed} errors`);
       }
     } catch (error: any) {
-      console.error('Import error:', error);
+      logger.error('Import error', 'CSVImportDialog', error);
       toast.error(error.message || 'Failed to import');
     } finally {
       setImporting(false);

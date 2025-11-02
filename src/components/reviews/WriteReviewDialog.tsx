@@ -12,6 +12,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 interface WriteReviewDialogProps {
   open: boolean;
@@ -92,7 +93,7 @@ export const WriteReviewDialog = ({
       setReviewText('');
       onSuccess?.();
     } catch (error: any) {
-      console.error('Error submitting review:', error);
+      logger.error('Error submitting review', 'WriteReviewDialog', error);
       toast.error(error.message || 'Failed to submit review');
     } finally {
       setSubmitting(false);

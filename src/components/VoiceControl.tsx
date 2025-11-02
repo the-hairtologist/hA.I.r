@@ -219,7 +219,7 @@ export const VoiceControl = ({
         icon: <Mic className="h-4 w-4" />,
       });
     } catch (error) {
-      console.error('Error starting recording:', error);
+      logger.error('Error starting recording', 'VoiceControl', error as Error);
 
       const errorMessage = 'Could not access microphone';
       let errorDescription = 'Check microphone permissions';

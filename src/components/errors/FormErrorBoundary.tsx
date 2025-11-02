@@ -6,6 +6,7 @@
 import React from 'react';
 import { AlertCircle, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { logger } from '@/lib/logger';
 import {
   Card,
   CardContent,
@@ -35,7 +36,10 @@ export class FormErrorBoundary extends React.Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('Form error:', error, errorInfo);
+    logger.error('Form error', 'FormErrorBoundary', {
+      error,
+      errorInfo: errorInfo.componentStack,
+    });
   }
 
   handleReset = () => {

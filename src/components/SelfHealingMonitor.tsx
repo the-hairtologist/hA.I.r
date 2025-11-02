@@ -18,6 +18,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Activity, CheckCircle, Database, Brain } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 export const SelfHealingMonitor = () => {
   const [metrics, setMetrics] = useState<any>(null);
@@ -42,7 +43,7 @@ export const SelfHealingMonitor = () => {
       });
       setLastCheck(new Date());
     } catch (error) {
-      console.error('Failed to load metrics:', error);
+      logger.error('Failed to load metrics', 'SelfHealingMonitor', error as Error);
     }
   };
 

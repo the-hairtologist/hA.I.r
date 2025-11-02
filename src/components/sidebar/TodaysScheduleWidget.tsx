@@ -8,6 +8,7 @@ import { Calendar, Clock, User, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
+import { logger } from '@/lib/logger';
 import { format, isToday, isTomorrow } from 'date-fns';
 
 interface Appointment {
@@ -71,7 +72,7 @@ export function TodaysScheduleWidget() {
 
         setAppointments(formattedData);
       } catch (error) {
-        console.error("Error fetching today's appointments:", error);
+        logger.error("Error fetching today's appointments", 'TodaysScheduleWidget', error as Error);
       } finally {
         setLoading(false);
       }

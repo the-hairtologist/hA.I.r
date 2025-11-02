@@ -3,6 +3,7 @@ import { Mic, MicOff, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 import { cn } from '@/lib/utils';
 import { haptic } from '@/platform/haptics';
 
@@ -67,7 +68,7 @@ export const VoiceInput = ({
         id: 'recording-toast',
       });
     } catch (error) {
-      console.error('Error starting recording:', error);
+      logger.error('Error starting recording', 'VoiceInput', error as Error);
 
       const errorMessage = 'Could not access microphone';
       let errorDescription = 'Check microphone permissions in browser settings';
@@ -131,7 +132,7 @@ export const VoiceInput = ({
         throw new Error('No transcription received');
       }
     } catch (error) {
-      console.error('Error processing audio:', error);
+      logger.error('Error processing audio', 'VoiceInput', error as Error);
       haptic.error();
       toast.error('Failed to transcribe audio');
     } finally {

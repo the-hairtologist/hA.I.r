@@ -11,6 +11,7 @@ import { formatDistanceToNow, isPast, format } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { logger } from '@/lib/logger';
 
 interface Appointment {
   id: string;
@@ -93,7 +94,7 @@ export function NextAppointmentBanner() {
         updateTimeUntil(appointment.appointment_date);
       }
     } catch (error) {
-      console.error('Error loading next appointment:', error);
+      logger.error('Error loading next appointment', 'NextAppointmentBanner', error as Error);
     } finally {
       setLoading(false);
     }
