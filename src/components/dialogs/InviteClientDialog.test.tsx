@@ -398,3 +398,12 @@ describe('InviteClientDialog - Success/Error Scenarios', () => {
     });
   });
 });
+
+<Button
+  type="submit"
+  onClick={handleSendInvite}
+  disabled={isSubmitting}
+  className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-bold uppercase tracking-wide ring-offset-background transition-all duration-200 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 border-2 border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] active:shadow-none active:translate-x-[3px] active:translate-y-[3px] focus-visible:ring-4 focus-visible:ring-primary/50 focus-visible:ring-offset-2 active:scale-[0.99] h-11 px-4 py-2 flex-1 min-h-[44px]"
+>
+  {isSubmitting ? 'Sending...' : 'Send Invite'}
+</Button>
