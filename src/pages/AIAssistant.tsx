@@ -781,7 +781,7 @@ const Knowledge = () => {
                       <div className="window-control bg-warning"></div>
                       <div className="window-control bg-accent"></div>
                     </div>
-                    <h2 className="text-primary-foreground font-pixel text-xs md:text-sm flex items-center gap-1 md:gap-2 truncate">
+                    <h2 className="text-primary-foreground font-pixel text-xs md:text-sm flex items-center gap-1 md:gap-2 truncate max-w-[calc(100%-80px)]">
                       <Sparkles className="h-3 w-3 md:h-4 md:w-4 flex-shrink-0" />
                       <span className="truncate">
                         AI Hair Pro

@@ -137,9 +137,9 @@ const ClientCardComponent = ({
         <div className="space-y-2 text-sm">
           {/* Email */}
           {client.email && (
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Mail className="h-4 w-4" aria-hidden="true" />
-              <span className="truncate">{client.email}</span>
+            <div className="flex items-center gap-2 text-muted-foreground min-w-0">
+              <Mail className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
+              <span className="truncate min-w-0">{client.email}</span>
             </div>
           )}
 

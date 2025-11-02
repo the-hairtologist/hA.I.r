@@ -162,9 +162,11 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                           )}
                         </div>
                         {item.description && (
-                          <p className="text-[11px] sm:text-xs text-muted-foreground truncate">
-                            {item.description}
-                          </p>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-[11px] sm:text-xs text-muted-foreground truncate">
+                              {item.description}
+                            </p>
+                          </div>
                         )}
                       </div>
                       <div className="flex-shrink-0 text-[11px] sm:text-xs text-muted-foreground">

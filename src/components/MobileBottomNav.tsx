@@ -116,7 +116,7 @@ const NavButton = ({
       {/* Label */}
       <span 
         className={cn(
-          "text-xs font-sans font-medium transition-all duration-200 truncate max-w-[70px]",
+          "text-xs font-sans font-medium transition-all duration-200 truncate max-w-[60px] sm:max-w-[70px]",
           active ? "text-primary scale-105" : "text-muted-foreground"
         )}
       >

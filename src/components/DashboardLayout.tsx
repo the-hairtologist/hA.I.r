@@ -285,7 +285,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                                   .slice(0, 2)}
                               </AvatarFallback>
                             </Avatar>
-                            <span className="hidden sm:inline truncate max-w-[100px] text-sm">
+                            <span className="hidden sm:inline truncate max-w-[100px] text-sm flex-shrink min-w-0">
                               {user?.user_metadata?.full_name ||
                                 user?.email?.split('@')[0] ||
                                 'Account'}

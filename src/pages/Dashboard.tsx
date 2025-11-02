@@ -711,7 +711,7 @@ const Dashboard = () => {
       <div className="w-full space-y-4 sm:space-y-6">
         <div className="mb-4 sm:mb-6 md:mb-8 window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 relative animate-fade-in-fast">
           <div className="window-titlebar">
-            <span className="text-background font-mono text-xs sm:text-sm md:text-base font-bold truncate max-w-[70vw]">
+            <span className="text-background font-mono text-xs sm:text-sm md:text-base font-bold truncate max-w-[calc(100%-80px)]">
               {new Date().toLocaleDateString('en-US', {
                 month: '2-digit',
                 day: '2-digit',
@@ -787,7 +787,7 @@ const Dashboard = () => {
                   </span>
                 </p>
               </div>
-              <div className="flex gap-2 w-full sm:w-auto">
+              <div className="flex gap-2 w-full sm:w-auto min-w-0">
                 <Button
                   size="sm"
                   variant="outline"
