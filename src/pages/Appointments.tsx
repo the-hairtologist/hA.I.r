@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useOptimizedCallback } from '@/hooks/useOptimizedCallback';
 import { useNavigate } from 'react-router-dom';
+import { usePerformance } from '@/hooks/usePerformance';
 import { supabase } from '@/integrations/supabase/client';
 import { useFormSubmit } from '@/hooks/useFormSubmit';
 import {
@@ -88,6 +89,14 @@ import { triggerAppointmentBooked } from '@/lib/zapierTriggers';
 import { AppointmentPhotoButton } from '@/components/AppointmentPhotoButton';
 
 const Appointments = () => {
+  // Performance tracking
+  usePerformance({
+    componentName: 'Appointments',
+    trackRenders: true,
+    trackMounts: true,
+    reportThreshold: 16,
+  });
+
   const navigate = useNavigate();
   const searchInputRef = useRef<HTMLInputElement>(null);
   const [stylistProfile, setStylistProfile] = useState<any>(null);

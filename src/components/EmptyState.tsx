@@ -10,6 +10,7 @@ interface EmptyStateProps {
   onAction?: () => void;
   className?: string;
   gradient?: string;
+  'aria-label'?: string;
 }
 
 export const EmptyState = ({
@@ -20,10 +21,13 @@ export const EmptyState = ({
   onAction,
   className = '',
   gradient = 'bg-gradient-purple-pink',
+  'aria-label': ariaLabel,
 }: EmptyStateProps) => {
   return (
     <Card
       className={`animate-fade-in brutal-border shadow-brutal-lg hover:shadow-brutal-xl transition-all duration-300 ${className}`}
+      role="status"
+      aria-label={ariaLabel || `${title}: ${description}`}
     >
       <CardContent className="flex flex-col items-center justify-center py-16 px-4 text-center">
         <div

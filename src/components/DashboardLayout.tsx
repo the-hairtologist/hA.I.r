@@ -348,10 +348,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             </div>
           </header>
 
-          {/* Main Content - CRITICAL: Prevent overflow */}
+          {/* Main Content - CRITICAL: Prevent overflow + bottom nav spacing */}
           <main
             id="main-content"
-            className="flex-1 w-full max-w-full overflow-y-auto overflow-x-hidden pb-20 md:pb-4"
+            className="flex-1 w-full max-w-full overflow-y-auto overflow-x-hidden pb-24 md:pb-4"
             role="main"
             aria-label="Main content"
           >

@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, lazy, Suspense } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { usePerformance } from '@/hooks/usePerformance';
 import { supabase } from '@/integrations/supabase/client';
 import {
   getPaymentsByStylist,
@@ -101,6 +102,14 @@ const loadCharts = async () => {
 };
 
 const Finance = () => {
+  // Performance tracking
+  usePerformance({
+    componentName: 'Finance',
+    trackRenders: true,
+    trackMounts: true,
+    reportThreshold: 16,
+  });
+
   const navigate = useNavigate();
   const location = useLocation();
   const [loading, setLoading] = useState(true);
@@ -332,9 +341,20 @@ const Finance = () => {
     };
   }, [payments, commissions, timePeriod]);
 
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
-    toast.success('Copied to clipboard!');
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast.success('Code copied!', {
+        icon: '✓',
+        duration: 2000,
+      });
+      // Add haptic feedback if available
+      if ('vibrate' in navigator) {
+        navigator.vibrate(50);
+      }
+    } catch (error) {
+      toast.error('Failed to copy');
+    }
   };
 
   const handleExportPayments = () => {
@@ -499,7 +519,7 @@ const Finance = () => {
                 </div>
               ) : (
                 <>
-                  <div className="h-[300px] w-full">
+                  <div className="h-[300px] w-full overflow-x-auto">
                     {ResponsiveContainer &&
                       LineChart &&
                       Line &&
@@ -508,7 +528,8 @@ const Finance = () => {
                       CartesianGrid &&
                       Tooltip &&
                       Legend && (
-                        <ResponsiveContainer width="100%" height="100%">
+                        <div style={{ minWidth: '320px', width: '100%', height: '300px' }}>
+                          <ResponsiveContainer width="100%" height="100%">
                           <LineChart
                             data={chartData}
                             margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
@@ -558,6 +579,7 @@ const Finance = () => {
                             />
                           </LineChart>
                         </ResponsiveContainer>
+                        </div>
                       )}
                   </div>
 

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { usePerformance } from '@/hooks/usePerformance';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useUserRole } from '@/hooks/useUserRole';
@@ -59,6 +60,14 @@ import { FormFieldError } from '@/components/FormFieldError';
 import { useDevMode } from '@/hooks/useDevMode';
 
 const Settings = () => {
+  // Performance tracking
+  usePerformance({
+    componentName: 'Settings',
+    trackRenders: true,
+    trackMounts: true,
+    reportThreshold: 16,
+  });
+
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
   const { roles, loading: roleLoading } = useUserRole(user?.id);

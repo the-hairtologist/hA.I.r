@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useCallback, memo } from 'react';
 import { useOptimizedCallback } from '@/hooks/useOptimizedCallback';
 import { useNavigate } from 'react-router-dom';
+import { usePerformance } from '@/hooks/usePerformance';
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
@@ -99,6 +100,14 @@ import { useClients } from '@/hooks/useClients';
 import { PageHeader } from '@/components/PageHeader';
 
 const Formulas = () => {
+  // Performance tracking
+  usePerformance({
+    componentName: 'Formulas',
+    trackRenders: true,
+    trackMounts: true,
+    reportThreshold: 16,
+  });
+
   const navigate = useNavigate();
   const [stylistId, setStylistId] = useState<string | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);

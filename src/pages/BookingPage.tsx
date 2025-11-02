@@ -73,9 +73,20 @@ const BookingPage = () => {
     ? `${window.location.origin}/stylist/${stylistProfile.id}/book`
     : '';
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(bookingUrl);
-    toast.success('Booking link copied!');
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(bookingUrl);
+      toast.success('Link copied!', {
+        icon: '✓',
+        duration: 2000,
+      });
+      // Add haptic feedback if available
+      if ('vibrate' in navigator) {
+        navigator.vibrate(50);
+      }
+    } catch (error) {
+      toast.error('Failed to copy link');
+    }
   };
 
   const shareLink = async () => {
@@ -115,9 +126,10 @@ const BookingPage = () => {
     window.location.href = `mailto:?subject=${subject}&body=${body}`;
   };
 
-  const copyInstagramLink = () => {
-    copyToClipboard();
+  const copyInstagramLink = async () => {
+    await copyToClipboard();
     toast.success('Link copied! Paste it in your Instagram bio or stories', {
+      icon: '✓',
       duration: 4000,
     });
   };

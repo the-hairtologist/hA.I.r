@@ -291,6 +291,109 @@ const Help = () => {
               </CardContent>
             </Card>
 
+            {/* Keyboard Shortcuts - NEW SECTION */}
+            {isStylist && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>⌨️ Keyboard Shortcuts</CardTitle>
+                  <p className="text-sm text-muted-foreground">
+                    Speed up your workflow with these keyboard shortcuts
+                  </p>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid gap-3">
+                    <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                      <span className="text-sm font-medium">Quick search</span>
+                      <div className="flex gap-1">
+                        <kbd className="px-2 py-1 bg-background rounded text-xs border">
+                          ⌘ / Ctrl
+                        </kbd>
+                        <span className="text-muted-foreground">+</span>
+                        <kbd className="px-2 py-1 bg-background rounded text-xs border">
+                          K
+                        </kbd>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                      <span className="text-sm font-medium">
+                        New appointment
+                      </span>
+                      <div className="flex gap-1">
+                        <kbd className="px-2 py-1 bg-background rounded text-xs border">
+                          ⌘ / Ctrl
+                        </kbd>
+                        <span className="text-muted-foreground">+</span>
+                        <kbd className="px-2 py-1 bg-background rounded text-xs border">
+                          N
+                        </kbd>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                      <span className="text-sm font-medium">Add new client</span>
+                      <div className="flex gap-1">
+                        <kbd className="px-2 py-1 bg-background rounded text-xs border">
+                          ⌘ / Ctrl
+                        </kbd>
+                        <span className="text-muted-foreground">+</span>
+                        <kbd className="px-2 py-1 bg-background rounded text-xs border">
+                          Shift
+                        </kbd>
+                        <span className="text-muted-foreground">+</span>
+                        <kbd className="px-2 py-1 bg-background rounded text-xs border">
+                          C
+                        </kbd>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                      <span className="text-sm font-medium">
+                        Show keyboard shortcuts
+                      </span>
+                      <div className="flex gap-1">
+                        <kbd className="px-2 py-1 bg-background rounded text-xs border">
+                          Shift
+                        </kbd>
+                        <span className="text-muted-foreground">+</span>
+                        <kbd className="px-2 py-1 bg-background rounded text-xs border">
+                          ?
+                        </kbd>
+                      </div>
+                    </div>
+                    <div className="space-y-2 mt-4">
+                      <p className="text-xs text-muted-foreground font-semibold">
+                        NAVIGATION SHORTCUTS (press G then...)
+                      </p>
+                      <div className="grid gap-2">
+                        <div className="flex items-center justify-between p-2 bg-muted/30 rounded">
+                          <span className="text-xs">Go to Dashboard</span>
+                          <kbd className="px-2 py-1 bg-background rounded text-xs border">
+                            G, D
+                          </kbd>
+                        </div>
+                        <div className="flex items-center justify-between p-2 bg-muted/30 rounded">
+                          <span className="text-xs">Go to Clients</span>
+                          <kbd className="px-2 py-1 bg-background rounded text-xs border">
+                            G, C
+                          </kbd>
+                        </div>
+                        <div className="flex items-center justify-between p-2 bg-muted/30 rounded">
+                          <span className="text-xs">Go to Appointments</span>
+                          <kbd className="px-2 py-1 bg-background rounded text-xs border">
+                            G, A
+                          </kbd>
+                        </div>
+                        <div className="flex items-center justify-between p-2 bg-muted/30 rounded">
+                          <span className="text-xs">Go to Messages</span>
+                          <kbd className="px-2 py-1 bg-background rounded text-xs border">
+                            G, M
+                          </kbd>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             {/* Help Articles */}
             <div>
               <h2 className="text-xl font-semibold mb-4">Help Articles</h2>
