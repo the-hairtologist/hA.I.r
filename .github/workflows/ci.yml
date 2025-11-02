@@ -82,13 +82,27 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const output = `#### 🧪 Test Results
+            const fs = require('fs');
+            let queryReport = '';
+            try {
+              const report = JSON.parse(fs.readFileSync('query-analysis-report.json', 'utf8'));
+              queryReport = `\n### 📊 Query Analysis
+              - Total queries: ${report.totalQueries}
+              - Components with queries: ${report.componentsWithQueries}
+              - Optimization opportunities: ${report.optimizationOpportunities}`;
+            } catch (e) {}
+            
+            const output = `#### ✅ CI/CD Results
             - ✅ Linting: Passed
             - ✅ Type Check: Passed
             - ✅ Security Audit: Completed
             - ✅ E2E Tests: Check artifacts for details
+            ${queryReport}
             
-            📊 [View full test report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`;
+            📊 [View full report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            
+            ---
+            💡 **Next steps:** Review performance and security warnings above`;
             
             github.rest.issues.createComment({
               issue_number: context.issue.number,
