@@ -101,7 +101,7 @@ export const getClientWithFormulas = async (clientId: string) => {
           `
           )
           .eq('id', clientId)
-          .single(),
+          .maybeSingle(),
 
         supabase
           .from('formulas')

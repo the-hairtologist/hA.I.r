@@ -101,7 +101,7 @@ export const fetchAppointmentById = async (
         .from('appointments')
         .select('*')
         .eq('id', appointmentId)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
       return data;
@@ -123,9 +123,10 @@ export const createAppointment = async (
         .from('appointments')
         .insert([appointmentData])
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      if (!data) throw new Error('Failed to create appointment');
 
       logger.info('Appointment created', {
         context: 'AppointmentAPI.create',
@@ -154,7 +155,7 @@ export const updateAppointment = async (
         .update(updates)
         .eq('id', id)
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
 
@@ -209,7 +210,7 @@ export const updateAppointmentStatus = async (
         .update({ status })
         .eq('id', appointmentId)
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
 

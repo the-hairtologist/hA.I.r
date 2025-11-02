@@ -153,7 +153,9 @@ export class ErrorBoundary extends Component<Props, State> {
                 )}
                 <div className="flex gap-2">
                   <Button
-                    onClick={() => (window.location.href = '/dashboard')}
+                    onClick={() => {
+                      window.location.href = '/dashboard';
+                    }}
                     variant={canRetry ? 'outline' : 'default'}
                     className="flex-1 brutal-button brutal-hover"
                   >

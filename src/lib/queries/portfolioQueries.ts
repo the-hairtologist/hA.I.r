@@ -51,7 +51,7 @@ export async function getPortfolioPhotoById(photoId: string) {
     `
     )
     .eq('id', photoId)
-    .single();
+    .maybeSingle();
 
   if (error) throw error;
   return data;

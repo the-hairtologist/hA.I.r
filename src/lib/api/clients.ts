@@ -122,7 +122,7 @@ export const fetchClientById = async (
         .from('client_profiles')
         .select('*')
         .eq('id', clientId)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
       return data;
@@ -144,9 +144,10 @@ export const createClient = async (
         .from('client_profiles')
         .insert([clientData])
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      if (!data) throw new Error('Failed to create client');
 
       logger.info('Client created successfully', {
         context: 'ClientAPI.create',
@@ -175,7 +176,7 @@ export const updateClient = async (
         .update(updates)
         .eq('id', id)
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
 

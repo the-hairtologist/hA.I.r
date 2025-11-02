@@ -53,13 +53,14 @@ export const QuickAddClientFAB = ({
           },
         ])
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      if (!newClient) throw new Error('Failed to create client');
 
       logger.info('Client added successfully', { clientId: newClient.id });
 
-      if (onClientAdded && newClient) {
+      if (onClientAdded) {
         onClientAdded(newClient.id);
       }
     },
