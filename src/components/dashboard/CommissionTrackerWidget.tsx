@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { supabase } from '@/integrations/supabase/client';
 import { useEnhancedAuth } from '@/contexts/EnhancedAuthContext';
 import { format } from 'date-fns';
+import { logger } from '@/lib/logger';
 
 interface Commission {
   id: string;
@@ -49,7 +50,7 @@ export function CommissionTrackerWidget() {
         status: c.status || 'pending'
       })));
     } catch (error) {
-      console.error('Error loading commissions:', error);
+      logger.error('Error loading commissions', 'CommissionTrackerWidget', error as Error);
     } finally {
       setLoading(false);
     }

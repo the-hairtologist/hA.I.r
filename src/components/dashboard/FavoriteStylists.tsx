@@ -5,6 +5,7 @@ import { Heart, MessageSquare, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useNavigate } from 'react-router-dom';
+import { logger } from '@/lib/logger';
 
 interface FavoriteStylistsProps {
   clientId: string;
@@ -73,7 +74,7 @@ export function FavoriteStylists({ clientId }: FavoriteStylistsProps) {
         setStylists(topStylists);
       }
     } catch (error) {
-      console.error('Error loading favorite stylists:', error);
+      logger.error('Error loading favorite stylists', 'FavoriteStylists', error as Error);
     } finally {
       setLoading(false);
     }

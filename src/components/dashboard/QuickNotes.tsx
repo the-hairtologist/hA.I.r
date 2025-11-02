@@ -6,6 +6,7 @@ import { StickyNote, Save } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
+import { logger } from '@/lib/logger';
 
 interface Note {
   id: string;
@@ -41,7 +42,7 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
       if (error) throw error;
       setNotes(data || []);
     } catch (error) {
-      console.error('Error loading notes:', error);
+      logger.error('Error loading notes', 'QuickNotes', error as Error);
       toast.error('Failed to load notes. Please try again.');
     } finally {
       setLoading(false);
@@ -73,7 +74,7 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
       setNewNote('');
       loadNotes();
     } catch (error) {
-      console.error('Error saving note:', error);
+      logger.error('Error saving note', 'QuickNotes', error as Error);
       toast.error('Failed to save note. Please try again.');
     }
   };

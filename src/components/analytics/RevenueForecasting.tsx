@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/card';
 import { TrendingUp, DollarSign, Users, Calendar } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { logger } from '@/lib/logger';
 
 interface RevenueForecast {
   id: string;
@@ -54,7 +55,7 @@ export function RevenueForecasting({ stylistId }: { stylistId: string }) {
         });
       }
     } catch (error) {
-      console.error('Error loading forecast:', error);
+      logger.error('Error loading forecast', 'RevenueForecasting', error as Error);
     } finally {
       setLoading(false);
     }

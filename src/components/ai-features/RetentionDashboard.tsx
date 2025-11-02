@@ -18,6 +18,7 @@ import {
   MessageSquare,
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 interface RetentionScore {
   id: string;
@@ -91,7 +92,7 @@ export function RetentionDashboard({ stylistId }: { stylistId: string }) {
 
       setStats({ atRisk, healthy, avgScore });
     } catch (error) {
-      console.error('Error loading retention scores:', error);
+      logger.error('Error loading retention scores', 'RetentionDashboard', error as Error);
       toast.error('Failed to load retention data');
     } finally {
       setLoading(false);

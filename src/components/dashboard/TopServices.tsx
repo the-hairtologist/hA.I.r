@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Award, Sparkles } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 interface TopServicesProps {
   stylistId: string;
@@ -61,7 +62,7 @@ export function TopServices({ stylistId }: TopServicesProps) {
         setServices(stats);
       }
     } catch (error) {
-      console.error('Error loading top services:', error);
+      logger.error('Error loading top services', 'TopServices', error as Error);
       toast.error('Failed to load service data');
     } finally {
       setLoading(false);

@@ -12,6 +12,7 @@ import {
   Heart,
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 interface AIInsight {
   id: string;
@@ -50,7 +51,7 @@ export function AIInsightsFeed({ stylistId }: { stylistId: string }) {
         confidence_score: insight.confidence_score || 0
       })));
     } catch (error) {
-      console.error('Error loading insights:', error);
+      logger.error('Error loading insights', 'AIInsightsFeed', error as Error);
     } finally {
       setLoading(false);
     }
@@ -68,7 +69,7 @@ export function AIInsightsFeed({ stylistId }: { stylistId: string }) {
       setInsights(insights.filter(i => i.id !== id));
       toast.success('Insight dismissed');
     } catch (error) {
-      console.error('Error dismissing insight:', error);
+      logger.error('Error dismissing insight', 'AIInsightsFeed', error as Error);
       toast.error('Failed to dismiss');
     }
   };

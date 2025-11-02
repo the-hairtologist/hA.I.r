@@ -10,6 +10,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { Loader2, Users, TrendingUp, Award } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { logger } from '@/lib/logger';
 
 interface ClientMetrics {
   totalClients: number;
@@ -131,7 +132,7 @@ export const RealClientMetrics = () => {
         topClients,
       });
     } catch (error) {
-      console.error('Error loading client metrics:', error);
+      logger.error('Error loading client metrics', 'RealClientMetrics', error as Error);
     } finally {
       setLoading(false);
     }

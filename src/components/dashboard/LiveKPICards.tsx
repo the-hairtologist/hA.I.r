@@ -5,6 +5,7 @@ import { Calendar, DollarSign, MessageSquare, TrendingUp } from 'lucide-react';
 import { format, startOfDay, endOfDay, startOfWeek, endOfWeek } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 interface LiveKPICardsProps {
   stylistId: string;
@@ -90,7 +91,7 @@ export const LiveKPICards = ({ stylistId, onCardClick }: LiveKPICardsProps) => {
         weekGrowth,
       });
     } catch (error) {
-      console.error('Error loading KPIs:', error);
+      logger.error('Error loading KPIs', 'LiveKPICards', error as Error);
       toast.error(
         "Unable to load today's metrics. Your data is safe - please refresh."
       );

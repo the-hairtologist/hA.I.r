@@ -12,6 +12,7 @@ import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { useEnhancedAuth } from '@/contexts/EnhancedAuthContext';
+import { logger } from '@/lib/logger';
 
 interface Milestone {
   id: string;
@@ -64,7 +65,7 @@ export function LoyaltyProgressWidget() {
         })) || []
       );
     } catch (error) {
-      console.error('Error loading loyalty data:', error);
+      logger.error('Error loading loyalty data', 'LoyaltyProgressWidget', error as Error);
     } finally {
       setLoading(false);
     }
