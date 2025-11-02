@@ -202,7 +202,7 @@ const Knowledge = () => {
 
       if (error) throw error;
 
-      toast.success('Formula saved successfully!');
+      toast.success('Locked in. One less thing to track.');
       setShowSaveDialog(false);
       setFormulaName('');
       setFormulaToSave('');
@@ -222,11 +222,11 @@ const Knowledge = () => {
 
       if (error) throw error;
 
-      toast.success('Formula deleted');
+      toast.success('Formula removed. All good.');
       loadSavedFormulas();
     } catch (error: any) {
       console.error('Error deleting formula:', error);
-      toast.error('Failed to delete formula');
+      toast.error("Couldn't delete that. Let's give it another shot.");
     }
   };
 
@@ -270,7 +270,7 @@ const Knowledge = () => {
       setAiMessages(messages);
     } catch (error: any) {
       console.error('Error loading conversation messages:', error);
-      toast.error('Failed to load conversation');
+      toast.error("Couldn't load that conversation. Mind trying again?");
     }
   };
 
@@ -412,7 +412,7 @@ const Knowledge = () => {
       });
     } catch (error: any) {
       console.error('Error loading client context:', error);
-      toast.error('Failed to load client data');
+      toast.error("Couldn't load that client's info. Let's try again.");
     }
   };
 

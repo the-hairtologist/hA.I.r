@@ -50,6 +50,7 @@ export default function AdminRevenue() {
         title="Revenue Analytics"
         icon={<DollarSign className="h-6 w-6" />}
         backTo="/dashboard"
+        loading={loading}
         actions={
           <Button variant="outline" className="gap-2">
             <Download className="h-4 w-4" />

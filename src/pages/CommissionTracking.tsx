@@ -3,6 +3,7 @@
  * Standalone page for detailed commission management
  */
 
+import { useState } from 'react';
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { CommissionTrackerWidget } from '@/components/dashboard/CommissionTrackerWidget';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,6 +14,7 @@ import { PageHeader } from '@/components/PageHeader';
 
 export default function CommissionTracking() {
   const navigate = useNavigate();
+  const [loading] = useState(false);
 
   return (
     <DashboardLayout>
@@ -20,6 +22,7 @@ export default function CommissionTracking() {
         title="Commission Tracking"
         icon={<DollarSign className="h-6 w-6" />}
         backTo="/dashboard"
+        loading={loading}
       />
       <div className="space-y-6 pb-8 px-4 py-6">
 

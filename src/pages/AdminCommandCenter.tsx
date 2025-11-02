@@ -157,8 +157,8 @@ export default function AdminCommandCenter() {
         context: 'AdminCommandCenter',
       });
       toast({
-        title: 'Error',
-        description: 'Failed to load dashboard data',
+        title: "Couldn't load data",
+        description: "Something slipped. Let's give that another shot.",
         variant: 'destructive',
       });
     } finally {

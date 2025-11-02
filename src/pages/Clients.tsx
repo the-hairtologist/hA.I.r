@@ -92,6 +92,7 @@ import { ReEngagementDialog } from '@/components/ReEngagementDialog';
 import { ClientActivityIndicator } from '@/components/ClientActivityIndicator';
 import { VirtualList } from '@/components/VirtualList';
 import { ClientCard } from '@/components/ClientCard';
+import { usePerformance } from '@/hooks/usePerformance';
 
 interface ClientProfile {
   id: string;
@@ -129,6 +130,14 @@ interface ClientFormula {
 }
 
 export default function Clients() {
+  // Performance tracking for this heavy list page
+  usePerformance({
+    componentName: 'Clients',
+    trackRenders: true,
+    trackMounts: true,
+    reportThreshold: 16,
+  });
+
   const navigate = useNavigate();
   const searchInputRef = useRef<HTMLInputElement>(null);
   const [stylistId, setStylistId] = useState<string | null>(null);

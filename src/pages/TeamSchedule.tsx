@@ -8,6 +8,7 @@ import { format, startOfWeek, addDays } from 'date-fns';
 import { TeamChat } from '@/components/TeamChat';
 import { PageHeader } from '@/components/PageHeader';
 import { DashboardLayout } from '@/components/DashboardLayout';
+import { toast } from 'sonner';
 
 interface TeamAppointment {
   id: string;
@@ -39,39 +40,55 @@ export default function TeamSchedule() {
   }, [stylistId, currentWeek]);
 
   const fetchStylistId = async () => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (!user) return;
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) {
+        toast.error("Looks like you're not signed in. Let's fix that.");
+        return;
+      }
 
-    const { data } = await supabase
-      .from('stylist_profiles')
-      .select('id')
-      .eq('user_id', user.id)
-      .maybeSingle();
+      const { data, error } = await supabase
+        .from('stylist_profiles')
+        .select('id')
+        .eq('user_id', user.id)
+        .maybeSingle();
 
-    if (data) setStylistId(data.id);
+      if (error) throw error;
+      if (data) setStylistId(data.id);
+    } catch (error) {
+      console.error('Failed to load stylist:', error);
+      toast.error("Couldn't load your profile. Mind trying again?");
+    }
   };
 
   const fetchTeamAppointments = async () => {
-    const weekStart = currentWeek;
-    const weekEnd = addDays(currentWeek, 7);
+    try {
+      const weekStart = currentWeek;
+      const weekEnd = addDays(currentWeek, 7);
 
-    const { data } = await supabase
-      .from('appointments')
-      .select(
+      const { data, error } = await supabase
+        .from('appointments')
+        .select(
+          `
+          *,
+          client_profiles(full_name),
+          stylist_profiles(business_name)
         `
-        *,
-        client_profiles(full_name),
-        stylist_profiles(business_name)
-      `
-      )
-      .gte('appointment_date', weekStart.toISOString())
-      .lt('appointment_date', weekEnd.toISOString())
-      .order('appointment_date', { ascending: true });
+        )
+        .gte('appointment_date', weekStart.toISOString())
+        .lt('appointment_date', weekEnd.toISOString())
+        .order('appointment_date', { ascending: true });
 
-    if (data) setAppointments(data as any);
-    setLoading(false);
+      if (error) throw error;
+      if (data) setAppointments(data as any);
+    } catch (error) {
+      console.error('Failed to load team schedule:', error);
+      toast.error("Couldn't load the schedule. Let's give that another shot.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(currentWeek, i));
@@ -87,6 +104,7 @@ export default function TeamSchedule() {
           title="Team Schedule"
           icon={<Users className="h-6 w-6" />}
           backTo="/dashboard"
+          loading={loading}
         />
         <div className="space-y-6 px-4 py-6">
 

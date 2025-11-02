@@ -290,7 +290,7 @@ const Auth = () => {
     dispatch({ type: 'CLEAR_ERRORS' });
 
     await updatePassword(state.newPassword);
-    toast.success('Password updated successfully!');
+    toast.success("Password updated. You're all set.");
     dispatch({ type: 'SET_RECOVERY_MODE', value: false });
     dispatch({ type: 'RESET_FORM' });
     navigate('/dashboard');

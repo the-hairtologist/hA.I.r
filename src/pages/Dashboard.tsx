@@ -24,6 +24,7 @@ import { startOfDay, endOfDay, startOfWeek, endOfWeek, format } from 'date-fns';
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { NotificationEnhancer } from '@/components/NotificationEnhancer';
 import { useAnalytics } from '@/hooks/useAnalytics';
+import { usePerformance } from '@/hooks/usePerformance';
 
 import { AppointmentTimerWidget } from '@/components/AppointmentTimerWidget';
 import { logger } from '@/lib/logging/productionLogger';
@@ -85,6 +86,14 @@ import {
 } from '@dnd-kit/sortable';
 
 const Dashboard = () => {
+  // Performance tracking for this heavy page
+  usePerformance({
+    componentName: 'Dashboard',
+    trackRenders: true,
+    trackMounts: true,
+    reportThreshold: 16,
+  });
+
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { user: authUser, loading: authLoading } = useAuth();
@@ -494,19 +503,19 @@ const Dashboard = () => {
       const newIndex = sections.findIndex(section => section.id === over.id);
       const newOrder = arrayMove(sections, oldIndex, newIndex);
       saveDashboardLayout(newOrder);
-      toast.success('Dashboard layout updated');
+      toast.success('Layout updated. Looking good!');
     }
   };
 
   const handleReset = async () => {
     await resetDashboardLayout();
     setIsEditMode(false);
-    toast.success('Dashboard layout reset to default');
+    toast.success('Back to defaults. Fresh start!');
   };
 
   const handleSave = () => {
     setIsEditMode(false);
-    toast.success('Dashboard layout saved');
+    toast.success('Perfect. Your layout is locked in.');
   };
 
   const loadPredictiveInsights = async (stylistId: string) => {

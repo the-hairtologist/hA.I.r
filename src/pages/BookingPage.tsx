@@ -184,7 +184,7 @@ const BookingPage = () => {
 
       if (error) throw error;
 
-      toast.success('Settings saved successfully!');
+      toast.success('Perfect. Your settings are locked in.');
       queryClient.invalidateQueries({ queryKey: ['stylist-profile'] });
     } catch (error) {
       console.error('Error saving settings:', error);
