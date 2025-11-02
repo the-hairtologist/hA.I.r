@@ -124,7 +124,7 @@ const ClientCardComponent = ({
 
           {/* Risk indicator (churn risk based on appointment history) */}
           <ClientRiskIndicator
-            lastAppointmentDate={client.last_appointment_date}
+            lastAppointmentDate={client.last_appointment_date ?? null}
             totalAppointments={appointmentCount}
             missedAppointments={missedAppointments}
           />

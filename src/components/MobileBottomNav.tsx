@@ -99,7 +99,6 @@ const NavButton = ({
               active ? "text-on-surface-primary" : "text-muted-foreground",
               item.highlight && !active && "text-primary/60"
             )} 
-            strokeWidth={active ? 2.5 : 2}
             aria-hidden="true"
           />
         </div>

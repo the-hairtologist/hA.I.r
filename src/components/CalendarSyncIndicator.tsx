@@ -49,7 +49,13 @@ export function CalendarSyncIndicator() {
         .maybeSingle();
 
       if (error && error.code !== 'PGRST116') throw error;
-      setConnection(data);
+      if (data) {
+        setConnection({
+          ...data,
+          is_active: data.is_active ?? false,
+          sync_enabled: (data as any).sync_enabled ?? false,
+        });
+      }
     } catch (error) {
       console.error('Error loading calendar connection:', error);
     } finally {

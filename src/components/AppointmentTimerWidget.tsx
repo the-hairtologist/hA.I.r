@@ -79,9 +79,7 @@ export function AppointmentTimerWidget() {
         setActiveSession(result.data as TimerSession);
       }
     } catch (error) {
-      logger.error('Error loading timer session', error, {
-        component: 'AppointmentTimerWidget',
-      });
+      logger.error('Error loading timer session', { component: 'AppointmentTimerWidget', error });
       userJourney.trackError(error as Error, { action: 'load-timer-session' });
     }
   };
@@ -110,9 +108,10 @@ export function AppointmentTimerWidget() {
       userJourney.trackAction('Timer Started', { appointmentId });
       toast.success('Timer started');
     } catch (error: any) {
-      logger.error('Error starting timer', error, {
+      logger.error('Error starting timer', {
         component: 'AppointmentTimerWidget',
         appointmentId,
+        error,
       });
       userJourney.trackError(error, { action: 'start-timer' });
       toast.error('Failed to start timer');
@@ -153,9 +152,10 @@ export function AppointmentTimerWidget() {
       setElapsed(0);
       setIsPaused(false);
     } catch (error: any) {
-      logger.error('Error stopping timer', error, {
+      logger.error('Error stopping timer', {
         component: 'AppointmentTimerWidget',
         timerId: activeSession.id,
+        error,
       });
       userJourney.trackError(error, { action: 'stop-timer' });
       toast.error('Failed to stop timer');

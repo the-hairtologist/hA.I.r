@@ -232,41 +232,41 @@ export const RebookDialog = ({
           console.error('Zapier webhook failed:', zapierError);
           // Don't block success if Zapier fails
         }
-      }
 
-      // Send SMS notification for the rebooked appointment
-      try {
-        await supabase.functions.invoke('send-sms-notification', {
-          body: {
-            appointmentId: newAppointment.id,
-            notificationType: 'confirmation',
-          },
-        });
-      } catch (smsError) {
-        console.error('SMS notification failed:', smsError);
-      }
+        // Send SMS notification for the rebooked appointment
+        try {
+          await supabase.functions.invoke('send-sms-notification', {
+            body: {
+              appointmentId: newAppointment.id,
+              notificationType: 'confirmation',
+            },
+          });
+        } catch (smsError) {
+          console.error('SMS notification failed:', smsError);
+        }
 
-      // Send email confirmation
-      try {
-        await supabase.functions.invoke('send-appointment-confirmation', {
-          body: {
-            appointmentId: newAppointment.id,
-          },
-        });
-      } catch (emailError) {
-        console.error('Email notification failed:', emailError);
-      }
+        // Send email confirmation
+        try {
+          await supabase.functions.invoke('send-appointment-confirmation', {
+            body: {
+              appointmentId: newAppointment.id,
+            },
+          });
+        } catch (emailError) {
+          console.error('Email notification failed:', emailError);
+        }
 
-      // Sync to calendar
-      try {
-        await supabase.functions.invoke('sync-calendar-event', {
-          body: {
-            appointment_id: newAppointment.id,
-            action: 'create',
-          },
-        });
-      } catch (calendarError) {
-        console.error('Calendar sync failed:', calendarError);
+        // Sync to calendar
+        try {
+          await supabase.functions.invoke('sync-calendar-event', {
+            body: {
+              appointment_id: newAppointment.id,
+              action: 'create',
+            },
+          });
+        } catch (calendarError) {
+          console.error('Calendar sync failed:', calendarError);
+        }
       }
 
       toast.success(

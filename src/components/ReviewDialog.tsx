@@ -165,7 +165,7 @@ export const ReviewDialog = ({
             label="Your Review"
             type="textarea"
             value={values.review_text || ''}
-            onChange={value => setFieldValue('review_text', value)}
+            onChange={value => setFieldValue('review_text', String(value))}
             onBlur={() => setFieldTouched('review_text')}
             error={errors.review_text}
             touched={touched.review_text}

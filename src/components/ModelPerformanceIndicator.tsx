@@ -126,11 +126,11 @@ export const ModelPerformanceIndicator = ({
             <TooltipTrigger>
               <Badge variant="outline" className={speedInfo.color}>
                 <Clock className="h-3 w-3 mr-1" />
-                {speedInfo.text} ({(responseTimeMs / 1000).toFixed(1)}s)
+                {speedInfo.text} ({((responseTimeMs ?? 0) / 1000).toFixed(1)}s)
               </Badge>
             </TooltipTrigger>
             <TooltipContent>
-              <p className="text-sm">Response time: {responseTimeMs}ms</p>
+              <p className="text-sm">Response time: {responseTimeMs ?? 0}ms</p>
               <p className="text-xs text-muted-foreground mt-1">
                 Smart routing optimizes cost and speed
               </p>

@@ -120,12 +120,7 @@ const App = () => {
                     <Sonner />
                     <CookieConsent />
                     <GlobalAnnouncer />
-                    <BrowserRouter
-                      future={{
-                        v7_startTransition: true,
-                        v7_relativeSplatPath: true,
-                      }}
-                    >
+                    <BrowserRouter>
                       <ScrollToTopButton />
                       <EnhancedAuthProvider>
                         <AnalyticsInitializer />

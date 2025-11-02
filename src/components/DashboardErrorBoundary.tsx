@@ -42,13 +42,13 @@ export class DashboardErrorBoundary extends Component<Props, State> {
     import('@/lib/logging/productionLogger').then(({ logger }) => {
       logger.error('Dashboard Error', error, {
         component: 'DashboardErrorBoundary',
-        componentStack: errorInfo.componentStack,
+        componentStack: errorInfo.componentStack || undefined,
       });
     });
     import('@/lib/logging/userJourneyTracker').then(({ userJourney }) => {
       userJourney.trackError(error, {
         boundary: 'Dashboard',
-        componentStack: errorInfo.componentStack,
+        componentStack: errorInfo.componentStack || undefined,
       });
     });
     this.setState({

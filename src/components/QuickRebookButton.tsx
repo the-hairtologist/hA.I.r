@@ -73,9 +73,12 @@ export const QuickRebookButton = ({
 
       // Find next available slot
       const dayOfWeek = suggestedDate.getDay();
-      const daySchedule = schedule?.weekly_schedule?.[dayOfWeek];
+      const weeklySchedule = schedule?.weekly_schedule;
+      const daySchedule = weeklySchedule && typeof weeklySchedule === 'object' 
+        ? (weeklySchedule as Record<string, any>)[dayOfWeek.toString()] 
+        : null;
 
-      if (daySchedule?.is_available && daySchedule.slots?.length > 0) {
+      if (daySchedule?.is_available && Array.isArray(daySchedule.slots) && daySchedule.slots.length > 0) {
         const firstSlot = daySchedule.slots[0];
         const appointmentTime = new Date(suggestedDate);
         const [hours, minutes] = firstSlot.start.split(':');

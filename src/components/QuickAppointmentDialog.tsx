@@ -114,45 +114,55 @@ export const QuickAppointmentDialog = ({
             price: selectedServiceData.price,
           });
         } catch (zapierError) {
-          logger.warn("Zapier webhook failed", zapierError, {
+          logger.warn("Zapier webhook failed", {
             context: "QuickAppointmentDialog",
             stylistId,
-            appointmentId: newAppointment.id,
+            appointmentId: newAppointment?.id,
+            error: zapierError,
           });
         }
       }
 
       // Send notifications (non-blocking)
       try {
-        await supabase.functions.invoke('send-sms-notification', {
-          body: { appointmentId: newAppointment.id, notificationType: 'confirmation' },
-        });
+        if (newAppointment) {
+          await supabase.functions.invoke('send-sms-notification', {
+            body: { appointmentId: newAppointment.id, notificationType: 'confirmation' },
+          });
+        }
       } catch (notificationError) {
-        logger.warn("SMS notification failed", notificationError, {
+        logger.warn("SMS notification failed", {
           context: "QuickAppointmentDialog",
-          appointmentId: newAppointment.id,
+          appointmentId: newAppointment?.id,
+          error: notificationError,
         });
       }
 
       try {
-        await supabase.functions.invoke('send-appointment-confirmation', {
-          body: { appointmentId: newAppointment.id },
-        });
+        if (newAppointment) {
+          await supabase.functions.invoke('send-appointment-confirmation', {
+            body: { appointmentId: newAppointment.id },
+          });
+        }
       } catch (emailError) {
-        logger.warn("Email confirmation failed", emailError, {
+        logger.warn("Email confirmation failed", {
           context: "QuickAppointmentDialog",
-          appointmentId: newAppointment.id,
+          appointmentId: newAppointment?.id,
+          error: emailError,
         });
       }
 
       try {
-        await supabase.functions.invoke('sync-calendar-event', {
-          body: { appointment_id: newAppointment.id, action: 'create' },
-        });
+        if (newAppointment) {
+          await supabase.functions.invoke('sync-calendar-event', {
+            body: { appointment_id: newAppointment.id, action: 'create' },
+          });
+        }
       } catch (calendarError) {
-        logger.warn("Calendar sync failed", calendarError, {
+        logger.warn("Calendar sync failed", {
           context: "QuickAppointmentDialog",
-          appointmentId: newAppointment.id,
+          appointmentId: newAppointment?.id,
+          error: calendarError,
         });
       }
     },
@@ -377,7 +387,7 @@ export const QuickAppointmentDialog = ({
             label="Notes (Optional)"
             type="textarea"
             value={values.notes || ""}
-            onChange={(val) => setFieldValue('notes', val)}
+            onChange={(val) => setFieldValue('notes', String(val))}
             onBlur={() => setFieldTouched('notes')}
             error={errors.notes}
             touched={touched.notes}
