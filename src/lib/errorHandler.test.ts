@@ -119,10 +119,6 @@ describe('errorHandler', () => {
   });
 
   describe('withRetry', () => {
-    beforeEach(() => {
-      vi.useFakeTimers();
-    });
-
     afterEach(() => {
       vi.restoreAllMocks();
     });
