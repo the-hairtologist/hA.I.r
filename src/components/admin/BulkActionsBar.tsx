@@ -26,6 +26,7 @@ import {
 import { X, Trash2, Mail, CheckCircle, XCircle, Download } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 interface BulkActionsBarProps {
   selectedIds: string[];
@@ -83,7 +84,7 @@ export function BulkActionsBar({
       onRefresh?.();
       setShowConfirmDialog(false);
     } catch (error: any) {
-      console.error('Bulk action error:', error);
+      logger.error('Bulk action failed', 'BulkActionsBar', error);
       toast.error(error.message || 'Failed to perform bulk action');
     } finally {
       setLoading(false);

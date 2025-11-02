@@ -22,6 +22,7 @@ import { useSmartAutomation } from '@/hooks/useSmartAutomation';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { format } from 'date-fns';
+import { logger } from '@/lib/logger';
 
 interface ReEngagementDialogProps {
   selectedClients: Array<{
@@ -103,10 +104,10 @@ export const ReEngagementDialog: React.FC<ReEngagementDialogProps> = ({
           } else {
             errorCount++;
           }
-        } catch (error) {
-          logger.error('Failed to send message', error, { component: 'ReEngagementDialog', clientId: client.id, clientName: client.full_name });
-          errorCount++;
-        }
+          } catch (error) {
+            logger.error('Failed to send message', 'ReEngagementDialog', error);
+            errorCount++;
+          }
       }
 
       if (successCount > 0) {
@@ -123,7 +124,7 @@ export const ReEngagementDialog: React.FC<ReEngagementDialogProps> = ({
       setOpen(false);
       setCustomMessage('');
     } catch (error) {
-      logger.error('Error sending messages', error, { component: 'ReEngagementDialog', clientCount: selectedClients.length });
+      logger.error('Error sending messages', 'ReEngagementDialog', error);
       toast.error('Failed to send messages');
     } finally {
       setSending(false);

@@ -22,6 +22,7 @@ import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { format } from 'date-fns';
+import { logger } from '@/lib/logger';
 
 interface WaitlistEntry {
   id: string;
@@ -80,7 +81,7 @@ export function WaitlistDialog() {
       if (error) throw error;
       setEntries((data || []) as WaitlistEntry[]);
     } catch (error) {
-      console.error('Error loading waitlist:', error);
+      logger.error('Failed to load waitlist', 'WaitlistDialog', error);
     } finally {
       setLoading(false);
     }
@@ -126,7 +127,7 @@ export function WaitlistDialog() {
       });
       loadWaitlist();
     } catch (error: any) {
-      console.error('Error adding to waitlist:', error);
+      logger.error('Failed to add to waitlist', 'WaitlistDialog', error);
       toast.error(error.message || 'Failed to add to waitlist');
     } finally {
       setLoading(false);
@@ -144,7 +145,7 @@ export function WaitlistDialog() {
       toast.success('Removed from waitlist');
       loadWaitlist();
     } catch (error: any) {
-      console.error('Error removing from waitlist:', error);
+      logger.error('Failed to remove from waitlist', 'WaitlistDialog', error);
       toast.error('Failed to remove from waitlist');
     }
   };

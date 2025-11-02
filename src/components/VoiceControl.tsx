@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import { haptic } from '@/platform/haptics';
 import { PrivacyConsentDialog, getStoredConsent } from './PrivacyConsentDialog';
 import { MediaErrorBoundary } from './MediaErrorBoundary';
+import { logger } from '@/lib/logger';
 
 interface VoiceControlProps {
   onTranscription: (text: string, metadata?: VoiceMetadata) => void;
@@ -310,7 +311,7 @@ export const VoiceControl = ({
         throw new Error('No transcription received');
       }
     } catch (error) {
-      console.error('Error processing audio:', error);
+      logger.error('Failed to process audio', 'VoiceControl', error);
       await haptic.error();
       toast.error('Failed to transcribe audio', {
         description: 'Please try again or check your connection',

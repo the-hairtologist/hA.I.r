@@ -18,6 +18,7 @@ import { format } from 'date-fns';
 import { AlertCircle, Send, Calendar, Clock, User } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 interface ConflictingAppointment {
   id: string;
@@ -83,10 +84,7 @@ export function VacationConflictDialog({
               },
             });
           } catch (error) {
-            console.error(
-              `Failed to send notification for appointment ${appointmentId}:`,
-              error
-            );
+            logger.error('Failed to send notification for appointment', 'VacationConflictDialog', error);
           }
         }
       );
@@ -99,7 +97,7 @@ export function VacationConflictDialog({
       onConfirm();
       onOpenChange(false);
     } catch (error) {
-      console.error('Error sending notifications:', error);
+      logger.error('Error sending vacation conflict notifications', 'VacationConflictDialog', error);
       toast.error('Some notifications failed to send');
     } finally {
       setSending(false);

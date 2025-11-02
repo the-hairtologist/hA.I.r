@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Code, Activity, Database, Zap } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 interface PerformanceMetrics {
   pageLoadTime: number;
@@ -59,7 +60,7 @@ export const DeveloperPanel = () => {
 
       setRecentQueries(data || []);
     } catch (error) {
-      console.error('Error loading audit logs:', error);
+      logger.error('Failed to load audit logs', 'DeveloperPanel', error);
     }
   };
 
