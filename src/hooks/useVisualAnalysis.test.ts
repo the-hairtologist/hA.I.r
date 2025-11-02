@@ -3,7 +3,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { renderHook } from '@testing-library/react';
+import { renderHook, act, waitFor } from '@testing-library/react';
 import { useVisualAnalysis } from './useVisualAnalysis';
 
 vi.mock('@/integrations/supabase/client', () => ({

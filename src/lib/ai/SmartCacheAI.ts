@@ -208,7 +208,12 @@ class SmartCacheAISystem {
    */
   async optimize(): Promise<{
     applied: number;
-    insights: ReturnType<typeof this.getInsights>;
+    insights: {
+      totalPatterns: number;
+      highPriorityData: number;
+      predictablePatterns: number;
+      recommendations: number;
+    };
   }> {
     const recommendations = this.getRecommendations();
     const applied = await this.applyRecommendations(recommendations);

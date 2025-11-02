@@ -22,8 +22,8 @@ export async function validatedInsert<T extends z.ZodTypeAny>(
       : schema.parse(data);
 
     const { data: result, error } = await supabase
-      .from(table)
-      .insert(validatedData)
+      .from(table as any)
+      .insert(validatedData as any)
       .select();
 
     if (error) throw error;
@@ -40,11 +40,11 @@ export async function validatedInsert<T extends z.ZodTypeAny>(
       logger.error('Validation failed on insert', error, {
         context: 'validatedSupabase',
         table,
-        validationErrors: error.errors,
+        validationErrors: error.issues,
       });
       return {
         data: null,
-        error: new Error(`Validation failed: ${error.errors.map(e => e.message).join(', ')}`),
+        error: new Error(`Validation failed: ${error.issues.map(e => e.message).join(', ')}`),
       };
     }
 
@@ -68,12 +68,12 @@ export async function validatedUpdate<T extends z.ZodTypeAny>(
 ) {
   try {
     // Use partial schema for updates (all fields optional)
-    const partialSchema = schema.partial();
+    const partialSchema = (schema as any).partial ? (schema as any).partial() : schema;
     const validatedData = partialSchema.parse(data);
 
     const { data: result, error } = await supabase
-      .from(table)
-      .update(validatedData)
+      .from(table as any)
+      .update(validatedData as any)
       .eq(matcher.column, matcher.value)
       .select();
 
@@ -91,11 +91,11 @@ export async function validatedUpdate<T extends z.ZodTypeAny>(
       logger.error('Validation failed on update', error, {
         context: 'validatedSupabase',
         table,
-        validationErrors: error.errors,
+        validationErrors: error.issues,
       });
       return {
         data: null,
-        error: new Error(`Validation failed: ${error.errors.map(e => e.message).join(', ')}`),
+        error: new Error(`Validation failed: ${error.issues.map(e => e.message).join(', ')}`),
       };
     }
 

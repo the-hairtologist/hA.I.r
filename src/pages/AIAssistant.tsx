@@ -301,6 +301,7 @@ const Knowledge = () => {
           .maybeSingle();
 
         if (convError) throw convError;
+        if (!conv) throw new Error('Failed to create conversation');
         convId = conv.id;
         setCurrentConversationId(convId);
       }

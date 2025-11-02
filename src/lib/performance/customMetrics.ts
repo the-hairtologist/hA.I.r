@@ -61,7 +61,7 @@ class CustomMetricsTracker {
 
       return customMeasure;
     } catch (error) {
-      logger.warn(`Failed to measure ${name}`, 'customMetrics', error);
+      logger.warn(`Failed to measure ${name}`, 'customMetrics', error as any);
     }
   }
 

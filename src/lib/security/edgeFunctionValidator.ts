@@ -60,14 +60,14 @@ export async function secureEdgeFunctionCall<T = any>(
     }
 
     // 3. Validate body if schema provided
-    let validatedBody = body;
+    let validatedBody: Record<string, any> | undefined = body;
     if (bodySchema && body) {
       try {
-        validatedBody = bodySchema.parse(body);
+        validatedBody = bodySchema.parse(body) as Record<string, any>;
       } catch (error) {
         if (error instanceof z.ZodError) {
           throw new Error(
-            `Invalid request body: ${error.errors.map(e => e.message).join(', ')}`
+            `Invalid request body: ${error.issues.map((e: any) => e.message).join(', ')}`
           );
         }
         throw error;

@@ -146,7 +146,7 @@ export const useOptimizedCallback = <T extends (...args: any[]) => any>(
   callback: T,
   delay = 300
 ): ((...args: Parameters<T>) => void) => {
-  const timeoutRef = React.useRef<NodeJS.Timeout>();
+  const timeoutRef = React.useRef<NodeJS.Timeout | undefined>(undefined);
 
   return React.useCallback(
     (...args: Parameters<T>) => {

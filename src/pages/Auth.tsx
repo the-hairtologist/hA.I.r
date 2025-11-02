@@ -127,7 +127,7 @@ const Auth = () => {
 
     if (!validation.success) {
       const newErrors: AuthState['errors'] = {};
-      validation.error.errors.forEach(err => {
+      validation.error.issues.forEach((err: any) => {
         const field = err.path[0] as keyof AuthState['errors'];
         if (field === 'email') {
           newErrors.email = 'Please enter a valid email address';
@@ -178,7 +178,7 @@ const Auth = () => {
 
     if (!validation.success) {
       const newErrors: AuthState['errors'] = {};
-      validation.error.errors.forEach(err => {
+      validation.error.issues.forEach((err: any) => {
         const field = err.path[0] as keyof AuthState['errors'];
         if (field === 'email') {
           newErrors.email = 'Please enter a valid email address';
