@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -443,13 +443,16 @@ const Dashboard = () => {
     }
   }, [searchParams]);
 
-  const checkProfileCompletion = () => {
+  const checkProfileCompletion = useCallback(() => {
     if (!profile || !user || !userProfile) return;
 
     // Don't show if already completed OR dismissed
     const profileCompleted = localStorage.getItem('profile_completed');
     const profileDismissed = localStorage.getItem('profile_setup_dismissed');
-    if (profileCompleted === 'true' || profileDismissed === 'true') return;
+    if (profileCompleted === 'true' || profileDismissed === 'true') {
+      setShowProfileCompletion(false);
+      return;
+    }
 
     // Check basic profile from profiles table
     const basicIncomplete = !userProfile.full_name;
@@ -459,13 +462,29 @@ const Dashboard = () => {
       const stylistIncomplete = !profile.business_name || !profile.color_line;
       if (basicIncomplete || stylistIncomplete) {
         // Delay showing by 3 seconds to let user see dashboard first
-        setTimeout(() => setShowProfileCompletion(true), 3000);
+        const timer = setTimeout(() => {
+          // Double-check flags before showing (user might have dismissed during delay)
+          const stillDismissed = localStorage.getItem('profile_setup_dismissed');
+          const stillCompleted = localStorage.getItem('profile_completed');
+          if (stillDismissed !== 'true' && stillCompleted !== 'true') {
+            setShowProfileCompletion(true);
+          }
+        }, 3000);
+        return () => clearTimeout(timer);
       }
     } else if (basicIncomplete) {
       // Delay showing by 3 seconds to let user see dashboard first
-      setTimeout(() => setShowProfileCompletion(true), 3000);
+      const timer = setTimeout(() => {
+        // Double-check flags before showing (user might have dismissed during delay)
+        const stillDismissed = localStorage.getItem('profile_setup_dismissed');
+        const stillCompleted = localStorage.getItem('profile_completed');
+        if (stillDismissed !== 'true' && stillCompleted !== 'true') {
+          setShowProfileCompletion(true);
+        }
+      }, 3000);
+      return () => clearTimeout(timer);
     }
-  };
+  }, [profile, user, userProfile, userRole]);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
