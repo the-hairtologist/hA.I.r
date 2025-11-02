@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface AnalysisResult {
   analysisId: string;
@@ -30,7 +31,7 @@ export const useHairAnalysis = () => {
       );
 
       if (error) {
-        console.error('Analysis error:', error);
+        logger.error('Hair photo analysis error', error, { component: 'useHairAnalysis', clientId });
         throw error;
       }
 
@@ -55,7 +56,7 @@ export const useHairAnalysis = () => {
 
       return data;
     } catch (error: any) {
-      console.error('Hair analysis error:', error);
+      logger.error('Hair analysis error', error, { component: 'useHairAnalysis', clientId });
 
       let errorMessage = 'Failed to analyze photo';
 
@@ -94,7 +95,7 @@ export const useHairAnalysis = () => {
 
       return data || [];
     } catch (error) {
-      console.error('Error fetching analysis history:', error);
+      logger.error('Error fetching analysis history', error, { component: 'useHairAnalysis', clientId });
       toast({
         title: 'Error',
         description: 'Failed to load analysis history',

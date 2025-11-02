@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { haptic } from '@/platform/haptics';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface ClientPortalPreviewProps {
   stylistName: string;
@@ -48,7 +49,7 @@ export const ClientPortalPreview = ({
       try {
         await navigator.share(shareData);
       } catch (error) {
-        console.error('Share failed:', error);
+        logger.error('Share failed', error, { component: 'ClientPortalPreview' });
       }
     } else {
       await navigator.clipboard.writeText(window.location.href);

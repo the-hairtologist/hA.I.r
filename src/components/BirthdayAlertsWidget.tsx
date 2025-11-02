@@ -13,6 +13,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { format, isSameDay, addDays } from 'date-fns';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface BirthdayClient {
   id: string;
@@ -98,7 +99,7 @@ export function BirthdayAlertsWidget() {
 
       setUpcomingBirthdays(upcoming as BirthdayClient[]);
     } catch (error) {
-      console.error('Error loading birthdays:', error);
+      logger.error('Error loading birthdays', error, { component: 'BirthdayAlertsWidget', userId: user?.id });
     } finally {
       setLoading(false);
     }

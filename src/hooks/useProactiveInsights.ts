@@ -4,8 +4,9 @@
  * Runs in background, updates insights table automatically
  */
 
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logging/productionLogger';
 import { differenceInDays, startOfWeek, endOfWeek } from 'date-fns';
 
 interface ProactiveInsight {
@@ -76,7 +77,7 @@ export const useProactiveInsights = (stylistId?: string, enabled = true) => {
         await saveInsightsToDatabase(stylistId, newInsights);
       }
     } catch (error) {
-      console.error('Error generating proactive insights:', error);
+      logger.error('Error generating proactive insights', error, { component: 'useProactiveInsights', stylistId });
     } finally {
       setLoading(false);
     }

@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { X, Sparkles, TrendingUp } from 'lucide-react';
 import { haptic } from '@/platform/haptics';
 import { cn } from '@/lib/utils';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface CelebrationAnimationProps {
   open: boolean;
@@ -68,7 +69,7 @@ export const CelebrationAnimation = ({
       haptic.success();
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
-      console.error('Failed to copy:', error);
+      logger.error('Failed to copy discount code', error, { component: 'CelebrationAnimation' });
     }
   };
 

@@ -7,6 +7,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Calendar, Sparkles, Share2, Download, Camera } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface TimelineEvent {
   id: string;
@@ -89,7 +90,7 @@ export const HairMemoryTimeline = ({ clientId }: HairMemoryTimelineProps) => {
 
       setEvents(timeline);
     } catch (error) {
-      console.error('Error loading timeline:', error);
+      logger.error('Error loading timeline', error, { component: 'HairMemoryTimeline', clientId });
     } finally {
       setLoading(false);
     }

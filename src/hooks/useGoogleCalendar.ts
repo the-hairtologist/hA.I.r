@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { analytics } from '@/lib/analytics';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface CalendarEvent {
   id?: string;
@@ -30,7 +31,7 @@ export const useGoogleCalendar = () => {
         analytics.track('google_calendar_connect_started');
       }
     } catch (error) {
-      console.error('Error connecting to Google Calendar:', error);
+      logger.error('Error connecting to Google Calendar', error, { component: 'useGoogleCalendar' });
       toast.error('Failed to connect to Google Calendar');
     } finally {
       setIsLoading(false);
@@ -55,7 +56,7 @@ export const useGoogleCalendar = () => {
       });
       return data;
     } catch (error) {
-      console.error('Error syncing to Google Calendar:', error);
+      logger.error('Error syncing to Google Calendar', error, { component: 'useGoogleCalendar' });
       toast.error('Failed to sync appointment');
       throw error;
     } finally {
@@ -76,7 +77,7 @@ export const useGoogleCalendar = () => {
       toast.success('Disconnected from Google Calendar');
       analytics.track('google_calendar_disconnected');
     } catch (error) {
-      console.error('Error disconnecting from Google Calendar:', error);
+      logger.error('Error disconnecting from Google Calendar', error, { component: 'useGoogleCalendar' });
       toast.error('Failed to disconnect');
     } finally {
       setIsLoading(false);

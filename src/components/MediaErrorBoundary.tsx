@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { AlertTriangle, Camera, Mic, RefreshCw, Upload } from 'lucide-react';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface Props {
   children: ReactNode;
@@ -36,7 +37,7 @@ export class MediaErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('MediaErrorBoundary caught error:', error, errorInfo);
+    logger.error('MediaErrorBoundary caught error', error, { component: 'MediaErrorBoundary', errorInfo });
 
     this.setState({
       error,

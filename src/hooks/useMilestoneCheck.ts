@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { logger } from '@/lib/logger';
+import { logger as productionLogger } from '@/lib/logging/productionLogger';
 
 /**
  * Hook to check for uncelebrated milestones and show celebration
@@ -39,7 +40,7 @@ export const useMilestoneCheck = (
           });
         }
       } catch (error) {
-        console.error('Error checking milestones:', error);
+        productionLogger.error('Error checking milestones', error, { component: 'useMilestoneCheck', clientId });
       }
     };
 

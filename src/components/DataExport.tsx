@@ -5,6 +5,7 @@ import { Download, FileJson, Loader2 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { logger } from '@/lib/logging/productionLogger';
 
 export const DataExport = () => {
   const [isExporting, setIsExporting] = useState(false);
@@ -44,7 +45,7 @@ export const DataExport = () => {
         description: 'Your data has been downloaded as a JSON file.',
       });
     } catch (error) {
-      console.error('Error exporting data:', error);
+      logger.error('Error exporting data', error, { component: 'DataExport', userId: user?.id });
       toast({
         title: 'Export Failed',
         description:

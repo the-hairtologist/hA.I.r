@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
+import { logger } from '@/lib/logging/productionLogger';
 
 export interface SidebarItem {
   id: string;
@@ -55,7 +56,7 @@ export function useSidebarOrder(
         .maybeSingle();
 
       if (error && error.code !== 'PGRST116') {
-        console.error('Error loading sidebar order:', error);
+        logger.error('Error loading sidebar order', error, { component: 'useSidebarOrder', userId: user?.id });
         setItems(defaultItems);
         setIsLoading(false);
         return;
@@ -77,7 +78,7 @@ export function useSidebarOrder(
         setItems(defaultItems);
       }
     } catch (error) {
-      console.error('Error loading sidebar order:', error);
+      logger.error('Error loading sidebar order', error, { component: 'useSidebarOrder', userId: user?.id });
       setItems(defaultItems);
     } finally {
       setIsLoading(false);
@@ -104,10 +105,10 @@ export function useSidebarOrder(
       );
 
       if (error) {
-        console.error('Error saving sidebar order:', error);
+        logger.error('Error saving sidebar order', error, { component: 'useSidebarOrder', userId: user?.id });
       }
     } catch (error) {
-      console.error('Error saving sidebar order:', error);
+      logger.error('Error saving sidebar order', error, { component: 'useSidebarOrder', userId: user?.id });
     }
   };
 
@@ -123,10 +124,10 @@ export function useSidebarOrder(
         .eq('user_id', user.id);
 
       if (error) {
-        console.error('Error resetting sidebar order:', error);
+        logger.error('Error resetting sidebar order', error, { component: 'useSidebarOrder', userId: user?.id });
       }
     } catch (error) {
-      console.error('Error resetting sidebar order:', error);
+      logger.error('Error resetting sidebar order', error, { component: 'useSidebarOrder', userId: user?.id });
     }
   };
 

@@ -5,6 +5,7 @@ import { Play, Pause, Volume2, Loader2, Download } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface AudioGuidePlayerProps {
   text: string;
@@ -50,7 +51,7 @@ export const AudioGuidePlayer = ({
       );
 
       if (error) {
-        console.error('Audio generation error:', error);
+        logger.error('Audio generation error', error, { component: 'AudioGuidePlayer' });
         toast.error(error.message || 'Failed to generate audio guide');
         return null;
       }
@@ -77,7 +78,7 @@ export const AudioGuidePlayer = ({
       setAudioUrl(url);
       return url;
     } catch (error: any) {
-      console.error('Error generating audio:', error);
+      logger.error('Error generating audio', error, { component: 'AudioGuidePlayer' });
       const errorMsg = error?.message || 'Failed to generate audio guide';
       toast.error(errorMsg);
       return null;

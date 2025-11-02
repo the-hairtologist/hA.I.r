@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { logger } from '@/lib/logging/productionLogger';
 
 export const useFormPersistence = <T extends Record<string, any>>(
   key: string,
@@ -15,7 +16,7 @@ export const useFormPersistence = <T extends Record<string, any>>(
         const parsed = JSON.parse(stored);
         setValues({ ...initialValues, ...parsed });
       } catch (e) {
-        console.error('Failed to parse stored form data:', e);
+        logger.error('Failed to parse stored form data', e, { component: 'useFormPersistence', key });
       }
     }
     setLoaded(true);

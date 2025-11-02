@@ -17,6 +17,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { useNavigate } from 'react-router-dom';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface CalendarConnection {
   id: string;
@@ -57,7 +58,7 @@ export function CalendarSyncIndicator() {
         });
       }
     } catch (error) {
-      console.error('Error loading calendar connection:', error);
+      logger.error('Error loading calendar connection', error, { component: 'CalendarSyncIndicator', userId: user?.id });
     } finally {
       setLoading(false);
     }
@@ -80,7 +81,7 @@ export function CalendarSyncIndicator() {
       await loadConnectionStatus();
       toast.success('Calendar synced successfully!');
     } catch (error: any) {
-      console.error('Error syncing calendar:', error);
+      logger.error('Error syncing calendar', error, { component: 'CalendarSyncIndicator', connectionId: connection?.id });
       toast.error('Failed to sync calendar');
     } finally {
       setSyncing(false);
