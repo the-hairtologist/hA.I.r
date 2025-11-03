@@ -1,6 +1,7 @@
 name: Fast CI Pipeline
 
 # Fast feedback on every push - completes in ~3 minutes
+# Synced to GitHub
 on:
   push:
     branches: [main, hA.I.r, develop]
