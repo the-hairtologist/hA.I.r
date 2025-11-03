@@ -53,14 +53,7 @@ jobs:
         run: npm run type-check
         continue-on-error: true
 
-      - name: Check for changes
-        id: check_changes
-        run: |
-          git diff --exit-code || echo "changes=true" >> $GITHUB_OUTPUT
-          git diff --cached --exit-code || echo "changes=true" >> $GITHUB_OUTPUT
-
       - name: Reset workflow files
-        if: steps.check_changes.outputs.changes == 'true'
         run: |
           # Reset any changes to workflow files to avoid permission issues
           git checkout HEAD -- .github/workflows/ || true
@@ -71,6 +64,12 @@ jobs:
             git restore --staged .github/workflows/ || true
             git restore .github/workflows/ || true
           fi
+
+      - name: Check for changes
+        id: check_changes
+        run: |
+          git diff --exit-code || echo "changes=true" >> $GITHUB_OUTPUT
+          git diff --cached --exit-code || echo "changes=true" >> $GITHUB_OUTPUT
 
       - name: Commit and create PR
         if: steps.check_changes.outputs.changes == 'true'
