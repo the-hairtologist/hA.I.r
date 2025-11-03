@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render } from '@testing-library/react';
+import { renderWithProviders } from '@/lib/testing/testUtils';
 import { BrowserRouter } from 'react-router-dom';
 import { MobileBottomNav } from './MobileBottomNav';
 
@@ -39,7 +39,7 @@ describe('MobileBottomNav', () => {
   });
 
   it('renders navigation items for stylists', () => {
-    const { container } = render(
+    const { container } = renderWithProviders(
       <BrowserRouter>
         <MobileBottomNav />
       </BrowserRouter>
@@ -59,7 +59,7 @@ describe('MobileBottomNav', () => {
       isClient: true,
     });
 
-    const { container } = render(
+    const { container } = renderWithProviders(
       <BrowserRouter>
         <MobileBottomNav />
       </BrowserRouter>
@@ -77,7 +77,7 @@ describe('MobileBottomNav', () => {
       isClient: false,
     });
 
-    const { container } = render(
+    const { container } = renderWithProviders(
       <BrowserRouter>
         <MobileBottomNav />
       </BrowserRouter>
@@ -88,7 +88,7 @@ describe('MobileBottomNav', () => {
   });
 
   it('handles navigation clicks', () => {
-    const { container } = render(
+    const { container } = renderWithProviders(
       <BrowserRouter>
         <MobileBottomNav />
       </BrowserRouter>
@@ -103,7 +103,7 @@ describe('MobileBottomNav', () => {
   });
 
   it('marks active route correctly', () => {
-    const { container } = render(
+    const { container } = renderWithProviders(
       <BrowserRouter>
         <MobileBottomNav />
       </BrowserRouter>

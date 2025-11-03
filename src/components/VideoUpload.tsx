@@ -5,6 +5,7 @@ import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { toast } from 'sonner';
 import { uploadToStorage } from '@/utils/supabaseStorageHelper';
+import { logger } from '@/lib/logger';
 
 interface VideoUploadProps {
   onVideoUploaded: (videoUrl: string, videoBase64: string) => void;
@@ -68,7 +69,7 @@ export const VideoUpload = ({
 
       toast.success('Video uploaded successfully!');
     } catch (error: any) {
-      console.error('Upload error:', error);
+      logger.error('Video upload failed', 'VideoUpload', error);
       toast.error('Failed to upload video');
       setVideoPreview(null);
     } finally {

@@ -12,6 +12,7 @@ import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { logger } from '@/lib/logger';
 import html2canvas from 'html2canvas';
+import { logger as productionLogger } from '@/lib/logging/productionLogger';
 
 export function BugReporter() {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,7 +31,7 @@ export function BugReporter() {
       setScreenshot(dataUrl);
       toast.success('Screenshot captured');
     } catch (error) {
-      console.error('Screenshot error:', error);
+      productionLogger.error('Failed to capture screenshot', error, { component: 'BugReporter' });
       toast.error('Failed to capture screenshot');
     }
   };
@@ -94,7 +95,7 @@ export function BugReporter() {
       setScreenshot(null);
       setIsOpen(false);
     } catch (error) {
-      console.error('Bug report submission error:', error);
+      productionLogger.error('Bug report submission failed', error, { component: 'BugReporter' });
       toast.error('Failed to submit bug report');
     } finally {
       setIsSubmitting(false);

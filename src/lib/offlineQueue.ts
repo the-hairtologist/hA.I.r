@@ -278,7 +278,7 @@ class OfflineQueue {
   }
 
   private async executeInsert(action: InsertAction) {
-    const { error } = await supabase.from(action.table).insert(action.data);
+    const { error } = await supabase.from(action.table as any).insert(action.data as any);
 
     if (error) throw error;
   }
@@ -287,18 +287,18 @@ class OfflineQueue {
     const { id, ...updateData } = action.data;
 
     const { error } = await supabase
-      .from(action.table)
-      .update(updateData)
-      .eq('id', id);
+      .from(action.table as any)
+      .update(updateData as any)
+      .eq('id', String(id));
 
     if (error) throw error;
   }
 
   private async executeDelete(action: DeleteAction) {
     const { error } = await supabase
-      .from(action.table)
+      .from(action.table as any)
       .delete()
-      .eq('id', action.data.id);
+      .eq('id', String(action.data.id));
 
     if (error) throw error;
   }

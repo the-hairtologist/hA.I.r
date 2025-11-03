@@ -59,8 +59,8 @@ class TestDataGenerator {
         ]),
         allergies: faker.datatype.boolean()
           ? faker.helpers.arrayElement(['None', 'PPD', 'Ammonia', 'Fragrance'])
-          : null,
-        notes: faker.datatype.boolean() ? faker.lorem.sentence() : null,
+          : undefined,
+        notes: faker.datatype.boolean() ? faker.lorem.sentence() : undefined,
       });
     }
 
@@ -113,7 +113,7 @@ class TestDataGenerator {
           'completed',
           'cancelled',
         ]),
-        notes: faker.datatype.boolean() ? faker.lorem.sentence() : null,
+        notes: faker.datatype.boolean() ? faker.lorem.sentence() : undefined,
       });
     }
 
@@ -163,7 +163,7 @@ class TestDataGenerator {
             { min: 2, max: 4 }
           )
           .join(', '),
-        notes: faker.datatype.boolean() ? faker.lorem.sentence() : null,
+        notes: faker.datatype.boolean() ? faker.lorem.sentence() : undefined,
       });
     }
 

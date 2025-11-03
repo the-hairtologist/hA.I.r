@@ -110,7 +110,7 @@ export const fetchFormulaById = async (
         .from('formulas')
         .select('*')
         .eq('id', formulaId)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
       return data;
@@ -132,9 +132,10 @@ export const createFormula = async (
         .from('formulas')
         .insert([formulaData])
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      if (!data) throw new Error('Failed to create formula');
 
       logger.info('Formula created', {
         context: 'FormulaAPI.create',
@@ -163,7 +164,7 @@ export const updateFormula = async (
         .update(updates)
         .eq('id', id)
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
 
@@ -216,7 +217,7 @@ export const updateFormulaText = async (
         .update({ formula_text: formulaText })
         .eq('id', formulaId)
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
 

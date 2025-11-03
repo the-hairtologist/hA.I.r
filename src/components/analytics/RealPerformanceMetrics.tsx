@@ -10,6 +10,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { Loader2, BarChart3, TrendingUp, X } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
+import { logger } from '@/lib/logger';
 
 interface ServiceMetrics {
   name: string;
@@ -156,7 +157,7 @@ export const RealPerformanceMetrics = () => {
         totalFormulas: formulaCount || 0,
       });
     } catch (error) {
-      console.error('Error loading performance metrics:', error);
+      logger.error('Error loading performance metrics', 'RealPerformanceMetrics', error as Error);
     } finally {
       setLoading(false);
     }
@@ -220,7 +221,7 @@ export const RealPerformanceMetrics = () => {
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
-                    data={metrics.services}
+                    data={metrics.services as any[]}
                     dataKey="count"
                     nameKey="name"
                     cx="50%"

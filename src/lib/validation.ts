@@ -322,7 +322,7 @@ export function validateWithSchema<T>(
   }
 
   const errors: Record<string, string> = {};
-  result.error.errors.forEach(error => {
+  result.error.issues.forEach((error: any) => {
     const path = error.path.join('.');
     errors[path] = error.message;
   });
@@ -338,7 +338,7 @@ export function createValidator<T>(schema: z.ZodSchema<T>) {
     const result = schema.safeParse(values);
     if (!result.success) {
       const errors: Record<string, string> = {};
-      result.error.errors.forEach(error => {
+      result.error.issues.forEach((error: any) => {
         const path = error.path.join('.');
         errors[path] = error.message;
       });

@@ -19,6 +19,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -76,7 +77,7 @@ export function AISupportChatbot() {
       });
 
       if (error) {
-        console.error('Support chat error:', error);
+        logger.error('Support chat error', 'AISupportChatbot', error);
         throw error;
       }
 
@@ -90,7 +91,7 @@ export function AISupportChatbot() {
 
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
-      console.error('Error sending message:', error);
+      logger.error('Error sending message', 'AISupportChatbot', error as Error);
 
       const errorMessage: Message = {
         role: 'assistant',

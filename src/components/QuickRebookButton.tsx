@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 import { haptic } from '@/platform/haptics';
 import { showCelebration } from './CelebrationToast';
 import { cn } from '@/lib/utils';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface QuickRebookButtonProps {
   appointmentId: string;
@@ -45,7 +46,7 @@ export const QuickRebookButton = ({
         .maybeSingle();
 
       if (fetchError) {
-        console.error('Error fetching appointment:', fetchError);
+        logger.error('Error fetching appointment', fetchError, { component: 'QuickRebookButton', appointmentId });
         toast.error('Failed to load appointment details');
         return;
       }
@@ -68,14 +69,17 @@ export const QuickRebookButton = ({
         .maybeSingle();
 
       if (scheduleError) {
-        console.error('Error fetching schedule:', scheduleError);
+        logger.error('Error fetching schedule', scheduleError, { component: 'QuickRebookButton', stylistId });
       }
 
       // Find next available slot
       const dayOfWeek = suggestedDate.getDay();
-      const daySchedule = schedule?.weekly_schedule?.[dayOfWeek];
+      const weeklySchedule = schedule?.weekly_schedule;
+      const daySchedule = weeklySchedule && typeof weeklySchedule === 'object' 
+        ? (weeklySchedule as Record<string, any>)[dayOfWeek.toString()] 
+        : null;
 
-      if (daySchedule?.is_available && daySchedule.slots?.length > 0) {
+      if (daySchedule?.is_available && Array.isArray(daySchedule.slots) && daySchedule.slots.length > 0) {
         const firstSlot = daySchedule.slots[0];
         const appointmentTime = new Date(suggestedDate);
         const [hours, minutes] = firstSlot.start.split(':');
@@ -127,7 +131,7 @@ export const QuickRebookButton = ({
         });
       }
     } catch (error) {
-      console.error('Error rebooking:', error);
+      logger.error('Error rebooking', error, { component: 'QuickRebookButton', appointmentId, clientId });
       haptic.error();
       toast.error('Failed to rebook appointment');
     } finally {

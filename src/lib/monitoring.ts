@@ -20,11 +20,7 @@
 
 import * as Sentry from '@sentry/react';
 import type { ComponentType } from 'react';
-import type {
-  Event as SentryEvent,
-  EventHint,
-  Transaction,
-} from '@sentry/types';
+import type { Event as SentryEvent, EventHint } from '@sentry/react';
 import { logger } from '@/lib/logger';
 
 // Lazy environment variable access to prevent build-time issues
@@ -84,7 +80,7 @@ export const initSentry = () => {
       ],
 
       // Add custom tags
-      beforeSend(event: SentryEvent, hint?: EventHint) {
+      beforeSend(event: any, hint?: any): any {
         if (event.request) {
           event.tags = {
             ...event.tags,
@@ -173,16 +169,16 @@ export const addBreadcrumb = (
 export const startTransaction = (
   name: string,
   operation: string
-): Transaction | null => {
+): any | null => {
   if (!sentryInitialized) {
     return null;
   }
 
-  const transaction = Sentry.getCurrentHub().startTransaction({
-    name,
-    op: operation,
-  });
-  return transaction ?? null;
+  try {
+    return Sentry.startSpan({ name, op: operation }, () => {});
+  } catch {
+    return null;
+  }
 };
 
 /**

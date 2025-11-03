@@ -41,7 +41,7 @@ class QueryCache {
     // Check if there's already a pending request for this key
     if (this.pendingRequests.has(key)) {
       logger.debug('Deduplicating request', 'queryCache', { key });
-      return this.pendingRequests.get(key)!;
+      return this.pendingRequests.get(key) as T;
     }
 
     // Fetch data

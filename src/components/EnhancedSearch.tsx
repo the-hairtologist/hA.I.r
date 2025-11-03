@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/popover';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface EnhancedSearchProps {
   value: string;
@@ -50,7 +51,7 @@ export const EnhancedSearch = ({
         setRecentSearches(JSON.parse(stored));
       }
     } catch (error) {
-      console.error('Error loading recent searches:', error);
+      logger.error('Error loading recent searches', error, { component: 'EnhancedSearch' });
     }
   }, [storageKey, showRecentSearches]);
 
@@ -71,7 +72,7 @@ export const EnhancedSearch = ({
     try {
       localStorage.setItem(storageKey, JSON.stringify(updated));
     } catch (error) {
-      console.error('Error saving recent searches:', error);
+      logger.error('Error saving recent searches', error, { component: 'EnhancedSearch' });
     }
   };
 
@@ -99,7 +100,7 @@ export const EnhancedSearch = ({
     try {
       localStorage.setItem(storageKey, JSON.stringify(updated));
     } catch (error) {
-      console.error('Error clearing recent search:', error);
+      logger.error('Error clearing recent search', error, { component: 'EnhancedSearch' });
     }
   };
 
@@ -108,7 +109,7 @@ export const EnhancedSearch = ({
     try {
       localStorage.removeItem(storageKey);
     } catch (error) {
-      console.error('Error clearing all recent searches:', error);
+      logger.error('Error clearing all recent searches', error, { component: 'EnhancedSearch' });
     }
   };
 

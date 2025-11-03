@@ -11,6 +11,7 @@ import { Button } from './ui/button';
 import { Check, AlertCircle, Loader2, ExternalLink } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface IntegrationStatusProps {
   compact?: boolean;
@@ -41,7 +42,7 @@ export const IntegrationStatus = ({
         email: 'active', // Resend is always active
       });
     } catch (error) {
-      console.error('Error checking integration statuses:', error);
+      logger.error('Error checking integration statuses', error, { component: 'IntegrationStatus' });
     } finally {
       setLoading(false);
     }

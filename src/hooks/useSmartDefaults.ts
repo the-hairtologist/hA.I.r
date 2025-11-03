@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from './useAuth';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface SmartDefaults {
   defaultDuration?: number;
@@ -44,7 +45,7 @@ export const useSmartDefaults = () => {
         preferredStartTime: '09:00',
       });
     } catch (error) {
-      console.error('Error loading smart defaults:', error);
+      logger.error('Error loading smart defaults', error, { component: 'useSmartDefaults', userId: user?.id });
     } finally {
       setLoading(false);
     }

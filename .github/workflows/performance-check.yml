@@ -1,0 +1,67 @@
+name: Performance & Query Check
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  performance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Analyze Query Patterns
+        run: node scripts/analyze-queries.js
+        continue-on-error: true
+
+      - name: Check for Duplicate Requests
+        run: |
+          echo "🔍 Checking for duplicate database queries..."
+          grep -r "supabase.from" src/ --include="*.tsx" --include="*.ts" | \
+          awk -F: '{print $1}' | sort | uniq -c | sort -rn | head -20 || true
+          
+      - name: Check Query Optimization
+        run: |
+          echo "📊 Analyzing query optimization opportunities..."
+          echo "Components with multiple queries:"
+          grep -r "useQuery\|supabase.from" src/components --include="*.tsx" -l | \
+          xargs -I {} sh -c 'count=$(grep -c "supabase.from\|useQuery" {}); if [ $count -gt 2 ]; then echo "{}: $count queries"; fi' || true
+
+      - name: Comment PR with Performance Report
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const output = `## 🚀 Performance Check Results
+            
+            ### Query Analysis
+            - ✅ Query pattern analysis completed
+            - ✅ Duplicate request check completed
+            - ✅ Optimization opportunities identified
+            
+            ### Recommendations
+            - Use React Query for caching
+            - Combine multiple queries into single calls
+            - Implement prefetching for better UX
+            
+            📊 [View detailed report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            });

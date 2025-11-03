@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button';
 import { GoogleCalendarConnect } from '@/components/integrations/GoogleCalendarConnect';
 import { useCalendarSync } from '@/hooks/useCalendarSync';
 import { toast } from 'sonner';
+import { PageHeader } from '@/components/PageHeader';
+import { Calendar as CalendarIcon } from 'lucide-react';
 
 export default function IntegrationsCalendar() {
   const [searchParams] = useSearchParams();
@@ -32,22 +34,13 @@ export default function IntegrationsCalendar() {
 
   return (
     <div className="container max-w-4xl py-8">
-      <Button
-        variant="ghost"
-        onClick={() => navigate('/integrations')}
-        className="mb-6 gap-2"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        Back to Integrations
-      </Button>
+      <PageHeader
+        title="Google Calendar"
+        icon={<CalendarIcon className="h-6 w-6" />}
+        backTo="/settings"
+      />
 
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold">Calendar Integration</h1>
-          <p className="text-muted-foreground mt-2">
-            Connect your Google Calendar to automatically sync appointments
-          </p>
-        </div>
+      <div className="space-y-6 px-4">
 
         <GoogleCalendarConnect />
 

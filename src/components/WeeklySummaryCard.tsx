@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { format, startOfWeek, endOfWeek, subWeeks } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { logger } from '@/lib/logger';
 
 interface WeeklySummaryCardProps {
   stylistId: string;
@@ -86,7 +87,7 @@ export const WeeklySummaryCard = ({
         growthPercent,
       });
     } catch (error) {
-      console.error('Error loading weekly summary:', error);
+      logger.error('Failed to load weekly summary', 'WeeklySummaryCard', error);
     } finally {
       setLoading(false);
     }

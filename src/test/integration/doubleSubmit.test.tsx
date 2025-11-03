@@ -1,5 +1,5 @@
-﻿import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { renderHook, waitFor, act } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { renderHook, waitFor, act } from '@/lib/testing/testUtils';
 import type { ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MemoryRouter } from 'react-router-dom';
@@ -22,17 +22,14 @@ vi.mock('@/lib/logger', () => ({
   log: {
     debug: vi.fn(),
     info: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
+  },
+}));
 
-    const createWrapper = (): React.FC<{ children: ReactNode }> => {
-      const queryClient = createQueryClient();
-      return ({ children }) => (
-        <QueryClientProvider client={queryClient}>
-          <MemoryRouter>{children}</MemoryRouter>
-        </QueryClientProvider>
-      );
-    };
-
-    const TypedWrapper = createWrapper();
+const createQueryClient = () => new QueryClient({
+  defaultOptions: {
+    queries: { retry: false },
     mutations: { retry: false },
   },
 });
@@ -51,8 +48,8 @@ describe('useFormSubmit', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
-  const { result } = renderHook(() => useFormSubmit(mockSubmit), {
-    wrapper: TypedWrapper,
+
+  afterEach(() => {
     vi.useRealTimers();
   });
 
@@ -65,27 +62,38 @@ describe('useFormSubmit', () => {
         );
 
       const { result } = renderHook(() => useFormSubmit(mockSubmit), {
-        wrapper: TypedWrapper,
-        const { result } = renderHook(() => useFormSubmit(mockSubmit), {
-          wrapper: TypedWrapper,
-          result.current.handleSubmit();
-          result.current.handleSubmit();
-
-          await waitFor(() => expect(mockSubmit).toHaveBeenCalledTimes(1));
-        });
-
-        it('blocks submissions within 1 second', async () => {
-        vi.useFakeTimers();
-        vi.setSystemTime(new Date('2024-01-01T00:00:00.000Z'));
-
-        const mockSubmit = vi.fn().mockResolvedValue(undefined);
-        const { result } = renderHook(() => useFormSubmit(mockSubmit), {
-          wrapper: TypedWrapper,
-        });
-        await result.current.handleSubmit();
-
-        expect(mockSubmit).toHaveBeenCalledTimes(1);
+        wrapper: createWrapper(),
       });
+
+      act(() => {
+        result.current.handleSubmit();
+        result.current.handleSubmit();
+      });
+
+      await waitFor(() => expect(mockSubmit).toHaveBeenCalledTimes(1));
+    });
+
+    it('blocks submissions within 1 second', async () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2024-01-01T00:00:00.000Z'));
+
+      const mockSubmit = vi.fn().mockResolvedValue(undefined);
+      const { result } = renderHook(() => useFormSubmit(mockSubmit), {
+        wrapper: createWrapper(),
+      });
+
+      await act(async () => {
+        await result.current.handleSubmit();
+      });
+
+      expect(mockSubmit).toHaveBeenCalledTimes(1);
+
+      await act(async () => {
+        await result.current.handleSubmit();
+      });
+
+      expect(mockSubmit).toHaveBeenCalledTimes(1);
+    });
 
     it('allows submission after 1 second', async () => {
       vi.useFakeTimers();
@@ -93,55 +101,22 @@ describe('useFormSubmit', () => {
 
       const mockSubmit = vi.fn().mockResolvedValue(undefined);
       const { result } = renderHook(() => useFormSubmit(mockSubmit), {
-        wrapper: TypedWrapper,
+        wrapper: createWrapper(),
       });
-      await result.current.handleSubmit();
-      await vi.advanceTimersByTimeAsync(1100);
-      await result.current.handleSubmit();
+
+      await act(async () => {
+        await result.current.handleSubmit();
+      });
+
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(1100);
+      });
+
+      await act(async () => {
+        await result.current.handleSubmit();
+      });
 
       expect(mockSubmit).toHaveBeenCalledTimes(2);
-      const { result } = renderHook(() => useFormSubmit(mockSubmit), {
-        wrapper: TypedWrapper,
-
-        describe('network delay handling', () => {
-        it('maintains submitting state during long requests', async () => {
-          vi.useFakeTimers();
-
-          let resolveSubmission: (() => void) | undefined;
-          const submission = new Promise<void>(resolve => {
-            resolveSubmission = resolve;
-          });
-
-          const mockSubmit = vi.fn().mockReturnValue(submission);
-          const { result } = renderHook(() => useFormSubmit(mockSubmit), {
-            wrapper: TypedWrapper,
-          });
-          let pendingSubmit: Promise<void> | undefined;
-          await act(async () => {
-            pendingSubmit = result.current.handleSubmit();
-          });
-
-          await waitFor(() => expect(result.current.isSubmitting).toBe(true));
-
-          await act(async () => {
-            result.current.handleSubmit();
-            result.current.handleSubmit();
-          });
-
-          await act(async () => {
-            await vi.advanceTimersByTimeAsync(3000);
-          });
-
-          expect(mockSubmit).toHaveBeenCalledTimes(1);
-          expect(result.current.isSubmitting).toBe(true);
-          const { result } = renderHook(() => useFormSubmit(mockSubmit), {
-            wrapper: TypedWrapper,
-            resolveSubmission?.();
-          await pendingSubmit;
-        });
-
-        await waitFor(() => expect(result.current.isSubmitting).toBe(false));
-      });
     });
   });
 
@@ -178,9 +153,11 @@ describe('useFormSubmit', () => {
     it('resets state after successful submission', async () => {
       const mockSubmit = vi.fn().mockResolvedValue(undefined);
       const { result } = renderHook(() => useFormSubmit(mockSubmit), {
-        wrapper: TypedWrapper,
+        wrapper: createWrapper(),
       });
-      await result.current.handleSubmit();
+      await act(async () => {
+        await result.current.handleSubmit();
+      });
       await waitFor(() => expect(result.current.isSubmitting).toBe(false));
       expect(result.current.errors).toEqual({});
     });
@@ -190,13 +167,16 @@ describe('useFormSubmit', () => {
         .fn()
         .mockRejectedValue(new Error('Submission failed'));
       const { result } = renderHook(() => useFormSubmit(mockSubmit, { enableRetry: false }), {
-        wrapper: TypedWrapper,
+        wrapper: createWrapper(),
+      });
+
+      await act(async () => {
+        await result.current.handleSubmit();
       });
 
       await waitFor(() => expect(result.current.isSubmitting).toBe(false));
       expect(result.current.submitCount).toBe(1);
       expect(toast.error).toHaveBeenCalledWith('Submission failed');
-      expect((toast as typeof toast).error).toHaveBeenCalledWith('Submission failed');
     });
 
     it('returns initial values after reset', async () => {
@@ -204,7 +184,7 @@ describe('useFormSubmit', () => {
 
       const mockSubmit = vi.fn().mockResolvedValue(undefined);
       const { result } = renderHook(() => useFormSubmit<FormData>(mockSubmit, { initialValues: { name: '' } }), {
-        wrapper: TypedWrapper,
+        wrapper: createWrapper(),
       });
       act(() => {
         result.current.setFieldValue('name', 'Updated');
@@ -228,30 +208,15 @@ describe('useFormSubmit', () => {
       vi.useFakeTimers();
       const mockSubmit = vi.fn().mockResolvedValue(undefined);
       const { result } = renderHook(() => useFormSubmit(mockSubmit), {
-        wrapper: TypedWrapper,
+        wrapper: createWrapper(),
       });
 
-      const { result } = renderHook(() => useFormSubmit(mockSubmit), {
-        wrapper: TypedWrapper,
-        await act(async () => {
-          await result.current.handleSubmit();
-        });
-        await waitFor(() => expect(result.current.submitCount).toBe(1));
-
-        await act(async () => {
-          await vi.advanceTimersByTimeAsync(1100);
-        });
-
-        await act(async () => {
-          await result.current.handleSubmit();
-        });
-        await waitFor(() => expect(result.current.submitCount).toBe(2));
+      await act(async () => {
+        await result.current.handleSubmit();
       });
-      await waitFor(() => expect(result.current.submitCount).toBe(2));
 
-      expect(result.current.submitCount).toBe(1);
+      await waitFor(() => expect(result.current.submitCount).toBe(1));
 
-      // Advance time by more than 1 second to allow another submission
       await act(async () => {
         await vi.advanceTimersByTimeAsync(1100);
       });
@@ -260,33 +225,34 @@ describe('useFormSubmit', () => {
         await result.current.handleSubmit();
       });
 
-      expect(result.current.submitCount).toBe(2);
-    });
-
-    describe('accessibility', () => {
-      it('toggles aria-busy state via isSubmitting flag', async () => {
-        const mockSubmit = vi
-          .fn()
-          .mockImplementation(
-            () => new Promise(resolve => setTimeout(resolve, 100))
-          );
-
-        const { result } = renderHook(() => useFormSubmit(mockSubmit), {
-          wrapper: createWrapper(),
-        });
-
-        let pendingSubmit: Promise<void> | undefined;
-        act(() => {
-          pendingSubmit = result.current.handleSubmit();
-        });
-
-        await waitFor(() => expect(result.current.isSubmitting).toBe(true));
-
-        await act(async () => {
-          await pendingSubmit;
-        });
-
-        await waitFor(() => expect(result.current.isSubmitting).toBe(false));
-      });
+      await waitFor(() => expect(result.current.submitCount).toBe(2));
     });
   });
+
+  describe('accessibility', () => {
+    it('toggles aria-busy state via isSubmitting flag', async () => {
+      const mockSubmit = vi
+        .fn()
+        .mockImplementation(
+          () => new Promise(resolve => setTimeout(resolve, 100))
+        );
+
+      const { result } = renderHook(() => useFormSubmit(mockSubmit), {
+        wrapper: createWrapper(),
+      });
+
+      let pendingSubmit: Promise<void> | undefined;
+      act(() => {
+        pendingSubmit = result.current.handleSubmit();
+      });
+
+      await waitFor(() => expect(result.current.isSubmitting).toBe(true));
+
+      await act(async () => {
+        await pendingSubmit;
+      });
+
+      await waitFor(() => expect(result.current.isSubmitting).toBe(false));
+    });
+  });
+});

@@ -1,4 +1,4 @@
-﻿import { render, screen, fireEvent } from '@testing-library/react';
+import { renderWithProviders, screen, fireEvent } from '@/lib/testing/testUtils';
 import { A11yTester } from '../A11yTester';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 
@@ -8,7 +8,7 @@ describe('A11yTester', () => {
   });
 
   it('should render in development mode', () => {
-    render(<A11yTester />);
+    renderWithProviders(<A11yTester />);
     const button = screen.getByTitle('Open A11y Tester (Ctrl+Shift+A)');
     expect(button).toBeInTheDocument();
   });
@@ -20,7 +20,7 @@ describe('A11yTester', () => {
   });
 
   it('should toggle visibility when button is clicked', () => {
-    render(<A11yTester />);
+    renderWithProviders(<A11yTester />);
 
     const toggleButton = screen.getByTitle('Open A11y Tester (Ctrl+Shift+A)');
     fireEvent.click(toggleButton);

@@ -41,6 +41,7 @@ import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { useBulkSelection } from '@/hooks/useBulkSelection';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { cn } from '@/lib/utils';
+import { logger } from '@/lib/logger';
 import {
   Dialog,
   DialogContent,
@@ -51,7 +52,7 @@ import {
 import { InviteClientDialog } from '@/components/clients';
 import { SearchInput } from '@/components/SearchInput';
 import { ClientCardSkeleton } from '@/components/LoadingSkeleton';
-import { useRealtimeUpdates } from '@/hooks/useRealtimeUpdates';
+
 import { useDebounce } from '@/hooks/useDebounce';
 import {
   Select,
@@ -92,6 +93,7 @@ import { ReEngagementDialog } from '@/components/ReEngagementDialog';
 import { ClientActivityIndicator } from '@/components/ClientActivityIndicator';
 import { VirtualList } from '@/components/VirtualList';
 import { ClientCard } from '@/components/ClientCard';
+import { usePerformance } from '@/hooks/usePerformance';
 
 interface ClientProfile {
   id: string;
@@ -129,6 +131,14 @@ interface ClientFormula {
 }
 
 export default function Clients() {
+  // Performance tracking for this heavy list page
+  usePerformance({
+    componentName: 'Clients',
+    trackRenders: true,
+    trackMounts: true,
+    reportThreshold: 16,
+  });
+
   const navigate = useNavigate();
   const searchInputRef = useRef<HTMLInputElement>(null);
   const [stylistId, setStylistId] = useState<string | null>(null);
@@ -141,8 +151,8 @@ export default function Clients() {
   const [searchQuery, setSearchQuery] = useState('');
   const debouncedSearch = useDebounce(searchQuery, 300);
 
-  const handleSearchChange = useOptimizedCallback((value: string) => {
-    setSearchQuery(value);
+  const handleSearchChange = useOptimizedCallback((...args: any[]) => {
+    setSearchQuery(args[0] as string);
   }, []);
   const [sortBy, setSortBy] = useState<'name' | 'recent' | 'inactive'>(
     'recent'
@@ -180,22 +190,6 @@ export default function Clients() {
     isLoading: loading,
     refetch: refetchClients,
   } = useClients(stylistId);
-
-  // Override with optimized query when stylistId available
-  useEffect(() => {
-    if (!stylistId) return;
-
-    const loadOptimizedClients = async () => {
-      try {
-        const data = await getClientsByStylist(stylistId);
-        // React Query will cache this automatically
-      } catch (error) {
-        console.error('Error loading optimized clients:', error);
-      }
-    };
-
-    loadOptimizedClients();
-  }, [stylistId]);
 
   const clients = clientsData?.clients || [];
   const totalClients = clientsData?.total || 0;
@@ -241,7 +235,7 @@ export default function Clients() {
           });
         }
       } catch (error) {
-        console.error('Error loading stylist profile:', error);
+        logger.error('Error loading stylist profile', 'Clients', error as Error);
         toast.error('Failed to load profile');
       }
     };
@@ -299,9 +293,9 @@ export default function Clients() {
         .eq('client_id', client.id)
         .order('created_at', { ascending: false });
 
-      setClientFormulas(formulas || []);
+      setClientFormulas(formulas as any || []);
     } catch (error) {
-      console.error('Error loading formulas:', error);
+      logger.error('Error loading formulas', 'Clients', error as Error);
       setClientFormulas([]);
     }
 
@@ -327,11 +321,11 @@ export default function Clients() {
       await createClientMutation.mutateAsync({
         preferred_stylist_id: stylistId,
         full_name: validatedData.full_name.trim(),
-        email: validatedData.email?.trim() || null,
-        phone: validatedData.phone?.trim() || null,
-        hair_type: validatedData.hair_type?.trim() || null,
-        allergies: validatedData.allergies?.trim() || null,
-        notes: validatedData.notes?.trim() || null,
+        email: validatedData.email?.trim() || '',
+        phone: validatedData.phone?.trim() ?? undefined,
+        hair_type: validatedData.hair_type?.trim() ?? undefined,
+        allergies: validatedData.allergies?.trim() ?? undefined,
+        notes: validatedData.notes?.trim() ?? undefined,
       });
 
       showCelebration('client-added', undefined, clients.length + 1);
@@ -372,11 +366,11 @@ export default function Clients() {
       await updateClientMutation.mutateAsync({
         id: selectedClient.id,
         full_name: validatedData.full_name.trim(),
-        email: validatedData.email?.trim() || null,
-        phone: validatedData.phone?.trim() || null,
-        hair_type: validatedData.hair_type?.trim() || null,
-        allergies: validatedData.allergies?.trim() || null,
-        notes: validatedData.notes?.trim() || null,
+        email: validatedData.email?.trim() ?? undefined,
+        phone: validatedData.phone?.trim() ?? undefined,
+        hair_type: validatedData.hair_type?.trim() ?? undefined,
+        allergies: validatedData.allergies?.trim() ?? undefined,
+        notes: validatedData.notes?.trim() ?? undefined,
       });
 
       setSaveStatus('saved');
@@ -530,7 +524,7 @@ export default function Clients() {
       await bulkDeleteMutation.mutateAsync(clientIds);
       clearSelection();
     } catch (error) {
-      console.error('Error deleting clients:', error);
+      logger.error('Error deleting clients', 'Clients', error as Error);
     }
   };
 
@@ -657,7 +651,7 @@ export default function Clients() {
               <UserPlus className="h-3.5 w-3.5 xs:h-4 xs:w-4" />
               <span className="hidden sm:inline">Invite</span>
             </Button>
-            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen} modal={true}>
               <DialogTrigger asChild>
                 <Button className="gap-1.5 xs:gap-2 text-xs xs:text-sm min-h-[44px] flex-1 xs:flex-none border-[2px] xs:border-[3px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] xs:shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] xs:hover:translate-x-[2px] xs:hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_hsl(var(--foreground))] xs:hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all">
                   <Plus className="h-3.5 w-3.5 xs:h-4 xs:w-4" />
@@ -853,7 +847,7 @@ export default function Clients() {
         )}
 
         {/* Keyboard shortcut hints */}
-        <div className="flex justify-end text-[10px] xs:text-xs sm:text-sm text-muted-foreground gap-4">
+        <div className="flex justify-end text-xs sm:text-sm text-muted-foreground gap-4">
           <span>
             <kbd className="px-2 py-1 font-semibold bg-muted rounded border">
               Ctrl+N
@@ -1144,7 +1138,7 @@ export default function Clients() {
         )}
 
         {/* Edit Client Dialog */}
-        <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+        <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen} modal={true}>
           <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto border-[3px] border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground))]">
             <DialogHeader>
               <DialogTitle className="text-xl sm:text-2xl md:text-3xl font-pixel gradient-text">
@@ -1382,7 +1376,7 @@ export default function Clients() {
         </Dialog>
 
         {/* Client History Dialog */}
-        <Dialog open={historyDialogOpen} onOpenChange={setHistoryDialogOpen}>
+        <Dialog open={historyDialogOpen} onOpenChange={setHistoryDialogOpen} modal={true}>
           <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Client History</DialogTitle>

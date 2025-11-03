@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { renderWithProviders, screen, waitFor } from '@/lib/testing/testUtils';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -73,21 +73,10 @@ vi.mock('@/components/DashboardLayout', () => ({
 }));
 
 const renderMessages = () => {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        retry: false,
-        gcTime: 0,
-      },
-    },
-  });
-
-  return render(
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <Messages />
-      </BrowserRouter>
-    </QueryClientProvider>
+  return renderWithProviders(
+    <BrowserRouter>
+      <Messages />
+    </BrowserRouter>
   );
 };
 

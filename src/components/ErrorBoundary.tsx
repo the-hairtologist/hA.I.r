@@ -51,14 +51,14 @@ export class ErrorBoundary extends Component<Props, State> {
     const journeySummary = userJourney.getJourneySummary();
 
     logger.error('Error caught by boundary', error, {
-      componentStack: errorInfo.componentStack,
+      componentStack: errorInfo.componentStack || undefined,
       errorCount: this.state.errorCount,
       userJourney: journeySummary.recentEvents,
       lastRoute: journeySummary.lastRoute,
     });
 
     // Track error in journey
-    userJourney.trackError(error, { componentStack: errorInfo.componentStack });
+    userJourney.trackError(error, { componentStack: errorInfo.componentStack || undefined });
 
     // Track error in production (could send to monitoring service)
     if (import.meta.env.PROD) {
@@ -153,7 +153,9 @@ export class ErrorBoundary extends Component<Props, State> {
                 )}
                 <div className="flex gap-2">
                   <Button
-                    onClick={() => (window.location.href = '/dashboard')}
+                    onClick={() => {
+                      window.location.href = '/dashboard';
+                    }}
                     variant={canRetry ? 'outline' : 'default'}
                     className="flex-1 brutal-button brutal-hover"
                   >

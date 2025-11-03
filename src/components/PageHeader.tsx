@@ -14,6 +14,7 @@ interface PageHeaderProps {
   actions?: ReactNode;
   backTo?: string;
   className?: string;
+  loading?: boolean;
 }
 
 export const PageHeader = ({
@@ -22,6 +23,7 @@ export const PageHeader = ({
   actions,
   backTo = '/dashboard',
   className = '',
+  loading = false,
 }: PageHeaderProps) => {
   const navigate = useNavigate();
 
@@ -37,16 +39,17 @@ export const PageHeader = ({
               variant="outline"
               size="icon"
               onClick={() => navigate(backTo)}
+              disabled={loading}
               aria-label="Go back"
-              className="min-h-[44px] min-w-[44px] border-2 border-foreground bg-background hover:bg-primary hover:text-primary-foreground hover:-translate-x-1 transition-all flex-shrink-0 shadow-brutal"
+              className={`min-h-[44px] min-w-[44px] border-2 border-foreground bg-background hover:bg-primary hover:text-primary-foreground hover:-translate-x-1 transition-all flex-shrink-0 shadow-brutal ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div className="flex items-center gap-3 min-w-0">
               {icon && <div className="text-primary flex-shrink-0">{icon}</div>}
-              <h1 className="text-2xl md:text-3xl font-pixel gradient-text truncate">
-                {title}
-              </h1>
+            <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-pixel gradient-text truncate max-w-[200px] xs:max-w-[250px] sm:max-w-none">
+              {title}
+            </div>
             </div>
           </div>
           {actions && (

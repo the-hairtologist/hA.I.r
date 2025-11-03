@@ -49,17 +49,18 @@ export const AddClientDialog = ({
   } = useFormSubmit<ClientInput>(
     async data => {
       // Check if email already exists (only if email provided)
-      if (data.email) {
+      if (data.email && data.email.trim()) {
+        const emailToCheck = data.email.trim();
         const result = await trackSelect(
           async () =>
             await supabase
               .from('client_profiles')
               .select('id, user:profiles(full_name)')
-              .eq('email', data.email)
+              .eq('email', emailToCheck)
               .maybeSingle(),
           'client_profiles',
           'AddClientDialog',
-          { email: data.email }
+          { email: emailToCheck }
         );
 
         if (result.error) {
@@ -177,7 +178,7 @@ export const AddClientDialog = ({
             label="Full Name"
             type="text"
             value={values.full_name}
-            onChange={value => setFieldValue('full_name', value)}
+            onChange={value => setFieldValue('full_name', String(value))}
             onBlur={() => setFieldTouched('full_name')}
             error={errors.full_name}
             touched={touched.full_name}
@@ -191,7 +192,7 @@ export const AddClientDialog = ({
             label="Email"
             type="email"
             value={values.email || ''}
-            onChange={value => setFieldValue('email', value)}
+            onChange={value => setFieldValue('email', value ? String(value) : '')}
             onBlur={() => setFieldTouched('email')}
             error={errors.email}
             touched={touched.email}
@@ -205,7 +206,7 @@ export const AddClientDialog = ({
             label="Phone"
             type="tel"
             value={values.phone || ''}
-            onChange={value => setFieldValue('phone', value)}
+            onChange={value => setFieldValue('phone', value ? String(value) : undefined)}
             onBlur={() => setFieldTouched('phone')}
             error={errors.phone}
             touched={touched.phone}
@@ -218,7 +219,7 @@ export const AddClientDialog = ({
             label="Notes"
             type="textarea"
             value={values.notes || ''}
-            onChange={value => setFieldValue('notes', value)}
+            onChange={value => setFieldValue('notes', value ? String(value) : undefined)}
             onBlur={() => setFieldTouched('notes')}
             error={errors.notes}
             touched={touched.notes}
@@ -234,7 +235,7 @@ export const AddClientDialog = ({
             label="Allergies"
             type="textarea"
             value={allergies}
-            onChange={setAllergies}
+            onChange={value => setAllergies(String(value))}
             placeholder="Any hair product allergies or sensitivities..."
             maxLength={500}
             rows={2}

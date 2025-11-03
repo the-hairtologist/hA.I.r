@@ -12,6 +12,7 @@ import { Label } from '@/components/ui/label';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { Trash2, Plus, Palette } from 'lucide-react';
+import { logger } from '@/lib/logger';
 import {
   Dialog,
   DialogContent,
@@ -52,7 +53,7 @@ export const ServiceTypeColorManager = ({
       if (error) throw error;
       setServiceColors(data || []);
     } catch (error) {
-      console.error('Error loading service colors:', error);
+      logger.error('Failed to load service colors', 'ServiceTypeColorManager', error);
       toast.error('Failed to load service colors');
     }
   }, [stylistId]);
@@ -74,7 +75,7 @@ export const ServiceTypeColorManager = ({
       );
       toast.success('Color updated');
     } catch (error) {
-      console.error('Error updating color:', error);
+      logger.error('Failed to update color', 'ServiceTypeColorManager', error);
       toast.error('Failed to update color');
     }
   };
@@ -99,13 +100,15 @@ export const ServiceTypeColorManager = ({
 
       if (error) throw error;
 
-      setServiceColors(prev => [...prev, data]);
+      if (data) {
+        setServiceColors(prev => [...prev, data]);
+      }
       setNewServiceType('');
       setNewColor('hsl(270 85% 60%)');
       setAddDialogOpen(false);
       toast.success('Service type added');
     } catch (error: any) {
-      console.error('Error adding service type:', error);
+      logger.error('Failed to add service type', 'ServiceTypeColorManager', error);
       if (error.code === '23505') {
         toast.error('This service type already exists');
       } else {
@@ -133,7 +136,7 @@ export const ServiceTypeColorManager = ({
       setServiceColors(prev => prev.filter(sc => sc.id !== id));
       toast.success('Service type deleted');
     } catch (error) {
-      console.error('Error deleting service type:', error);
+      logger.error('Failed to delete service type', 'ServiceTypeColorManager', error);
       toast.error('Failed to delete service type');
     }
   };

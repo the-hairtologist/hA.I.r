@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { renderWithProviders, screen, fireEvent, waitFor } from '@/lib/testing/testUtils';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 
 vi.mock('sonner', () => ({
@@ -67,20 +67,7 @@ const mockedUseDevMode = useDevMode as unknown as Mock;
 const toastMock = toast as unknown as ToastMock;
 
 const renderSettings = () => {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: { retry: false },
-      mutations: { retry: false },
-    },
-  });
-
-  return render(
-    <BrowserRouter>
-      <QueryClientProvider client={queryClient}>
-        <Settings />
-      </QueryClientProvider>
-    </BrowserRouter>
-  );
+  return renderWithProviders(<Settings />);
 };
 
 const waitForSettingsReady = async () => {

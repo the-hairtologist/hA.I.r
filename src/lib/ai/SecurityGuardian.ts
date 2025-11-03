@@ -77,7 +77,7 @@ class SecurityGuardian {
       // Check for rate limit violations
       await this.checkRateLimits();
     } catch (error) {
-      logger.error('Security scan error:', error);
+      logger.error('Security scan error:', 'SecurityGuardian', error as any);
     }
   }
 

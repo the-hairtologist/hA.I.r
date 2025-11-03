@@ -48,6 +48,7 @@ import { HelpTooltip } from '@/components/HelpTooltip';
 import { ServiceTypeColorManager } from '@/components/ServiceTypeColorManager';
 import { ServiceTemplatesDialog } from '@/components/ServiceTemplatesDialog';
 import type { StylistProfile } from '@/types/common';
+import { logger } from '@/lib/logger';
 
 const Services = () => {
   const navigate = useNavigate();
@@ -123,7 +124,7 @@ const Services = () => {
         price: 0,
         deposit_amount: 0,
         deposit_type: 'fixed',
-        buffer_time_minutes: null,
+        buffer_time_minutes: undefined,
       },
       successMessage: editingService
         ? 'Service updated successfully!'
@@ -152,7 +153,7 @@ const Services = () => {
         .maybeSingle();
 
       if (stylistError) {
-        console.error('Error fetching stylist profile:', stylistError);
+        logger.error('Error fetching stylist profile', 'Services', stylistError as Error);
         toast.error('Failed to load stylist profile');
         navigate('/dashboard');
         return;
@@ -169,7 +170,7 @@ const Services = () => {
       const servicesData = await getServicesByStylist(stylist.id);
       setServices(servicesData);
     } catch (error: unknown) {
-      console.error('Error loading data:', error);
+      logger.error('Error loading data', 'Services', error as Error);
       toast.error(
         'Unable to load your services. Please refresh or check your connection.'
       );
@@ -198,7 +199,7 @@ const Services = () => {
     setFieldValue('price', Number(service.price));
     setFieldValue('deposit_amount', service.deposit_amount ?? 0);
     setFieldValue('deposit_type', service.deposit_type ?? 'fixed');
-    setFieldValue('buffer_time_minutes', service.buffer_time_minutes ?? null);
+    setFieldValue('buffer_time_minutes', service.buffer_time_minutes ?? undefined);
     setIsActive(service.is_active);
     setRequireDeposit(service.require_deposit ?? false);
     setUseCustomBuffer(service.buffer_time_minutes !== null);
@@ -310,7 +311,7 @@ const Services = () => {
               label="Service Name"
               type="text"
               value={values.service_name || ''}
-              onChange={val => setFieldValue('service_name', val)}
+              onChange={val => setFieldValue('service_name', String(val))}
               onBlur={() => setFieldTouched('service_name')}
               error={errors.service_name}
               touched={touched.service_name}
@@ -324,7 +325,7 @@ const Services = () => {
               label="Description"
               type="textarea"
               value={values.description || ''}
-              onChange={val => setFieldValue('description', val)}
+              onChange={val => setFieldValue('description', String(val || ''))}
               onBlur={() => setFieldTouched('description')}
               error={errors.description}
               touched={touched.description}
@@ -362,7 +363,7 @@ const Services = () => {
                   label=""
                   type="number"
                   value={values.duration_minutes || 90}
-                  onChange={val => setFieldValue('duration_minutes', val)}
+                  onChange={val => setFieldValue('duration_minutes', Number(val))}
                   onBlur={() => setFieldTouched('duration_minutes')}
                   error={errors.duration_minutes}
                   touched={touched.duration_minutes}
@@ -400,7 +401,7 @@ const Services = () => {
                   label=""
                   type="number"
                   value={values.price || 0}
-                  onChange={val => setFieldValue('price', val)}
+                  onChange={val => setFieldValue('price', Number(val))}
                   onBlur={() => setFieldTouched('price')}
                   error={errors.price}
                   touched={touched.price}
@@ -562,7 +563,7 @@ const Services = () => {
                     label={`Deposit ${values.deposit_type === 'fixed' ? 'Amount ($)' : 'Percentage (%)'}`}
                     type="number"
                     value={values.deposit_amount || 0}
-                    onChange={val => setFieldValue('deposit_amount', val)}
+                    onChange={val => setFieldValue('deposit_amount', Number(val || 0))}
                     onBlur={() => setFieldTouched('deposit_amount')}
                     error={errors.deposit_amount}
                     touched={touched.deposit_amount}

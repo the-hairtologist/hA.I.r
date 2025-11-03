@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Clock, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logging/productionLogger';
 
 const SESSION_WARNING_TIME = 5 * 60 * 1000; // 5 minutes in ms
 const SESSION_DURATION = 60 * 60 * 1000; // 1 hour in ms
@@ -87,7 +88,7 @@ export function SessionExpiryWarning() {
         setShowWarning(false);
       }
     } catch (error) {
-      console.error('Error extending session:', error);
+      logger.error('Error extending session', error, { component: 'SessionExpiryWarning' });
       toast.error('Failed to extend session', {
         description: 'Please sign in again',
       });

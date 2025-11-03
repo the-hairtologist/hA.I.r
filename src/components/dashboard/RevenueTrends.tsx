@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { DollarSign, TrendingUp, TrendingDown } from 'lucide-react';
 import { startOfMonth, endOfMonth, format, subMonths } from 'date-fns';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 interface RevenueTrendsProps {
   stylistId: string;
@@ -69,7 +70,7 @@ export function RevenueTrends({ stylistId }: RevenueTrendsProps) {
         );
       }
     } catch (error) {
-      console.error('Error loading revenue:', error);
+      logger.error('Error loading revenue', 'RevenueTrends', error as Error);
       toast.error('Failed to load revenue data');
     } finally {
       setLoading(false);

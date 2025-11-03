@@ -13,6 +13,7 @@ import { Badge } from '@/components/ui/badge';
 import { Zap, Plus, Trash2, ExternalLink, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 interface WebhookConfig {
   id: string;
@@ -92,9 +93,9 @@ export const ZapierSettings = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setWebhooks(data || []);
+      setWebhooks(data as any || []);
     } catch (error: any) {
-      console.error('Error loading webhooks:', error);
+      logger.error('Error loading webhooks', 'ZapierSettings', error as Error);
       toast.error('Failed to load webhooks');
     } finally {
       setLoading(false);
@@ -143,7 +144,7 @@ export const ZapierSettings = () => {
       setNewWebhook({ event_type: '', webhook_url: '' });
       loadWebhooks();
     } catch (error: any) {
-      console.error('Error saving webhook:', error);
+      logger.error('Error saving webhook', 'ZapierSettings', error as Error);
       toast.error('Failed to save webhook');
     } finally {
       setSaving(false);
@@ -162,7 +163,7 @@ export const ZapierSettings = () => {
       toast.success('Webhook deleted');
       loadWebhooks();
     } catch (error: any) {
-      console.error('Error deleting webhook:', error);
+      logger.error('Error deleting webhook', 'ZapierSettings', error as Error);
       toast.error('Failed to delete webhook');
     }
   };
@@ -179,7 +180,7 @@ export const ZapierSettings = () => {
       toast.success(`Webhook ${!currentStatus ? 'enabled' : 'disabled'}`);
       loadWebhooks();
     } catch (error: any) {
-      console.error('Error toggling webhook:', error);
+      logger.error('Error toggling webhook', 'ZapierSettings', error as Error);
       toast.error('Failed to update webhook');
     }
   };
@@ -206,7 +207,7 @@ export const ZapierSettings = () => {
       });
       loadWebhooks(); // Refresh to show updated stats
     } catch (error: any) {
-      console.error('Error testing webhook:', error);
+      logger.error('Error testing webhook', 'ZapierSettings', error);
       toast.error('Failed to send test webhook');
     } finally {
       setTesting(null);
@@ -376,7 +377,7 @@ export const ZapierSettings = () => {
                             >
                               {webhook.is_active ? 'Active' : 'Inactive'}
                             </Badge>
-                            {successRate < 80 && webhook.total_triggers > 0 && (
+                            {successRate < 80 && (webhook.total_triggers || 0) > 0 && (
                               <Badge
                                 variant="destructive"
                                 className="text-[10px] sm:text-xs"

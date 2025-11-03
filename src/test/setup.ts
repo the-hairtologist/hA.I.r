@@ -14,7 +14,7 @@ global.getComputedStyle = element => {
   return {
     display: 'block',
     visibility: 'visible',
-    getPropertyValue: prop => {
+    getPropertyValue: (prop: any) => {
       if (prop === 'display') return 'block';
       if (prop === 'visibility') return 'visible';
       return '';

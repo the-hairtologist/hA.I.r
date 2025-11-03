@@ -1,6 +1,7 @@
 import { useMemo, useEffect, useState } from 'react';
 import { useSubscription } from '@/contexts/SubscriptionContext';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 export type NudgeTrigger =
   | 'trial_day_5'
@@ -70,7 +71,7 @@ export const useSubscriptionNudges = () => {
 
       setAppointmentCount(appointments || 0);
     } catch (error) {
-      console.error('Error loading subscription nudge data:', error);
+      logger.error('Error loading subscription nudge data', 'useSubscriptionNudges', error as Error);
     }
   };
 
@@ -80,7 +81,7 @@ export const useSubscriptionNudges = () => {
       try {
         setDismissedNudges(new Set(JSON.parse(dismissed)));
       } catch (error) {
-        console.error('Error loading dismissed nudges:', error);
+        logger.error('Error loading dismissed nudges', 'useSubscriptionNudges', error as Error);
       }
     }
   };

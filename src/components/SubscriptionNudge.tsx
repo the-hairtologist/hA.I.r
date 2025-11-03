@@ -13,6 +13,7 @@ import { toast } from 'sonner';
 import { useState } from 'react';
 import { analytics } from '@/lib/analytics';
 import type { NudgeTrigger } from '@/hooks/useSubscriptionNudges';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface SubscriptionNudgeProps {
   trigger: NudgeTrigger;
@@ -133,7 +134,7 @@ export const SubscriptionNudge = ({
         toast.success('Redirecting to checkout...');
       }
     } catch (error: any) {
-      console.error('Subscription error:', error);
+      logger.error('Subscription error', error, { component: 'SubscriptionNudge', trigger });
       toast.error('Failed to start subscription process');
     } finally {
       setLoading(false);

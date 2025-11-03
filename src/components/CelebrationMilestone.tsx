@@ -6,6 +6,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Sparkles, Gift, Copy, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Confetti from 'react-confetti';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface CelebrationMilestoneProps {
   clientId: string;
@@ -45,7 +46,7 @@ export const CelebrationMilestone = ({
         setTimeout(() => setShowConfetti(false), 5000);
       }
     } catch (error) {
-      console.error('Error checking milestones:', error);
+      logger.error('Error checking milestones', error, { component: 'CelebrationMilestone', clientId });
     }
   };
 
@@ -65,7 +66,7 @@ export const CelebrationMilestone = ({
 
       if (onClose) onClose();
     } catch (error) {
-      console.error('Error marking milestone:', error);
+      logger.error('Error marking milestone as celebrated', error, { component: 'CelebrationMilestone', milestoneId: milestone?.id });
     }
   };
 

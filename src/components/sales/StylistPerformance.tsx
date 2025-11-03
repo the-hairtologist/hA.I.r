@@ -17,10 +17,12 @@ export function StylistPerformance() {
   const { data: performance, isLoading } = useQuery({
     queryKey: ['stylist-performance', user?.id],
     queryFn: async () => {
+      if (!user?.id) return null;
+      
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id, average_rating, total_reviews')
-        .eq('user_id', user?.id)
+        .eq('user_id', user.id)
         .maybeSingle();
 
       if (!stylistProfile) return null;

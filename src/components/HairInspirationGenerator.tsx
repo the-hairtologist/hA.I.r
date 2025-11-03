@@ -6,6 +6,7 @@ import { Card } from '@/components/ui/card';
 import { Sparkles, Download, Share2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { OptimizedImage } from '@/components/OptimizedImage';
+import { logger } from '@/lib/logging/productionLogger';
 
 export function HairInspirationGenerator() {
   const [prompt, setPrompt] = useState('');
@@ -40,7 +41,7 @@ export function HairInspirationGenerator() {
         description: 'Your hair inspiration image is ready',
       });
     } catch (error) {
-      console.error('Generation error:', error);
+      logger.error('Hair image generation failed', error, { component: 'HairInspirationGenerator' });
       toast({
         title: 'Generation failed',
         description: error instanceof Error ? error.message : 'Unknown error',

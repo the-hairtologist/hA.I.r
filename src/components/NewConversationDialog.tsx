@@ -13,6 +13,7 @@ import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { toast } from 'sonner';
 import { MessageSquare, User, Loader2, Search } from 'lucide-react';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface NewConversationDialogProps {
   open: boolean;
@@ -94,7 +95,7 @@ export const NewConversationDialog = ({
         setUsers(stylistProfiles?.map(s => s.user) || []);
       }
     } catch (error) {
-      console.error('Error loading users:', error);
+      logger.error('Error loading users', error, { component: 'NewConversationDialog', userRole });
       toast.error('Error loading users');
     } finally {
       setLoading(false);

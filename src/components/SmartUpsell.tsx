@@ -127,7 +127,7 @@ export const SmartUpsell = ({
       logger.debug('AI Upsell Suggestion:', data);
       setAiSuggestion(data);
     } catch (error) {
-      console.error('Error loading AI suggestion:', error);
+      logger.error('Error loading AI suggestion', 'SmartUpsell', error);
       // Fallback to static suggestion
       const fallbackSuggestion = upsellMap[currentService];
       if (fallbackSuggestion) {

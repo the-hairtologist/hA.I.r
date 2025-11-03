@@ -28,6 +28,7 @@ import {
 } from '@/lib/deepLinks';
 import { enhancedAnalytics, ANALYTICS_EVENTS } from '@/lib/enhancedAnalytics';
 import { OptimizedImage } from '@/components/OptimizedImage';
+import { logger } from '@/lib/logger';
 
 export default function DeepLinkTransformation() {
   const { id } = useParams<{ id: string }>();
@@ -72,7 +73,7 @@ export default function DeepLinkTransformation() {
 
       setAppointment(data);
     } catch (error) {
-      console.error('Error loading transformation:', error);
+      logger.error('Error loading transformation', 'DeepLinkTransformation', error as Error);
       toast.error('Failed to load transformation');
     } finally {
       setLoading(false);

@@ -167,7 +167,7 @@ export type FormulaData = z.infer<typeof formulaSchema>;
  */
 export const clientNoteSchema = z.object({
   note_type: z.enum(['general', 'allergy', 'preference', 'caution'], {
-    errorMap: () => ({ message: 'Please select a valid note type' }),
+    message: 'Please select a valid note type',
   }),
   content: z
     .string()
@@ -185,8 +185,7 @@ export const appointmentSchema = z.object({
   stylist_id: z.string().uuid({ message: 'Invalid stylist selected' }),
   service_id: z.string().uuid({ message: 'Invalid service selected' }),
   appointment_date: z.date({
-    required_error: 'Please select an appointment date',
-    invalid_type_error: 'Invalid date format',
+    message: 'Please select an appointment date',
   }),
   notes: z
     .string()
@@ -288,7 +287,7 @@ export const aiPromptSchema = z.object({
     .trim()
     .min(3, { message: 'Prompt must be at least 3 characters' })
     .max(2000, { message: 'Prompt must be less than 2000 characters' }),
-  context: z.record(z.unknown()).optional(),
+  context: z.record(z.string(), z.unknown()).optional(),
 });
 
 export type AIPromptData = z.infer<typeof aiPromptSchema>;

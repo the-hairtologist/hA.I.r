@@ -26,6 +26,7 @@ import { SearchInput } from '@/components/SearchInput';
 import { useAuth } from '@/hooks/useAuth';
 import { useUserRole } from '@/hooks/useUserRole';
 import { IntegrationTester } from '@/components/IntegrationTester';
+import { logger } from '@/lib/logger';
 import {
   Zap,
   Calendar,
@@ -514,7 +515,7 @@ const Integrations = () => {
       setWebhookUrl('');
       setApiKey('');
     } catch (error) {
-      console.error('Connection error:', error);
+      logger.error('Connection error', 'Integrations', error as Error);
       toast({
         title: 'Connection Error',
         description: 'Please check your configuration and try again',

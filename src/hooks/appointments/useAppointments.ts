@@ -180,7 +180,7 @@ export const useCreateAppointment = () => {
           )
         `
         )
-        .single();
+        .maybeSingle();
 
       if (error) {
         logger.error('Failed to create appointment', { error });
@@ -240,7 +240,7 @@ export const useUpdateAppointment = () => {
           )
         `
         )
-        .single();
+        .maybeSingle();
 
       if (error) {
         logger.error('Failed to update appointment', { error, id });
@@ -279,7 +279,7 @@ export const useDeleteAppointment = () => {
         .from('appointments')
         .select('stylist_id, client_id')
         .eq('id', id)
-        .single();
+        .maybeSingle();
 
       const { error } = await supabase
         .from('appointments')
@@ -342,7 +342,7 @@ export const useUpdateAppointmentStatus = () => {
           )
         `
         )
-        .single();
+        .maybeSingle();
 
       if (error) {
         logger.error('Failed to update appointment status', {

@@ -6,6 +6,7 @@
 import { useState, useCallback, useRef } from 'react';
 import { toast } from 'sonner';
 import { Undo } from 'lucide-react';
+import { logger } from '@/lib/logger';
 
 interface UndoableActionOptions<T> {
   action: () => Promise<void>;
@@ -17,7 +18,7 @@ interface UndoableActionOptions<T> {
 
 export const useUndoableAction = <T = void>() => {
   const [isUndoing, setIsUndoing] = useState(false);
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
   const executeWithUndo = useCallback(
     async <T>({
@@ -51,7 +52,7 @@ export const useUndoableAction = <T = void>() => {
                 await undoAction();
                 toast.success(undoMessage);
               } catch (error) {
-                console.error('Undo failed:', error);
+                logger.error('Undo failed', 'useUndoableAction', error as Error);
                 toast.error('Failed to undo action');
               } finally {
                 setIsUndoing(false);
@@ -61,14 +62,15 @@ export const useUndoableAction = <T = void>() => {
         });
 
         // Auto-dismiss after timeout
-        timeoutRef.current = setTimeout(() => {
+        const timeout = setTimeout(() => {
           if (!undoTriggered) {
             // Action is now permanent
             timeoutRef.current = undefined;
           }
         }, undoTimeout);
+        timeoutRef.current = timeout;
       } catch (error) {
-        console.error('Action failed:', error);
+        logger.error('Action failed', 'useUndoableAction', error as Error);
         toast.error('Action failed');
         throw error;
       }

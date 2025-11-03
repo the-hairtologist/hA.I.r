@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { format } from 'date-fns';
+import { logger } from '@/lib/logging/productionLogger';
 
 export const NotificationCenter = ({ userId }: { userId: string }) => {
   const [notifications, setNotifications] = useState<any[]>([]);
@@ -67,7 +68,7 @@ export const NotificationCenter = ({ userId }: { userId: string }) => {
       setNotifications(appointments || []);
       setUnreadCount(messages?.length || 0);
     } catch (error) {
-      console.error('Error loading notifications:', error);
+      logger.error('Error loading notifications', error, { component: 'NotificationCenter', userId });
     }
   };
 

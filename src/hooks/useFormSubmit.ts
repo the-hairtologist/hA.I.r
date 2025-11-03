@@ -77,7 +77,7 @@ export const useFormSubmit = <
     }
 
     const nextErrors: Record<string, string> = {};
-    result.error.errors.forEach(issue => {
+    result.error.issues.forEach((issue: any) => {
       const path = issue.path.join('.');
       nextErrors[path] = issue.message;
     });

@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, lazy, Suspense } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { usePerformance } from '@/hooks/usePerformance';
 import { supabase } from '@/integrations/supabase/client';
 import {
   getPaymentsByStylist,
@@ -86,6 +87,8 @@ let Tooltip: typeof TooltipType | undefined;
 let ResponsiveContainer: typeof ResponsiveContainerType | undefined;
 let Legend: typeof LegendType | undefined;
 
+import { logger } from '@/lib/logger';
+
 const loadCharts = async () => {
   const charts = await import('recharts');
   LineChart = charts.LineChart;
@@ -101,6 +104,14 @@ const loadCharts = async () => {
 };
 
 const Finance = () => {
+  // Performance tracking
+  usePerformance({
+    componentName: 'Finance',
+    trackRenders: true,
+    trackMounts: true,
+    reportThreshold: 16,
+  });
+
   const navigate = useNavigate();
   const location = useLocation();
   const [loading, setLoading] = useState(true);
@@ -151,14 +162,14 @@ const Finance = () => {
         .maybeSingle();
 
       if (stylistError) {
-        console.error('Error fetching stylist profile:', stylistError);
+        logger.error('Error fetching stylist profile', 'Finance', stylistError as Error);
         toast.error('Failed to load stylist profile');
         navigate('/dashboard');
         return;
       }
 
       if (!stylist) {
-        console.warn('Finance: No stylist profile found for user');
+        logger.warn('No stylist profile found for user', 'Finance', { userId: session.user.id });
         toast.error(
           'Stylist profile not found. Please complete your profile first.'
         );
@@ -186,7 +197,7 @@ const Finance = () => {
       setBrands(brandsData || []);
       setAffiliateCodes(codesData || []);
     } catch (error: any) {
-      console.error('Error loading data:', error);
+      logger.error('Error loading data', 'Finance', error as Error);
       toast.error('Failed to load financial data');
     } finally {
       setLoading(false);
@@ -332,9 +343,20 @@ const Finance = () => {
     };
   }, [payments, commissions, timePeriod]);
 
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
-    toast.success('Copied to clipboard!');
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast.success('Code copied!', {
+        icon: '✓',
+        duration: 2000,
+      });
+      // Add haptic feedback if available
+      if ('vibrate' in navigator) {
+        navigator.vibrate(50);
+      }
+    } catch (error) {
+      toast.error('Failed to copy');
+    }
   };
 
   const handleExportPayments = () => {
@@ -499,7 +521,7 @@ const Finance = () => {
                 </div>
               ) : (
                 <>
-                  <div className="h-[300px] w-full">
+                  <div className="h-[300px] w-full overflow-x-auto">
                     {ResponsiveContainer &&
                       LineChart &&
                       Line &&
@@ -508,7 +530,8 @@ const Finance = () => {
                       CartesianGrid &&
                       Tooltip &&
                       Legend && (
-                        <ResponsiveContainer width="100%" height="100%">
+                        <div style={{ minWidth: '320px', width: '100%', height: '300px' }}>
+                          <ResponsiveContainer width="100%" height="100%">
                           <LineChart
                             data={chartData}
                             margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
@@ -558,6 +581,7 @@ const Finance = () => {
                             />
                           </LineChart>
                         </ResponsiveContainer>
+                        </div>
                       )}
                   </div>
 

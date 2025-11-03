@@ -26,6 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { logger } from '@/lib/logger';
 
 interface UserRole {
   role: string;
@@ -56,9 +57,9 @@ export default function AdminUsers() {
         .order('created_at', { ascending: false});
 
       if (error) throw error;
-      setUsers(data || []);
+      setUsers(data as any || []);
     } catch (error) {
-      console.error('Error loading users:', error);
+      logger.error('Error loading users', 'AdminUsers', error as Error);
       toast.error('Failed to load users');
     }
   };
@@ -122,7 +123,7 @@ export default function AdminUsers() {
       //   body: { userIds: Array.from(selectedUsers) }
       // });
     } catch (error) {
-      console.error("Error deleting users:", error);
+      logger.error("Error deleting users", 'AdminUsers', error as Error);
       toast.error("Failed to delete users");
     } finally {
       setBulkActionLoading(false);
@@ -141,7 +142,7 @@ export default function AdminUsers() {
       toast.success('Role assigned successfully');
       loadUsers();
     } catch (error: any) {
-      console.error("Error assigning role:", error);
+      logger.error("Error assigning role", 'AdminUsers', error as Error);
       toast.error(error.message || "Failed to assign role");
     }
   };

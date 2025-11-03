@@ -13,6 +13,7 @@ import { Calendar, Clock, FileText, History } from 'lucide-react';
 import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface ClientHistoryTimelineProps {
   clientId: string;
@@ -55,7 +56,7 @@ export const ClientHistoryTimeline = ({
       setAppointments(appointmentsData || []);
       setFormulas(formulasData || []);
     } catch (error) {
-      console.error('Error loading client history:', error);
+      logger.error('Error loading client history', error, { component: 'ClientHistoryTimeline', clientId });
       toast.error('Failed to load client history');
     } finally {
       setLoading(false);

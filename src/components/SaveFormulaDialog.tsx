@@ -23,6 +23,7 @@ import { toast } from 'sonner';
 import { Save, Loader2, UserPlus } from 'lucide-react';
 import { AddClientDialog } from './AddClientDialog';
 import { cn } from '@/lib/utils';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface SaveFormulaDialogProps {
   open: boolean;
@@ -72,7 +73,7 @@ export const SaveFormulaDialog = ({
 
       setClients(clientsData || []);
     } catch (error: any) {
-      console.error('Error loading clients:', error);
+      logger.error('Error loading clients', error, { component: 'SaveFormulaDialog', stylistId });
       toast.error('Failed to load clients');
     } finally {
       setLoadingClients(false);
@@ -112,7 +113,7 @@ export const SaveFormulaDialog = ({
       setNotes('');
       onOpenChange(false);
     } catch (error: any) {
-      console.error('Error saving formula:', error);
+      logger.error('Error saving formula', error, { component: 'SaveFormulaDialog', clientId: selectedClient, stylistId });
       toast.error('Failed to save formula');
     } finally {
       setLoading(false);

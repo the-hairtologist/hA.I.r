@@ -13,6 +13,7 @@ import { Badge } from '@/components/ui/badge';
 import { Check, Loader2, ExternalLink, CreditCard } from 'lucide-react';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
+import { logger } from '@/lib/logger';
 
 export default function SubscriptionPage() {
   const { user } = useAuth();
@@ -39,7 +40,7 @@ export default function SubscriptionPage() {
 
       setSubscription(data);
     } catch (error: any) {
-      console.error('Error checking subscription:', error);
+      logger.error('Error checking subscription', 'SubscriptionPage', error);
       toast.error('Failed to check subscription status');
     } finally {
       setLoading(false);
@@ -73,7 +74,7 @@ export default function SubscriptionPage() {
         }, 5000);
       }
     } catch (error: any) {
-      console.error('Error creating checkout:', error);
+      logger.error('Error creating checkout', 'SubscriptionPage', error);
       toast.error(error.message || 'Failed to create checkout session');
     } finally {
       setCheckoutLoading(false);
@@ -94,7 +95,7 @@ export default function SubscriptionPage() {
         window.open(data.url, '_blank');
       }
     } catch (error: any) {
-      console.error('Error opening customer portal:', error);
+      logger.error('Error opening customer portal', 'SubscriptionPage', error);
       toast.error(error.message || 'Failed to open customer portal');
     } finally {
       setPortalLoading(false);

@@ -36,13 +36,15 @@ export default function AccessCodes() {
   useEffect(() => {
     if (!authLoading) {
       if (!user) {
-        toast.error('Please sign in');
+        toast.error("Looks like you're not signed in. Let's fix that.");
         setLoadingCodes(false);
         return;
       }
 
       if (!isAdmin) {
-        toast.error('Admin access required');
+        toast.error(
+          'This area requires admin access. If you need access, reach out to your admin.'
+        );
         setLoadingCodes(false);
         return;
       }
@@ -71,7 +73,7 @@ export default function AccessCodes() {
       logger.error('Error loading access codes', error, {
         context: 'AccessCodes',
       });
-      toast.error('Failed to load access codes');
+      toast.error("Couldn't load access codes. Mind trying again?");
     } finally {
       setLoadingCodes(false);
     }
@@ -188,7 +190,7 @@ export default function AccessCodes() {
                       </p>
                     )}
 
-                    <div className="flex items-center gap-4 text-[10px] xs:text-xs text-muted-foreground">
+                    <div className="flex items-center gap-4 text-xs sm:text-sm text-muted-foreground">
                       <div className="flex items-center gap-1">
                         <Calendar className="h-3 w-3" />
                         Created{' '}

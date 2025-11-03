@@ -12,6 +12,7 @@ import { ArrowLeft, Download, TrendingUp, DollarSign } from 'lucide-react';
 import { useEnhancedAuth } from '@/contexts/EnhancedAuthContext';
 import { useEffect } from 'react';
 import { toast } from 'sonner';
+import { PageHeader } from '@/components/PageHeader';
 
 export default function AdminRevenue() {
   const navigate = useNavigate();
@@ -45,34 +46,19 @@ export default function AdminRevenue() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6 pb-8">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => navigate('/dashboard')}
-              className="h-10 w-10"
-            >
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-            <div>
-              <h1 className="text-3xl font-bold flex items-center gap-2">
-                <DollarSign className="h-8 w-8 text-emerald-500" />
-                Revenue Analytics
-              </h1>
-              <p className="text-muted-foreground mt-1">
-                Complete financial overview and business intelligence
-              </p>
-            </div>
-          </div>
-
+      <PageHeader
+        title="Revenue Analytics"
+        icon={<DollarSign className="h-6 w-6" />}
+        backTo="/dashboard"
+        loading={loading}
+        actions={
           <Button variant="outline" className="gap-2">
             <Download className="h-4 w-4" />
             Export Report
           </Button>
-        </div>
+        }
+      />
+      <div className="space-y-6 pb-8 px-4 py-6">
 
         {/* Admin Notice */}
         <Card className="border-2 border-amber-500 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/30">

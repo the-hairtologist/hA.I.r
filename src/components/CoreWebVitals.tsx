@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import { onCLS, onINP, onLCP, onTTFB, onFCP, Metric } from 'web-vitals';
 import { logger } from '@/lib/logger';
 import { supabase } from '@/integrations/supabase/client';
+import { logger as productionLogger } from '@/lib/logging/productionLogger';
 
 interface VitalsData {
   metric: string;
@@ -79,7 +80,7 @@ async function sendToAnalytics(data: VitalsData) {
     );
   } catch (error) {
     // Silently fail - don't break user experience for analytics
-    console.error('Failed to send vitals:', error);
+    productionLogger.error('Failed to send Core Web Vitals', error, { component: 'CoreWebVitals' });
   }
 }
 

@@ -32,6 +32,7 @@ import {
 } from '@/components/ui/table';
 import { useToast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
+import { logger } from '@/lib/logger';
 
 export default function EmailCampaigns() {
   const { toast } = useToast();
@@ -93,7 +94,7 @@ export default function EmailCampaigns() {
       // Refetch stats after a delay
       setTimeout(() => refetch(), 3000);
     } catch (error: any) {
-      console.error('Error triggering reminders:', error);
+      logger.error('Error triggering reminders', 'EmailCampaigns', error as Error);
       toast({
         title: 'Error',
         description: error.message || 'Failed to trigger reminders',

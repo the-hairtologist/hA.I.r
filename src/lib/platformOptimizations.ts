@@ -1,6 +1,6 @@
 import { Platform, haptic } from '@/platform';
 import { analytics } from './analytics';
-import { logger } from './logging/productionLogger';
+import { logger } from './logger';
 
 /**
  * Platform-specific optimizations and integrations
@@ -27,7 +27,7 @@ export const triggerHaptic = (
         haptic.select();
     }
   } catch (error) {
-    console.warn('Haptic feedback failed:', error);
+    logger.warn('Haptic feedback failed', 'platformOptimizations');
   }
 };
 
@@ -38,7 +38,7 @@ export const shareContent = async (data: {
   url?: string;
 }) => {
   if (!Platform.isMobile && !navigator.share) {
-    console.warn('Share API not supported');
+    logger.warn('Share API not supported', 'platformOptimizations');
     return false;
   }
 
@@ -50,7 +50,7 @@ export const shareContent = async (data: {
     }
   } catch (error) {
     if ((error as Error).name !== 'AbortError') {
-      console.error('Share failed:', error);
+      logger.error('Share failed', 'platformOptimizations', error as Error);
     }
     return false;
   }
@@ -85,7 +85,7 @@ export const optimizeForPlatform = () => {
   }
 
   // Log capabilities for debugging
-  logger.debug('[Platform] Device capabilities', { capabilities });
+  logger.debug('[Platform] Device capabilities', 'platformOptimizations', { capabilities });
 
   analytics.track('platform_detected', capabilities);
 

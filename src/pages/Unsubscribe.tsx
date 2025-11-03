@@ -12,6 +12,7 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import { Mail, CheckCircle2, XCircle } from 'lucide-react';
+import { logger } from '@/lib/logger';
 
 export default function Unsubscribe() {
   const navigate = useNavigate();
@@ -60,7 +61,7 @@ export default function Unsubscribe() {
         throw new Error(data?.message || 'Failed to unsubscribe');
       }
     } catch (error: any) {
-      console.error('Unsubscribe error:', error);
+      logger.error('Unsubscribe error', 'Unsubscribe', error);
       toast({
         title: 'Error',
         description:

@@ -83,7 +83,13 @@ export const ReferralSystem = () => {
         }
       }
 
-      setReferralData(existingRef);
+      if (existingRef) {
+        setReferralData({
+          ...existingRef,
+          successful_referrals: existingRef.successful_referrals ?? 0,
+          reward_tier: existingRef.reward_tier ?? 'None',
+        });
+      }
 
       // Load referral tracking
       const { data: trackingData } = await supabase
@@ -92,9 +98,14 @@ export const ReferralSystem = () => {
         .eq('referrer_id', profile.id)
         .order('signup_date', { ascending: false });
 
-      setReferrals(trackingData || []);
+      if (trackingData) {
+        setReferrals(trackingData.map(ref => ({
+          ...ref,
+          is_qualified: ref.is_qualified ?? false,
+        })));
+      }
     } catch (error) {
-      console.error('Error loading referral data:', error);
+      logger.error('Error loading referral data', 'ReferralSystem', error);
     } finally {
       setLoading(false);
     }

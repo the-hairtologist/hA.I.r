@@ -22,6 +22,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { removeBackground, loadImage } from '@/utils/backgroundRemoval';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logging/productionLogger';
 import { OptimizedImage } from '@/components/OptimizedImage';
 import {
   Dialog,
@@ -166,7 +167,7 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
         description: 'Professional photo ready',
       });
     } catch (error) {
-      console.error('Background removal error:', error);
+      logger.error('Background removal error', error, { component: 'BeforeAfterPhotoFlow', clientId });
       triggerError();
       toast({
         title: 'Processing Failed',

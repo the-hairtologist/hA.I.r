@@ -6,6 +6,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { logger } from '@/lib/logger';
+import { logger as productionLogger } from '@/lib/logging/productionLogger';
 
 interface AutomationTiming {
   clientId: string;
@@ -105,8 +106,8 @@ export const useSmartAutomation = (stylistId?: string) => {
         clientCount: Object.keys(clientPatterns).length,
       });
     } catch (error) {
-      console.error('Error learning timing patterns:', error);
-    } finally {
+      productionLogger.error('Error learning timing patterns', error, { component: 'useSmartAutomation', stylistId });
+    } finally{
       setLoading(false);
     }
   };
@@ -140,10 +141,11 @@ export const useSmartAutomation = (stylistId?: string) => {
 
       clients.forEach(score => {
         const timing = timingProfiles[score.client_id];
+        const churnProb = score.churn_probability ?? 0;
         const urgency =
-          score.churn_probability >= 0.7
+          churnProb >= 0.7
             ? 'high'
-            : score.churn_probability >= 0.4
+            : churnProb >= 0.4
               ? 'medium'
               : 'low';
 
@@ -177,7 +179,7 @@ export const useSmartAutomation = (stylistId?: string) => {
 
       setSmartReminders(reminders);
     } catch (error) {
-      console.error('Error generating smart reminders:', error);
+      productionLogger.error('Error generating smart reminders', error, { component: 'useSmartAutomation', stylistId });
     }
   };
 

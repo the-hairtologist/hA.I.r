@@ -48,6 +48,7 @@ import { FormulaSafetyBadge } from '@/components/FormulaSafetyBadge';
 import { AIFeedbackPrompt } from '@/components/AIFeedbackPrompt';
 import { HairAnalysisPanel } from '@/components/HairAnalysisPanel';
 import { ModelPerformanceIndicator } from '@/components/ModelPerformanceIndicator';
+import { logger } from '@/lib/logger';
 import { FormulaOutcomeFeedback } from '@/components/FormulaOutcomeFeedback';
 import { AIFeatureErrorBoundary } from '@/components/AIFeatureErrorBoundary';
 import { CameraCapture } from '@/components/CameraCapture';
@@ -180,7 +181,7 @@ const Knowledge = () => {
       if (error) throw error;
       setSavedFormulas(data || []);
     } catch (error: any) {
-      console.error('Error loading formulas:', error);
+      logger.error('Error loading formulas', 'AIAssistant', error as Error);
     }
   };
 
@@ -202,13 +203,13 @@ const Knowledge = () => {
 
       if (error) throw error;
 
-      toast.success('Formula saved successfully!');
+      toast.success('Locked in. One less thing to track.');
       setShowSaveDialog(false);
       setFormulaName('');
       setFormulaToSave('');
       loadSavedFormulas();
     } catch (error: any) {
-      console.error('Error saving formula:', error);
+      logger.error('Error saving formula', 'AIAssistant', error as Error);
       toast.error('Failed to save formula');
     }
   };
@@ -222,11 +223,11 @@ const Knowledge = () => {
 
       if (error) throw error;
 
-      toast.success('Formula deleted');
+      toast.success('Formula removed. All good.');
       loadSavedFormulas();
     } catch (error: any) {
-      console.error('Error deleting formula:', error);
-      toast.error('Failed to delete formula');
+      logger.error('Error deleting formula', 'AIAssistant', error as Error);
+      toast.error("Couldn't delete that. Let's give it another shot.");
     }
   };
 
@@ -246,7 +247,7 @@ const Knowledge = () => {
       if (error) throw error;
       setConversations(data || []);
     } catch (error: any) {
-      console.error('Error loading conversations:', error);
+      logger.error('Error loading conversations', 'AIAssistant', error as Error);
     }
   };
 
@@ -269,8 +270,8 @@ const Knowledge = () => {
 
       setAiMessages(messages);
     } catch (error: any) {
-      console.error('Error loading conversation messages:', error);
-      toast.error('Failed to load conversation');
+      logger.error('Error loading conversation messages', 'AIAssistant', error as Error);
+      toast.error("Couldn't load that conversation. Mind trying again?");
     }
   };
 
@@ -301,6 +302,7 @@ const Knowledge = () => {
           .maybeSingle();
 
         if (convError) throw convError;
+        if (!conv) throw new Error('Failed to create conversation');
         convId = conv.id;
         setCurrentConversationId(convId);
       }
@@ -316,7 +318,7 @@ const Knowledge = () => {
       if (error) throw error;
       loadConversations();
     } catch (error: any) {
-      console.error('Error saving message:', error);
+      logger.error('Error saving message', 'AIAssistant', error as Error);
     }
   };
 
@@ -336,7 +338,7 @@ const Knowledge = () => {
       if (error) throw error;
       setStylistContext(data);
     } catch (error: any) {
-      console.error('Error loading stylist context:', error);
+      logger.error('Error loading stylist context', 'AIAssistant', error as Error);
     }
   };
 
@@ -364,7 +366,7 @@ const Knowledge = () => {
       if (error) throw error;
       setClientsList(data || []);
     } catch (error: any) {
-      console.error('Error loading clients list:', error);
+      logger.error('Error loading clients list', 'AIAssistant', error as Error);
     }
   };
 
@@ -410,8 +412,8 @@ const Knowledge = () => {
         recentAppointments: appointments || [],
       });
     } catch (error: any) {
-      console.error('Error loading client context:', error);
-      toast.error('Failed to load client data');
+      logger.error('Error loading client context', 'AIAssistant', error as Error);
+      toast.error("Couldn't load that client's info. Let's try again.");
     }
   };
 
@@ -487,10 +489,7 @@ const Knowledge = () => {
             });
           }
         } catch (analysisError) {
-          console.warn(
-            'Hair analysis failed, continuing with chat:',
-            analysisError
-          );
+          logger.warn('Hair analysis failed, continuing with chat', 'AIAssistant', { error: String(analysisError) });
         } finally {
           setAnalyzingPhoto(false);
         }
@@ -590,7 +589,7 @@ const Knowledge = () => {
             });
           }
         } catch (validationError) {
-          console.warn('Formula validation failed:', validationError);
+          logger.warn('Formula validation failed', 'AIAssistant', { error: String(validationError) });
         } finally {
           setValidatingFormula(false);
         }
@@ -605,7 +604,7 @@ const Knowledge = () => {
       // Clear uploaded images after successful send
       setUploadedImages([]);
     } catch (error: any) {
-      console.error('AI Error:', error);
+      logger.error('AI Error', 'AIAssistant', error as Error);
 
       // Provide actionable error message
       const errorMessage = error.message?.includes('rate limit')
@@ -668,7 +667,7 @@ const Knowledge = () => {
                 AI Hair Pro
               </h2>
             </div>
-            <p className="text-[10px] xs:text-xs sm:text-sm font-sans text-muted-foreground leading-relaxed">
+            <p className="text-xs sm:text-sm font-sans text-muted-foreground leading-relaxed">
               <span className="font-semibold text-foreground">
                 Ask anything hair-related!
               </span>{' '}
@@ -780,7 +779,7 @@ const Knowledge = () => {
                       <div className="window-control bg-warning"></div>
                       <div className="window-control bg-accent"></div>
                     </div>
-                    <h2 className="text-primary-foreground font-pixel text-xs md:text-sm flex items-center gap-1 md:gap-2 truncate">
+                    <h2 className="text-primary-foreground font-pixel text-xs md:text-sm flex items-center gap-1 md:gap-2 truncate max-w-[calc(100%-80px)]">
                       <Sparkles className="h-3 w-3 md:h-4 md:w-4 flex-shrink-0" />
                       <span className="truncate">
                         AI Hair Pro
@@ -1007,7 +1006,7 @@ const Knowledge = () => {
         </div>
 
         {/* Save Formula Dialog */}
-        <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
+        <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog} modal={true}>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Save Formula</DialogTitle>

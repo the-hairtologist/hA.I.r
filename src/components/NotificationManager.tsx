@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import { format, isToday, startOfDay, endOfDay } from 'date-fns';
 import { Calendar, DollarSign, TrendingUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface NotificationManagerProps {
   userId: string;
@@ -47,7 +48,7 @@ export const NotificationManager = ({
 
       setLastCheck(new Date());
     } catch (error) {
-      console.error('Error checking notifications:', error);
+      logger.error('Error checking notifications', error, { component: 'NotificationManager', userId, userRole });
     }
   };
 

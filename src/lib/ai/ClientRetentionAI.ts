@@ -276,7 +276,7 @@ class ClientRetentionAISystem {
         // Send message (this would integrate with your messaging system)
         await supabase.from('messages').insert({
           sender_id: stylistId,
-          recipient_id: profile.user_id,
+          recipient_id: profile.user_id || profile.id,
           message_text: message,
         });
 

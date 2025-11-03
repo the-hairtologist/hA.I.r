@@ -13,6 +13,7 @@ import {
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 interface WeeklyScheduleViewProps {
   appointments: any[];
@@ -61,7 +62,7 @@ export const WeeklyScheduleView = ({
       });
       setServiceColors(colorMap);
     } catch (error) {
-      console.error('Error loading service colors:', error);
+      logger.error('Failed to load service colors', 'WeeklyScheduleView', error);
     }
   };
 

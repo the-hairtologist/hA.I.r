@@ -22,6 +22,7 @@ import {
   isWebGPUAvailable,
 } from '@/utils/backgroundRemoval';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface BackgroundRemovalDialogProps {
   open: boolean;
@@ -79,7 +80,7 @@ export const BackgroundRemovalDialog = ({
         description: 'You can now download or use this image',
       });
     } catch (err) {
-      console.error('Background removal failed:', err);
+      logger.error('Background removal failed', err, { component: 'BackgroundRemovalDialog' });
       setError(
         err instanceof Error ? err.message : 'Failed to remove background'
       );

@@ -3,7 +3,7 @@
  * Tests double submission prevention, loading states, error handling, and success scenarios
  */
 
-import { renderHook, act, waitFor } from '@testing-library/react';
+import { renderHook, act, waitFor } from '@/lib/testing/testUtils';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { useFormSubmit } from './useFormSubmit';
 import { toast } from 'sonner';

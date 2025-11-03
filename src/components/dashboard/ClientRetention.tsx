@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { supabase } from '@/integrations/supabase/client';
 import { Users, Repeat } from 'lucide-react';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 interface ClientRetentionProps {
   stylistId: string;
@@ -47,7 +48,7 @@ export function ClientRetention({ stylistId }: ClientRetentionProps) {
         setStats({ totalClients, returningClients, retentionRate });
       }
     } catch (error) {
-      console.error('Error loading retention stats:', error);
+      logger.error('Error loading retention stats', 'ClientRetention', error as Error);
       toast.error('Failed to load retention data');
     } finally {
       setLoading(false);

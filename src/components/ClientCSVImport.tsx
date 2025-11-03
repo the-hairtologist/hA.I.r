@@ -16,6 +16,7 @@ import { Upload, Download, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface ClientCSVImportProps {
   stylistId: string;
@@ -141,7 +142,7 @@ export function ClientCSVImport({
         onImportComplete();
       }
     } catch (error) {
-      console.error('Error importing CSV:', error);
+      logger.error('Error importing CSV', error, { component: 'ClientCSVImport', stylistId });
       toast.error('Failed to process CSV file');
     } finally {
       setImporting(false);

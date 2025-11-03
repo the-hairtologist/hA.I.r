@@ -12,6 +12,7 @@ import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { useEnhancedAuth } from '@/contexts/EnhancedAuthContext';
+import { logger } from '@/lib/logger';
 
 interface Milestone {
   id: string;
@@ -55,9 +56,16 @@ export function LoyaltyProgressWidget() {
         .eq('client_id', clientProfile.id)
         .order('created_at', { ascending: false });
 
-      setMilestones(milestonesData || []);
+      setMilestones(
+        milestonesData?.map(m => ({
+          ...m,
+          discount_amount: m.discount_amount ?? 0,
+          discount_code: m.discount_code ?? '',
+          celebrated: m.celebrated ?? false,
+        })) || []
+      );
     } catch (error) {
-      console.error('Error loading loyalty data:', error);
+      logger.error('Error loading loyalty data', 'LoyaltyProgressWidget', error as Error);
     } finally {
       setLoading(false);
     }

@@ -112,10 +112,7 @@ export function QuickActionsMenu({
             client_id: data.client_id,
           });
         } catch (error) {
-          console.error(
-            '[Zapier] Failed to trigger appointment completed webhook:',
-            error
-          );
+          logger.error('Zapier webhook failed', 'QuickActionsMenu', error);
         }
 
         toast.success('Appointment marked as completed');
@@ -125,7 +122,7 @@ export function QuickActionsMenu({
         toast.success('Task completed');
       }
     } catch (error) {
-      console.error('Error completing:', error);
+      logger.error('Error completing action', 'QuickActionsMenu', error);
       toast.error('Failed to complete');
     }
   };
@@ -140,7 +137,7 @@ export function QuickActionsMenu({
         toast.success('Appointment cancelled');
       }
     } catch (error) {
-      console.error('Error cancelling:', error);
+      logger.error('Error cancelling', 'QuickActionsMenu', error);
       toast.error('Failed to cancel');
     }
   };

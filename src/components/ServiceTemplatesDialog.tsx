@@ -22,6 +22,7 @@ import { Bookmark, Plus, Trash2, Check, Package } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface ServiceTemplate {
   id: string;
@@ -61,10 +62,12 @@ export function ServiceTemplatesDialog({
     setLoading(true);
     try {
       // Get stylist profile
+      if (!user?.id) return;
+      
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id')
-        .eq('user_id', user?.id)
+        .eq('user_id', user.id)
         .maybeSingle();
 
       if (!stylistProfile) return;
@@ -77,9 +80,12 @@ export function ServiceTemplatesDialog({
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setTemplates(data || []);
+      setTemplates((data || []).map(t => ({
+        ...t,
+        created_at: t.created_at || new Date().toISOString()
+      })));
     } catch (error) {
-      console.error('Error loading templates:', error);
+      logger.error('Error loading templates', error, { component: 'ServiceTemplatesDialog', userId: user?.id });
     } finally {
       setLoading(false);
     }
@@ -87,10 +93,12 @@ export function ServiceTemplatesDialog({
 
   const loadAvailableServices = async () => {
     try {
+      if (!user?.id) return;
+      
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id')
-        .eq('user_id', user?.id)
+        .eq('user_id', user.id)
         .maybeSingle();
 
       if (!stylistProfile) return;
@@ -104,7 +112,7 @@ export function ServiceTemplatesDialog({
       if (error) throw error;
       setAvailableServices(data || []);
     } catch (error) {
-      console.error('Error loading services:', error);
+      logger.error('Error loading services', error, { component: 'ServiceTemplatesDialog', userId: user?.id });
     }
   };
 
@@ -116,10 +124,12 @@ export function ServiceTemplatesDialog({
 
     setCreating(true);
     try {
+      if (!user?.id) throw new Error('User not found');
+      
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id')
-        .eq('user_id', user?.id)
+        .eq('user_id', user.id)
         .maybeSingle();
 
       if (!stylistProfile) throw new Error('Stylist profile not found');
@@ -152,7 +162,7 @@ export function ServiceTemplatesDialog({
       setSelectedServices([]);
       loadTemplates();
     } catch (error: any) {
-      console.error('Error creating template:', error);
+      logger.error('Error creating template', error, { component: 'ServiceTemplatesDialog', templateName: newTemplateName });
       toast.error(error.message || 'Failed to create template');
     } finally {
       setCreating(false);
@@ -170,7 +180,7 @@ export function ServiceTemplatesDialog({
       toast.success('Template deleted');
       loadTemplates();
     } catch (error: any) {
-      console.error('Error deleting template:', error);
+      logger.error('Error deleting template', error, { component: 'ServiceTemplatesDialog', templateId: id });
       toast.error('Failed to delete template');
     }
   };

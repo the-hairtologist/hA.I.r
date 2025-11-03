@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -20,11 +20,11 @@ import { DashboardFullSkeleton } from '@/components/LoadingSkeleton';
 import { NextAppointmentWidget } from '@/components/dashboard/NextAppointmentWidget';
 import { LoyaltyProgressWidget } from '@/components/dashboard/LoyaltyProgressWidget';
 import { CommissionTrackerWidget } from '@/components/dashboard/CommissionTrackerWidget';
-import { QuickAddClientFAB } from '@/components/QuickAddClientFAB';
 import { startOfDay, endOfDay, startOfWeek, endOfWeek, format } from 'date-fns';
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { NotificationEnhancer } from '@/components/NotificationEnhancer';
 import { useAnalytics } from '@/hooks/useAnalytics';
+import { usePerformance } from '@/hooks/usePerformance';
 
 import { AppointmentTimerWidget } from '@/components/AppointmentTimerWidget';
 import { logger } from '@/lib/logging/productionLogger';
@@ -55,6 +55,7 @@ import { DashboardSectionRenderer } from '@/components/dashboard/DashboardSectio
 import { useAIAnalytics } from '@/hooks/useAIAnalytics';
 import { useFeatureFlag } from '@/lib/featureFlags';
 import { Button } from '@/components/ui/button';
+import { useQueryClient } from '@tanstack/react-query';
 import {
   Edit3,
   RotateCcw,
@@ -86,6 +87,17 @@ import {
 } from '@dnd-kit/sortable';
 
 const Dashboard = () => {
+  // Performance tracking for this heavy page
+  usePerformance({
+    componentName: 'Dashboard',
+    trackRenders: true,
+    trackMounts: true,
+    reportThreshold: 16,
+  });
+
+  // Query client for cache management
+  const queryClient = useQueryClient();
+
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { user: authUser, loading: authLoading } = useAuth();
@@ -398,6 +410,9 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (userRole && profile) {
+      // Force fresh data from React Query cache on dashboard load
+      queryClient.invalidateQueries();
+      
       loadDashboardData();
 
       // GuidedTour handles onboarding automatically via useTour hook
@@ -444,12 +459,16 @@ const Dashboard = () => {
     }
   }, [searchParams]);
 
-  const checkProfileCompletion = () => {
+  const checkProfileCompletion = useCallback(() => {
     if (!profile || !user || !userProfile) return;
 
-    // Don't show if already completed before
+    // Don't show if already completed OR dismissed
     const profileCompleted = localStorage.getItem('profile_completed');
-    if (profileCompleted === 'true') return;
+    const profileDismissed = localStorage.getItem('profile_setup_dismissed');
+    if (profileCompleted === 'true' || profileDismissed === 'true') {
+      setShowProfileCompletion(false);
+      return;
+    }
 
     // Check basic profile from profiles table
     const basicIncomplete = !userProfile.full_name;
@@ -459,13 +478,29 @@ const Dashboard = () => {
       const stylistIncomplete = !profile.business_name || !profile.color_line;
       if (basicIncomplete || stylistIncomplete) {
         // Delay showing by 3 seconds to let user see dashboard first
-        setTimeout(() => setShowProfileCompletion(true), 3000);
+        const timer = setTimeout(() => {
+          // Double-check flags before showing (user might have dismissed during delay)
+          const stillDismissed = localStorage.getItem('profile_setup_dismissed');
+          const stillCompleted = localStorage.getItem('profile_completed');
+          if (stillDismissed !== 'true' && stillCompleted !== 'true') {
+            setShowProfileCompletion(true);
+          }
+        }, 3000);
+        return () => clearTimeout(timer);
       }
     } else if (basicIncomplete) {
       // Delay showing by 3 seconds to let user see dashboard first
-      setTimeout(() => setShowProfileCompletion(true), 3000);
+      const timer = setTimeout(() => {
+        // Double-check flags before showing (user might have dismissed during delay)
+        const stillDismissed = localStorage.getItem('profile_setup_dismissed');
+        const stillCompleted = localStorage.getItem('profile_completed');
+        if (stillDismissed !== 'true' && stillCompleted !== 'true') {
+          setShowProfileCompletion(true);
+        }
+      }, 3000);
+      return () => clearTimeout(timer);
     }
-  };
+  }, [profile, user, userProfile, userRole]);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -475,19 +510,19 @@ const Dashboard = () => {
       const newIndex = sections.findIndex(section => section.id === over.id);
       const newOrder = arrayMove(sections, oldIndex, newIndex);
       saveDashboardLayout(newOrder);
-      toast.success('Dashboard layout updated');
+      toast.success('Layout updated. Looking good!');
     }
   };
 
   const handleReset = async () => {
     await resetDashboardLayout();
     setIsEditMode(false);
-    toast.success('Dashboard layout reset to default');
+    toast.success('Back to defaults. Fresh start!');
   };
 
   const handleSave = () => {
     setIsEditMode(false);
-    toast.success('Dashboard layout saved');
+    toast.success('Perfect. Your layout is locked in.');
   };
 
   const loadPredictiveInsights = async (stylistId: string) => {
@@ -680,13 +715,10 @@ const Dashboard = () => {
         />
       )}
 
-      {/* Quick Add Client FAB - Only for stylists */}
-      {userRole === 'stylist' && !isAdmin && <QuickAddClientFAB />}
-
       <div className="w-full space-y-4 sm:space-y-6">
         <div className="mb-4 sm:mb-6 md:mb-8 window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 relative animate-fade-in-fast">
           <div className="window-titlebar">
-            <span className="text-background font-mono text-[10px] xs:text-[11px] sm:text-xs md:text-sm font-bold truncate max-w-[70vw]">
+            <span className="text-background font-mono text-xs sm:text-sm md:text-base font-bold truncate max-w-[calc(100%-80px)]">
               {new Date().toLocaleDateString('en-US', {
                 month: '2-digit',
                 day: '2-digit',
@@ -752,7 +784,7 @@ const Dashboard = () => {
                   <Edit3 className="h-3.5 w-3.5 text-primary flex-shrink-0" />
                   <span className="truncate">Customize Dashboard</span>
                 </h3>
-                <p className="text-[10px] xs:text-[11px] sm:text-xs font-sans text-muted-foreground">
+                <p className="text-xs sm:text-sm font-sans text-muted-foreground">
                   <span className="hidden sm:inline">
                     Drag sections to reorder • Click eye icon to show/hide
                     sections
@@ -767,7 +799,7 @@ const Dashboard = () => {
                   size="sm"
                   variant="outline"
                   onClick={handleReset}
-                  className="text-[10px] xs:text-xs font-bold uppercase tracking-wide flex-1 sm:flex-none min-h-[44px]"
+                  className="text-xs sm:text-sm font-bold uppercase tracking-wide flex-1 sm:flex-none min-h-[44px]"
                 >
                   <RotateCcw className="h-3.5 w-3.5 mr-1" />
                   <span className="hidden xs:inline">Reset</span>
@@ -775,7 +807,7 @@ const Dashboard = () => {
                 <Button
                   size="sm"
                   onClick={handleSave}
-                  className="text-[10px] xs:text-xs font-bold uppercase tracking-wide flex-1 sm:flex-none min-h-[44px]"
+                  className="text-xs sm:text-sm font-bold uppercase tracking-wide flex-1 sm:flex-none min-h-[44px]"
                 >
                   <Save className="h-3.5 w-3.5 mr-1" />
                   <span className="hidden xs:inline">Done</span>

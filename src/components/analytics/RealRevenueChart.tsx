@@ -22,6 +22,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { Loader2, TrendingUp, DollarSign } from 'lucide-react';
 import { format, subDays, startOfDay } from 'date-fns';
+import { logger } from '@/lib/logger';
 
 interface RevenueData {
   date: string;
@@ -117,7 +118,7 @@ export const RealRevenueChart = () => {
       setTotalRevenue(total);
       setGrowthRate(growth);
     } catch (error) {
-      console.error('Error loading revenue data:', error);
+      logger.error('Error loading revenue data', 'RealRevenueChart', error as Error);
     } finally {
       setLoading(false);
     }

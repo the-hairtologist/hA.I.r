@@ -157,8 +157,8 @@ export default function AdminCommandCenter() {
         context: 'AdminCommandCenter',
       });
       toast({
-        title: 'Error',
-        description: 'Failed to load dashboard data',
+        title: "Couldn't load data",
+        description: "Something slipped. Let's give that another shot.",
         variant: 'destructive',
       });
     } finally {
@@ -261,7 +261,7 @@ export default function AdminCommandCenter() {
                   <p className="text-2xl sm:text-3xl md:text-4xl font-bold">
                     {stats.totalStylists}
                   </p>
-                  <p className="text-[10px] xs:text-xs text-muted-foreground mt-1">
+                  <p className="text-xs sm:text-sm text-muted-foreground mt-1">
                     Active professionals
                   </p>
                 </div>
@@ -280,7 +280,7 @@ export default function AdminCommandCenter() {
                   <p className="text-2xl sm:text-3xl md:text-4xl font-bold">
                     {stats.totalClients}
                   </p>
-                  <p className="text-[10px] xs:text-xs text-muted-foreground mt-1">
+                  <p className="text-xs sm:text-sm text-muted-foreground mt-1">
                     Platform users
                   </p>
                 </div>
@@ -299,7 +299,7 @@ export default function AdminCommandCenter() {
                   <p className="text-2xl sm:text-3xl md:text-4xl font-bold">
                     {stats.totalAppointments}
                   </p>
-                  <p className="text-[10px] xs:text-xs text-muted-foreground mt-1">
+                  <p className="text-xs sm:text-sm text-muted-foreground mt-1">
                     {stats.completionRate}% completion
                   </p>
                 </div>
@@ -318,7 +318,7 @@ export default function AdminCommandCenter() {
                   <p className="text-2xl sm:text-3xl md:text-4xl font-bold">
                     {stats.recentErrors === 0 ? '100%' : '98%'}
                   </p>
-                  <p className="text-[10px] xs:text-xs text-muted-foreground mt-1">
+                  <p className="text-xs sm:text-sm text-muted-foreground mt-1">
                     {stats.recentErrors} errors (24h)
                   </p>
                 </div>
@@ -347,7 +347,7 @@ export default function AdminCommandCenter() {
                 <p className="text-2xl sm:text-3xl md:text-4xl font-bold">
                   ${businessMetrics.totalRevenue?.toFixed(2) || '0.00'}
                 </p>
-                <p className="text-[10px] xs:text-xs text-success flex items-center gap-1">
+                <p className="text-xs sm:text-sm text-success flex items-center gap-1">
                   <TrendingUp className="h-3 w-3" />
                   Platform lifetime
                 </p>
@@ -359,7 +359,7 @@ export default function AdminCommandCenter() {
                 <p className="text-2xl sm:text-3xl md:text-4xl font-bold">
                   ${businessMetrics.avgRevenue || '0.00'}
                 </p>
-                <p className="text-[10px] xs:text-xs text-muted-foreground">
+                <p className="text-xs sm:text-sm text-muted-foreground">
                   Revenue efficiency
                 </p>
               </div>
@@ -370,7 +370,7 @@ export default function AdminCommandCenter() {
                 <p className="text-2xl sm:text-3xl md:text-4xl font-bold">
                   {stats.completionRate}%
                 </p>
-                <p className="text-[10px] xs:text-xs text-muted-foreground">
+                <p className="text-xs sm:text-sm text-muted-foreground">
                   {stats.completedAppointments} completed
                 </p>
               </div>
@@ -392,7 +392,7 @@ export default function AdminCommandCenter() {
                 className="h-auto flex-col gap-2 p-4"
               >
                 <Users className="h-6 w-6" />
-                <span className="text-[10px] xs:text-xs sm:text-sm">
+                <span className="text-xs sm:text-sm">
                   Manage Users
                 </span>
               </Button>
@@ -402,7 +402,7 @@ export default function AdminCommandCenter() {
                 className="h-auto flex-col gap-2 p-4"
               >
                 <Activity className="h-6 w-6" />
-                <span className="text-[10px] xs:text-xs sm:text-sm">
+                <span className="text-xs sm:text-sm">
                   System Health
                 </span>
               </Button>
@@ -412,7 +412,7 @@ export default function AdminCommandCenter() {
                 className="h-auto flex-col gap-2 p-4"
               >
                 <Lock className="h-6 w-6" />
-                <span className="text-[10px] xs:text-xs sm:text-sm">
+                <span className="text-xs sm:text-sm">
                   Access Codes
                 </span>
               </Button>
@@ -422,7 +422,7 @@ export default function AdminCommandCenter() {
                 className="h-auto flex-col gap-2 p-4"
               >
                 <SettingsIcon className="h-6 w-6" />
-                <span className="text-[10px] xs:text-xs sm:text-sm">
+                <span className="text-xs sm:text-sm">
                   Settings
                 </span>
               </Button>

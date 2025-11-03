@@ -80,18 +80,17 @@ export function useAIAnalytics() {
     // Detect patterns and generate insights
     const patterns = analyzePatterns(recentEvents);
 
-    if (patterns.shouldGenerateInsight) {
+    if (patterns.shouldGenerateInsight && patterns.stylistId) {
       // Auto-create AI insight
       await supabase.from('ai_insights').insert({
-        stylist_id: patterns.stylistId,
         insight_type: patterns.type,
         title: patterns.title,
         description: patterns.description,
         priority: patterns.priority,
         confidence_score: patterns.confidence,
-        action_items: patterns.actions,
+        action_items: patterns.actions as any,
         potential_revenue: patterns.revenue,
-      });
+      } as any);
     }
   };
 

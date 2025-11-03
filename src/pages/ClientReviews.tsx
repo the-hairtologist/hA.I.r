@@ -17,7 +17,7 @@ const ClientReviews = () => {
       const { data } = await supabase
         .from('stylist_profiles')
         .select('*')
-        .eq('user_id', session?.user?.id)
+        .eq('user_id', session?.user?.id || '')
         .maybeSingle();
       return data;
     },
@@ -38,7 +38,7 @@ const ClientReviews = () => {
           )
         `
         )
-        .eq('stylist_id', stylistProfile?.id)
+        .eq('stylist_id', stylistProfile?.id || '')
         .order('created_at', { ascending: false });
       return data || [];
     },

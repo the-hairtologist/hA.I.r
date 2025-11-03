@@ -96,7 +96,7 @@ class OfflineQueue {
         logger.warn('Offline operation failed', 'OfflineQueue', {
           id: item.id,
           retryCount: item.retryCount,
-          error,
+          error: error as any,
         });
 
         item.retryCount++;

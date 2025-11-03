@@ -1,6 +1,6 @@
 ﻿import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
-import { Home, Calendar, MessageSquare, User, Users, Sparkles, Shield, Activity, CalendarCheck, Settings, Plus } from "lucide-react";
+import { Home, Calendar, MessageSquare, User, Users, Sparkles, Shield, Activity, CalendarCheck, Settings, Plus, LayoutGrid } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { haptic } from "@/platform/haptics";
 import { NotificationDot } from "./NotificationDot";
@@ -8,6 +8,7 @@ import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
 import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import { logger } from "@/lib/logging/productionLogger";
 import { prefetchOnHover } from "@/lib/performance/ResourceHints";
+import { MoreMenu } from "./MoreMenu";
 
 interface NavItem {
   icon: React.ComponentType<{ className?: string }>;
@@ -99,7 +100,6 @@ const NavButton = ({
               active ? "text-on-surface-primary" : "text-muted-foreground",
               item.highlight && !active && "text-primary/60"
             )} 
-            strokeWidth={active ? 2.5 : 2}
             aria-hidden="true"
           />
         </div>
@@ -117,7 +117,7 @@ const NavButton = ({
       {/* Label */}
       <span 
         className={cn(
-          "text-xs font-sans font-medium transition-all duration-200 truncate max-w-[70px]",
+          "text-xs font-sans font-medium transition-all duration-200 truncate max-w-[60px] sm:max-w-[70px]",
           active ? "text-primary scale-105" : "text-muted-foreground"
         )}
       >
@@ -146,6 +146,7 @@ export const MobileBottomNav = () => {
   const location = useLocation();
   const { user, isAdmin, isStylist, isClient } = useEnhancedAuth();
   const { unreadCount } = useRealtimeNotifications(user?.id);
+  const [moreMenuOpen, setMoreMenuOpen] = useState(false);
 
   const isActive = (path: string) => location.pathname === path;
   
@@ -156,7 +157,7 @@ export const MobileBottomNav = () => {
     { icon: Users, label: "Clients", path: "/clients", gradient: "from-green-start to-green-end", highlight: false },
     { icon: Home, label: "Home", path: "/dashboard", gradient: "from-purple-start to-purple-end", highlight: true },
     { icon: MessageSquare, label: "Messages", path: "/messages", gradient: "from-pink-start to-pink-end", badge: unreadCount, highlight: false },
-    { icon: Settings, label: "Settings", path: "/settings", gradient: "from-blue-start to-blue-end", highlight: false },
+    { icon: LayoutGrid, label: "More", path: "#more", gradient: "from-blue-start to-blue-end", highlight: false },
   ];
 
   const clientItems: NavItem[] = [
@@ -164,14 +165,14 @@ export const MobileBottomNav = () => {
     { icon: Plus, label: "Book Now", path: "/book-appointment", gradient: "from-emerald-start to-emerald-end", highlight: true },
     { icon: CalendarCheck, label: "Appointments", path: "/appointments", gradient: "from-cyan-start to-cyan-end", highlight: false },
     { icon: MessageSquare, label: "Messages", path: "/messages", gradient: "from-pink-start to-pink-end", badge: unreadCount, highlight: false },
-    { icon: Settings, label: "Account", path: "/settings", gradient: "from-blue-start to-blue-end", highlight: false },
+    { icon: LayoutGrid, label: "More", path: "#more", gradient: "from-blue-start to-blue-end", highlight: false },
   ];
 
   const adminItems: NavItem[] = [
     { icon: Users, label: "Users", path: "/admin/users", gradient: "from-cyan-start to-cyan-end", highlight: false },
     { icon: MessageSquare, label: "Messages", path: "/messages", gradient: "from-pink-start to-pink-end", badge: unreadCount, highlight: false },
     { icon: Shield, label: "Admin Hub", path: "/admin/command", gradient: "from-amber-start to-amber-end", highlight: true },
-    { icon: Settings, label: "Settings", path: "/settings", gradient: "from-blue-start to-blue-end", highlight: false },
+    { icon: LayoutGrid, label: "More", path: "#more", gradient: "from-blue-start to-blue-end", highlight: false },
   ];
 
   const effectiveRole = isAdmin ? "admin" : userRole;
@@ -222,14 +223,30 @@ export const MobileBottomNav = () => {
   const items = mounted && customizedItems.length > 0 ? customizedItems : allItems;
 
   const handleNavigation = (path: string) => {
+    // Handle "More" menu trigger
+    if (path === "#more") {
+      haptic.tap();
+      setMoreMenuOpen(true);
+      return;
+    }
+    
     haptic.tap();
     navigate(path);
   };
 
+  // Get paths that are in bottom nav to exclude from More menu
+  const excludePaths = items.map(item => item.path).filter(path => path !== "#more");
+
   return (
     <>
+      <MoreMenu 
+        open={moreMenuOpen} 
+        onOpenChange={setMoreMenuOpen}
+        excludePaths={excludePaths}
+      />
+      
       <div className="lg:hidden flex-shrink-0 h-16" aria-hidden="true" />
-      <nav 
+      <nav
         className={cn(
           "lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md brutal-shadow-top",
           "brutal-border-t",

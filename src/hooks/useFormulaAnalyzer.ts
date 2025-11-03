@@ -72,12 +72,12 @@ export function useFormulaAnalyzer() {
         });
         toast.success(`Analyzed ${Object.keys(analysisMap).length} formulas`);
 
-        return analysisMap;
+      return analysisMap;
       }
 
       return null;
     } catch (error) {
-      logger.error('Formula analysis failed', error);
+      logger.error('Formula analysis failed', 'FormulaAnalyzer', error as any);
       toast.error('Failed to analyze formulas');
       return null;
     } finally {

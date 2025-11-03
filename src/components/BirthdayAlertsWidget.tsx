@@ -13,6 +13,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { format, isSameDay, addDays } from 'date-fns';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface BirthdayClient {
   id: string;
@@ -38,10 +39,12 @@ export function BirthdayAlertsWidget() {
   const loadUpcomingBirthdays = async () => {
     try {
       // Get stylist profile
+      if (!user?.id) return;
+      
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id')
-        .eq('user_id', user?.id)
+        .eq('user_id', user.id)
         .maybeSingle();
 
       if (!stylistProfile) {
@@ -64,7 +67,7 @@ export function BirthdayAlertsWidget() {
 
       const upcoming = data
         .map(client => {
-          const birthday = new Date(client.birthday);
+          const birthday = new Date(String(client.birthday));
           const thisYearBirthday = new Date(
             today.getFullYear(),
             birthday.getMonth(),
@@ -96,7 +99,7 @@ export function BirthdayAlertsWidget() {
 
       setUpcomingBirthdays(upcoming as BirthdayClient[]);
     } catch (error) {
-      console.error('Error loading birthdays:', error);
+      logger.error('Error loading birthdays', error, { component: 'BirthdayAlertsWidget', userId: user?.id });
     } finally {
       setLoading(false);
     }

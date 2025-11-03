@@ -11,6 +11,7 @@ import { formatDistanceToNow, isPast, format } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { logger } from '@/lib/logger';
 
 interface Appointment {
   id: string;
@@ -45,12 +46,14 @@ export function NextAppointmentBanner() {
   }, [user]);
 
   const loadNextAppointment = async () => {
+    if (!user?.id) return;
+    
     try {
       // Get stylist profile
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id')
-        .eq('user_id', user?.id)
+        .eq('user_id', user.id)
         .maybeSingle();
 
       if (!stylistProfile) {
@@ -91,7 +94,7 @@ export function NextAppointmentBanner() {
         updateTimeUntil(appointment.appointment_date);
       }
     } catch (error) {
-      console.error('Error loading next appointment:', error);
+      logger.error('Error loading next appointment', 'NextAppointmentBanner', error as Error);
     } finally {
       setLoading(false);
     }

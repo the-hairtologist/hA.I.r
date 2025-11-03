@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface StylistSubscriptionPromptProps {
   open: boolean;
@@ -97,7 +98,7 @@ export const StylistSubscriptionPrompt = ({
         toast.success('Redirecting to checkout...');
       }
     } catch (error: any) {
-      console.error('Subscription error:', error);
+      logger.error('Subscription error', error, { component: 'StylistSubscriptionPrompt' });
       toast.error('Failed to start subscription process');
     } finally {
       setLoading(false);

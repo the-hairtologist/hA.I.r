@@ -42,13 +42,13 @@ export class DashboardErrorBoundary extends Component<Props, State> {
     import('@/lib/logging/productionLogger').then(({ logger }) => {
       logger.error('Dashboard Error', error, {
         component: 'DashboardErrorBoundary',
-        componentStack: errorInfo.componentStack,
+        componentStack: errorInfo.componentStack || undefined,
       });
     });
     import('@/lib/logging/userJourneyTracker').then(({ userJourney }) => {
       userJourney.trackError(error, {
         boundary: 'Dashboard',
-        componentStack: errorInfo.componentStack,
+        componentStack: errorInfo.componentStack || undefined,
       });
     });
     this.setState({
@@ -115,7 +115,9 @@ export class DashboardErrorBoundary extends Component<Props, State> {
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => (window.location.href = '/')}
+                  onClick={() => {
+                    window.location.href = '/';
+                  }}
                   className="flex-1"
                 >
                   Go Home

@@ -6,6 +6,10 @@ import { Calendar as CalendarIcon, Users } from 'lucide-react';
 import { MetaTags } from '@/components/MetaTags';
 import { format, startOfWeek, addDays } from 'date-fns';
 import { TeamChat } from '@/components/TeamChat';
+import { PageHeader } from '@/components/PageHeader';
+import { DashboardLayout } from '@/components/DashboardLayout';
+import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 interface TeamAppointment {
   id: string;
@@ -37,39 +41,55 @@ export default function TeamSchedule() {
   }, [stylistId, currentWeek]);
 
   const fetchStylistId = async () => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (!user) return;
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) {
+        toast.error("Looks like you're not signed in. Let's fix that.");
+        return;
+      }
 
-    const { data } = await supabase
-      .from('stylist_profiles')
-      .select('id')
-      .eq('user_id', user.id)
-      .maybeSingle();
+      const { data, error } = await supabase
+        .from('stylist_profiles')
+        .select('id')
+        .eq('user_id', user.id)
+        .maybeSingle();
 
-    if (data) setStylistId(data.id);
+      if (error) throw error;
+      if (data) setStylistId(data.id);
+    } catch (error) {
+      logger.error('Failed to load stylist', 'TeamSchedule', error as Error);
+      toast.error("Couldn't load your profile. Mind trying again?");
+    }
   };
 
   const fetchTeamAppointments = async () => {
-    const weekStart = currentWeek;
-    const weekEnd = addDays(currentWeek, 7);
+    try {
+      const weekStart = currentWeek;
+      const weekEnd = addDays(currentWeek, 7);
 
-    const { data } = await supabase
-      .from('appointments')
-      .select(
+      const { data, error } = await supabase
+        .from('appointments')
+        .select(
+          `
+          *,
+          client_profiles(full_name),
+          stylist_profiles(business_name)
         `
-        *,
-        client_profiles(full_name),
-        stylist_profiles(business_name)
-      `
-      )
-      .gte('appointment_date', weekStart.toISOString())
-      .lt('appointment_date', weekEnd.toISOString())
-      .order('appointment_date', { ascending: true });
+        )
+        .gte('appointment_date', weekStart.toISOString())
+        .lt('appointment_date', weekEnd.toISOString())
+        .order('appointment_date', { ascending: true });
 
-    if (data) setAppointments(data);
-    setLoading(false);
+      if (error) throw error;
+      if (data) setAppointments(data as any);
+    } catch (error) {
+      logger.error('Failed to load team schedule', 'TeamSchedule', error as Error);
+      toast.error("Couldn't load the schedule. Let's give that another shot.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(currentWeek, i));
@@ -80,20 +100,14 @@ export default function TeamSchedule() {
         title="Team Schedule"
         description="View all team member schedules"
       />
-
-      <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 p-4 md:p-8">
-        <div className="max-w-7xl mx-auto space-y-6">
-          <div className="flex items-center gap-3">
-            <div className="p-3 bg-primary/10 rounded-xl">
-              <Users className="w-8 h-8 text-primary" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold">Team Schedule</h1>
-              <p className="text-muted-foreground">
-                Collaborative calendar view
-              </p>
-            </div>
-          </div>
+      <DashboardLayout>
+        <PageHeader
+          title="Team Schedule"
+          icon={<Users className="h-6 w-6" />}
+          backTo="/dashboard"
+          loading={loading}
+        />
+        <div className="space-y-6 px-4 py-6">
 
           <div className="grid lg:grid-cols-3 gap-6">
             {/* Schedule Grid */}
@@ -177,7 +191,7 @@ export default function TeamSchedule() {
             <div>{stylistId && <TeamChat stylistId={stylistId} />}</div>
           </div>
         </div>
-      </div>
+      </DashboardLayout>
     </>
   );
 }

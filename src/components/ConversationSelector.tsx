@@ -11,6 +11,7 @@ import { MessageSquare, Plus, Trash2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface ConversationSelectorProps {
   open: boolean;
@@ -49,7 +50,7 @@ export const ConversationSelector = ({
         onNewConversation();
       }
     } catch (error: any) {
-      console.error('Error deleting conversation:', error);
+      logger.error('Error deleting conversation', error, { component: 'ConversationSelector', conversationId: id });
       toast.error('Failed to delete conversation');
     }
   };

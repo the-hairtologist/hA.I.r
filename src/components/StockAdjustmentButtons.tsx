@@ -8,6 +8,7 @@ import { Plus, Minus } from 'lucide-react';
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 interface StockAdjustmentButtonsProps {
   productId: string;
@@ -45,7 +46,7 @@ export const StockAdjustmentButtons = ({
       );
       onUpdate();
     } catch (error) {
-      console.error('Error adjusting stock:', error);
+      logger.error('Error adjusting stock', 'StockAdjustmentButtons', error);
       toast.error('Failed to update stock');
     } finally {
       setIsAdjusting(false);

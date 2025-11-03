@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { differenceInDays, addDays } from 'date-fns';
+import { addDays, differenceInDays } from 'date-fns';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface ClientInsight {
   clientId: string;
@@ -194,7 +195,7 @@ export const usePredictiveInsights = (stylistId?: string) => {
 
       setClientInsights(insights.slice(0, 5)); // Top 5 insights
     } catch (error) {
-      console.error('Error analyzing client patterns:', error);
+      logger.error('Error analyzing client patterns', error, { component: 'usePredictiveInsights', stylistId });
     } finally {
       setLoading(false);
     }

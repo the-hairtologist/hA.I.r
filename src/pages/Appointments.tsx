@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useOptimizedCallback } from '@/hooks/useOptimizedCallback';
 import { useNavigate } from 'react-router-dom';
+import { usePerformance } from '@/hooks/usePerformance';
 import { supabase } from '@/integrations/supabase/client';
 import { useFormSubmit } from '@/hooks/useFormSubmit';
 import {
@@ -61,7 +62,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
 import { SearchInput } from '@/components/SearchInput';
 import { AppointmentSkeleton } from '@/components/LoadingSkeleton';
-import { useRealtimeUpdates } from '@/hooks/useRealtimeUpdates';
+
 import {
   Select,
   SelectContent,
@@ -88,6 +89,14 @@ import { triggerAppointmentBooked } from '@/lib/zapierTriggers';
 import { AppointmentPhotoButton } from '@/components/AppointmentPhotoButton';
 
 const Appointments = () => {
+  // Performance tracking
+  usePerformance({
+    componentName: 'Appointments',
+    trackRenders: true,
+    trackMounts: true,
+    reportThreshold: 16,
+  });
+
   const navigate = useNavigate();
   const searchInputRef = useRef<HTMLInputElement>(null);
   const [stylistProfile, setStylistProfile] = useState<any>(null);
@@ -110,8 +119,8 @@ const Appointments = () => {
   }>({ open: false, title: '', description: '', onConfirm: () => {} });
   const [searchQuery, setSearchQuery] = useState('');
 
-  const handleSearchChange = useOptimizedCallback((value: string) => {
-    setSearchQuery(value);
+  const handleSearchChange = useOptimizedCallback((...args: any[]) => {
+    setSearchQuery(args[0] as string);
   }, []);
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [rebookDialogOpen, setRebookDialogOpen] = useState(false);
@@ -139,8 +148,8 @@ const Appointments = () => {
         refetchAppointments();
       },
       {
-        successMessage: `${selectedAppointments.size} appointment${selectedAppointments.size !== 1 ? 's' : ''} completed`,
-        errorMessage: 'Failed to update appointments',
+        successMessage: `Perfect. ${selectedAppointments.size} appointment${selectedAppointments.size !== 1 ? 's' : ''} marked complete.`,
+        errorMessage: 'Couldn\'t update those. Let\'s try again.',
       }
     );
 
@@ -232,7 +241,15 @@ const Appointments = () => {
 
         setProfilesLoaded(true);
       } catch (error: any) {
-        toast.error('Unable to load your profile. Please refresh the page.');
+        if (!navigator.onLine) {
+          toast.error('You\'re offline. Reconnect to see appointments.', {
+            description: 'Your changes will sync when you\'re back online.',
+          });
+        } else {
+          toast.error('Couldn\'t load your profile. Let\'s give that another shot.', {
+            description: 'Try refreshing the page.',
+          });
+        }
       }
     };
 
@@ -240,7 +257,7 @@ const Appointments = () => {
   }, [navigate]);
 
   // Keyboard shortcuts
-  useGlobalShortcuts(searchInputRef);
+  useGlobalShortcuts(searchInputRef as any);
 
   // Helper function to refetch appointments
   const refetchAppointments = () => {
@@ -268,9 +285,15 @@ const Appointments = () => {
         `You are now ${!stylistProfile.is_available ? 'accepting' : 'not accepting'} appointments`
       );
     } catch (error: any) {
-      toast.error(
-        'Unable to update your availability status. Please try again.'
-      );
+      if (!navigator.onLine) {
+        toast.error('You\'re offline. Changes saved locally.', {
+          description: 'Will sync when connection returns.',
+        });
+      } else {
+        toast.error('That didn\'t stick. One more time?', {
+          description: 'Try toggling your availability again.',
+        });
+      }
     }
   };
 
@@ -278,7 +301,7 @@ const Appointments = () => {
     appointmentId: string,
     newStatus: string
   ) => {
-    const appointment = appointments.find(a => a.id === appointmentId);
+    const appointment = appointments.find((a: any) => a.id === appointmentId);
     const clientName = appointment?.client_profiles?.full_name || 'this client';
     const statusAction = newStatus === 'cancelled' ? 'cancel' : newStatus;
 
@@ -357,7 +380,7 @@ const Appointments = () => {
 
   // Get today's appointments
   const todayAppointments = appointments
-    .filter(apt => {
+    .filter((apt: any) => {
       const aptDate = new Date(apt.appointment_date);
       const today = new Date();
       return (
@@ -366,7 +389,7 @@ const Appointments = () => {
       );
     })
     .sort(
-      (a, b) =>
+      (a: any, b: any) =>
         new Date(a.appointment_date).getTime() -
         new Date(b.appointment_date).getTime()
     );
@@ -526,7 +549,7 @@ const Appointments = () => {
                 <AIFeatureErrorBoundary featureName="revenue_optimizer">
                   <RevenueOptimizer
                     appointments={appointments}
-                    clientData={appointments.map(apt => ({
+                    clientData={appointments.map((apt: any) => ({
                       id: apt.client_id,
                       last_appointment_date: apt.appointment_date,
                       total_appointments: 1,
@@ -632,7 +655,7 @@ const Appointments = () => {
                         ? 'No appointments match your filters'
                         : 'Your schedule is clear today! ☕'}
                     </p>
-                    <p className="text-[11px] sm:text-xs text-muted-foreground mt-1">
+                    <p className="text-xs sm:text-sm text-muted-foreground mt-1">
                       {searchQuery || statusFilter !== 'all'
                         ? 'Try adjusting your search or filters'
                         : 'Time to relax or catch up on other tasks'}
@@ -821,7 +844,7 @@ const Appointments = () => {
       </main>
 
       {/* Appointment Details Dialog */}
-      <Dialog open={detailsOpen} onOpenChange={setDetailsOpen}>
+      <Dialog open={detailsOpen} onOpenChange={setDetailsOpen} modal={true}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
             <DialogTitle>Appointment Details</DialogTitle>

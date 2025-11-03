@@ -14,6 +14,7 @@ import { toast } from 'sonner';
 import { useFormSubmit } from '@/hooks/useFormSubmit';
 import { reviewSchema, type ReviewInput } from '@/lib/validation';
 import { StandardFormField } from '@/components/forms/StandardFormField';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface ReviewDialogProps {
   open: boolean;
@@ -69,10 +70,7 @@ export const ReviewDialog = ({
           client_id: clientId,
         });
       } catch (error) {
-        console.error(
-          '[Zapier] Failed to trigger review received webhook:',
-          error
-        );
+        logger.error('Zapier webhook failed', error, { component: 'ReviewDialog', appointmentId, stylistId });
       }
     },
     {
@@ -165,7 +163,7 @@ export const ReviewDialog = ({
             label="Your Review"
             type="textarea"
             value={values.review_text || ''}
-            onChange={value => setFieldValue('review_text', value)}
+            onChange={value => setFieldValue('review_text', String(value))}
             onBlur={() => setFieldTouched('review_text')}
             error={errors.review_text}
             touched={touched.review_text}

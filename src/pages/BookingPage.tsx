@@ -35,6 +35,8 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { sanitizeInput, rateLimiter, RATE_LIMITS } from '@/lib';
+import { PageHeader } from '@/components/PageHeader';
+import { logger } from '@/lib/logger';
 
 const BookingPage = () => {
   const { session } = useAuth();
@@ -52,7 +54,7 @@ const BookingPage = () => {
       const { data } = await supabase
         .from('stylist_profiles')
         .select('*')
-        .eq('user_id', session?.user?.id)
+        .eq('user_id', session?.user?.id || '')
         .maybeSingle();
       return data;
     },
@@ -72,9 +74,20 @@ const BookingPage = () => {
     ? `${window.location.origin}/stylist/${stylistProfile.id}/book`
     : '';
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(bookingUrl);
-    toast.success('Booking link copied!');
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(bookingUrl);
+      toast.success('Link copied!', {
+        icon: '✓',
+        duration: 2000,
+      });
+      // Add haptic feedback if available
+      if ('vibrate' in navigator) {
+        navigator.vibrate(50);
+      }
+    } catch (error) {
+      toast.error('Failed to copy link');
+    }
   };
 
   const shareLink = async () => {
@@ -86,7 +99,7 @@ const BookingPage = () => {
           url: bookingUrl,
         });
       } catch (err) {
-        console.log('Share cancelled');
+        logger.info('Share cancelled', 'BookingPage', { feature: 'share' });
       }
     } else {
       copyToClipboard();
@@ -114,9 +127,10 @@ const BookingPage = () => {
     window.location.href = `mailto:?subject=${subject}&body=${body}`;
   };
 
-  const copyInstagramLink = () => {
-    copyToClipboard();
+  const copyInstagramLink = async () => {
+    await copyToClipboard();
     toast.success('Link copied! Paste it in your Instagram bio or stories', {
+      icon: '✓',
       duration: 4000,
     });
   };
@@ -134,7 +148,7 @@ const BookingPage = () => {
       setQrCodeUrl(qrDataUrl);
       setShowQrDialog(true);
     } catch (error) {
-      console.error('Error generating QR code:', error);
+      logger.error('Error generating QR code', 'BookingPage', error as Error);
       toast.error('Failed to generate QR code');
     }
   };
@@ -171,10 +185,10 @@ const BookingPage = () => {
 
       if (error) throw error;
 
-      toast.success('Settings saved successfully!');
+      toast.success('Perfect. Your settings are locked in.');
       queryClient.invalidateQueries({ queryKey: ['stylist-profile'] });
     } catch (error) {
-      console.error('Error saving settings:', error);
+      logger.error('Error saving settings', 'BookingPage', error as Error);
       toast.error('Failed to save settings');
     } finally {
       setIsSaving(false);
@@ -183,13 +197,12 @@ const BookingPage = () => {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6 max-w-4xl">
-        <div>
-          <h1 className="text-3xl font-pixel">My Booking Page</h1>
-          <p className="font-sans text-muted-foreground">
-            Share your booking link with clients
-          </p>
-        </div>
+      <PageHeader
+        title="My Booking Page"
+        icon={<Share2 className="h-6 w-6" />}
+        backTo="/settings"
+      />
+      <div className="space-y-6 max-w-4xl px-4 py-6">
 
         {/* Booking Link Card */}
         <Card>
@@ -338,7 +351,7 @@ const BookingPage = () => {
         </Card>
 
         {/* QR Code Dialog */}
-        <Dialog open={showQrDialog} onOpenChange={setShowQrDialog}>
+        <Dialog open={showQrDialog} onOpenChange={setShowQrDialog} modal={true}>
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
               <DialogTitle>Booking Page QR Code</DialogTitle>

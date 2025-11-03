@@ -26,6 +26,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
+import { logger } from '@/lib/logger';
 
 interface ImportResult {
   total: number;
@@ -87,11 +88,13 @@ John Smith,john@example.com,(555) 987-6543,1985-10-20,straight,Allergic to certa
     setProgress(0);
 
     try {
+      if (!user?.id) throw new Error('User not found');
+      
       // Get stylist profile
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id')
-        .eq('user_id', user?.id)
+        .eq('user_id', user.id)
         .maybeSingle();
 
       if (!stylistProfile) throw new Error('Stylist profile not found');
@@ -143,7 +146,7 @@ John Smith,john@example.com,(555) 987-6543,1985-10-20,straight,Allergic to certa
         toast.warning(`Imported ${success} clients with ${failed} errors`);
       }
     } catch (error: any) {
-      console.error('Import error:', error);
+      logger.error('Import error', 'CSVImportDialog', error);
       toast.error(error.message || 'Failed to import');
     } finally {
       setImporting(false);

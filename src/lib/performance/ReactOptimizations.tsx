@@ -5,6 +5,7 @@
 
 import React, { ComponentType, lazy, memo, Suspense } from 'react';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
+import { logger } from '@/lib/logger';
 
 /**
  * Enhanced lazy loading with preloading capability
@@ -39,17 +40,12 @@ export function lazyWithRetry<T extends ComponentType<any>>(
             .then(resolve)
             .catch(error => {
               if (attemptsRemaining === 0) {
-                console.error(
-                  '[LazyLoad] Failed to load chunk after retries:',
-                  error
-                );
+                logger.error('[LazyLoad] Failed to load chunk after retries', 'ReactOptimizations', error as Error);
                 reject(error);
                 return;
               }
 
-              console.warn(
-                `[LazyLoad] Chunk load failed, retrying in ${currentInterval}ms... (${attemptsRemaining} attempts left)`
-              );
+              logger.warn(`[LazyLoad] Chunk load failed, retrying in ${currentInterval}ms`, 'ReactOptimizations', { attemptsRemaining, currentInterval });
 
               setTimeout(() => {
                 attemptLoad(attemptsRemaining - 1, currentInterval * 2);
@@ -146,7 +142,7 @@ export const useOptimizedCallback = <T extends (...args: any[]) => any>(
   callback: T,
   delay = 300
 ): ((...args: Parameters<T>) => void) => {
-  const timeoutRef = React.useRef<NodeJS.Timeout>();
+  const timeoutRef = React.useRef<NodeJS.Timeout | undefined>(undefined);
 
   return React.useCallback(
     (...args: Parameters<T>) => {

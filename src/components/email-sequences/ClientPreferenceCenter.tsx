@@ -18,10 +18,12 @@ export const ClientPreferenceCenter = () => {
   const { data: preferences, isLoading } = useQuery({
     queryKey: ['client_email_preferences'],
     queryFn: async () => {
+      if (!user?.id) return null;
+      
       const { data: clientProfile } = await supabase
         .from('client_profiles')
         .select('id')
-        .eq('user_id', user?.id)
+        .eq('user_id', user.id)
         .maybeSingle();
 
       if (!clientProfile) return null;
@@ -51,10 +53,12 @@ export const ClientPreferenceCenter = () => {
   // Update preferences
   const updateMutation = useMutation({
     mutationFn: async (newPrefs: any) => {
+      if (!user?.id) throw new Error('Not authenticated');
+      
       const { data: clientProfile } = await supabase
         .from('client_profiles')
         .select('id, email')
-        .eq('user_id', user?.id)
+        .eq('user_id', user.id)
         .maybeSingle();
 
       if (!clientProfile) throw new Error('Client profile not found');
@@ -80,7 +84,7 @@ export const ClientPreferenceCenter = () => {
   });
 
   const handleToggle = (field: string, value: boolean) => {
-    const updated = { ...localPrefs, [field]: value };
+    const updated = { ...localPrefs, [field]: value } as any;
     setLocalPrefs(updated);
     updateMutation.mutate(updated);
   };

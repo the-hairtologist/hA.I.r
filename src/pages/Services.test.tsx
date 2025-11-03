@@ -1,4 +1,4 @@
-﻿import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+﻿import { renderWithProviders, screen, fireEvent, waitFor } from '@/lib/testing/testUtils';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter } from 'react-router-dom';
@@ -72,13 +72,7 @@ const renderServices = () => {
     },
   });
 
-  return render(
-    <BrowserRouter>
-      <QueryClientProvider client={queryClient}>
-        <Services />
-      </QueryClientProvider>
-    </BrowserRouter>
-  );
+  return renderWithProviders(<Services />, { queryClient });
 };
 
 let insertMock: Mock;

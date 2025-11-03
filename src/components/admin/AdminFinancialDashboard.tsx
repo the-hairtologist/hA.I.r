@@ -27,6 +27,7 @@ import {
   Activity,
 } from 'lucide-react';
 import { format, startOfMonth, endOfMonth, subMonths } from 'date-fns';
+import { logger } from '@/lib/logger';
 
 interface FinancialMetrics {
   totalRevenue: number;
@@ -169,7 +170,7 @@ export const AdminFinancialDashboard = () => {
         topStylist,
       });
     } catch (error) {
-      console.error('Error loading financial data:', error);
+      logger.error('Failed to load financial data', 'AdminFinancialDashboard', error);
     } finally {
       setLoading(false);
     }

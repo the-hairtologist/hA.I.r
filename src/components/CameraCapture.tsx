@@ -140,7 +140,7 @@ export const CameraCapture = ({
         context,
       });
       if (error instanceof z.ZodError) {
-        throw new Error('Invalid image metadata: ' + error.errors[0].message);
+        throw new Error('Invalid image metadata: ' + error.issues[0].message);
       }
       throw new Error('Failed to optimize image');
     }

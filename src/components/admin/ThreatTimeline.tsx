@@ -60,7 +60,7 @@ export function ThreatTimeline() {
           type: 'Suspicious Activity',
           severity: 'high',
           description: `Suspicious activity detected on ${conn.provider} connection`,
-          timestamp: conn.updated_at,
+          timestamp: conn.updated_at || new Date().toISOString(),
           source: 'Calendar Connections',
         });
       });

@@ -31,6 +31,7 @@ import {
 } from 'lucide-react';
 import { SEOHead } from '@/components/SEOHead';
 import { TrustBadge } from '@/components/TrustBadge';
+import { logger } from '@/lib/logger';
 
 interface StylistProfile {
   id: string;
@@ -68,7 +69,7 @@ const PublicStylistDirectory = () => {
       if (error) throw error;
       setStylists(data || []);
     } catch (error: any) {
-      console.error('Error fetching stylists:', error);
+      logger.error('Error fetching stylists', 'PublicStylistDirectory', error as Error);
     } finally {
       setLoading(false);
     }

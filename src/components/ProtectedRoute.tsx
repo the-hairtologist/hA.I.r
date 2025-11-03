@@ -21,7 +21,7 @@ export const ProtectedRoute = ({
 
   // Sync loading state with global loader
   useEffect(() => {
-    setLoading(isStillLoading, 'Verifying access...');
+    setLoading(Boolean(isStillLoading), 'Verifying access...');
   }, [isStillLoading, setLoading]);
 
   if (isStillLoading) {

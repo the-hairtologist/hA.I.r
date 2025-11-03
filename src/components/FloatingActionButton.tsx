@@ -112,7 +112,7 @@ export const FloatingActionButton = ({
             className="flex items-center gap-3 animate-fade-in"
             style={{ animationDelay: `${index * 50}ms` }}
           >
-            <span className="text-sm font-medium bg-card px-3 py-1 rounded-lg brutal-border brutal-shadow-xs whitespace-nowrap">
+            <span className="text-sm font-medium bg-card px-3 py-1 rounded-lg brutal-border brutal-shadow-xs whitespace-nowrap max-w-[140px] truncate">
               {action.label}
             </span>
             <Button

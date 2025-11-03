@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
+import { renderHook, act } from '@/lib/testing/testUtils';
 import { useResponsive, useBreakpoint, useOrientation } from './useResponsive';
 
 describe('useResponsive', () => {

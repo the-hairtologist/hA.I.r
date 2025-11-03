@@ -11,6 +11,7 @@ import { Check, Loader2, Apple } from 'lucide-react';
 import { appleIAP, IAP_PRODUCTS } from '@/lib/iap/appleIAP';
 import { toast } from 'sonner';
 import { useSubscription } from '@/contexts/SubscriptionContext';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface IAPProduct {
   id: string;
@@ -36,7 +37,7 @@ export const AppleIAPSubscription = () => {
       const iapProducts = await appleIAP.getProducts();
       setProducts(iapProducts);
     } catch (error) {
-      console.error('Failed to load products:', error);
+      logger.error('Failed to load IAP products', error, { component: 'AppleIAPSubscription' });
       toast.error('Failed to load subscription options');
     } finally {
       setLoading(false);
@@ -57,7 +58,7 @@ export const AppleIAPSubscription = () => {
         toast.error(result.error || 'Purchase failed');
       }
     } catch (error) {
-      console.error('Purchase error:', error);
+      logger.error('IAP purchase failed', error, { component: 'AppleIAPSubscription', productId });
       toast.error('Purchase failed. Please try again.');
     } finally {
       setPurchasing(null);
@@ -78,7 +79,7 @@ export const AppleIAPSubscription = () => {
         toast.error(result.error || 'No purchases to restore');
       }
     } catch (error) {
-      console.error('Restore error:', error);
+      logger.error('IAP restore purchases failed', error, { component: 'AppleIAPSubscription' });
       toast.error('Failed to restore purchases');
     } finally {
       setLoading(false);

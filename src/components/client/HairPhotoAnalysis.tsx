@@ -12,6 +12,7 @@ import { useHairAnalysis } from '@/hooks/useHairAnalysis';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { OptimizedImage } from '@/components/OptimizedImage';
+import { logger } from '@/lib/logger';
 
 interface HairPhotoAnalysisProps {
   clientId?: string;
@@ -83,7 +84,7 @@ export const HairPhotoAnalysis = ({
         });
 
       if (uploadError) {
-        console.error('Upload error:', uploadError);
+        logger.error('Photo upload failed', 'HairPhotoAnalysis', uploadError);
         throw new Error(`Upload failed: ${uploadError.message}`);
       }
 
@@ -99,7 +100,7 @@ export const HairPhotoAnalysis = ({
         onAnalysisComplete(analysisResult);
       }
     } catch (error) {
-      console.error('Analysis process error:', error);
+      logger.error('Hair photo analysis process failed', 'HairPhotoAnalysis', error);
       // Error toast already shown by useHairAnalysis hook
     } finally {
       setIsUploading(false);

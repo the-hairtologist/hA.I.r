@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Smile, Meh, Frown, TrendingUp, TrendingDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 interface ClientSentimentTrackerProps {
   stylistId: string;
@@ -54,7 +55,7 @@ export function ClientSentimentTracker({
         setSentiment({ positive, neutral, negative, trend });
       }
     } catch (error) {
-      console.error('Error loading sentiment:', error);
+      logger.error('Error loading sentiment', 'ClientSentimentTracker', error as Error);
       toast.error('Failed to load client feedback data');
     } finally {
       setLoading(false);

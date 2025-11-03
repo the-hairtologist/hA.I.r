@@ -4,7 +4,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render } from '@testing-library/react';
+import { renderWithProviders } from '@/lib/testing/testUtils';
 import '@testing-library/jest-dom';
 import { AIFormulaAnalyzer } from './AIFormulaAnalyzer';
 import { AIScheduleOptimizer } from './AIScheduleOptimizer';
@@ -106,7 +106,7 @@ describe('AI Components', () => {
     ];
 
     it('should render analyze button', () => {
-      const { getByText } = render(
+      const { getByText } = renderWithProviders(
         <AIFormulaAnalyzer formulas={mockFormulas} />
       );
 
@@ -114,7 +114,7 @@ describe('AI Components', () => {
     });
 
     it('should show loading state while analyzing', async () => {
-      const { getByText } = render(
+      const { getByText } = renderWithProviders(
         <AIFormulaAnalyzer formulas={mockFormulas} />
       );
 
@@ -123,7 +123,7 @@ describe('AI Components', () => {
     });
 
     it('should display analysis results', async () => {
-      const { getByText } = render(
+      const { getByText } = renderWithProviders(
         <AIFormulaAnalyzer formulas={mockFormulas} />
       );
 
@@ -132,7 +132,7 @@ describe('AI Components', () => {
     });
 
     it.skip('should handle empty formulas array', () => {
-      const { getByText } = render(<AIFormulaAnalyzer formulas={[]} />);
+      const { getByText } = renderWithProviders(<AIFormulaAnalyzer formulas={[]} />);
 
       // Should render without crashing
       expect(getByText(/analyze/i)).toBeInTheDocument();
@@ -140,7 +140,7 @@ describe('AI Components', () => {
 
     it('should call onAnalysisComplete callback', async () => {
       const onComplete = vi.fn();
-      const { getByText } = render(
+      const { getByText } = renderWithProviders(
         <AIFormulaAnalyzer
           formulas={mockFormulas}
           onAnalysisComplete={onComplete}
@@ -161,13 +161,13 @@ describe('AI Components', () => {
     };
 
     it.skip('should render predict button', () => {
-      const { getByText } = render(<AIScheduleOptimizer {...mockProps} />);
+      const { getByText } = renderWithProviders(<AIScheduleOptimizer {...mockProps} />);
 
       expect(getByText(/predict/i)).toBeInTheDocument();
     });
 
     it.skip('should show loading state while predicting', async () => {
-      const { getByText } = render(<AIScheduleOptimizer {...mockProps} />);
+      const { getByText } = renderWithProviders(<AIScheduleOptimizer {...mockProps} />);
 
       const predictButton = getByText(/predict/i);
       expect(predictButton).toBeInTheDocument();
@@ -175,7 +175,7 @@ describe('AI Components', () => {
 
     it.skip('should call onSuggestionSelect when provided', async () => {
       const onSelect = vi.fn();
-      const { getByText } = render(
+      const { getByText } = renderWithProviders(
         <AIScheduleOptimizer {...mockProps} onSuggestionSelect={onSelect} />
       );
 
@@ -192,19 +192,19 @@ describe('AI Components', () => {
     };
 
     it('should render message type selector', () => {
-      const { getByText } = render(<AIMessageComposer {...mockProps} />);
+      const { getByText } = renderWithProviders(<AIMessageComposer {...mockProps} />);
 
       expect(getByText(/message type/i)).toBeInTheDocument();
     });
 
     it.skip('should render generate button', () => {
-      const { getByText } = render(<AIMessageComposer {...mockProps} />);
+      const { getByText } = renderWithProviders(<AIMessageComposer {...mockProps} />);
 
       expect(getByText(/generate/i)).toBeInTheDocument();
     });
 
     it.skip('should show loading state while generating', async () => {
-      const { getByText } = render(<AIMessageComposer {...mockProps} />);
+      const { getByText } = renderWithProviders(<AIMessageComposer {...mockProps} />);
 
       const generateButton = getByText(/generate/i);
       expect(generateButton).toBeInTheDocument();
@@ -217,19 +217,19 @@ describe('AI Components', () => {
     };
 
     it('should render photo input', () => {
-      const { getByLabelText } = render(<HairPhotoAnalyzer {...mockProps} />);
+      const { getByLabelText } = renderWithProviders(<HairPhotoAnalyzer {...mockProps} />);
 
       expect(getByLabelText(/photo url/i)).toBeInTheDocument();
     });
 
     it('should render analyze button', () => {
-      const { getByText } = render(<HairPhotoAnalyzer {...mockProps} />);
+      const { getByText } = renderWithProviders(<HairPhotoAnalyzer {...mockProps} />);
 
       expect(getByText(/analyze/i)).toBeInTheDocument();
     });
 
     it('should disable analyze when no photo URL', () => {
-      const { getByText } = render(<HairPhotoAnalyzer {...mockProps} />);
+      const { getByText } = renderWithProviders(<HairPhotoAnalyzer {...mockProps} />);
 
       const analyzeButton = getByText(/analyze/i);
       expect(analyzeButton).toBeDisabled();

@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useCallback, memo } from 'react';
 import { useOptimizedCallback } from '@/hooks/useOptimizedCallback';
 import { useNavigate } from 'react-router-dom';
+import { usePerformance } from '@/hooks/usePerformance';
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
@@ -52,6 +53,7 @@ import {
 } from 'lucide-react';
 import { exportToCSV, formatDataForExport } from '@/lib/csvExport';
 import { SkeletonList } from '@/components/ui/skeleton-list';
+import { FormulaCardSkeleton } from '@/components/skeletons/FormulaCardSkeleton';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { AddClientDialog } from '@/components/AddClientDialog';
@@ -96,15 +98,24 @@ import {
   useDeleteFormula,
 } from '@/hooks/useFormulas';
 import { useClients } from '@/hooks/useClients';
+import { PageHeader } from '@/components/PageHeader';
 
 const Formulas = () => {
+  // Performance tracking
+  usePerformance({
+    componentName: 'Formulas',
+    trackRenders: true,
+    trackMounts: true,
+    reportThreshold: 16,
+  });
+
   const navigate = useNavigate();
   const [stylistId, setStylistId] = useState<string | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const handleSearchChange = useOptimizedCallback((value: string) => {
-    setSearchTerm(value);
+  const handleSearchChange = useOptimizedCallback((...args: any[]) => {
+    setSearchTerm(args[0] as string);
   }, []);
   const [editingFormula, setEditingFormula] = useState<any>(null);
   const [clientSearchOpen, setClientSearchOpen] = useState(false);
@@ -494,7 +505,13 @@ const Formulas = () => {
   if (loading) {
     return (
       <DashboardLayout>
-        <div className="space-y-6">
+        <PageHeader
+          title="Color Formulas"
+          icon={<Beaker className="h-6 w-6" />}
+          loading={true}
+          backTo="/dashboard"
+        />
+        <div className="space-y-6 px-4 py-6">
           <Breadcrumbs />
           <SkeletonList count={8} variant="card" showHeader />
         </div>
@@ -504,7 +521,12 @@ const Formulas = () => {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <PageHeader
+        title="Color Formulas"
+        icon={<Beaker className="h-6 w-6" />}
+        backTo="/dashboard"
+      />
+      <div className="space-y-6 px-4 py-6">
         <Breadcrumbs />
 
         {/* AI Disclaimer */}
@@ -563,7 +585,7 @@ const Formulas = () => {
         {clients.length === 0 && <PrerequisiteCheck type="clients" />}
 
         {/* Keyboard shortcut hints */}
-        <div className="flex justify-between items-center text-[10px] xs:text-xs sm:text-sm text-muted-foreground">
+        <div className="flex justify-between items-center text-xs sm:text-sm text-muted-foreground">
           <div className="flex gap-4">
             <span>
               <kbd className="px-2 py-1 font-semibold bg-muted rounded border">
@@ -624,7 +646,7 @@ const Formulas = () => {
           <FormulaFiltersComponent
             filters={filters}
             onFiltersChange={setFilters}
-            clients={clients}
+            clients={clients as any}
             colorLines={uniqueColorLines}
             availableTags={availableTags}
           />
@@ -783,12 +805,12 @@ const Formulas = () => {
                     <Plus className="h-5 w-5" />
                     Create Your First Formula
                   </Button>
-                  <p className="text-[10px] xs:text-xs sm:text-sm text-muted-foreground mt-4">
-                    <kbd className="px-2 py-1 text-[10px] xs:text-xs font-semibold bg-muted rounded border">
+                  <p className="text-xs sm:text-sm text-muted-foreground mt-4">
+                    <kbd className="px-2 py-1 text-xs font-semibold bg-muted rounded border">
                       Ctrl
                     </kbd>{' '}
                     +{' '}
-                    <kbd className="px-2 py-1 text-[10px] xs:text-xs font-semibold bg-muted rounded border">
+                    <kbd className="px-2 py-1 text-xs font-semibold bg-muted rounded border">
                       N
                     </kbd>{' '}
                     for quick access
@@ -911,7 +933,7 @@ const Formulas = () => {
                               {client.full_name || 'Client'}
                             </span>
                             {client.email && (
-                              <span className="text-[10px] xs:text-xs text-muted-foreground">
+                              <span className="text-xs sm:text-sm text-muted-foreground">
                                 {client.email}
                               </span>
                             )}
@@ -1177,7 +1199,7 @@ const Formulas = () => {
       <AddClientDialog
         open={addClientDialogOpen}
         onOpenChange={setAddClientDialogOpen}
-        stylistId={stylistId || undefined}
+        stylistId={stylistId || ''}
         onClientAdded={() => {
           setAddClientDialogOpen(false);
           toast.success('Client added successfully!');

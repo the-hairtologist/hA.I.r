@@ -52,33 +52,8 @@ export const MobileHeader = ({ notificationCount = 0 }: MobileHeaderProps) => {
       }}
     >
       <div className={cn('flex items-center justify-between px-4 h-16')}>
-        {/* Left: Menu button with "More" indicator - ENHANCED for better discoverability */}
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={handleMenuClick}
-          className={cn(
-            'min-w-[48px] min-h-[48px] touch-manipulation',
-            'relative group hover:bg-primary/10 transition-all duration-200',
-            'ring-1 ring-primary/20 hover:ring-primary/40'
-          )}
-          aria-label="Open full navigation menu - More options available"
-        >
-          <div className="relative">
-            <Menu
-              className="h-7 w-7 group-hover:text-primary transition-colors"
-              strokeWidth={2.5}
-            />
-            {/* "More" indicator - enhanced visibility */}
-            <div
-              className="absolute -top-1.5 -right-1.5 w-2.5 h-2.5 bg-primary rounded-full animate-pulse shadow-lg"
-              title="More menu items available"
-              aria-hidden="true"
-            />
-          </div>
-          {/* Enhanced pulse background */}
-          <div className="absolute inset-0 rounded-md bg-primary/10 animate-pulse opacity-50 group-hover:opacity-100 transition-opacity" />
-        </Button>
+        {/* Left: Spacer for visual balance (no menu button on mobile) */}
+        <div className="w-12" aria-hidden="true" />
 
         {/* Center: Logo */}
         <button

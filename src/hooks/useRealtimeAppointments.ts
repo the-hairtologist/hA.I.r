@@ -64,8 +64,17 @@ export const useRealtimeAppointments = (
             const { data, error } = await query;
 
             if (error) throw error;
-            setAppointments(data || []);
-            return { data, error };
+            
+            // Map nullable DB fields to non-nullable interface types
+            const mappedData = (data || []).map(apt => ({
+              ...apt,
+              status: apt.status ?? 'scheduled',
+              notes: apt.notes ?? undefined,
+              cancellation_reason: apt.cancellation_reason ?? undefined,
+            }));
+            
+            setAppointments(mappedData as any);
+            return { data: mappedData, error };
           },
           'appointments',
           'useRealtimeAppointments',

@@ -12,6 +12,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { useState } from 'react';
 import { useUserRole } from '@/hooks/useUserRole';
+import { PageHeader } from '@/components/PageHeader';
 
 const Profile = () => {
   const { session } = useAuth();
@@ -25,7 +26,7 @@ const Profile = () => {
       const { data } = await supabase
         .from('profiles')
         .select('*')
-        .eq('id', session?.user?.id)
+        .eq('id', session?.user?.id || '')
         .maybeSingle();
       return data;
     },
@@ -38,7 +39,7 @@ const Profile = () => {
       const { data } = await supabase
         .from('stylist_profiles')
         .select('*')
-        .eq('user_id', session?.user?.id)
+        .eq('user_id', session?.user?.id || '')
         .maybeSingle();
       return data;
     },
@@ -63,7 +64,7 @@ const Profile = () => {
           full_name: data.full_name,
           phone: data.phone,
         })
-        .eq('id', session?.user?.id);
+        .eq('id', session?.user?.id || '');
 
       if (profileError) throw profileError;
 
@@ -76,7 +77,7 @@ const Profile = () => {
             business_name: data.business_name,
             location: data.location,
           })
-          .eq('user_id', session?.user?.id);
+          .eq('user_id', session?.user?.id || '');
 
         if (stylistError) throw stylistError;
       }
@@ -98,15 +99,12 @@ const Profile = () => {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6 max-w-3xl">
-        <div>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-pixel">
-            My Profile
-          </h1>
-          <p className="text-muted-foreground font-sans">
-            Manage your personal information
-          </p>
-        </div>
+      <PageHeader
+        title="My Profile"
+        icon={<User className="h-6 w-6" />}
+        backTo="/dashboard"
+      />
+      <div className="space-y-6 max-w-3xl px-4 py-6">
 
         <Card>
           <CardHeader>
@@ -164,7 +162,7 @@ const Profile = () => {
                     className="pl-9"
                   />
                 </div>
-                <p className="text-[10px] xs:text-xs sm:text-sm text-muted-foreground">
+                <p className="text-xs sm:text-sm text-muted-foreground">
                   Email cannot be changed here
                 </p>
               </div>

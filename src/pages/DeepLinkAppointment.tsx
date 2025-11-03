@@ -15,6 +15,7 @@ import { toast } from 'sonner';
 import { shareDeepLink, generateDeepLink } from '@/lib/deepLinks';
 import { enhancedAnalytics, ANALYTICS_EVENTS } from '@/lib/enhancedAnalytics';
 import { Loader2 } from 'lucide-react';
+import { logger } from '@/lib/logger';
 
 export default function DeepLinkAppointment() {
   const { id } = useParams<{ id: string }>();
@@ -60,7 +61,7 @@ export default function DeepLinkAppointment() {
 
       setAppointment(data);
     } catch (error) {
-      console.error('Error loading appointment:', error);
+      logger.error('Error loading appointment', 'DeepLinkAppointment', error as Error);
       toast.error('Failed to load appointment');
     } finally {
       setLoading(false);

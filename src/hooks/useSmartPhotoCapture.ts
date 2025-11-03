@@ -8,6 +8,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { captureImage } from '@/platform/camera';
 import imageCompression from 'browser-image-compression';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface PhotoMetadata {
   serviceType?: string;
@@ -125,7 +126,7 @@ export const useSmartPhotoCapture = () => {
 
         return enhancedPhoto;
       } catch (error) {
-        console.error('Smart capture error:', error);
+        logger.error('Smart capture error', error, { component: 'useSmartPhotoCapture' });
         toast.error('Failed to capture photo');
         return null;
       } finally {
@@ -167,7 +168,7 @@ export const useSmartPhotoCapture = () => {
       const serviceType = inferServiceType(data);
       return serviceType;
     } catch (error) {
-      console.error('Auto-tagging failed:', error);
+      logger.error('Auto-tagging failed', error, { component: 'useSmartPhotoCapture' });
       return null;
     }
   };

@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { describe, it, expect, vi, beforeEach, type Mock } from 'vitest';
-import { renderHook, waitFor, act } from '@testing-library/react';
+import { renderHook, waitFor, act } from '@/lib/testing/testUtils';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useAICall } from './useAICall';
 import { supabase } from '@/integrations/supabase/client';
@@ -223,10 +223,6 @@ describe('useAICall', () => {
     for (const model of models) {
       const { result } = renderHook(() => useAICall('test-function', { model }), {
         wrapper: createWrapper(),
-      });
-
-      (supabase.functions.invoke as Mock).mockResolvedValue({ data: { modelUsed: model }, error: null });
-
       });
 
       (supabase.functions.invoke as Mock).mockResolvedValue({

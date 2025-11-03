@@ -14,6 +14,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { notification } from '@/platform/haptics';
+import { logger } from '@/lib/logger';
 
 export const SampleDataToggle = () => {
   const { user } = useAuth();
@@ -55,7 +56,7 @@ export const SampleDataToggle = () => {
       toast.success('Sample data added! Refresh to see it.');
       setOpen(false);
     } catch (error) {
-      console.error('Error adding sample data:', error);
+      logger.error('Failed to add sample data', 'SampleDataToggle', error);
       toast.error('Failed to add sample data');
     } finally {
       setLoading(false);
@@ -73,7 +74,7 @@ export const SampleDataToggle = () => {
       notification('success');
       setOpen(false);
     } catch (error) {
-      console.error('Error removing sample data:', error);
+      logger.error('Failed to remove sample data', 'SampleDataToggle', error);
       toast.error('Failed to remove sample data');
     } finally {
       setLoading(false);

@@ -19,6 +19,7 @@ import { useEnhancedAuth } from '@/contexts/EnhancedAuthContext';
 import { format, formatDistanceToNow } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { logger } from '@/lib/logger';
 
 interface Appointment {
   id: string;
@@ -72,12 +73,13 @@ export function NextAppointmentWidget() {
       if (data) {
         setAppointment({
           ...data,
+          notes: data.notes ?? undefined,
           stylist_name:
             (data.stylist_profiles as any)?.user?.full_name || 'Your Stylist',
         });
       }
     } catch (error) {
-      console.error('Error fetching next appointment:', error);
+      logger.error('Error fetching next appointment', 'NextAppointmentWidget', error as Error);
     } finally {
       setLoading(false);
     }
