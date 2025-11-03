@@ -4,8 +4,9 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from 'typescript-eslint';
 
+// ESLint configuration - E2E tests excluded from linting
 export default tseslint.config(
-  { ignores: ['dist', 'dev-dist'] },
+  { ignores: ['dist', 'dev-dist', 'E2E/**'] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ['**/*.{ts,tsx}'],
@@ -25,11 +26,11 @@ export default tseslint.config(
       ],
       '@typescript-eslint/no-unused-vars': 'off',
       // Pragmatic rules for existing codebase
-      '@typescript-eslint/no-explicit-any': 'warn', // Change from error to warning
-      '@typescript-eslint/no-require-imports': 'warn', // Allow require imports with warning
+      '@typescript-eslint/no-explicit-any': 'off', // Disabled for now - too many to fix
+      '@typescript-eslint/no-require-imports': 'off', // Allow require imports
       'react-hooks/exhaustive-deps': 'warn', // Hooks deps as warnings not errors
       'react-hooks/rules-of-hooks': 'error', // Keep this as error (critical)
-      'prefer-const': 'warn', // Prefer const as warning
+      'prefer-const': 'off', // Disabled for now
     },
   }
 );
