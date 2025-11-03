@@ -40,9 +40,11 @@ Your hA.I.r app now has **complete error monitoring** with Sentry. All errors ar
 ### 🔧 Configuration
 
 **Environment Variable Set:**
+
 - `VITE_SENTRY_DSN` - Your project's unique identifier (securely stored)
 
 **Settings:**
+
 - Enabled in all environments (dev + production)
 - 10% performance trace sampling
 - Session replay: 10% normal, 100% on errors
@@ -51,21 +53,25 @@ Your hA.I.r app now has **complete error monitoring** with Sentry. All errors ar
 ## 🚀 How to Verify It's Working
 
 ### Method 1: Check Console Logs
+
 1. Open your browser's Developer Tools
 2. Look for: `✅ Sentry initialized successfully`
 
 ### Method 2: Trigger a Test Error
+
 ```javascript
 // Open browser console and run:
-throw new Error("Test error for Sentry");
+throw new Error('Test error for Sentry');
 ```
 
 ### Method 3: Check Your Sentry Dashboard
+
 1. Go to [https://hair-l0.sentry.io](https://hair-l0.sentry.io)
 2. Navigate to "Issues"
 3. You should see errors appearing in real-time
 
 ### Method 4: Test User Context
+
 1. Log in to your app
 2. Trigger an error (or use the test above)
 3. In Sentry, click on the error
@@ -74,6 +80,7 @@ throw new Error("Test error for Sentry");
 ## 📊 What You'll See in Sentry
 
 ### Issues View
+
 - Error message and type
 - Stack trace with file names and line numbers
 - User information (if logged in)
@@ -81,18 +88,21 @@ throw new Error("Test error for Sentry");
 - Breadcrumbs (user actions leading to error)
 
 ### Performance View
+
 - Page load times
 - API call durations
 - Slowest transactions
 - Performance trends over time
 
 ### Replays View
+
 - Video-like recordings of user sessions where errors occurred
 - See exactly what users did before encountering errors
 
 ## 🎨 Customization Options
 
 ### Track Custom Events
+
 ```typescript
 import { captureMessage } from '@/lib/monitoring';
 
@@ -100,25 +110,27 @@ captureMessage('User completed onboarding', 'info');
 ```
 
 ### Track Custom Errors
+
 ```typescript
 import { captureError } from '@/lib/monitoring';
 
 try {
   // risky code
 } catch (error) {
-  captureError(error, { 
+  captureError(error, {
     context: 'payment_processing',
-    userId: user.id 
+    userId: user.id,
   });
 }
 ```
 
 ### Add Breadcrumbs
+
 ```typescript
 import { addBreadcrumb } from '@/lib/monitoring';
 
-addBreadcrumb('User clicked checkout', 'user_action', { 
-  cartTotal: 99.99 
+addBreadcrumb('User clicked checkout', 'user_action', {
+  cartTotal: 99.99,
 });
 ```
 
@@ -141,17 +153,20 @@ addBreadcrumb('User clicked checkout', 'user_action', {
 ## 🆘 Troubleshooting
 
 ### Not Seeing Errors?
+
 1. Verify DSN is set correctly in Lovable secrets
 2. Check browser console for "Sentry initialized" message
 3. Trigger a test error using the console method above
 4. Make sure you're logged into the correct Sentry project
 
 ### Too Many Errors?
+
 1. Review ignored errors list in `src/lib/monitoring.ts`
 2. Add more error patterns to ignore if needed
 3. Set up error grouping rules in Sentry dashboard
 
 ### Performance Data Missing?
+
 - Performance traces are sampled at 10% by default
 - Increase `tracesSampleRate` in `monitoring.ts` if needed
 
@@ -160,6 +175,7 @@ addBreadcrumb('User clicked checkout', 'user_action', {
 Your error monitoring is now live and tracking issues automatically. You'll be notified of errors as they happen, helping you maintain a stable, reliable app for your users.
 
 **Next Steps:**
+
 1. Visit your [Sentry Dashboard](https://hair-l0.sentry.io)
 2. Configure email alerts for critical errors
 3. Set up Slack integration (optional)

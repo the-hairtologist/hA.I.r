@@ -25,7 +25,6 @@ export default function CommissionTracking() {
         loading={loading}
       />
       <div className="space-y-6 pb-8 px-4 py-6">
-
         {/* Commission Widget */}
         <CommissionTrackerWidget />
 

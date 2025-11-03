@@ -19,15 +19,18 @@ Completed comprehensive audit and fix of all potential infinite recursion issues
 Removed redundant policies that were causing confusion and potential conflicts:
 
 #### `audit_logs` Table
+
 - ❌ Removed: "Block non-admin audit log access" (duplicate)
 - ✅ Kept: "Admins can view audit logs"
 
 #### `client_profiles` Table
+
 - ❌ Removed: "Clients can view own profile by user_id" (duplicate)
 - ❌ Removed: "client_select_own" (duplicate)
 - ✅ Kept: "Clients can view own profile" (most specific)
 
 #### `profiles` Table
+
 - ❌ Removed: "profile_delete_own" (duplicate)
 - ❌ Removed: "profile_insert_own" (duplicate)
 - ❌ Removed: "profile_select_own" (duplicate)
@@ -45,6 +48,7 @@ Replaced deeply nested SELECT statements with security definer functions to prev
 #### A. `formula_products` Table
 
 **Before** (Recursion Risk):
+
 ```sql
 -- Policy had nested queries: formula_products -> formulas -> stylist_profiles
 (formula_id IN (
@@ -57,6 +61,7 @@ Replaced deeply nested SELECT statements with security definer functions to prev
 ```
 
 **After** (Safe):
+
 ```sql
 -- New security definer function
 CREATE FUNCTION user_owns_formula(_formula_id uuid, _user_id uuid)
@@ -64,6 +69,7 @@ CREATE FUNCTION user_owns_formula(_formula_id uuid, _user_id uuid)
 ```
 
 **Policies Updated**:
+
 - ✅ Stylists can create formula products
 - ✅ Stylists can view formula products
 - ✅ Stylists can update formula products
@@ -74,12 +80,14 @@ CREATE FUNCTION user_owns_formula(_formula_id uuid, _user_id uuid)
 #### B. `stylist_services` Table
 
 **Before** (High Recursion Risk):
+
 ```sql
 -- Multiple complex nested queries with EXISTS clauses
 ((stylist_id IN (...)) OR ((auth.uid() IS NOT NULL) AND (stylist_id IN (...))) OR ...)
 ```
 
 **After** (Safe):
+
 ```sql
 -- New security definer function
 CREATE FUNCTION can_access_stylist_services(_stylist_id uuid, _user_id uuid)
@@ -87,6 +95,7 @@ CREATE FUNCTION can_access_stylist_services(_stylist_id uuid, _user_id uuid)
 ```
 
 **Policies Consolidated**:
+
 - ❌ Removed: "Authenticated users can view services for connected stylists"
 - ❌ Removed: "Clients can view connected stylist services"
 - ✅ Created: "Users can view accessible stylist services" (single clean policy)
@@ -96,12 +105,14 @@ CREATE FUNCTION can_access_stylist_services(_stylist_id uuid, _user_id uuid)
 #### C. `referral_tracking` Table
 
 **Before** (Recursion Risk):
+
 ```sql
 -- Complex OR with nested queries
 ((referrer_id IN (...)) OR (referred_stylist_id IN (...)))
 ```
 
 **After** (Safe):
+
 ```sql
 -- New security definer function
 CREATE FUNCTION can_view_referral_tracking(_referrer_id uuid, _referred_stylist_id uuid, _user_id uuid)
@@ -113,13 +124,16 @@ CREATE FUNCTION can_view_referral_tracking(_referrer_id uuid, _referred_stylist_
 ## New Security Definer Functions Created
 
 ### 1. `user_owns_formula()`
+
 **Purpose**: Check if user owns a formula through stylist profile  
 **Tables Accessed**: `formulas`, `stylist_profiles`  
 **Used By**: `formula_products` policies
 
 ### 2. `can_access_stylist_services()`
+
 **Purpose**: Check if user can view a stylist's services  
 **Logic**:
+
 - User is the stylist themselves
 - User is a client with appointment in last 90 days
 - User has this as preferred stylist
@@ -128,6 +142,7 @@ CREATE FUNCTION can_view_referral_tracking(_referrer_id uuid, _referred_stylist_
 **Used By**: `stylist_services` policies
 
 ### 3. `can_view_referral_tracking()`
+
 **Purpose**: Check if user can view referral tracking records  
 **Logic**: User must be either the referrer or referred stylist  
 **Tables Accessed**: `stylist_profiles`  
@@ -138,12 +153,14 @@ CREATE FUNCTION can_view_referral_tracking(_referrer_id uuid, _referred_stylist_
 ## Security Improvements
 
 ### Before Fix
+
 - ⚠️ 9 duplicate policies causing confusion
 - ⚠️ 6 policies with deeply nested SELECT statements (3+ levels)
 - ⚠️ Potential for infinite recursion in complex queries
 - ⚠️ Policy evaluation was slow due to nested queries
 
 ### After Fix
+
 - ✅ Zero duplicate policies
 - ✅ Zero nested SELECT statements in policies
 - ✅ All complex logic in security definer functions
@@ -155,6 +172,7 @@ CREATE FUNCTION can_view_referral_tracking(_referrer_id uuid, _referred_stylist_
 ## Verification Results
 
 ### Linter Status
+
 - ✅ No infinite recursion warnings
 - ✅ No RLS policy issues
 - ⚠️ 2 minor warnings (unrelated to recursion):
@@ -162,11 +180,13 @@ CREATE FUNCTION can_view_referral_tracking(_referrer_id uuid, _referred_stylist_
   - Leaked password protection (informational)
 
 ### Policy Audit
+
 - ✅ **Zero duplicate policies detected**
 - ✅ **Zero circular references detected**
 - ✅ **All policies use security definer functions correctly**
 
 ### Database Query Results
+
 ```sql
 -- Query for duplicate policies returned: []
 -- This confirms all duplicates have been removed
@@ -177,6 +197,7 @@ CREATE FUNCTION can_view_referral_tracking(_referrer_id uuid, _referred_stylist_
 ## Technical Details
 
 ### Security Definer Pattern
+
 All new functions follow the secure pattern:
 
 ```sql
@@ -190,6 +211,7 @@ AS $$ ... $$;
 ```
 
 **Why This Works**:
+
 1. `SECURITY DEFINER` allows function to bypass RLS on tables it queries
 2. This breaks circular dependencies between policies
 3. `STABLE` ensures function is cacheable for performance
@@ -200,11 +222,13 @@ AS $$ ... $$;
 ## Performance Impact
 
 ### Query Speed Improvements
+
 - Formula products queries: **~40% faster** (eliminated nested subqueries)
 - Stylist services queries: **~60% faster** (consolidated 2 policies into 1)
 - Referral tracking queries: **~30% faster** (simplified logic)
 
 ### Database Load
+
 - Reduced policy evaluation overhead by **~35%**
 - Function results are cached during query execution
 - No more exponential query expansion from nested SELECTs
@@ -214,11 +238,13 @@ AS $$ ... $$;
 ## Testing Performed
 
 ### 1. Duplicate Policy Verification
+
 ```sql
 ✅ Query confirmed zero duplicate policies remain
 ```
 
 ### 2. Function Testing
+
 ```sql
 ✅ user_owns_formula() - Correctly identifies formula ownership
 ✅ can_access_stylist_services() - Properly checks service access
@@ -226,6 +252,7 @@ AS $$ ... $$;
 ```
 
 ### 3. Policy Testing
+
 ```sql
 ✅ All CRUD operations work correctly with new policies
 ✅ Users can only access their own data
@@ -234,6 +261,7 @@ AS $$ ... $$;
 ```
 
 ### 4. Recursion Testing
+
 ```sql
 ✅ No infinite loops detected in any query
 ✅ All policies evaluate in finite time
@@ -245,12 +273,15 @@ AS $$ ... $$;
 ## Migration Safety
 
 ### Rollback Plan
+
 If issues arise, the migration can be rolled back by:
+
 1. Restoring the old policies from backup
 2. Dropping the new security definer functions
 3. Re-enabling the original nested query policies
 
 ### Zero Downtime
+
 - ✅ Migration was applied with zero downtime
 - ✅ All policies were recreated atomically
 - ✅ No data loss or access interruption
@@ -261,11 +292,13 @@ If issues arise, the migration can be rolled back by:
 ## Compliance & Security Standards
 
 ### OWASP Compliance
+
 - ✅ **A01:2021 - Broken Access Control**: Fixed with proper RLS policies
 - ✅ **A03:2021 - Injection**: Prevented with parameterized functions
 - ✅ **A05:2021 - Security Misconfiguration**: Eliminated duplicate policies
 
 ### Database Security Best Practices
+
 - ✅ Security definer functions for complex authorization logic
 - ✅ No circular dependencies in RLS policies
 - ✅ Principle of least privilege enforced
@@ -276,12 +309,14 @@ If issues arise, the migration can be rolled back by:
 ## Monitoring & Maintenance
 
 ### Automated Monitoring
+
 The following queries are now monitored:
+
 ```sql
 -- Check for duplicate policies (should always return 0)
 SELECT COUNT(*) FROM (
   SELECT tablename, cmd, qual, with_check
-  FROM pg_policies 
+  FROM pg_policies
   WHERE schemaname = 'public'
   GROUP BY tablename, cmd, qual, with_check
   HAVING COUNT(*) > 1
@@ -290,11 +325,12 @@ SELECT COUNT(*) FROM (
 -- Check for complex nested queries (should always return 0)
 SELECT COUNT(*) FROM pg_policies
 WHERE schemaname = 'public'
-  AND (qual ILIKE '%SELECT%SELECT%SELECT%' 
+  AND (qual ILIKE '%SELECT%SELECT%SELECT%'
        OR qual ILIKE '%EXISTS%EXISTS%EXISTS%');
 ```
 
 ### Maintenance Schedule
+
 - **Daily**: Automated duplicate policy check
 - **Weekly**: Performance analysis of security definer functions
 - **Monthly**: Full RLS policy audit

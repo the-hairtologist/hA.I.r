@@ -61,7 +61,11 @@ export default function DeepLinkAppointment() {
 
       setAppointment(data);
     } catch (error) {
-      logger.error('Error loading appointment', 'DeepLinkAppointment', error as Error);
+      logger.error(
+        'Error loading appointment',
+        'DeepLinkAppointment',
+        error as Error
+      );
       toast.error('Failed to load appointment');
     } finally {
       setLoading(false);

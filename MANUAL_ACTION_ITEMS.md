@@ -8,9 +8,10 @@
 ## 🚨 Critical Security Items (Do Immediately)
 
 ### 1. Enable Leaked Password Protection
+
 - **Priority**: High
 - **Time**: 2 minutes
-- **Action**: 
+- **Action**:
   1. <lov-open-backend>Open Backend</lov-open-backend>
   2. Navigate to: Users → Auth Settings
   3. Enable "Leaked Password Protection"
@@ -18,6 +19,7 @@
 - **Status**: ❌ Not Enabled
 
 ### 2. Review Security Definer Views
+
 - **Priority**: Medium
 - **Time**: 15 minutes
 - **Action**:
@@ -33,6 +35,7 @@
 ## 🔑 Required API Keys & Secrets
 
 ### Already Configured ✅
+
 - Google Calendar (Client ID & Secret)
 - Stripe (Secret Key)
 - Twilio (Account SID, Auth Token, Phone Number)
@@ -42,6 +45,7 @@
 ### Still Needed ❌
 
 #### 3. Resend API Key (High Priority)
+
 - **Purpose**: Send appointment confirmations, reminders, notifications
 - **Time**: 15 minutes setup + 1-24 hours DNS verification
 - **Steps**:
@@ -53,6 +57,7 @@
 - **Status**: ❌ Required for production
 
 #### 4. ElevenLabs API Key (Medium Priority)
+
 - **Purpose**: 24/7 AI phone answering service
 - **Time**: 10 minutes
 - **Steps**:
@@ -63,6 +68,7 @@
 - **Status**: ❌ Optional but recommended
 
 #### 5. Instagram Access Token (Medium Priority)
+
 - **Purpose**: Portfolio management and client booking via Instagram
 - **Time**: 30 minutes
 - **Steps**:
@@ -78,6 +84,7 @@
 ## 📱 App Store Submission (Before Launch)
 
 ### 6. Apple App Store Submission
+
 - **Priority**: Critical for iOS users
 - **Time**: 4-6 hours + 24-48 hour review
 - **Cost**: $99/year
@@ -91,6 +98,7 @@
 - **Status**: ❌ Not Started
 
 ### 7. Google Play Store Submission
+
 - **Priority**: Critical for Android users
 - **Time**: 3-5 hours + 1-7 day review
 - **Cost**: $25 one-time
@@ -108,6 +116,7 @@
 ## 🌐 Domain & Infrastructure
 
 ### 8. Custom Domain Setup
+
 - **Priority**: High for brand identity
 - **Time**: 1 hour + 48 hours DNS propagation
 - **Cost**: $12-20/year
@@ -120,6 +129,7 @@
 - **Status**: ❌ Not Configured
 
 ### 9. Stripe Production Mode
+
 - **Priority**: Critical before accepting real payments
 - **Time**: 2-3 hours
 - **Cost**: Free (transaction fees apply)
@@ -136,6 +146,7 @@
 ## 📊 Analytics & Monitoring
 
 ### 10. Google Analytics 4
+
 - **Priority**: High for understanding users
 - **Time**: 30 minutes
 - **Cost**: Free
@@ -146,6 +157,7 @@
 - **Status**: ❌ Not Configured
 
 ### 11. Sentry Error Monitoring
+
 - **Priority**: High for debugging production issues
 - **Time**: 20 minutes
 - **Cost**: Free (5k errors/month)
@@ -157,6 +169,7 @@
 - **Status**: ❌ Recommended
 
 ### 12. UptimeRobot Monitoring
+
 - **Priority**: Medium for uptime alerts
 - **Time**: 15 minutes
 - **Cost**: Free (50 monitors)
@@ -171,6 +184,7 @@
 ## 🔔 Push Notifications
 
 ### 13. Firebase Cloud Messaging
+
 - **Priority**: Medium for user engagement
 - **Time**: 1-2 hours
 - **Cost**: Free
@@ -187,6 +201,7 @@
 ## 📧 Email & SMS
 
 ### 14. Email Domain Verification (Resend)
+
 - **Priority**: High (required for item #3)
 - **Time**: 15 min setup + DNS wait
 - **Steps**:
@@ -196,6 +211,7 @@
 - **Status**: ❌ Waiting on item #3
 
 ### 15. Twilio Account Upgrade
+
 - **Priority**: Medium for production SMS
 - **Time**: 1 hour
 - **Cost**: $1-2/month + $0.0075/SMS
@@ -210,6 +226,7 @@
 ## 🎨 Marketing & Social
 
 ### 16. Social Media Accounts
+
 - **Priority**: Low but good for launch
 - **Time**: 1 hour total
 - **Accounts to Create**:
@@ -220,6 +237,7 @@
 - **Status**: ❌ Not Created
 
 ### 17. Meta Ads Account Setup
+
 - **Priority**: Low (when ready for paid marketing)
 - **Time**: 1 hour
 - **Steps**:
@@ -233,6 +251,7 @@
 ## 📝 Legal & Compliance
 
 ### 18. Legal Document Review
+
 - **Priority**: High before public launch
 - **Time**: 2-4 hours (or hire lawyer)
 - **Cost**: $0-500
@@ -250,11 +269,13 @@
 ## 🎯 Priority Matrix
 
 ### Do Immediately (Before Any Testing)
+
 1. ✅ Security Review (COMPLETED)
 2. ❌ Enable Leaked Password Protection (2 min)
 3. ❌ Review Security Definer Views (15 min)
 
 ### Do Before Launch (Critical)
+
 1. ❌ Resend API Key + Domain Verification
 2. ❌ Stripe Production Mode
 3. ❌ Google Analytics 4
@@ -263,6 +284,7 @@
 6. ❌ App Store submissions (iOS + Android)
 
 ### Do Within First Month (Important)
+
 1. ❌ Sentry error monitoring
 2. ❌ ElevenLabs Voice AI
 3. ❌ Instagram Integration
@@ -271,6 +293,7 @@
 6. ❌ Twilio account upgrade
 
 ### Do When Ready (Optional)
+
 1. ❌ Social media accounts
 2. ❌ Meta Ads account
 3. ❌ Advanced backup strategy
@@ -281,6 +304,7 @@
 ## 💰 Cost Summary
 
 ### One-Time Costs
+
 - Apple Developer Account: $99/year
 - Google Play Console: $25 one-time
 - Domain: $15/year
@@ -288,12 +312,14 @@
 - **Total**: $139-639
 
 ### Monthly Costs (Estimated)
+
 - Twilio SMS: $5-20/month
 - Email (Resend): $0-20/month (free tier sufficient initially)
 - Domain: $1.25/month (annual)
 - **Total**: $6-41/month
 
 ### Free Tiers
+
 - Google Analytics 4: Free
 - Sentry: Free (5k errors/month)
 - UptimeRobot: Free (50 monitors)
@@ -307,35 +333,43 @@
 Track your progress:
 
 **Security** (2 items)
+
 - [ ] Leaked password protection enabled
 - [ ] Security definer views reviewed
 
 **API Keys** (3 items)
+
 - [ ] Resend API key added
 - [ ] ElevenLabs API key added
 - [ ] Instagram access token added
 
 **App Stores** (2 items)
+
 - [ ] iOS App Store submitted
 - [ ] Google Play Store submitted
 
 **Infrastructure** (2 items)
+
 - [ ] Custom domain configured
 - [ ] Stripe production mode activated
 
 **Monitoring** (3 items)
+
 - [ ] Google Analytics 4 set up
 - [ ] Sentry error monitoring configured
 - [ ] UptimeRobot monitors created
 
 **Communications** (2 items)
+
 - [ ] Email domain verified (Resend)
 - [ ] Twilio account upgraded
 
 **Legal** (1 item)
+
 - [ ] Legal documents reviewed & customized
 
 **Marketing** (2 items)
+
 - [ ] Social media accounts created
 - [ ] Push notifications configured
 
@@ -355,21 +389,25 @@ Track your progress:
 ## 🎯 Suggested Timeline
 
 ### Week 1 (Immediate)
+
 - Days 1-2: Security items + Resend setup
 - Days 3-4: Stripe production + Analytics
 - Days 5-7: Custom domain + Testing
 
 ### Week 2 (Pre-Launch)
+
 - Days 8-10: App store assets creation
 - Days 11-12: iOS submission
 - Days 13-14: Android submission
 
 ### Week 3 (Launch Prep)
+
 - Days 15-17: Marketing setup + Social accounts
 - Days 18-19: Legal review finalization
 - Days 20-21: Monitoring & alerts setup
 
 ### Week 4 (Launch)
+
 - Day 22+: App store approval + Public launch
 
 ---

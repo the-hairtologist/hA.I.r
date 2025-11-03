@@ -21,7 +21,7 @@ Email: theha.i.rtologist@gmail.com
 Password: TestAdmin123!
 Role: admin (in user_roles table)
 
-// Stylist User  
+// Stylist User
 Email: tomtocutit@gmail.com
 Password: TestStylist123!
 Role: stylist (in user_roles table)
@@ -36,15 +36,15 @@ Role: client (in user_roles table)
 
 ```sql
 -- Check users exist
-SELECT email FROM auth.users 
+SELECT email FROM auth.users
 WHERE email IN (
   'theha.i.rtologist@gmail.com',
-  'tomtocutit@gmail.com', 
+  'tomtocutit@gmail.com',
   'chhiasmu@gmail.com'
 );
 
 -- Check roles assigned
-SELECT u.email, ur.role 
+SELECT u.email, ur.role
 FROM auth.users u
 JOIN user_roles ur ON ur.user_id = u.id
 WHERE u.email IN (
@@ -86,6 +86,7 @@ chmod +x run-tests.sh
 ```
 
 The script will present an interactive menu:
+
 1. Run ALL tests (72 tests)
 2. Run Desktop tests only (36 tests)
 3. Run Mobile tests only (36 tests)
@@ -136,6 +137,7 @@ npx playwright show-report
 ```
 
 This opens an interactive HTML report in your browser showing:
+
 - ✅ Passed tests
 - ❌ Failed tests
 - ⏱️ Test duration
@@ -146,6 +148,7 @@ This opens an interactive HTML report in your browser showing:
 ### Command Line Output
 
 Test results appear directly in terminal:
+
 - Green ✓ = Passed
 - Red ✗ = Failed
 - Yellow - = Skipped
@@ -155,6 +158,7 @@ Test results appear directly in terminal:
 ### Issue: "Dev server not running"
 
 **Solution**: Start your dev server first:
+
 ```bash
 npm run dev
 # or
@@ -164,11 +168,13 @@ bun dev
 ### Issue: "Login failed" or "401 Unauthorized"
 
 **Causes**:
+
 1. Test user doesn't exist
 2. Password is incorrect
 3. User doesn't have correct role assigned
 
-**Solution**: 
+**Solution**:
+
 1. Create test users manually via auth UI
 2. Assign roles in `user_roles` table
 3. Verify credentials match test files
@@ -176,11 +182,13 @@ bun dev
 ### Issue: "Element not found" errors
 
 **Causes**:
+
 1. Page not fully loaded
 2. Element selector changed
 3. Component refactored
 
 **Solution**:
+
 1. Increase timeout in test
 2. Update selectors in test files
 3. Add `waitForLoadState('networkidle')`
@@ -188,11 +196,13 @@ bun dev
 ### Issue: "RLS policy violation"
 
 **Causes**:
+
 1. User doesn't have permission for data
 2. RLS policies not configured correctly
 3. Role not assigned properly
 
 **Solution**:
+
 1. Check `user_roles` table
 2. Verify RLS policies in Supabase
 3. Check row ownership in tables
@@ -200,6 +210,7 @@ bun dev
 ### Issue: Tests timeout
 
 **Solution**: Increase timeout in `playwright.config.ts`:
+
 ```typescript
 use: {
   timeout: 60000, // 60 seconds per test
@@ -226,16 +237,19 @@ Root/
 ## 🎯 Test Coverage
 
 ### Desktop Tests (36 tests)
+
 - Admin Role: 12 tests
 - Stylist Role: 12 tests
 - Client Role: 12 tests
 
 ### Mobile Tests (36 tests)
+
 - Admin Role (iPhone 12 Pro): 12 tests
 - Stylist Role (Pixel 5): 12 tests
 - Client Role (iPhone 12 Pro): 12 tests
 
 ### Test Categories (12 per role)
+
 1. Authentication & Authorization
 2. Navigation & Routing
 3. Data CRUD Operations
@@ -264,6 +278,7 @@ Before running tests, verify:
 ## 📈 Success Criteria
 
 Tests should achieve:
+
 - ✅ 100% pass rate
 - ✅ Desktop load time < 3s
 - ✅ Mobile load time < 4s
@@ -274,6 +289,7 @@ Tests should achieve:
 ## 🔄 Continuous Testing
 
 ### Run on Every:
+
 - Code deployment
 - Database migration
 - Role/permission changes
@@ -308,6 +324,7 @@ jobs:
 ## 📞 Need Help?
 
 If tests fail:
+
 1. Check HTML report: `npx playwright show-report`
 2. Review console logs in report
 3. Check screenshots of failures
@@ -318,6 +335,7 @@ If tests fail:
 ## 🎉 Next Steps
 
 After successful test run:
+
 1. Review HTML report
 2. Fix any failures
 3. Update documentation if needed

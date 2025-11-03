@@ -7,16 +7,22 @@ interface ListSkeletonProps {
   className?: string;
 }
 
-export const ListSkeleton = ({ 
-  items = 3, 
+export const ListSkeleton = ({
+  items = 3,
   variant = 'compact',
-  className = '' 
+  className = '',
 }: ListSkeletonProps) => {
   if (variant === 'grid') {
     return (
-      <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ${className}`}>
+      <div
+        className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ${className}`}
+      >
         {[...Array(items)].map((_, i) => (
-          <Card key={i} className="animate-fade-in shimmer" style={{ animationDelay: `${i * 50}ms` }}>
+          <Card
+            key={i}
+            className="animate-fade-in shimmer"
+            style={{ animationDelay: `${i * 50}ms` }}
+          >
             <CardHeader>
               <Skeleton className="h-5 w-3/4 shimmer" />
               <Skeleton className="h-4 w-1/2 shimmer" />
@@ -35,7 +41,11 @@ export const ListSkeleton = ({
     return (
       <div className={`space-y-4 ${className}`}>
         {[...Array(items)].map((_, i) => (
-          <Card key={i} className="animate-fade-in shimmer" style={{ animationDelay: `${i * 50}ms` }}>
+          <Card
+            key={i}
+            className="animate-fade-in shimmer"
+            style={{ animationDelay: `${i * 50}ms` }}
+          >
             <CardContent className="p-6">
               <div className="flex items-start gap-4">
                 <Skeleton className="h-16 w-16 rounded-lg shrink-0 shimmer" />
@@ -60,7 +70,11 @@ export const ListSkeleton = ({
   return (
     <div className={`space-y-2 ${className}`}>
       {[...Array(items)].map((_, i) => (
-        <Card key={i} className="animate-fade-in shimmer" style={{ animationDelay: `${i * 50}ms` }}>
+        <Card
+          key={i}
+          className="animate-fade-in shimmer"
+          style={{ animationDelay: `${i * 50}ms` }}
+        >
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <Skeleton className="h-10 w-10 rounded-full shrink-0 shimmer" />
@@ -77,7 +91,13 @@ export const ListSkeleton = ({
   );
 };
 
-export const TableSkeleton = ({ rows = 5, columns = 4 }: { rows?: number; columns?: number }) => (
+export const TableSkeleton = ({
+  rows = 5,
+  columns = 4,
+}: {
+  rows?: number;
+  columns?: number;
+}) => (
   <div className="space-y-3 animate-fade-in">
     {/* Header */}
     <div className="flex gap-4 pb-3 border-b">
@@ -87,7 +107,11 @@ export const TableSkeleton = ({ rows = 5, columns = 4 }: { rows?: number; column
     </div>
     {/* Rows */}
     {[...Array(rows)].map((_, rowIndex) => (
-      <div key={rowIndex} className="flex gap-4 py-3" style={{ animationDelay: `${rowIndex * 50}ms` }}>
+      <div
+        key={rowIndex}
+        className="flex gap-4 py-3"
+        style={{ animationDelay: `${rowIndex * 50}ms` }}
+      >
         {[...Array(columns)].map((_, colIndex) => (
           <Skeleton key={colIndex} className="h-4 flex-1 shimmer" />
         ))}

@@ -51,7 +51,9 @@ export const EnhancedSearch = ({
         setRecentSearches(JSON.parse(stored));
       }
     } catch (error) {
-      logger.error('Error loading recent searches', error, { component: 'EnhancedSearch' });
+      logger.error('Error loading recent searches', error, {
+        component: 'EnhancedSearch',
+      });
     }
   }, [storageKey, showRecentSearches]);
 
@@ -72,7 +74,9 @@ export const EnhancedSearch = ({
     try {
       localStorage.setItem(storageKey, JSON.stringify(updated));
     } catch (error) {
-      logger.error('Error saving recent searches', error, { component: 'EnhancedSearch' });
+      logger.error('Error saving recent searches', error, {
+        component: 'EnhancedSearch',
+      });
     }
   };
 
@@ -100,7 +104,9 @@ export const EnhancedSearch = ({
     try {
       localStorage.setItem(storageKey, JSON.stringify(updated));
     } catch (error) {
-      logger.error('Error clearing recent search', error, { component: 'EnhancedSearch' });
+      logger.error('Error clearing recent search', error, {
+        component: 'EnhancedSearch',
+      });
     }
   };
 
@@ -109,7 +115,9 @@ export const EnhancedSearch = ({
     try {
       localStorage.removeItem(storageKey);
     } catch (error) {
-      logger.error('Error clearing all recent searches', error, { component: 'EnhancedSearch' });
+      logger.error('Error clearing all recent searches', error, {
+        component: 'EnhancedSearch',
+      });
     }
   };
 

@@ -47,7 +47,9 @@ export const SubscriptionManagementCard = () => {
         toast.success('Opening subscription management...');
       }
     } catch (error: any) {
-      logger.error('Portal error', error, { component: 'SubscriptionManagementCard' });
+      logger.error('Portal error', error, {
+        component: 'SubscriptionManagementCard',
+      });
       toast.error('Failed to open subscription management');
     } finally {
       setManagingSubscription(false);
@@ -81,7 +83,10 @@ export const SubscriptionManagementCard = () => {
         toast.success('Redirecting to checkout...');
       }
     } catch (error: any) {
-      logger.error('Subscription error', error, { component: 'SubscriptionManagementCard', action: 'subscribe' });
+      logger.error('Subscription error', error, {
+        component: 'SubscriptionManagementCard',
+        action: 'subscribe',
+      });
       toast.error('Failed to start subscription process');
     } finally {
       setSubscribing(false);

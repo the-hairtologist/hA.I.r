@@ -49,7 +49,9 @@ export const ClientPortalPreview = ({
       try {
         await navigator.share(shareData);
       } catch (error) {
-        logger.error('Share failed', error, { component: 'ClientPortalPreview' });
+        logger.error('Share failed', error, {
+          component: 'ClientPortalPreview',
+        });
       }
     } else {
       await navigator.clipboard.writeText(window.location.href);

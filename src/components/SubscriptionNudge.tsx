@@ -134,7 +134,10 @@ export const SubscriptionNudge = ({
         toast.success('Redirecting to checkout...');
       }
     } catch (error: any) {
-      logger.error('Subscription error', error, { component: 'SubscriptionNudge', trigger });
+      logger.error('Subscription error', error, {
+        component: 'SubscriptionNudge',
+        trigger,
+      });
       toast.error('Failed to start subscription process');
     } finally {
       setLoading(false);

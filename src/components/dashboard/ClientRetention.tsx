@@ -48,7 +48,11 @@ export function ClientRetention({ stylistId }: ClientRetentionProps) {
         setStats({ totalClients, returningClients, retentionRate });
       }
     } catch (error) {
-      logger.error('Error loading retention stats', 'ClientRetention', error as Error);
+      logger.error(
+        'Error loading retention stats',
+        'ClientRetention',
+        error as Error
+      );
       toast.error('Failed to load retention data');
     } finally {
       setLoading(false);

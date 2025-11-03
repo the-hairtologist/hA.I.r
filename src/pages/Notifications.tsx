@@ -53,7 +53,11 @@ const Notifications = () => {
       const { data, error } = await query;
 
       if (error) {
-        logger.error('Error fetching notifications', 'Notifications', error as Error);
+        logger.error(
+          'Error fetching notifications',
+          'Notifications',
+          error as Error
+        );
         toast.error('Failed to load notifications');
         throw error;
       }
@@ -104,7 +108,7 @@ const Notifications = () => {
       queryClient.invalidateQueries({ queryKey: ['notifications'] });
       toast.success('Marked as read');
     },
-    onError: (error) => {
+    onError: error => {
       logger.error('Error marking as read', 'Notifications', error as Error);
       toast.error('Failed to mark as read');
     },
@@ -126,8 +130,12 @@ const Notifications = () => {
       queryClient.invalidateQueries({ queryKey: ['notifications'] });
       toast.success('Notification deleted');
     },
-    onError: (error) => {
-      logger.error('Error deleting notification', 'Notifications', error as Error);
+    onError: error => {
+      logger.error(
+        'Error deleting notification',
+        'Notifications',
+        error as Error
+      );
       toast.error('Failed to delete notification');
     },
   });
@@ -148,8 +156,12 @@ const Notifications = () => {
       queryClient.invalidateQueries({ queryKey: ['notifications'] });
       toast.success('All notifications marked as read');
     },
-    onError: (error) => {
-      logger.error('Error marking all as read', 'Notifications', error as Error);
+    onError: error => {
+      logger.error(
+        'Error marking all as read',
+        'Notifications',
+        error as Error
+      );
       toast.error('Failed to mark all as read');
     },
   });
@@ -265,10 +277,11 @@ const Notifications = () => {
                               {notification.message}
                             </p>
                             <p className="text-xs text-muted-foreground mt-2">
-                              {notification.created_at && format(
-                                new Date(notification.created_at),
-                                "MMM d, yyyy 'at' h:mm a"
-                              )}
+                              {notification.created_at &&
+                                format(
+                                  new Date(notification.created_at),
+                                  "MMM d, yyyy 'at' h:mm a"
+                                )}
                             </p>
                           </div>
                         </div>

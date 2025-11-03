@@ -85,7 +85,11 @@ export default function TeamSchedule() {
       if (error) throw error;
       if (data) setAppointments(data as any);
     } catch (error) {
-      logger.error('Failed to load team schedule', 'TeamSchedule', error as Error);
+      logger.error(
+        'Failed to load team schedule',
+        'TeamSchedule',
+        error as Error
+      );
       toast.error("Couldn't load the schedule. Let's give that another shot.");
     } finally {
       setLoading(false);
@@ -108,7 +112,6 @@ export default function TeamSchedule() {
           loading={loading}
         />
         <div className="space-y-6 px-4 py-6">
-
           <div className="grid lg:grid-cols-3 gap-6">
             {/* Schedule Grid */}
             <div className="lg:col-span-2 space-y-4">

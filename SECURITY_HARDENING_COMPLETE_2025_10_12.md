@@ -1,4 +1,5 @@
 # 🔒 SECURITY HARDENING COMPLETE
+
 **Date:** October 12, 2025  
 **Status:** ✅ **PRODUCTION SECURE**  
 **Security Grade:** A (95/100)
@@ -8,30 +9,38 @@
 ## 🎯 CRITICAL FIXES APPLIED TODAY
 
 ### 1. ✅ Profiles Table - Anonymous Access BLOCKED
+
 **Issue:** Email addresses and phone numbers exposed to public
-**Fix Applied:** 
+**Fix Applied:**
+
 - Dropped all permissive policies
 - Created strict authenticated-only policies
 - Added explicit anonymous blocking policy
 - **Result:** Zero anonymous access to PII
 
 ### 2. ✅ Admin Activity Log - Secured
+
 **Issue:** Admin actions visible to anyone
 **Fix Applied:**
+
 - Set `security_invoker = true` on view
 - Restricted to admin role only
 - **Result:** Only admins can view sensitive logs
 
 ### 3. ✅ Client Statistics View - Protected
+
 **Issue:** Client contact info and appointment history publicly accessible
 **Fix Applied:**
+
 - Set `security_invoker = true` on view
 - Created `can_view_client_stats()` function for relationship-based access
 - **Result:** Only authorized users can view client data
 
 ### 4. ✅ Commissions Table - Hardened
+
 **Issue:** Stylist earnings and referral codes exposed
 **Fix Applied:**
+
 - Explicit anonymous blocking policy
 - Owner-only access enforcement
 - **Result:** Complete protection of financial data
@@ -40,13 +49,13 @@
 
 ## 📊 SECURITY SCORECARD
 
-| Category | Before | After | Status |
-|----------|--------|-------|--------|
-| Anonymous Access Control | ❌ FAIL | ✅ PASS | **SECURED** |
-| PII Protection | ⚠️ WEAK | ✅ STRONG | **SECURED** |
-| Admin Log Security | ❌ EXPOSED | ✅ PRIVATE | **SECURED** |
-| Financial Data | ⚠️ VULNERABLE | ✅ PROTECTED | **SECURED** |
-| RLS Coverage | 85% | 98% | **EXCELLENT** |
+| Category                 | Before        | After        | Status        |
+| ------------------------ | ------------- | ------------ | ------------- |
+| Anonymous Access Control | ❌ FAIL       | ✅ PASS      | **SECURED**   |
+| PII Protection           | ⚠️ WEAK       | ✅ STRONG    | **SECURED**   |
+| Admin Log Security       | ❌ EXPOSED    | ✅ PRIVATE   | **SECURED**   |
+| Financial Data           | ⚠️ VULNERABLE | ✅ PROTECTED | **SECURED**   |
+| RLS Coverage             | 85%           | 98%          | **EXCELLENT** |
 
 **Overall Grade:** A (95/100) - **PRODUCTION READY**
 
@@ -68,11 +77,13 @@
 ## ⚠️ REMAINING NON-CRITICAL ITEMS
 
 ### 1. Security Definer Views (Informational)
+
 - **Status:** Addressed by setting `security_invoker = true`
 - **Impact:** Low - Views now use querying user's permissions
 - **Action:** Monitor in production
 
 ### 2. Leaked Password Protection Disabled
+
 - **Status:** Non-blocking
 - **Impact:** Low - users can sign up with leaked passwords
 - **Recommendation:** Enable via Lovable Cloud → Auth Settings

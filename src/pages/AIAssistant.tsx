@@ -247,7 +247,11 @@ const Knowledge = () => {
       if (error) throw error;
       setConversations(data || []);
     } catch (error: any) {
-      logger.error('Error loading conversations', 'AIAssistant', error as Error);
+      logger.error(
+        'Error loading conversations',
+        'AIAssistant',
+        error as Error
+      );
     }
   };
 
@@ -270,7 +274,11 @@ const Knowledge = () => {
 
       setAiMessages(messages);
     } catch (error: any) {
-      logger.error('Error loading conversation messages', 'AIAssistant', error as Error);
+      logger.error(
+        'Error loading conversation messages',
+        'AIAssistant',
+        error as Error
+      );
       toast.error("Couldn't load that conversation. Mind trying again?");
     }
   };
@@ -338,7 +346,11 @@ const Knowledge = () => {
       if (error) throw error;
       setStylistContext(data);
     } catch (error: any) {
-      logger.error('Error loading stylist context', 'AIAssistant', error as Error);
+      logger.error(
+        'Error loading stylist context',
+        'AIAssistant',
+        error as Error
+      );
     }
   };
 
@@ -412,7 +424,11 @@ const Knowledge = () => {
         recentAppointments: appointments || [],
       });
     } catch (error: any) {
-      logger.error('Error loading client context', 'AIAssistant', error as Error);
+      logger.error(
+        'Error loading client context',
+        'AIAssistant',
+        error as Error
+      );
       toast.error("Couldn't load that client's info. Let's try again.");
     }
   };
@@ -489,7 +505,11 @@ const Knowledge = () => {
             });
           }
         } catch (analysisError) {
-          logger.warn('Hair analysis failed, continuing with chat', 'AIAssistant', { error: String(analysisError) });
+          logger.warn(
+            'Hair analysis failed, continuing with chat',
+            'AIAssistant',
+            { error: String(analysisError) }
+          );
         } finally {
           setAnalyzingPhoto(false);
         }
@@ -589,7 +609,9 @@ const Knowledge = () => {
             });
           }
         } catch (validationError) {
-          logger.warn('Formula validation failed', 'AIAssistant', { error: String(validationError) });
+          logger.warn('Formula validation failed', 'AIAssistant', {
+            error: String(validationError),
+          });
         } finally {
           setValidatingFormula(false);
         }
@@ -1006,7 +1028,11 @@ const Knowledge = () => {
         </div>
 
         {/* Save Formula Dialog */}
-        <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog} modal={true}>
+        <Dialog
+          open={showSaveDialog}
+          onOpenChange={setShowSaveDialog}
+          modal={true}
+        >
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Save Formula</DialogTitle>

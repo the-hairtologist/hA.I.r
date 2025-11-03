@@ -118,7 +118,11 @@ export default function QuickFormula() {
           });
         }
       } catch (validationError) {
-        logger.warn('Validation failed, continuing without it', 'QuickFormula', { error: String(validationError) });
+        logger.warn(
+          'Validation failed, continuing without it',
+          'QuickFormula',
+          { error: String(validationError) }
+        );
       }
 
       toast.success(`Formula generated in ${timeMs}ms!`, {

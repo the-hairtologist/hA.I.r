@@ -1,6 +1,7 @@
 # ⏰ Cron Job Setup for Smart Reminders
 
 ## Overview
+
 The smart-reminder function needs to run daily to send appointment reminders to clients 24 hours before their appointments.
 
 ## Setup Instructions
@@ -32,11 +33,13 @@ SELECT cron.schedule(
 ### Option 2: Use External Cron Service
 
 If you can't enable pg_cron, use a free service like:
+
 - **Cron-job.org** (https://cron-job.org)
 - **EasyCron** (https://www.easycron.com)
 - **Uptime Robot** (https://uptimerobot.com)
 
 **Setup Steps:**
+
 1. Create free account
 2. Add new cron job with URL:
    ```
@@ -53,6 +56,7 @@ If you can't enable pg_cron, use a free service like:
 ## What the Smart Reminder Does
 
 **Automatically sends reminders 24 hours before appointments:**
+
 - ✅ Personalized SMS/email to client
 - ✅ Includes last formula used
 - ✅ References previous results
@@ -60,8 +64,9 @@ If you can't enable pg_cron, use a free service like:
 - ✅ Marks reminder as sent
 
 **Example Message:**
+
 ```
-Hi Sarah! ✨ Jane's Hair Studio is ready for your 
+Hi Sarah! ✨ Jane's Hair Studio is ready for your
 Balayage tomorrow at 2:00 PM!
 
 💡 Last time we used: Wella Koleston 8/01
@@ -75,13 +80,16 @@ See you soon! 💇‍♀️
 ## Testing
 
 ### Manual Test (Immediate)
+
 1. Go to **Backend** → **Functions**
 2. Find `smart-reminder`
 3. Click **Invoke**
 4. Check logs for processed appointments
 
 ### Verify Cron Job
+
 After setup, check:
+
 - **Supabase Dashboard** → **Database** → **Cron Jobs** (shows last run)
 - **Backend** → **Functions** → `smart-reminder` logs
 - Check appointments table for `reminder_sent = true`
@@ -91,6 +99,7 @@ After setup, check:
 ## Monitoring
 
 ### Check Cron Status
+
 ```sql
 -- View all cron jobs
 SELECT * FROM cron.job;
@@ -102,6 +111,7 @@ LIMIT 10;
 ```
 
 ### Unschedule (if needed)
+
 ```sql
 SELECT cron.unschedule('smart-reminder-daily');
 ```
@@ -111,17 +121,21 @@ SELECT cron.unschedule('smart-reminder-daily');
 ## Best Practices
 
 ### Timing
+
 - **9 AM** works for most timezones
 - Adjust based on your target audience
 - Avoid late night / early morning sends
 
 ### Frequency
+
 - **Once daily** is optimal
 - Too frequent = spam
 - Less than daily = missed reminders
 
 ### Error Handling
+
 The function includes:
+
 - ✅ Automatic retry logic
 - ✅ Error logging
 - ✅ Graceful failure handling

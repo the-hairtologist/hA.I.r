@@ -146,7 +146,10 @@ describe('useAICall', () => {
   it('should handle timeout errors', async () => {
     (supabase.functions.invoke as Mock).mockImplementation(() => {
       return new Promise(resolve =>
-        setTimeout(() => resolve({ error: { message: 'Request timed out' } }), 100)
+        setTimeout(
+          () => resolve({ error: { message: 'Request timed out' } }),
+          100
+        )
       );
     });
 
@@ -188,10 +191,7 @@ describe('useAICall', () => {
     (supabase.functions.invoke as Mock).mockImplementation(
       () =>
         new Promise(resolve =>
-          setTimeout(
-            () => resolve({ data: { done: true }, error: null }),
-            50
-          )
+          setTimeout(() => resolve({ data: { done: true }, error: null }), 50)
         )
     );
 
@@ -221,9 +221,12 @@ describe('useAICall', () => {
     ];
 
     for (const model of models) {
-      const { result } = renderHook(() => useAICall('test-function', { model }), {
-        wrapper: createWrapper(),
-      });
+      const { result } = renderHook(
+        () => useAICall('test-function', { model }),
+        {
+          wrapper: createWrapper(),
+        }
+      );
 
       (supabase.functions.invoke as Mock).mockResolvedValue({
         data: { modelUsed: model },

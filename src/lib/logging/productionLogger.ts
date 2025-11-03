@@ -44,7 +44,7 @@ class ProductionLogger {
    */
   private scrubPII(text: string): string {
     if (!text || typeof text !== 'string') return text;
-    
+
     let scrubbed = text;
     scrubbed = scrubbed.replace(PII_PATTERNS.email, '[EMAIL_REDACTED]');
     scrubbed = scrubbed.replace(PII_PATTERNS.phone, '[PHONE_REDACTED]');
@@ -58,12 +58,12 @@ class ProductionLogger {
    */
   private scrubSensitiveData(data: any): any {
     if (!data) return data;
-    
+
     // Scrub strings for PII
     if (typeof data === 'string') {
       return this.scrubPII(data);
     }
-    
+
     if (typeof data !== 'object') return data;
 
     const scrubbed = Array.isArray(data) ? [...data] : { ...data };
@@ -94,11 +94,11 @@ class ProductionLogger {
 
       Object.keys(obj).forEach(key => {
         const lowerKey = key.toLowerCase();
-        
+
         // Redact sensitive keys completely
         if (sensitiveKeys.some(sensitive => lowerKey.includes(sensitive))) {
           obj[key] = '[REDACTED]';
-        } 
+        }
         // Mask email partially (keep first 2 chars)
         else if (lowerKey.includes('email') && typeof obj[key] === 'string') {
           const email = obj[key];
@@ -120,7 +120,7 @@ class ProductionLogger {
           obj[key] = this.scrubPII(obj[key]);
         }
       });
-      
+
       return obj;
     };
 
@@ -140,7 +140,7 @@ class ProductionLogger {
   info(message: string, context?: LogContext): void {
     const scrubbedMessage = this.scrubPII(message);
     const scrubbedContext = this.scrubSensitiveData(context);
-    
+
     safeConsole.info(`[INFO] ${scrubbedMessage}`, scrubbedContext);
     this.bufferLog('info', scrubbedMessage, scrubbedContext);
   }
@@ -151,7 +151,7 @@ class ProductionLogger {
   warn(message: string, context?: LogContext): void {
     const scrubbedMessage = this.scrubPII(message);
     const scrubbedContext = this.scrubSensitiveData(context);
-    
+
     safeConsole.warn(`[WARN] ${scrubbedMessage}`, scrubbedContext);
     this.bufferLog('warn', scrubbedMessage, scrubbedContext);
   }
@@ -165,7 +165,7 @@ class ProductionLogger {
       error instanceof Error
         ? { message: error.message, stack: error.stack, name: error.name }
         : { error };
-    
+
     const scrubbedContext = this.scrubSensitiveData({
       ...context,
       error: errorDetails,

@@ -1,4 +1,5 @@
 # 🎯 TEAM EXECUTION PLAN: 70% UNTAPPED POTENTIAL
+
 **Mission:** Transform hA.I.r from 98/100 foundation to 100% market dominance
 **Timeline:** Systematic execution with real-world testing
 **Team Structure:** 3-Person Strike Team
@@ -8,10 +9,12 @@
 ## 📋 TEAM ASSIGNMENTS
 
 ### **TEAM 1: AI & Intelligence 🧠**
+
 **Mission:** Make AI the competitive moat
 
 #### Phase 1: Hook Integration (NOW)
-- [x] ✅ Created `useClientChurnPredictor`  
+
+- [x] ✅ Created `useClientChurnPredictor`
 - [x] ✅ Created `useProactiveInsights`
 - [x] ✅ Created `useAIAnalytics` enhancements
 - [ ] 🔄 **INTEGRATE into Stylist Dashboard**
@@ -20,6 +23,7 @@
 - [ ] 🔄 **CREATE ProactiveInsightsPanel component**
 
 #### Phase 2: Image AI (NEXT)
+
 - [ ] **ENABLE** Nano Banana image generation
   - Portfolio mockups
   - Before/after simulations
@@ -28,6 +32,7 @@
 - [ ] **CREATE** SmartPhotoStudio component
 
 #### Phase 3: AI Automation
+
 - [ ] Smart email composition
 - [ ] Auto-rebooking suggestions
 - [ ] Revenue opportunity detection
@@ -35,9 +40,11 @@
 ---
 
 ### **TEAM 2: Native Mobile 📱**
+
 **Mission:** Make it feel native, not web
 
 #### Phase 1: Camera & Haptics (NOW)
+
 - [x] ✅ Created `useSmartPhotoCapture`
 - [x] ✅ Created `useRichHaptics`
 - [ ] 🔄 **INTEGRATE** camera into appointment flow
@@ -46,12 +53,14 @@
 - [ ] 🔄 **TEST** on physical device
 
 #### Phase 2: Push & Offline
+
 - [ ] **SETUP** native push notifications
 - [ ] **IMPLEMENT** offline mode for key features
 - [ ] **ADD** native sharing (portfolio, referrals)
 - [ ] **ENABLE** location services for stylist discovery
 
 #### Phase 3: Performance
+
 - [ ] Image lazy loading
 - [ ] Code splitting
 - [ ] Service worker optimization
@@ -60,15 +69,18 @@
 ---
 
 ### **TEAM 3: Realtime & Revenue 💰**
+
 **Mission:** Live updates + monetization layers
 
 #### Phase 1: Realtime Features (NOW)
+
 - [ ] **ACTIVATE** Supabase Realtime on key tables
 - [ ] **CREATE** LiveBookingIndicator component
 - [ ] **ADD** real-time chat for stylist-client
 - [ ] **IMPLEMENT** live appointment updates
 
 #### Phase 2: Revenue Features
+
 - [ ] **BUILD** subscription tiers for stylists
   - Basic ($29/mo): 30 clients, basic AI
   - Pro ($79/mo): Unlimited clients, advanced AI
@@ -78,6 +90,7 @@
 - [ ] **IMPLEMENT** dynamic pricing for peak times
 
 #### Phase 3: Viral Growth
+
 - [ ] Stylist leaderboard (public)
 - [ ] "Bring a Friend" booking bonus
 - [ ] Portfolio sharing with social proof
@@ -90,6 +103,7 @@
 ### **Real User Scenarios**
 
 #### **Scenario 1: Churn Prevention**
+
 ```
 USER: Sarah (Stylist with 50 clients)
 GOAL: Identify at-risk clients before they leave
@@ -111,6 +125,7 @@ METRICS:
 ```
 
 #### **Scenario 2: Smart Photo Capture**
+
 ```
 USER: Mike (Stylist doing color correction)
 GOAL: Document transformation with optimized photos
@@ -133,6 +148,7 @@ METRICS:
 ```
 
 #### **Scenario 3: Proactive Revenue**
+
 ```
 USER: Lisa (Salon owner, 3 stylists)
 GOAL: Maximize revenue without manual work
@@ -156,6 +172,7 @@ METRICS:
 ```
 
 #### **Scenario 4: Native Mobile Feel**
+
 ```
 USER: Client using iPhone
 GOAL: Book appointment feels like native app
@@ -181,6 +198,7 @@ METRICS:
 ## 📊 SUCCESS METRICS
 
 ### **Phase 1 (Immediate)**
+
 - [ ] All 6 hooks integrated into live UI
 - [ ] Churn prediction showing on 100% of stylist dashboards
 - [ ] Photo capture working on ≥1 physical device
@@ -188,6 +206,7 @@ METRICS:
 - [ ] 0 TypeScript errors, 0 console errors
 
 ### **Phase 2 (Week 1)**
+
 - [ ] Realtime updates showing <1s latency
 - [ ] Image generation functional (1 test image)
 - [ ] Background removal working (1 test photo)
@@ -195,6 +214,7 @@ METRICS:
 - [ ] Performance: LCP <2.5s, CLS <0.1
 
 ### **Phase 3 (Week 2)**
+
 - [ ] Subscription tiers live in settings
 - [ ] ≥1 test transaction completed
 - [ ] Marketplace MVP with 5 products
@@ -217,11 +237,13 @@ graph TD
 ```
 
 **BLOCKING ISSUES:**
+
 - ❌ Hooks not wired to UI components
 - ❌ No test data for churn prediction
 - ❌ Camera permissions not requested
 
 **NEXT IMMEDIATE ACTION:**
+
 1. Wire `useClientChurnPredictor` to StylistDashboard
 2. Wire `useSmartPhotoCapture` to appointment flow
 3. Add haptics to button components

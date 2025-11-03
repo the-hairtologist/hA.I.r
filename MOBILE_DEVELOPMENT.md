@@ -1,4 +1,5 @@
 # Mobile Development Guide
+
 **hA.I.r - Native Mobile App**
 
 ---
@@ -14,18 +15,21 @@ This guide covers everything you need to develop, test, and deploy the hA.I.r mo
 ### Required Software
 
 #### For iOS Development
+
 - **macOS** (Catalina 10.15.4 or later)
 - **Xcode** 12.0 or later ([Download](https://apps.apple.com/us/app/xcode/id497799835))
 - **CocoaPods** (install via: `sudo gem install cocoapods`)
 - **Apple Developer Account** ($99/year for App Store distribution)
 
 #### For Android Development
+
 - **Android Studio** Arctic Fox or later ([Download](https://developer.android.com/studio))
 - **JDK** 11 or later
 - **Android SDK** (Platform 29+)
 - **Google Play Console Account** ($25 one-time fee)
 
 #### For Both Platforms
+
 - **Node.js** 16+ and npm
 - **Git**
 - **Code editor** (VS Code recommended)
@@ -52,6 +56,7 @@ npm install
 ### 3. Add Native Platforms
 
 #### iOS
+
 ```bash
 npx cap add ios
 npx cap update ios
@@ -60,6 +65,7 @@ npx cap update ios
 This creates an `ios/` directory with your Xcode project.
 
 #### Android
+
 ```bash
 npx cap add android
 npx cap update android
@@ -84,6 +90,7 @@ server: {
 ```
 
 **To use hot-reload:**
+
 1. Make changes in Lovable editor
 2. App automatically reloads on device/emulator
 3. No need to rebuild native projects
@@ -93,20 +100,23 @@ server: {
 For testing locally without internet:
 
 1. **Build the web assets:**
+
    ```bash
    npm run build
    ```
 
 2. **Sync to native projects:**
+
    ```bash
    npx cap sync
    ```
 
 3. **Run on device/emulator:**
+
    ```bash
    # iOS
    npx cap run ios
-   
+
    # Android
    npx cap run android
    ```
@@ -126,11 +136,13 @@ This opens the project in Xcode.
 ### Configuration
 
 #### 1. Bundle Identifier
+
 - In Xcode, select the project root
 - Under **General** → **Identity**
 - Bundle Identifier: `app.lovable.a1a18f9db2f94d81aa8ce28408bee3a2`
 
 #### 2. Signing & Capabilities
+
 - Under **Signing & Capabilities**
 - Check **Automatically manage signing**
 - Select your **Team** (requires Apple Developer account)
@@ -140,7 +152,9 @@ This opens the project in Xcode.
   - ✅ Background Modes (if needed)
 
 #### 3. Associated Domains
+
 For Universal Links (deep linking):
+
 ```
 applinks:yourdomain.com
 ```
@@ -177,11 +191,13 @@ Add to `ios/App/App/Info.plist`:
 ### Building for iOS
 
 #### Debug Build (Simulator)
+
 ```bash
 npx cap run ios
 ```
 
 #### Release Build (Device/TestFlight)
+
 1. In Xcode, select **Product** → **Archive**
 2. Once archived, click **Distribute App**
 3. Choose distribution method:
@@ -221,8 +237,10 @@ This opens the project in Android Studio.
 ### Configuration
 
 #### 1. Package Name
+
 - In Android Studio, open `android/app/build.gradle`
 - Verify `applicationId`:
+
 ```gradle
 android {
     defaultConfig {
@@ -239,21 +257,21 @@ Add to `android/app/src/main/AndroidManifest.xml`:
 <manifest>
   <!-- Camera permission -->
   <uses-permission android:name="android.permission.CAMERA" />
-  
+
   <!-- Photo access -->
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" 
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
                    android:maxSdkVersion="28" />
-  
+
   <!-- Internet (required) -->
   <uses-permission android:name="android.permission.INTERNET" />
-  
+
   <!-- Network state -->
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-  
+
   <!-- Location (optional) -->
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-  
+
   <!-- Notifications -->
   <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 </manifest>
@@ -268,11 +286,11 @@ Add to `<activity>` in `AndroidManifest.xml`:
   <action android:name="android.intent.action.VIEW" />
   <category android:name="android.intent.category.DEFAULT" />
   <category android:name="android.intent.category.BROWSABLE" />
-  
+
   <!-- HTTP/HTTPS links -->
-  <data android:scheme="https" 
+  <data android:scheme="https"
         android:host="yourdomain.com" />
-  
+
   <!-- Custom scheme -->
   <data android:scheme="hair" />
 </intent-filter>
@@ -295,6 +313,7 @@ keytool -list -v -keystore hair-release-key.keystore
 **CRITICAL:** Back up your keystore file and passwords securely!
 
 Add to `android/gradle.properties`:
+
 ```properties
 HAIR_RELEASE_STORE_FILE=../hair-release-key.keystore
 HAIR_RELEASE_KEY_ALIAS=hair-key-alias
@@ -303,6 +322,7 @@ HAIR_RELEASE_KEY_PASSWORD=YOUR_KEY_PASSWORD
 ```
 
 Update `android/app/build.gradle`:
+
 ```gradle
 android {
     signingConfigs {
@@ -324,11 +344,13 @@ android {
 ### Building for Android
 
 #### Debug Build (Emulator/Device)
+
 ```bash
 npx cap run android
 ```
 
 #### Release Build (AAB for Play Store)
+
 ```bash
 cd android
 ./gradlew bundleRelease
@@ -337,6 +359,7 @@ cd android
 ```
 
 #### Release APK (for manual distribution)
+
 ```bash
 cd android
 ./gradlew assembleRelease
@@ -382,13 +405,13 @@ function App() {
   useEffect(() => {
     CapacitorApp.addListener('appUrlOpen', (event) => {
       const url = new URL(event.url);
-      
+
       // Handle hair:// scheme
       if (url.protocol === 'hair:') {
         const path = url.pathname;
         navigate(path);
       }
-      
+
       // Handle https://yourdomain.com links
       if (url.hostname === 'yourdomain.com') {
         const path = url.pathname;
@@ -446,7 +469,7 @@ import { Keyboard } from '@capacitor/keyboard';
 await Keyboard.hide();
 
 // Listen for keyboard events
-Keyboard.addListener('keyboardWillShow', (info) => {
+Keyboard.addListener('keyboardWillShow', info => {
   console.log('Keyboard height:', info.keyboardHeight);
 });
 ```
@@ -456,11 +479,13 @@ Keyboard.addListener('keyboardWillShow', (info) => {
 ## Testing
 
 ### Unit Testing
+
 ```bash
 npm test
 ```
 
 ### E2E Testing
+
 ```bash
 npm run test:e2e
 ```
@@ -468,6 +493,7 @@ npm run test:e2e
 ### Device Testing
 
 #### iOS Simulator
+
 ```bash
 # List available simulators
 xcrun simctl list devices
@@ -480,6 +506,7 @@ npx cap run ios --target="iPhone 14 Pro"
 ```
 
 #### Android Emulator
+
 ```bash
 # List available AVDs
 emulator -list-avds
@@ -520,6 +547,7 @@ npx cap run android
 ### Common Issues
 
 #### iOS Build Failures
+
 ```bash
 # Clean build folders
 cd ios
@@ -532,6 +560,7 @@ rm -rf ~/Library/Developer/Xcode/DerivedData
 ```
 
 #### Android Build Failures
+
 ```bash
 # Clean build
 cd android
@@ -546,6 +575,7 @@ File → Invalidate Caches and Restart
 ## Performance Optimization
 
 ### Bundle Size Optimization
+
 ```bash
 # Analyze bundle
 npm run build -- --analyze
@@ -567,11 +597,13 @@ npm run build -- --analyze
 ```
 
 ### Image Optimization
+
 - Use WebP format
 - Lazy load images
 - Implement responsive images
 
 ### Code Splitting
+
 ```typescript
 // Lazy load routes
 const Dashboard = lazy(() => import('./pages/Dashboard'));
@@ -621,16 +653,19 @@ const Appointments = lazy(() => import('./pages/Appointments'));
 ## Resources
 
 ### Official Documentation
+
 - [Capacitor Docs](https://capacitorjs.com/docs)
 - [iOS Developer Docs](https://developer.apple.com/documentation/)
 - [Android Developer Docs](https://developer.android.com/docs)
 
 ### Useful Guides
+
 - [iOS App Store Review Guidelines](https://developer.apple.com/app-store/review/guidelines/)
 - [Google Play Policy Center](https://play.google.com/about/developer-content-policy/)
 - [Capacitor Blog](https://capacitorjs.com/blog)
 
 ### Community
+
 - [Capacitor Discord](https://discord.com/invite/UPYYRhtyzp)
 - [Ionic Forum](https://forum.ionicframework.com/)
 - [Stack Overflow](https://stackoverflow.com/questions/tagged/capacitor)
@@ -640,6 +675,7 @@ const Appointments = lazy(() => import('./pages/Appointments'));
 ## Support
 
 For technical issues with mobile development:
+
 - **Email:** dev@hair.app
 - **GitHub Issues:** [Repository Issues](https://github.com/yourusername/hair-ai-app/issues)
 

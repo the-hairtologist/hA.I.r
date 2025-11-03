@@ -95,7 +95,10 @@ export const NewConversationDialog = ({
         setUsers(stylistProfiles?.map(s => s.user) || []);
       }
     } catch (error) {
-      logger.error('Error loading users', error, { component: 'NewConversationDialog', userRole });
+      logger.error('Error loading users', error, {
+        component: 'NewConversationDialog',
+        userRole,
+      });
       toast.error('Error loading users');
     } finally {
       setLoading(false);

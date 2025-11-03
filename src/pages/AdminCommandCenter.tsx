@@ -392,9 +392,7 @@ export default function AdminCommandCenter() {
                 className="h-auto flex-col gap-2 p-4"
               >
                 <Users className="h-6 w-6" />
-                <span className="text-xs sm:text-sm">
-                  Manage Users
-                </span>
+                <span className="text-xs sm:text-sm">Manage Users</span>
               </Button>
               <Button
                 onClick={() => navigate('/system-health')}
@@ -402,9 +400,7 @@ export default function AdminCommandCenter() {
                 className="h-auto flex-col gap-2 p-4"
               >
                 <Activity className="h-6 w-6" />
-                <span className="text-xs sm:text-sm">
-                  System Health
-                </span>
+                <span className="text-xs sm:text-sm">System Health</span>
               </Button>
               <Button
                 onClick={() => navigate('/access-codes')}
@@ -412,9 +408,7 @@ export default function AdminCommandCenter() {
                 className="h-auto flex-col gap-2 p-4"
               >
                 <Lock className="h-6 w-6" />
-                <span className="text-xs sm:text-sm">
-                  Access Codes
-                </span>
+                <span className="text-xs sm:text-sm">Access Codes</span>
               </Button>
               <Button
                 onClick={() => navigate('/settings')}
@@ -422,9 +416,7 @@ export default function AdminCommandCenter() {
                 className="h-auto flex-col gap-2 p-4"
               >
                 <SettingsIcon className="h-6 w-6" />
-                <span className="text-xs sm:text-sm">
-                  Settings
-                </span>
+                <span className="text-xs sm:text-sm">Settings</span>
               </Button>
             </div>
           </CardContent>

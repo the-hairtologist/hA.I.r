@@ -18,6 +18,7 @@
 ## 🔥 Quick Actions
 
 ### Access Debug Tools
+
 ```
 Navigate to: /admin/debug-tools
 Requires: Admin role
@@ -25,6 +26,7 @@ Features: Logs, Journey, Health Check, Error Tests
 ```
 
 ### Add Logging to Your Code
+
 ```typescript
 // Step 1: Import
 import { logger } from '@/lib/logging/productionLogger';
@@ -44,6 +46,7 @@ try {
 ```
 
 ### Track Database Operations
+
 ```typescript
 import { trackSelect } from '@/lib/logging/supabaseTracker';
 
@@ -59,6 +62,7 @@ const result = await trackSelect(
 ## 📊 What's Tracked Automatically
 
 ### ✅ Already Tracking
+
 - **Navigation**: All route changes
 - **Authentication**: Sign-in, sign-up, sign-out, password reset
 - **Appointments**: Create, update, delete, status changes
@@ -67,6 +71,7 @@ const result = await trackSelect(
 - **Realtime**: All Supabase realtime events
 
 ### 🔄 Coming Soon (Phase 3)
+
 - Client/Stylist profile operations
 - Formula management
 - Service/pricing operations
@@ -78,6 +83,7 @@ const result = await trackSelect(
 ## 🐛 Debug Workflow
 
 ### When Something Breaks
+
 1. **Reproduce** the issue
 2. **Go to** `/admin/debug-tools`
 3. **Check Logs** tab for errors
@@ -85,6 +91,7 @@ const result = await trackSelect(
 5. **Copy logs/journey** and attach to bug report
 
 ### Test Error Handling
+
 1. Go to `/admin/debug-tools` → Test Errors tab
 2. Click "Run All Scenarios"
 3. Verify all 6 tests pass

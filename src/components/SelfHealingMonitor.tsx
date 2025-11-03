@@ -43,7 +43,11 @@ export const SelfHealingMonitor = () => {
       });
       setLastCheck(new Date());
     } catch (error) {
-      logger.error('Failed to load metrics', 'SelfHealingMonitor', error as Error);
+      logger.error(
+        'Failed to load metrics',
+        'SelfHealingMonitor',
+        error as Error
+      );
     }
   };
 

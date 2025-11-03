@@ -16,33 +16,34 @@
 CURRENT PROBLEM:
 
 ```tsx
-  if (loading) {
-    return <LoadingSpinner message="Verifying access..." />;
-  }
+if (loading) {
+  return <LoadingSpinner message="Verifying access..." />;
+}
 
-  useEffect(() => {    //  Hook called after conditional return!
-    loadUsers();
-  }, []);
+useEffect(() => {
+  //  Hook called after conditional return!
+  loadUsers();
+}, []);
 ```
 
 FIXED VERSION:
 
 ```tsx
-  // Move useEffect BEFORE conditional returns
-  useEffect(() => {
-    if (!loading && user && isAdmin) {
-      loadUsers();
-    }
-  }, [loading, user, isAdmin]);
-
-  // Then the conditionals
-  if (!loading && (!user || !isAdmin)) {
-    return <Navigate to="/dashboard" replace />;
+// Move useEffect BEFORE conditional returns
+useEffect(() => {
+  if (!loading && user && isAdmin) {
+    loadUsers();
   }
+}, [loading, user, isAdmin]);
 
-  if (loading) {
-    return <LoadingSpinner message="Verifying access..." />;
-  }
+// Then the conditionals
+if (!loading && (!user || !isAdmin)) {
+  return <Navigate to="/dashboard" replace />;
+}
+
+if (loading) {
+  return <LoadingSpinner message="Verifying access..." />;
+}
 ```
 
 #### AuditLogs.tsx - Lines 54-57
@@ -50,33 +51,34 @@ FIXED VERSION:
 CURRENT PROBLEM:
 
 ```tsx
-  if (authLoading) {
-    return <LoadingSpinner message="Verifying access..." />;
-  }
+if (authLoading) {
+  return <LoadingSpinner message="Verifying access..." />;
+}
 
-  useEffect(() => {    //  Hook called after conditional return!
-    loadLogs();
-  }, [dateRange]);
+useEffect(() => {
+  //  Hook called after conditional return!
+  loadLogs();
+}, [dateRange]);
 ```
 
 FIXED VERSION:
 
 ```tsx
-  // Move useEffect BEFORE conditional returns  
-  useEffect(() => {
-    if (!authLoading && user && isAdmin) {
-      loadLogs();
-    }
-  }, [authLoading, user, isAdmin, dateRange]);
-
-  // Then the conditionals
-  if (!authLoading && (!user || !isAdmin)) {
-    return <Navigate to="/dashboard" replace />;
+// Move useEffect BEFORE conditional returns
+useEffect(() => {
+  if (!authLoading && user && isAdmin) {
+    loadLogs();
   }
+}, [authLoading, user, isAdmin, dateRange]);
 
-  if (authLoading) {
-    return <LoadingSpinner message="Verifying access..." />;
-  }
+// Then the conditionals
+if (!authLoading && (!user || !isAdmin)) {
+  return <Navigate to="/dashboard" replace />;
+}
+
+if (authLoading) {
+  return <LoadingSpinner message="Verifying access..." />;
+}
 ```
 
 ### 2. FIX EMPTY INTERFACES
@@ -102,13 +104,15 @@ interface CommandDialogProps extends DialogProps {
 CHANGE:
 
 ```tsx
-export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
+export interface TextareaProps
+  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
 ```
 
 TO:
 
 ```tsx
-export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+export interface TextareaProps
+  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   // Inherits all textarea attributes without adding new properties
 }
 ```
@@ -169,14 +173,14 @@ case 'stripe': {
 ## APPLY THESE FIXES IN ORDER
 
 1. Fix React hooks violations (CRITICAL)
-2. Fix empty interfaces  
+2. Fix empty interfaces
 3. Fix unsafe Function types
 4. Fix empty blocks
 5. Fix lexical declarations
 
 ## EXPECTED RESULTS
 
-- Critical errors: 22  ~8-10
+- Critical errors: 22 ~8-10
 - React hooks violations: RESOLVED
 - Empty interface errors: RESOLVED
 - Better code quality overall

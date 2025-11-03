@@ -44,6 +44,7 @@ SELECT cron.schedule(
 ```
 
 **What this does:**
+
 - Checks for birthdays in next 7 days → sends birthday emails with discounts
 - Finds appointments completed 24h ago → sends review requests
 - Finds cancellations from 3 days ago → sends follow-up emails
@@ -207,12 +208,14 @@ ORDER BY sent_at DESC;
 ## 📝 Best Practices
 
 ✅ **DO:**
+
 - Test each email type before going live
 - Monitor open/click rates to improve content
 - Customize templates with your branding
 - Update client email preferences regularly
 
 ❌ **DON'T:**
+
 - Send emails without testing first
 - Ignore bounce notifications
 - Use generic content (personalize!)
@@ -252,6 +255,7 @@ If you encounter issues:
 4. Check Resend dashboard for email delivery status
 
 **Common Issues:**
+
 - Missing API keys → Add in Supabase Secrets
 - Wrong timing → Adjust cron schedule
 - Template errors → Use Test tab to preview

@@ -56,7 +56,10 @@ export const ClientHistoryTimeline = ({
       setAppointments(appointmentsData || []);
       setFormulas(formulasData || []);
     } catch (error) {
-      logger.error('Error loading client history', error, { component: 'ClientHistoryTimeline', clientId });
+      logger.error('Error loading client history', error, {
+        component: 'ClientHistoryTimeline',
+        clientId,
+      });
       toast.error('Failed to load client history');
     } finally {
       setLoading(false);

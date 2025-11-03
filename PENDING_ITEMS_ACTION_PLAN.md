@@ -9,6 +9,7 @@ All technical work is **COMPLETE**. These remaining items are external tasks tha
 ## 🎯 Quick Priority Guide
 
 ### Priority 1: CRITICAL (Required for App Store Submission)
+
 - [ ] Apple Developer Account ($99/year)
 - [ ] Google Play Console Account ($25 one-time)
 - [ ] App Icon 1024x1024 (for stores)
@@ -16,16 +17,19 @@ All technical work is **COMPLETE**. These remaining items are external tasks tha
 - [ ] App Store Descriptions
 
 ### Priority 2: IMPORTANT (Needed for Full Functionality)
+
 - [ ] Stripe Account Activation (payment processing)
 - [ ] Email Service Setup (appointment confirmations)
 - [ ] API Keys Configuration
 
 ### Priority 3: RECOMMENDED (Enhances Experience)
+
 - [ ] Custom Domain ($10-15/year)
 - [ ] Google Analytics Setup (free)
 - [ ] Privacy Policy Review
 
 ### Priority 4: OPTIONAL (Can Add Later)
+
 - [ ] Cloudflare CDN (free)
 - [ ] Google Workspace Email ($6/user/month)
 - [ ] Sentry Error Tracking (free tier)
@@ -37,6 +41,7 @@ All technical work is **COMPLETE**. These remaining items are external tasks tha
 ### Week 1: Accounts & Approvals
 
 **Day 1 (Monday):**
+
 - ⏰ **Morning:**
   - [ ] Apply for Apple Developer Program ($99)
   - [ ] Register for Google Play Console ($25)
@@ -51,18 +56,21 @@ All technical work is **COMPLETE**. These remaining items are external tasks tha
   - **Cost:** $0-15
 
 **Day 2 (Tuesday):**
+
 - [ ] Check email for account approvals
 - [ ] Complete Stripe verification if requested
 - [ ] Configure DNS if domain purchased
 - **Time:** 30 minutes
 
 **Day 3-5 (Wednesday-Friday):**
+
 - [ ] Wait for account approvals (24-48 hours typical)
 - [ ] Start designing app icon in free time
 - [ ] Draft app store descriptions
 - **Time:** Waiting period (can work on assets)
 
 **Weekend:**
+
 - [ ] Create app icon (1024x1024)
 - [ ] Write app descriptions
 - [ ] Plan screenshot compositions
@@ -73,6 +81,7 @@ All technical work is **COMPLETE**. These remaining items are external tasks tha
 ### Week 2: Assets & Submission
 
 **Day 1 (Monday):**
+
 - ⏰ **All Day:**
   - [ ] Capture app screenshots on iOS device
   - [ ] Capture app screenshots on Android device
@@ -81,6 +90,7 @@ All technical work is **COMPLETE**. These remaining items are external tasks tha
   - **Tools:** Figma (free), Screenshot.rocks (free)
 
 **Day 2 (Tuesday):**
+
 - ⏰ **Morning:**
   - [ ] Set up App Store Connect listing
   - [ ] Upload icon, screenshots, description
@@ -94,6 +104,7 @@ All technical work is **COMPLETE**. These remaining items are external tasks tha
   - **Time:** 2 hours
 
 **Day 3 (Wednesday):**
+
 - [ ] Build iOS app for submission
   - [ ] Run `npx cap sync ios`
   - [ ] Open Xcode
@@ -108,12 +119,14 @@ All technical work is **COMPLETE**. These remaining items are external tasks tha
   - **Time:** 1-2 hours
 
 **Day 4 (Thursday):**
+
 - [ ] Submit iOS app for review
 - [ ] Submit Android app for review
 - [ ] Configure API keys in production
 - **Time:** 1 hour
 
 **Day 5+ (Friday onward):**
+
 - [ ] Wait for app reviews
   - Apple: 1-2 days average
   - Google: 1-2 hours average
@@ -127,7 +140,9 @@ All technical work is **COMPLETE**. These remaining items are external tasks tha
 You now have these comprehensive guides:
 
 ### 1. **APP_STORE_ASSETS_GUIDE.md**
+
 Complete walkthrough for creating all app store assets:
+
 - App icon specifications (1024x1024 for iOS, 512x512 for Android)
 - Screenshot requirements for all devices
 - App descriptions optimized for both stores
@@ -136,7 +151,9 @@ Complete walkthrough for creating all app store assets:
 - Timeline estimates
 
 ### 2. **DOMAIN_SETUP_GUIDE.md**
+
 Step-by-step domain configuration:
+
 - DNS record setup (A records for Lovable)
 - Registrar-specific guides (Namecheap, GoDaddy, Google Domains, Cloudflare)
 - SSL certificate verification
@@ -145,7 +162,9 @@ Step-by-step domain configuration:
 - Troubleshooting guide
 
 ### 3. **DEVELOPER_ACCOUNTS_GUIDE.md**
+
 All account creation procedures:
+
 - Apple Developer Program enrollment
 - Google Play Console registration
 - Stripe activation steps
@@ -159,6 +178,7 @@ All account creation procedures:
 ## 💰 Complete Cost Breakdown
 
 ### Required Costs (Year 1):
+
 ```
 Apple Developer Program:      $99.00
 Google Play Console:          $25.00 (one-time)
@@ -169,6 +189,7 @@ TOTAL REQUIRED:              $124 - $364
 ```
 
 ### Optional Costs (Year 1):
+
 ```
 Custom Domain:                $10-15/year
 Google Workspace:             $72/year per user
@@ -189,6 +210,7 @@ TOTAL OPTIONAL:              $82 - $627
 ### 📱 Mobile App Stores
 
 **Apple App Store:**
+
 - [ ] Create Apple ID (if needed)
 - [ ] Enroll in Apple Developer Program - $99/year
 - [ ] Wait for approval (24-48 hours)
@@ -203,6 +225,7 @@ TOTAL OPTIONAL:              $82 - $627
 - [ ] **GO LIVE! 🎉**
 
 **Google Play Store:**
+
 - [ ] Create Google account (if needed)
 - [ ] Register for Play Console - $25 one-time
 - [ ] Verify identity (1-3 days)
@@ -221,6 +244,7 @@ TOTAL OPTIONAL:              $82 - $627
 ### 💳 Payment & Services
 
 **Stripe:**
+
 - [ ] Log into Stripe dashboard
 - [ ] Complete business information
 - [ ] Add bank account for payouts
@@ -233,6 +257,7 @@ TOTAL OPTIONAL:              $82 - $627
 - [ ] Add API keys to app secrets
 
 **Email Service (Resend):**
+
 - [ ] Sign up at resend.com
 - [ ] Verify email address
 - [ ] Add sending domain
@@ -247,6 +272,7 @@ TOTAL OPTIONAL:              $82 - $627
 ### 🌐 Domain & Hosting
 
 **Custom Domain (Optional but Recommended):**
+
 - [ ] Purchase domain ($10-15/year)
 - [ ] Open Lovable project settings
 - [ ] Navigate to Domains tab
@@ -265,6 +291,7 @@ TOTAL OPTIONAL:              $82 - $627
 ### 📊 Analytics & Monitoring
 
 **Google Analytics (Optional):**
+
 - [ ] Create GA4 account
 - [ ] Create property
 - [ ] Add data stream (Web)
@@ -274,6 +301,7 @@ TOTAL OPTIONAL:              $82 - $627
 - [ ] Set up conversion events
 
 **Sentry (Optional):**
+
 - [ ] Sign up at sentry.io
 - [ ] Create React project
 - [ ] Get DSN
@@ -286,6 +314,7 @@ TOTAL OPTIONAL:              $82 - $627
 ### 🎨 Design Assets
 
 **App Icon:**
+
 - [ ] Design 1024x1024 icon (iOS)
 - [ ] Design 512x512 icon (Android)
 - [ ] Test at small sizes (40px)
@@ -294,6 +323,7 @@ TOTAL OPTIONAL:              $82 - $627
 - [ ] Include transparency (Android)
 
 **Screenshots:**
+
 - [ ] iPhone 6.9" (2868x1320 or 1320x2868)
 - [ ] iPhone 6.7" (2796x1290 or 1290x2796)
 - [ ] iPad Pro 13" (2752x2064 or 2064x2752)
@@ -309,6 +339,7 @@ TOTAL OPTIONAL:              $82 - $627
   - [ ] Portfolio (if stylist)
 
 **App Store Copy:**
+
 - [ ] App name (30 chars max)
 - [ ] Subtitle (30 chars max)
 - [ ] Description (4000 chars max)
@@ -356,6 +387,7 @@ TOTAL OPTIONAL:              $82 - $627
 ## 🚨 Common Mistakes to Avoid
 
 ### ❌ DON'T:
+
 1. **Submit with placeholder content** - Instant rejection
 2. **Use low-res screenshots** - Looks unprofessional
 3. **Forget to test on real devices** - Emulators hide issues
@@ -368,6 +400,7 @@ TOTAL OPTIONAL:              $82 - $627
 10. **Ignore review guidelines** - Causes rejection
 
 ### ✅ DO:
+
 1. **Test thoroughly before submitting**
 2. **Use high-quality assets**
 3. **Follow platform guidelines exactly**
@@ -384,18 +417,21 @@ TOTAL OPTIONAL:              $82 - $627
 ## 🆘 When You Get Stuck
 
 ### Resource Files:
+
 - **Detailed asset guide:** `APP_STORE_ASSETS_GUIDE.md`
 - **Domain setup help:** `DOMAIN_SETUP_GUIDE.md`
 - **Account creation:** `DEVELOPER_ACCOUNTS_GUIDE.md`
 - **Technical audit:** `FINAL_COMPREHENSIVE_AUDIT.md`
 
 ### External Help:
+
 - **Apple Support:** developer@apple.com
 - **Google Support:** Via Play Console
 - **Stripe Support:** dashboard chat (fastest)
 - **Lovable Support:** support@lovable.dev
 
 ### Useful Tools:
+
 - **DNS Checker:** dnschecker.org
 - **SSL Checker:** sslshopper.com
 - **App Icon Generator:** appicon.co
@@ -428,6 +464,7 @@ You'll know you're ready when:
 ## 💪 You've Got This!
 
 Remember:
+
 - **Technical work:** 100% COMPLETE ✅
 - **Your app:** Production-ready, Grade A+ ✅
 - **Remaining tasks:** External setup (accounts, assets)

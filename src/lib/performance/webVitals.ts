@@ -37,7 +37,11 @@ class WebVitalsMonitor {
 
       logger.debug('📊 Web Vitals monitoring initialized', 'webVitals');
     } catch (error) {
-      logger.warn('Web Vitals library not available', 'webVitals', error as any);
+      logger.warn(
+        'Web Vitals library not available',
+        'webVitals',
+        error as any
+      );
     }
   }
 
@@ -131,7 +135,11 @@ class WebVitalsMonitor {
         rating: metric.rating,
       });
     } catch (error) {
-      logger.warn('Failed to send Web Vital to database', 'webVitals', error as any);
+      logger.warn(
+        'Failed to send Web Vital to database',
+        'webVitals',
+        error as any
+      );
     }
   }
 

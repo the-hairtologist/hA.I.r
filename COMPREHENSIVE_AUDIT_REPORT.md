@@ -1,4 +1,5 @@
 # Comprehensive App Audit - 3 Perspective Analysis
+
 **Date:** 2025-10-11  
 **Scope:** Full app experience from new client, returning client, and stylist perspectives
 
@@ -7,10 +8,12 @@
 ## 🚨 CRITICAL BLOCKERS (P0 - Fix Immediately)
 
 ### **BLOCKER-001: Profiles Table RLS Policy Breaks Everything**
+
 **Severity:** 🔴 P0 - Complete System Failure  
 **Impact:** Users cannot access ANY profile data after authentication
 
 **Issue:**
+
 ```sql
 -- CURRENT (BROKEN):
 Policy: "Block anonymous profile access"
@@ -19,6 +22,7 @@ Using Expression: false  -- ❌ BLOCKS EVERYONE
 ```
 
 **Network Evidence:**
+
 - Repeated 401 errors: `"permission denied for table profiles"`
 - Occurs every 30 seconds for all users
 - Blocks: Dashboard loading, profile completion, all profile-based features
@@ -26,13 +30,14 @@ Using Expression: false  -- ❌ BLOCKS EVERYONE
 **Root Cause:** Overly restrictive RLS policy blocks authenticated users from reading their own profiles
 
 **Fix Required:**
+
 ```sql
 -- Remove blocking policy
 DROP POLICY "Block anonymous profile access" ON profiles;
 
 -- Add correct policy
-CREATE POLICY "Users can view own profile" 
-ON profiles FOR SELECT 
+CREATE POLICY "Users can view own profile"
+ON profiles FOR SELECT
 USING (auth.uid() = id);
 ```
 
@@ -43,6 +48,7 @@ USING (auth.uid() = id);
 ### Journey: Landing → Sign Up → Discover Stylists
 
 #### ✅ What Works Well:
+
 1. **Landing Page (/):**
    - Clean, accessible design with skip navigation
    - Clear value proposition: "For the stylists who do it all—now you don't have to"
@@ -64,6 +70,7 @@ USING (auth.uid() = id);
    - OG image, sitemap, manifest.json all present
 
 #### 🔴 Critical Issues:
+
 1. **Auth → Dashboard Redirect Fails**
    - After signup, user hits profiles permission error
    - Cannot load dashboard at all
@@ -79,6 +86,7 @@ USING (auth.uid() = id);
    - Microcopy varies (some friendly, some generic)
 
 #### ⚠️ UX Gaps:
+
 1. **Missing Trust Signals on Landing:**
    - No social proof (testimonials, user count)
    - No pricing transparency
@@ -101,6 +109,7 @@ USING (auth.uid() = id);
 ### Journey: Login → Dashboard → Book Appointment → View History
 
 #### ✅ What Works Well:
+
 1. **Dashboard Features (if it loaded):**
    - Drag-and-drop section reordering
    - Live KPI cards
@@ -119,6 +128,7 @@ USING (auth.uid() = id);
    - Notification center exists
 
 #### 🔴 Critical Issues:
+
 1. **Can't Access Dashboard**
    - Same profiles RLS issue
    - User stuck in loading state or auth redirect loop
@@ -134,6 +144,7 @@ USING (auth.uid() = id);
    - No confirmation emails setup
 
 #### ⚠️ UX Gaps:
+
 1. **Dashboard Overwhelming:**
    - Too many sections by default (11+ draggable items)
    - No "focus mode" or simplified view
@@ -156,6 +167,7 @@ USING (auth.uid() = id);
 ### Journey: Login → Dashboard → Manage Clients → View Payments
 
 #### ✅ What Works Well:
+
 1. **Feature Parity:**
    - Same dashboard framework as clients
    - Additional sections: clients, services, portfolio, finance
@@ -175,6 +187,7 @@ USING (auth.uid() = id);
    - Medical consent flags
 
 #### 🔴 Critical Issues:
+
 1. **Same Profiles RLS Blocker**
    - Stylists can't access dashboard either
    - Can't manage client data
@@ -191,6 +204,7 @@ USING (auth.uid() = id);
    - No way to "claim" or "request access" to clients
 
 #### ⚠️ UX Gaps:
+
 1. **Onboarding Too Complex:**
    - OnboardingWizard, OnboardingTour, ProfileCompletion all compete
    - No clear sequence
@@ -211,26 +225,31 @@ USING (auth.uid() = id);
 ## 🔍 CROSS-CUTTING ISSUES
 
 ### State Management
+
 - **Issue:** `EnhancedAuthContext` and `SubscriptionContext` race condition
 - **Impact:** Sometimes subscribed=false even when user has subscription
 - **Fix:** Consolidate or add loading gates
 
 ### Analytics
+
 - **Issue:** `initAnalytics()` never called in App.tsx
 - **Impact:** No tracking despite `useAnalytics()` hook usage
 - **Fix:** Add `useEffect(() => { initAnalytics() }, [])` to App.tsx
 
 ### Error Handling
+
 - **Issue:** Network errors retry 3x then fail silently
 - **Impact:** User sees perpetual loading or blank screens
 - **Fix:** Add error boundaries with retry + fallback UI
 
 ### Mobile Experience
+
 - **Issue:** PWA installed but no offline-first patterns
 - **Impact:** App appears broken when internet flickers
 - **Fix:** Workbox caching configured but needs runtime fetch wrappers
 
 ### Type Safety
+
 - **Issue:** Database types in `src/integrations/supabase/types.ts` out of sync
 - **Impact:** TypeScript errors suppressed with `any` types
 - **Note:** Types auto-generated, but migrations need approval first
@@ -240,18 +259,21 @@ USING (auth.uid() = id);
 ## 📋 RECOMMENDED FIX PRIORITY
 
 ### Phase 1: Emergency Fixes (Deploy Today)
+
 1. **Fix profiles RLS policy** ← MUST DO FIRST
 2. Initialize analytics in App.tsx
 3. Add error boundaries around Dashboard, Auth
 4. Fix empty state inconsistencies
 
 ### Phase 2: UX Polish (This Week)
+
 1. Consolidate onboarding flows
 2. Add trust signals to landing page
 3. Improve subscription prompt timing
 4. Add "what's next" guidance post-signup
 
 ### Phase 3: Feature Completion (Next Sprint)
+
 1. Payment integration (Stripe)
 2. Calendar sync (Google/Apple)
 3. Email notifications (transactional)
@@ -271,16 +293,16 @@ USING (auth.uid() = id);
 
 ## 📊 HEALTH SCORE
 
-| Category | Score | Status |
-|----------|-------|--------|
-| **Authentication** | 20/100 | 🔴 Broken (RLS) |
-| **New User Experience** | 65/100 | 🟡 Needs Work |
-| **Returning User** | 0/100 | 🔴 Blocked |
-| **Stylist Tools** | 0/100 | 🔴 Blocked |
-| **Mobile Experience** | 70/100 | 🟢 Good |
-| **Accessibility** | 85/100 | 🟢 Excellent |
-| **SEO** | 90/100 | 🟢 Excellent |
-| **Performance** | 75/100 | 🟢 Good |
+| Category                | Score  | Status          |
+| ----------------------- | ------ | --------------- |
+| **Authentication**      | 20/100 | 🔴 Broken (RLS) |
+| **New User Experience** | 65/100 | 🟡 Needs Work   |
+| **Returning User**      | 0/100  | 🔴 Blocked      |
+| **Stylist Tools**       | 0/100  | 🔴 Blocked      |
+| **Mobile Experience**   | 70/100 | 🟢 Good         |
+| **Accessibility**       | 85/100 | 🟢 Excellent    |
+| **SEO**                 | 90/100 | 🟢 Excellent    |
+| **Performance**         | 75/100 | 🟢 Good         |
 
 **Overall:** 🔴 **50/100 - Launch Blocked**
 
@@ -291,6 +313,7 @@ USING (auth.uid() = id);
 Once RLS is fixed, estimated readiness: **85/100** (Soft Launch Ready)
 
 Remaining blockers for full launch:
+
 - Email notifications (appointment confirmations)
 - Payment processing (Stripe live mode)
 - Client invitation flow testing

@@ -5,15 +5,18 @@ This directory contains utility functions and helpers used throughout the applic
 ## Error Handling
 
 ### `errorHandler.ts`
+
 Centralized error handling with user-friendly messages and retry logic.
 
 **Key Functions:**
+
 - `handleError()` - Process and display errors with toast notifications
 - `getErrorMessage()` - Extract user-friendly messages from various error types
 - `withRetry()` - Retry failed operations with exponential backoff
 - `safeAsync()` - Safe wrapper for async operations
 
 **Example:**
+
 ```ts
 try {
   await riskyOperation();
@@ -21,7 +24,7 @@ try {
   handleError(error, 'riskyOperation', {
     showToast: true,
     retryable: true,
-    onRetry: () => riskyOperation()
+    onRetry: () => riskyOperation(),
   });
 }
 ```
@@ -29,47 +32,59 @@ try {
 ## Validation
 
 ### `validation.ts`
+
 Input validation utilities and sanitization functions.
 
 ### `phoneValidation.ts`
+
 Phone number validation and formatting.
 
 ### `urlValidation.ts`
+
 URL validation and sanitization.
 
 ## Data Processing
 
 ### `csvExport.ts`
+
 Export data to CSV format with proper formatting.
 
 ### `queryCache.ts`
+
 React Query cache management and configuration.
 
 ## Analytics & Monitoring
 
 ### `analytics.ts`
+
 Analytics tracking and event logging.
 
 ### `logger.ts`
+
 Application logging utility with different log levels.
 
 ### `monitoring.ts`
+
 Performance monitoring and error tracking.
 
 ## Platform-Specific
 
 ### `platform/`
+
 Cross-platform utilities for web, iOS, and Android.
 
 ### `mobileOptimizations.ts`
+
 Mobile-specific performance optimizations.
 
 ### `platformOptimizations.ts`
+
 Platform detection and optimization utilities.
 
 ## AI & Intelligence
 
 ### `ai/`
+
 AI-powered features and utilities.
 
 - `AdaptiveLearningAI.ts` - Learns from user behavior
@@ -80,6 +95,7 @@ AI-powered features and utilities.
 ## Self-Healing
 
 ### `selfHealing/`
+
 Autonomous system monitoring and recovery.
 
 - `HealthMonitor.ts` - System health checks
@@ -90,12 +106,15 @@ Autonomous system monitoring and recovery.
 ## Styling & Design
 
 ### `buttonStyles.ts`
+
 Button style variants and configurations.
 
 ### `animations.ts`
+
 Animation utilities and presets.
 
 ### `responsiveSystem.ts`
+
 Responsive design system configuration.
 
 ## Best Practices

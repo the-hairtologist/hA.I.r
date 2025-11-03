@@ -5,6 +5,7 @@ When adding new components or modifying existing ones, follow these standards to
 ## Quick Reference
 
 ### Standard Component Structure
+
 ```tsx
 <Card className="p-4 sm:p-5 md:p-6">
   <CardHeader className="p-0 mb-4">
@@ -13,24 +14,25 @@ When adding new components or modifying existing ones, follow these standards to
       Title
     </CardTitle>
   </CardHeader>
-  <CardContent className="p-0 space-y-4">
-    {/* Content */}
-  </CardContent>
+  <CardContent className="p-0 space-y-4">{/* Content */}</CardContent>
 </Card>
 ```
 
 ### Standard Spacing
+
 - **Between sections**: `space-y-6` (24px)
 - **Between cards**: `gap-3 sm:gap-4` (12-16px)
 - **Card padding**: `p-4 sm:p-5 md:p-6` (16-24px)
 - **Within elements**: `gap-2` or `gap-3` (8-12px)
 
 ### Standard Text Sizing
+
 - **Headings**: `text-lg sm:text-xl lg:text-2xl`
 - **Body**: `text-xs sm:text-sm`
 - **Small text**: `text-[11px] sm:text-xs`
 
 ### Standard Grids
+
 ```tsx
 // 2-column to 4-column
 <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
@@ -55,8 +57,8 @@ When creating a new component, ensure:
 ## Dashboard Widget Template
 
 ```tsx
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Icon } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Icon } from 'lucide-react';
 
 interface WidgetProps {
   // Props here
@@ -84,6 +86,7 @@ export const Widget = ({ ...props }: WidgetProps) => {
 ## Common Patterns
 
 ### Icon + Text Button
+
 ```tsx
 <Button className="gap-2">
   <Icon className="h-4 w-4" />
@@ -92,6 +95,7 @@ export const Widget = ({ ...props }: WidgetProps) => {
 ```
 
 ### Stat Card
+
 ```tsx
 <div className="p-4 rounded-lg border-2 border-border bg-card">
   <div className="flex items-center gap-2 mb-2">
@@ -103,6 +107,7 @@ export const Widget = ({ ...props }: WidgetProps) => {
 ```
 
 ### List Item (clickable)
+
 ```tsx
 <div className="flex items-center gap-3 p-3 sm:p-4 rounded-lg border brutal-border hover:bg-muted/50 cursor-pointer transition-colors">
   <div className="p-2 rounded-lg bg-primary/10 shrink-0">
@@ -110,7 +115,9 @@ export const Widget = ({ ...props }: WidgetProps) => {
   </div>
   <div className="flex-1 min-w-0">
     <p className="text-sm sm:text-base font-semibold truncate">Title</p>
-    <p className="text-xs sm:text-sm text-muted-foreground truncate">Subtitle</p>
+    <p className="text-xs sm:text-sm text-muted-foreground truncate">
+      Subtitle
+    </p>
   </div>
 </div>
 ```
@@ -178,7 +185,7 @@ Never hardcode colors - use design system tokens:
 <div className="animate-fade-in">
 
 // With delay
-<div 
+<div
   className="animate-fade-in"
   style={{ animationDelay: `${index * 50}ms` }}
 >

@@ -8,20 +8,22 @@
 ## 📊 Current AI Infrastructure
 
 ### Platform: Lovable AI Gateway
+
 - **Endpoint:** `https://ai.gateway.lovable.dev/v1/chat/completions`
 - **Authentication:** Pre-configured `LOVABLE_API_KEY` (no user setup required)
 - **Cost Model:** Usage-based with free tier included
 
 ### Available Models
-| Model | Best For | Cost | Speed | Quality |
-|-------|----------|------|-------|---------|
-| **google/gemini-2.5-pro** | Complex reasoning, critical analysis | High | Slower | Best |
-| **google/gemini-2.5-flash** | Balanced tasks, general use | Medium | Fast | Good |
-| **google/gemini-2.5-flash-lite** | Simple queries, classification | Low | Fastest | Basic |
-| **google/gemini-2.5-flash-image-preview** | Image generation | Medium | Medium | Good |
-| **openai/gpt-5** | Highest accuracy tasks | Highest | Slow | Best |
-| **openai/gpt-5-mini** | Balanced alternative to Gemini Flash | Medium | Fast | Good |
-| **openai/gpt-5-nano** | Speed-optimized simple tasks | Low | Fastest | Basic |
+
+| Model                                     | Best For                             | Cost    | Speed   | Quality |
+| ----------------------------------------- | ------------------------------------ | ------- | ------- | ------- |
+| **google/gemini-2.5-pro**                 | Complex reasoning, critical analysis | High    | Slower  | Best    |
+| **google/gemini-2.5-flash**               | Balanced tasks, general use          | Medium  | Fast    | Good    |
+| **google/gemini-2.5-flash-lite**          | Simple queries, classification       | Low     | Fastest | Basic   |
+| **google/gemini-2.5-flash-image-preview** | Image generation                     | Medium  | Medium  | Good    |
+| **openai/gpt-5**                          | Highest accuracy tasks               | Highest | Slow    | Best    |
+| **openai/gpt-5-mini**                     | Balanced alternative to Gemini Flash | Medium  | Fast    | Good    |
+| **openai/gpt-5-nano**                     | Speed-optimized simple tasks         | Low     | Fastest | Basic   |
 
 ---
 
@@ -53,17 +55,19 @@
 ### ⚠️ Areas for Optimization
 
 #### CRITICAL: Model Underutilization
+
 Several high-stakes features use **Flash** when they should use **Pro**:
 
-| Function | Current Model | Should Use | Why |
-|----------|---------------|------------|-----|
-| `ai-visual-analysis` | flash | **gemini-2.5-pro** | Critical hair condition assessment for $200+ services |
-| `analyze-hair-photo` | flash | **gemini-2.5-pro** | Professional color analysis requires precision |
-| `ai-formula-analyzer` | flash | **gemini-2.5-pro** | Formula success = revenue; errors = unhappy clients |
-| `ai-schedule-predictor` | flash | ✅ flash (OK) | Pattern matching doesn't need pro |
-| `generate-ad` | flash | ✅ flash (OK) | Marketing copy is forgiving |
+| Function                | Current Model | Should Use         | Why                                                   |
+| ----------------------- | ------------- | ------------------ | ----------------------------------------------------- |
+| `ai-visual-analysis`    | flash         | **gemini-2.5-pro** | Critical hair condition assessment for $200+ services |
+| `analyze-hair-photo`    | flash         | **gemini-2.5-pro** | Professional color analysis requires precision        |
+| `ai-formula-analyzer`   | flash         | **gemini-2.5-pro** | Formula success = revenue; errors = unhappy clients   |
+| `ai-schedule-predictor` | flash         | ✅ flash (OK)      | Pattern matching doesn't need pro                     |
+| `generate-ad`           | flash         | ✅ flash (OK)      | Marketing copy is forgiving                           |
 
 **Impact of Upgrade:**
+
 - 📈 **+25% accuracy** on hair analysis
 - 💰 **+$15/analysis cost** but saves $500+ in correction services
 - 🎯 **Better client outcomes** = higher retention
@@ -76,6 +80,7 @@ Several high-stakes features use **Flash** when they should use **Pro**:
    - High-risk for professional services
 
 2. **No Fallback Strategy**
+
    ```
    Current: flash → error (if fails)
    Better:  pro → flash → cached response → error
@@ -98,18 +103,23 @@ Several high-stakes features use **Flash** when they should use **Pro**:
 ### Phase 1: Critical Upgrades (Do Now)
 
 #### 1.1 Upgrade Critical Functions to Pro
+
 **Functions to upgrade:**
+
 - ✅ `ai-visual-analysis` → gemini-2.5-pro
-- ✅ `analyze-hair-photo` → gemini-2.5-pro  
+- ✅ `analyze-hair-photo` → gemini-2.5-pro
 - ✅ `ai-formula-analyzer` → gemini-2.5-pro
 
 **Estimated Impact:**
+
 - Cost: +$45/day (~$1,350/month for 100 analyses/day)
 - Revenue protection: Prevents $5,000+/month in correction services
 - **ROI: 270%**
 
 #### 1.2 Add Confidence Scoring
+
 Add to all AI responses:
+
 ```typescript
 {
   response: "...",
@@ -120,11 +130,13 @@ Add to all AI responses:
 ```
 
 **Logic:**
+
 - confidence < 0.7 → Flag for human review
 - confidence < 0.5 → Don't show, require manual analysis
 - confidence > 0.9 → Safe to auto-proceed
 
 #### 1.3 Implement Fallback Chain
+
 ```typescript
 try {
   result = await callAI('gemini-2.5-pro', prompt);
@@ -143,7 +155,9 @@ try {
 ### Phase 2: Enhanced Safety (Week 2)
 
 #### 2.1 Response Validation Layer
+
 Before returning AI responses, validate:
+
 - ✅ Contains required sections (for formulas)
 - ✅ No conflicting instructions
 - ✅ Allergy warnings if client has allergies
@@ -151,15 +165,19 @@ Before returning AI responses, validate:
 - ✅ No harmful recommendations
 
 #### 2.2 Allergy Cross-Check
+
 ```typescript
 if (clientContext?.allergies) {
   const allergyCheck = await callAI('gemini-2.5-flash-lite', {
     prompt: `Check if this formula is safe for client with allergies: ${clientContext.allergies}`,
-    formula: aiResponse
+    formula: aiResponse,
   });
-  
+
   if (!allergyCheck.safe) {
-    return { error: "Formula may trigger client allergies", details: allergyCheck };
+    return {
+      error: 'Formula may trigger client allergies',
+      details: allergyCheck,
+    };
   }
 }
 ```
@@ -167,14 +185,18 @@ if (clientContext?.allergies) {
 ### Phase 3: Intelligence Layer (Month 2)
 
 #### 3.1 Model Performance Dashboard
+
 Track per-model:
+
 - Average response time
 - Token usage vs accuracy
 - User satisfaction scores
 - Cost per query type
 
 #### 3.2 Smart Model Selection v2
+
 Use historical data to optimize:
+
 ```typescript
 const selectModel = (query, clientRisk) => {
   if (clientRisk === 'high') return 'gemini-2.5-pro'; // High-value client
@@ -185,16 +207,17 @@ const selectModel = (query, clientRisk) => {
 ```
 
 #### 3.3 A/B Testing Framework
+
 ```typescript
-const testModels = async (query) => {
+const testModels = async query => {
   const [proResult, flashResult] = await Promise.all([
     callAI('gemini-2.5-pro', query),
-    callAI('gemini-2.5-flash', query)
+    callAI('gemini-2.5-flash', query),
   ]);
-  
+
   // Log for comparison
   logABTest({ query, proResult, flashResult });
-  
+
   // Return pro result but track if flash would've been good enough
   return proResult;
 };
@@ -206,25 +229,28 @@ const testModels = async (query) => {
 
 ### Post-Optimization Metrics
 
-| Metric | Current | Target | Impact |
-|--------|---------|--------|--------|
-| **Hair Analysis Accuracy** | 85% | 95% | +10% fewer corrections |
-| **Formula Success Rate** | 88% | 96% | +$800/month per stylist |
-| **Client Satisfaction** | 4.2/5 | 4.7/5 | +12% retention |
-| **AI Response Confidence** | N/A | 92% avg | Trustworthy flagging |
-| **False Positives** | ~15% | <5% | Less wasted time |
-| **Cost per Query** | $0.02 | $0.05 | +150% but worth it |
-| **ROI** | N/A | 270% | Net positive |
+| Metric                     | Current | Target  | Impact                  |
+| -------------------------- | ------- | ------- | ----------------------- |
+| **Hair Analysis Accuracy** | 85%     | 95%     | +10% fewer corrections  |
+| **Formula Success Rate**   | 88%     | 96%     | +$800/month per stylist |
+| **Client Satisfaction**    | 4.2/5   | 4.7/5   | +12% retention          |
+| **AI Response Confidence** | N/A     | 92% avg | Trustworthy flagging    |
+| **False Positives**        | ~15%    | <5%     | Less wasted time        |
+| **Cost per Query**         | $0.02   | $0.05   | +150% but worth it      |
+| **ROI**                    | N/A     | 270%    | Net positive            |
 
 ### Financial Impact (100 analyses/day)
 
 **Current Costs:**
+
 - 100 analyses × $0.02 = $2/day = $60/month
 
 **Optimized Costs:**
+
 - 100 analyses × $0.05 = $5/day = $150/month
 
 **Revenue Protection:**
+
 - Prevent 10 corrections/month × $500 = $5,000/month saved
 - **Net Benefit: +$4,850/month**
 
@@ -233,6 +259,7 @@ const testModels = async (query) => {
 ## 🎯 Immediate Action Plan
 
 ### This Week
+
 1. ✅ Upgrade `ai-visual-analysis` to pro
 2. ✅ Upgrade `analyze-hair-photo` to pro
 3. ✅ Upgrade `ai-formula-analyzer` to pro
@@ -240,12 +267,14 @@ const testModels = async (query) => {
 5. ✅ Implement basic fallback (pro → flash)
 
 ### Next Week
+
 6. ⏳ Add response validation layer
 7. ⏳ Implement allergy cross-check
 8. ⏳ Create AI quality metrics dashboard
 9. ⏳ Set up performance monitoring alerts
 
 ### Month 2
+
 10. ⏳ Launch A/B testing framework
 11. ⏳ Optimize model selection based on data
 12. ⏳ Build client-facing AI transparency reports
@@ -255,6 +284,7 @@ const testModels = async (query) => {
 ## 🔐 Security & Compliance
 
 ### Already Implemented ✅
+
 - Rate limiting (10 req/min)
 - Input validation (<2000 chars)
 - PII detection
@@ -263,6 +293,7 @@ const testModels = async (query) => {
 - No medical advice
 
 ### To Add
+
 - Response sanitization (remove potential harmful content)
 - Audit logging for all AI decisions
 - GDPR-compliant data retention (90 days)

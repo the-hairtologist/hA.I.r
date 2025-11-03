@@ -1,4 +1,5 @@
 # Security Hardening Guide
+
 **hA.I.r - Security Best Practices & Implementation**
 
 ---
@@ -8,6 +9,7 @@
 **Current Security Score:** 85/100 (from SECURITY_REPORT.md)
 
 **Strengths:**
+
 - ✅ HTTPS enforced
 - ✅ Row-Level Security (RLS) on all 28+ tables
 - ✅ Input validation with Zod schemas
@@ -23,6 +25,7 @@
 ### 1. Authentication & Authorization
 
 #### Current Implementation
+
 ```typescript
 // Authentication via Supabase
 import { useAuth } from '@/hooks/useAuth';
@@ -33,6 +36,7 @@ const { roles, isStylist, isClient } = useUserRole(user?.id);
 ```
 
 #### Best Practices
+
 - ✅ Session tokens auto-expire
 - ✅ Password requirements: min 8 chars
 - ✅ Email verification required
@@ -40,6 +44,7 @@ const { roles, isStylist, isClient } = useUserRole(user?.id);
 - ⏳ TODO: Add biometric authentication (mobile)
 
 #### Password Policy
+
 ```
 Minimum Length: 8 characters
 Requirements:
@@ -58,7 +63,7 @@ Prohibited: Common passwords (checked via Supabase)
 Run this query to verify all tables have RLS enabled:
 
 ```sql
-SELECT 
+SELECT
   schemaname,
   tablename,
   rowsecurity
@@ -72,6 +77,7 @@ Expected result: **0 rows** (all tables should have RLS enabled)
 #### Example RLS Policies
 
 **User-Specific Data:**
+
 ```sql
 -- Users can only see their own profile
 CREATE POLICY "Users view own profile"
@@ -85,19 +91,21 @@ USING (auth.uid() = id);
 ```
 
 **Role-Based Access:**
+
 ```sql
 -- Stylists can view their clients
 CREATE POLICY "Stylists view their clients"
 ON public.client_profiles FOR SELECT
 USING (
   preferred_stylist_id = (
-    SELECT id FROM stylist_profiles 
+    SELECT id FROM stylist_profiles
     WHERE user_id = auth.uid()
   )
 );
 ```
 
 **Security Definer Functions:**
+
 ```sql
 -- Avoid infinite recursion in RLS
 CREATE FUNCTION public.has_role(_user_id uuid, _role app_role)
@@ -124,20 +132,19 @@ import { z } from 'zod';
 
 // Example: Contact form validation
 const contactSchema = z.object({
-  name: z.string()
+  name: z.string().trim().min(1, 'Name is required').max(100, 'Name too long'),
+
+  email: z
+    .string()
     .trim()
-    .min(1, "Name is required")
-    .max(100, "Name too long"),
-  
-  email: z.string()
+    .email('Invalid email address')
+    .max(255, 'Email too long'),
+
+  message: z
+    .string()
     .trim()
-    .email("Invalid email address")
-    .max(255, "Email too long"),
-  
-  message: z.string()
-    .trim()
-    .min(10, "Message too short")
-    .max(1000, "Message too long")
+    .min(10, 'Message too short')
+    .max(1000, 'Message too long'),
 });
 ```
 
@@ -145,24 +152,25 @@ const contactSchema = z.object({
 
 ```typescript
 // supabase/functions/[function-name]/index.ts
-import { z } from "https://deno.land/x/zod/mod.ts";
+import { z } from 'https://deno.land/x/zod/mod.ts';
 
 const inputSchema = z.object({
   userId: z.string().uuid(),
-  content: z.string().max(1000)
+  content: z.string().max(1000),
 });
 
 // Validate before processing
 const { data, error } = inputSchema.safeParse(body);
 if (error) {
-  return new Response(JSON.stringify({ error: "Invalid input" }), {
+  return new Response(JSON.stringify({ error: 'Invalid input' }), {
     status: 400,
-    headers: corsHeaders
+    headers: corsHeaders,
   });
 }
 ```
 
 #### Prohibited Patterns
+
 - ❌ Never use `dangerouslySetInnerHTML` with user input
 - ❌ Never concatenate user input into SQL queries
 - ❌ Never trust client-side validation alone
@@ -217,6 +225,7 @@ if (error) {
 #### Testing Security Headers
 
 Use these tools to verify:
+
 - [Security Headers](https://securityheaders.com)
 - [Mozilla Observatory](https://observatory.mozilla.org)
 - [SSL Labs](https://www.ssllabs.com/ssltest/)
@@ -230,6 +239,7 @@ Target grade: **A** or **A+**
 #### Rate Limiting
 
 **Implemented:**
+
 - Supabase: Built-in rate limiting
 - Lovable AI: 10 requests/minute per user
 
@@ -242,25 +252,25 @@ const rateLimiter = new Map<string, { count: number; resetAt: number }>();
 function checkRateLimit(userId: string, limit = 10): boolean {
   const now = Date.now();
   const userLimit = rateLimiter.get(userId);
-  
+
   if (!userLimit || now > userLimit.resetAt) {
     rateLimiter.set(userId, { count: 1, resetAt: now + 60000 });
     return true;
   }
-  
+
   if (userLimit.count >= limit) {
     return false;
   }
-  
+
   userLimit.count++;
   return true;
 }
 
 // In edge function
 if (!checkRateLimit(userId)) {
-  return new Response(JSON.stringify({ error: "Rate limit exceeded" }), {
+  return new Response(JSON.stringify({ error: 'Rate limit exceeded' }), {
     status: 429,
-    headers: corsHeaders
+    headers: corsHeaders,
   });
 }
 ```
@@ -270,7 +280,8 @@ if (!checkRateLimit(userId)) {
 ```typescript
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*', // Production: restrict to your domain
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
 };
 
 // Handle preflight
@@ -280,6 +291,7 @@ if (req.method === 'OPTIONS') {
 ```
 
 **Production Recommendation:**
+
 ```typescript
 // Restrict CORS to your domain
 const corsHeaders = {
@@ -294,11 +306,13 @@ const corsHeaders = {
 ### 6. Data Encryption
 
 #### In Transit
+
 - ✅ HTTPS enforced (TLS 1.2+)
 - ✅ Secure WebSocket connections (WSS)
 - ✅ Certificate pinning (mobile apps)
 
 #### At Rest
+
 - ✅ Supabase: AES-256 encryption
 - ✅ Stripe: PCI DSS Level 1 compliant
 - ✅ Passwords: bcrypt hashing (cost factor 10)
@@ -306,6 +320,7 @@ const corsHeaders = {
 #### Sensitive Data Handling
 
 **PII Storage:**
+
 ```typescript
 // ✅ CORRECT: Minimal PII storage
 interface Profile {
@@ -318,6 +333,7 @@ interface Profile {
 ```
 
 **Payment Data:**
+
 - ✅ Never store card numbers
 - ✅ Use Stripe tokens only
 - ✅ Store only Stripe customer ID and payment intent ID
@@ -329,12 +345,14 @@ interface Profile {
 #### Environment Variables
 
 **Client-Side (Public):**
+
 ```bash
 VITE_SUPABASE_URL=https://[project].supabase.co
 VITE_SUPABASE_PUBLISHABLE_KEY=eyJ...
 ```
 
 **Server-Side (Secret):**
+
 ```bash
 SUPABASE_SERVICE_ROLE_KEY=eyJ... (edge functions only)
 STRIPE_SECRET_KEY=sk_live_...
@@ -343,6 +361,7 @@ LOVABLE_API_KEY=... (auto-provided)
 ```
 
 #### Best Practices
+
 - ✅ Never commit secrets to Git
 - ✅ Use Supabase Vault for sensitive tokens
 - ✅ Rotate API keys quarterly
@@ -364,8 +383,8 @@ LOVABLE_API_KEY=... (auto-provided)
 
 // ✅ SAFE: If HTML needed, use DOMPurify
 import DOMPurify from 'dompurify';
-<div dangerouslySetInnerHTML={{ 
-  __html: DOMPurify.sanitize(userContent) 
+<div dangerouslySetInnerHTML={{
+  __html: DOMPurify.sanitize(userContent)
 }} />
 ```
 
@@ -374,14 +393,11 @@ import DOMPurify from 'dompurify';
 ```typescript
 // ❌ DANGEROUS: Never concatenate SQL
 const { data } = await supabase.rpc('execute_sql', {
-  query: `SELECT * FROM users WHERE name = '${userName}'`
+  query: `SELECT * FROM users WHERE name = '${userName}'`,
 });
 
 // ✅ SAFE: Use parameterized queries
-const { data } = await supabase
-  .from('users')
-  .select('*')
-  .eq('name', userName);
+const { data } = await supabase.from('users').select('*').eq('name', userName);
 ```
 
 #### Command Injection Prevention
@@ -408,7 +424,7 @@ const ALLOWED_TYPES = [
   'image/jpeg',
   'image/png',
   'image/webp',
-  'image/heic' // iOS photos
+  'image/heic', // iOS photos
 ];
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
@@ -417,11 +433,11 @@ function validateFile(file: File): boolean {
   if (!ALLOWED_TYPES.includes(file.type)) {
     throw new Error('Invalid file type');
   }
-  
+
   if (file.size > MAX_FILE_SIZE) {
     throw new Error('File too large');
   }
-  
+
   return true;
 }
 ```
@@ -454,7 +470,7 @@ import { Preferences } from '@capacitor/preferences';
 // ✅ SAFE: Encrypted storage
 await Preferences.set({
   key: 'user_token',
-  value: token
+  value: token,
 });
 
 // ❌ DANGEROUS: Never use localStorage for tokens
@@ -480,7 +496,7 @@ import { Device } from '@capacitor/device';
 
 async function checkDeviceSecurity() {
   const info = await Device.getInfo();
-  
+
   // Warn user if running on rooted/jailbroken device
   if (info.isVirtual) {
     console.warn('Running on emulator');
@@ -495,11 +511,13 @@ async function checkDeviceSecurity() {
 ### Data Breach Protocol
 
 **Detection:**
+
 1. Monitor error rates for anomalies
 2. Review audit logs daily
 3. Set up alerts for suspicious activity
 
 **Response (within 72 hours):**
+
 1. Contain the breach (disable compromised credentials)
 2. Assess scope (what data, how many users)
 3. Notify affected users via email
@@ -507,12 +525,13 @@ async function checkDeviceSecurity() {
 5. Document incident in `SECURITY_INCIDENTS.md`
 
 **Communication Template:**
+
 ```
 Subject: Important Security Notice - hA.I.r
 
 Dear [User],
 
-We are writing to inform you of a security incident that may have 
+We are writing to inform you of a security incident that may have
 affected your account.
 
 What happened: [Brief description]
@@ -531,6 +550,7 @@ hA.I.r Security Team
 ## Security Audit Checklist
 
 ### Monthly Checks
+
 - [ ] Review Supabase audit logs
 - [ ] Check for unauthorized access attempts
 - [ ] Verify all RLS policies still active
@@ -539,6 +559,7 @@ hA.I.r Security Team
 - [ ] Audit user permissions
 
 ### Quarterly Checks
+
 - [ ] Update all dependencies (`npm audit fix`)
 - [ ] Rotate API keys
 - [ ] Review and update security headers
@@ -547,6 +568,7 @@ hA.I.r Security Team
 - [ ] Review incident response plan
 
 ### Annual Checks
+
 - [ ] Full security audit by third party
 - [ ] Compliance review (GDPR, CCPA)
 - [ ] Update privacy policy if needed
@@ -558,17 +580,20 @@ hA.I.r Security Team
 ## Tools & Resources
 
 ### Security Scanning
+
 - **OWASP ZAP:** Web application security scanner
 - **npm audit:** Dependency vulnerability scanner
 - **Snyk:** Continuous security monitoring
 - **Semgrep:** Static analysis for code security
 
 ### Monitoring
+
 - **Sentry:** Error tracking and security alerts
 - **LogRocket:** Session replay for security analysis
 - **Supabase Logs:** Built-in audit trail
 
 ### Testing
+
 - **Burp Suite:** Manual penetration testing
 - **Postman:** API security testing
 - **OWASP Top 10:** Security vulnerability checklist
@@ -578,12 +603,14 @@ hA.I.r Security Team
 ## Compliance Certifications
 
 ### Current Status
+
 - ✅ **WCAG 2.2 AA:** Accessibility compliance
 - ✅ **GDPR Ready:** EU data protection
 - ✅ **CCPA Ready:** California consumer privacy
 - ⏳ **SOC 2 Type II:** (Future, if enterprise customers)
 
 ### PCI DSS Compliance
+
 - ✅ SAQ-A (Stripe handles card data)
 - Annual attestation required
 - No card data stored locally
@@ -593,11 +620,13 @@ hA.I.r Security Team
 ## Contact
 
 **Security Issues:**
+
 - Email: security@hair.app
 - Response Time: Within 24 hours
 - Vulnerability Disclosure: See VDP.md (to be created)
 
 **Emergency Contact:**
+
 - Phone: [To be configured]
 - On-Call: [Rotation schedule]
 

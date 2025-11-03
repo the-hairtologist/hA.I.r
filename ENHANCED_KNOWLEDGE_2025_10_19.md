@@ -20,24 +20,28 @@
 ### 1. **Stylist (Primary User)**
 
 **Profile:**
+
 - Professional hairstylist managing 20-50 active clients
 - Needs to track custom formulas, book appointments, and maintain client relationships
 - Works on mobile device 60% of the time (between clients, at supply stores)
 - Values speed, simplicity, and having client history at fingertips
 
 **Goals:**
+
 - Reduce admin time spent on scheduling and formula tracking
 - Build stronger client relationships through personalized service
 - Never lose a formula or forget client preferences
 - Get paid faster with streamlined booking and payments
 
 **Pain Points:**
+
 - Paper formula cards get lost or damaged
 - Juggling multiple apps (calendar, notes, payments)
 - Forgetting client allergies or sensitivities
 - No-shows and last-minute cancellations
 
 **Success Metrics:**
+
 - Books 15+ appointments per week through app
 - Creates 5+ formulas per week
 - 90% client retention rate
@@ -48,24 +52,28 @@
 ### 2. **Client (Secondary User)**
 
 **Profile:**
+
 - Regular salon visitor who values their hairstylist's expertise
 - Wants to book appointments easily and track their hair journey
 - Uses mobile device almost exclusively
 - Appreciates transparency and communication
 
 **Goals:**
+
 - Book appointments without phone tag
 - View past formulas and results
 - Remember when next appointment is due
 - Feel confident their stylist knows their preferences
 
 **Pain Points:**
+
 - Forgetting to book next appointment
 - Not knowing what products/formulas were used last time
 - Difficulty scheduling around busy work schedule
 - Lack of transparency in salon processes
 
 **Success Metrics:**
+
 - Books appointments within 2 taps
 - Views appointment history and formulas easily
 - Receives timely reminders and updates
@@ -76,24 +84,28 @@
 ### 3. **Admin (Power User)**
 
 **Profile:**
+
 - Salon owner or manager overseeing multiple stylists
 - Needs financial visibility and operational control
 - Uses desktop and mobile equally
 - Values data-driven decision making
 
 **Goals:**
+
 - Monitor salon performance and revenue
 - Manage stylist access and permissions
 - Ensure compliance and security
 - Identify growth opportunities
 
 **Pain Points:**
+
 - Lack of real-time visibility into bookings and revenue
 - Manual tracking of stylist performance
 - Security concerns with client data
 - Difficulty scaling operations
 
 **Success Metrics:**
+
 - Real-time dashboard access to all metrics
 - Full audit trail of all system changes
 - Zero security incidents
@@ -108,6 +120,7 @@
 **Context:** First-time client appointment, needs custom color formula
 
 **Steps:**
+
 1. **Before Appointment** (Mobile)
    - Stylist opens app → Clients → Add New Client
    - Enters: Name, Phone, Email
@@ -138,12 +151,14 @@
    - Relationship strengthened
 
 **Edge Cases:**
+
 - Client has severe allergies → AI flags and requires explicit acknowledgment
 - Formula doesn't turn out as expected → Easy to note and adjust for next time
 - Client no-shows → Automatic SMS reminder system reduces this by 40%
 - Client wants to rebook → Self-service booking link in confirmation
 
 **Success Criteria:**
+
 - Total time: <5 minutes spread across appointment
 - Zero formulas lost or forgotten
 - Client feels pampered and informed
@@ -156,6 +171,7 @@
 **Context:** Client needs haircut + color, browsing on phone during lunch break
 
 **Steps:**
+
 1. **Discovery** (Mobile)
    - Receives SMS from stylist with booking link
    - Clicks link → Opens booking page (PWA)
@@ -179,12 +195,14 @@
    - After appointment: "Thank you!" + rebook option
 
 **Edge Cases:**
+
 - Stylist not available for 3 weeks → AI suggests nearby available stylist OR waitlist
 - Client wants to reschedule → 1-tap reschedule up to 24 hours before
 - Client forgets → Automatic reminders reduce no-shows by 40%
 - Client wants recurring appointments → Option to book series of appointments
 
 **Success Criteria:**
+
 - Booking completed in <2 minutes
 - Zero phone calls needed
 - Client feels in control
@@ -197,6 +215,7 @@
 **Context:** Monday morning, salon owner reviewing weekend performance
 
 **Steps:**
+
 1. **Dashboard Access** (Desktop/Tablet)
    - Signs in → Admin dashboard loads
    - Sees weekend summary:
@@ -224,12 +243,14 @@
    - Sets goals for next week
 
 **Edge Cases:**
+
 - Revenue drops suddenly → Dashboard flags anomaly, suggests investigation
 - Security alert triggered → Immediate notification, locked accounts pending review
 - Stylist needs help → Admin can view their bookings and assist
 - Financial discrepancy → Full audit trail available for review
 
 **Success Criteria:**
+
 - Full visibility in <5 minutes
 - Data-driven decisions
 - Proactive problem solving
@@ -242,6 +263,7 @@
 ### Core Design Philosophy
 
 **"Brutal, Bold, LEGO-Pixel Vibes"**
+
 - Inspired by: 1990s video games, LEGO instruction manuals, brutalist web design
 - Colors: High contrast, bold primaries
 - Typography: Pixel fonts for headings, clean sans-serif for body
@@ -252,60 +274,72 @@
 **CRITICAL:** All designs start mobile, scale up to desktop. Never desktop-first.
 
 #### Color System (HSL Format)
+
 ```css
 /* Core Brand Colors */
---primary: 210 100% 50%;           /* Bold blue (#0080FF) */
---secondary: 45 100% 50%;          /* Vibrant yellow (#FFCC00) */
---accent: 330 100% 45%;            /* Hot pink (#E6007A) */
+--primary: 210 100% 50%; /* Bold blue (#0080FF) */
+--secondary: 45 100% 50%; /* Vibrant yellow (#FFCC00) */
+--accent: 330 100% 45%; /* Hot pink (#E6007A) */
 
 /* Semantic Colors */
---success: 120 60% 45%;            /* Green for confirmations */
---warning: 40 100% 50%;            /* Orange for cautions */
---error: 0 85% 55%;                /* Red for errors */
+--success: 120 60% 45%; /* Green for confirmations */
+--warning: 40 100% 50%; /* Orange for cautions */
+--error: 0 85% 55%; /* Red for errors */
 
 /* Neutral Palette */
---background: 0 0% 100%;           /* Pure white */
---foreground: 0 0% 5%;             /* Near black */
---muted: 210 10% 95%;              /* Soft gray for disabled states */
+--background: 0 0% 100%; /* Pure white */
+--foreground: 0 0% 5%; /* Near black */
+--muted: 210 10% 95%; /* Soft gray for disabled states */
 
 /* Gradients */
---gradient-bg-main: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
---gradient-card: linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--muted)) 100%);
+--gradient-bg-main: linear-gradient(
+  135deg,
+  hsl(var(--primary)) 0%,
+  hsl(var(--accent)) 100%
+);
+--gradient-card: linear-gradient(
+  180deg,
+  hsl(var(--background)) 0%,
+  hsl(var(--muted)) 100%
+);
 ```
 
 #### Typography Scale (Mobile-First)
+
 ```css
 /* Headings - Pixel Font */
 --font-heading: 'Press Start 2P', 'Courier New', monospace;
---text-xs: 10px;    /* 320px width minimum */
---text-sm: 12px;    /* 360px width minimum */
---text-base: 14px;  /* 390px+ width */
---text-lg: 16px;    /* 768px+ width */
---text-xl: 20px;    /* 1024px+ width */
---text-2xl: 24px;   /* 1440px+ width */
+--text-xs: 10px; /* 320px width minimum */
+--text-sm: 12px; /* 360px width minimum */
+--text-base: 14px; /* 390px+ width */
+--text-lg: 16px; /* 768px+ width */
+--text-xl: 20px; /* 1024px+ width */
+--text-2xl: 24px; /* 1440px+ width */
 
 /* Body - Clean Sans */
 --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 ```
 
 #### Spacing Scale (Touch-Optimized)
+
 ```css
 /* Minimum tap targets: 44x44px (WCAG 2.2 AA) */
---space-1: 4px;     /* Micro spacing */
---space-2: 8px;     /* Small spacing */
---space-3: 12px;    /* Base spacing */
---space-4: 16px;    /* Medium spacing */
---space-5: 24px;    /* Large spacing */
---space-6: 32px;    /* XL spacing */
+--space-1: 4px; /* Micro spacing */
+--space-2: 8px; /* Small spacing */
+--space-3: 12px; /* Base spacing */
+--space-4: 16px; /* Medium spacing */
+--space-5: 24px; /* Large spacing */
+--space-6: 32px; /* XL spacing */
 
 /* Component Heights */
---height-button: 44px;        /* Minimum tappable */
---height-input: 48px;         /* Comfortable typing */
---height-header: 56px;        /* Standard mobile header */
---height-bottom-nav: 64px;    /* Bottom navigation bar */
+--height-button: 44px; /* Minimum tappable */
+--height-input: 48px; /* Comfortable typing */
+--height-header: 56px; /* Standard mobile header */
+--height-bottom-nav: 64px; /* Bottom navigation bar */
 ```
 
 #### Shadow System (Brutal Borders)
+
 ```css
 /* All shadows are solid, no blur - LEGO brick style */
 --shadow-brutal-sm: 2px 2px 0px 0px hsl(var(--foreground));
@@ -318,15 +352,16 @@
 ```
 
 #### Animation Tokens
+
 ```css
 /* Snappy, game-like animations */
---duration-fast: 150ms;       /* Hover states */
---duration-base: 300ms;       /* Standard transitions */
---duration-slow: 500ms;       /* Page transitions */
+--duration-fast: 150ms; /* Hover states */
+--duration-base: 300ms; /* Standard transitions */
+--duration-slow: 500ms; /* Page transitions */
 
 /* Easing */
---ease-elastic: cubic-bezier(0.68, -0.55, 0.265, 1.55);  /* Bouncy */
---ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);             /* Standard */
+--ease-elastic: cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Bouncy */
+--ease-smooth: cubic-bezier(0.4, 0, 0.2, 1); /* Standard */
 ```
 
 ---
@@ -334,18 +369,21 @@
 ### Component Variants by Role
 
 **Stylist Components:**
+
 - Primary actions: Large, bold buttons (accent color)
 - Quick actions: Floating action button (bottom right)
 - Lists: Card-based with swipe actions
 - Forms: Multi-step with progress indicators
 
 **Client Components:**
+
 - Simple, minimal UI with clear CTAs
 - Calendar-first booking interface
 - Read-only views with "Request Change" options
 - Large, tappable elements (elderly-friendly)
 
 **Admin Components:**
+
 - Dense information tables (desktop)
 - Data visualizations (charts, graphs)
 - Expandable detail panels
@@ -431,6 +469,7 @@
 ## 🎭 Role-Specific Behaviors
 
 ### Stylist-Only Features
+
 - Create/edit formulas
 - Manage client notes and photos
 - AI formula suggestions
@@ -439,6 +478,7 @@
 - Keyboard shortcuts (desktop)
 
 ### Client-Only Features
+
 - Self-service booking
 - View own appointment history
 - Request appointment changes
@@ -446,6 +486,7 @@
 - Provide feedback/reviews
 
 ### Admin-Only Features
+
 - Financial dashboard
 - User management (add/remove stylists)
 - Audit logs review
@@ -454,6 +495,7 @@
 - Security settings
 
 ### Cross-Role Restrictions
+
 - Stylist CANNOT view other stylists' clients (unless shared)
 - Client CANNOT view other clients' data
 - Admin CANNOT impersonate users (audit trail only)
@@ -463,24 +505,28 @@
 ## 📱 Mobile-Specific Requirements
 
 ### Touch Interactions
+
 - Tap targets: Minimum 44x44px (WCAG 2.2 AA)
 - Swipe gestures: Left = delete, Right = edit (stylist lists)
 - Pull to refresh: All list views
 - Long press: Context menus (desktop-replacement)
 
 ### Keyboard Handling
+
 - Auto-focus first input field
 - "Next" button advances through form
 - "Done" button submits form
 - Virtual keyboard: Never covers input fields
 
 ### Camera Integration
+
 - Before/after photos: Direct camera access
 - Photo upload: Max 5MB per photo, auto-compress
 - Photo preview: Show immediately, upload in background
 - Offline photos: Stored locally, uploaded when online
 
 ### Notifications
+
 - Push notifications: Appointment reminders (opt-in)
 - SMS fallback: If push not enabled
 - In-app notifications: Badge count on bell icon
@@ -491,24 +537,28 @@
 ## 🔄 State Management Rules
 
 ### Loading States
+
 - Skeleton screens: For initial page load
 - Spinners: For in-page actions (<3 seconds)
 - Progress bars: For uploads/downloads
 - Optimistic updates: For instant feedback (undo available)
 
 ### Error States
+
 - Inline errors: Form validation (red text below field)
 - Toast notifications: API errors (5-second auto-dismiss)
 - Full-page errors: Network down (retry button)
 - Fallback content: If data fails to load
 
 ### Empty States
+
 - First-time user: Onboarding tutorial
 - No data: Illustration + clear CTA
 - No search results: "Try different keywords" + clear filters
 - No network: Cached data shown with "Offline" badge
 
 ### Success States
+
 - Confirmation toast: Action completed (green, 3 seconds)
 - Page transition: Smooth animation to next screen
 - Checkmark animation: Satisfying visual feedback
@@ -519,12 +569,14 @@
 ## 🎯 Performance Targets
 
 ### Core Web Vitals
+
 - **LCP (Largest Contentful Paint):** <2.5s
 - **FID (First Input Delay):** <100ms
 - **CLS (Cumulative Layout Shift):** <0.1
 - **INP (Interaction to Next Paint):** <200ms
 
 ### App-Specific Metrics
+
 - Page load time: <2s on 3G
 - Time to interactive: <3s
 - Formula search: <200ms
@@ -532,6 +584,7 @@
 - Image upload: <5s on 4G
 
 ### Bundle Size Targets
+
 - Initial bundle: <200KB (gzipped)
 - Route chunks: <50KB each
 - Total bundle: <500KB
@@ -542,6 +595,7 @@
 ## 🧪 Testing Requirements
 
 ### Manual Testing Checklist
+
 - [ ] Test on iPhone SE (smallest modern screen)
 - [ ] Test on Android 5.5" phone
 - [ ] Test on iPad
@@ -552,6 +606,7 @@
 - [ ] Test slow 3G connection
 
 ### Automated Testing
+
 - E2E tests: 72 tests covering all user flows
 - Unit tests: Critical business logic functions
 - Visual regression: Screenshot comparison
@@ -562,6 +617,7 @@
 ## 🔒 Compliance & Accessibility
 
 ### WCAG 2.2 AA Requirements
+
 - ✅ Color contrast: Minimum 4.5:1 for text
 - ✅ Tap targets: Minimum 44x44px
 - ✅ Keyboard navigation: All features accessible
@@ -571,6 +627,7 @@
 - ✅ Form labels: All inputs properly labeled
 
 ### SEO Requirements
+
 - Title tags: Unique, <60 characters
 - Meta descriptions: <160 characters
 - Semantic HTML: Proper heading hierarchy
@@ -584,19 +641,23 @@
 ## 📝 Copy & Messaging Guidelines
 
 ### Voice & Tone
+
 - **Personality:** Friendly, confident, efficient
 - **Level:** Professional but approachable
 - **Avoid:** Jargon, corporate-speak, overly casual slang
 
 ### Error Messages
+
 - ❌ Bad: "Error 500: Internal server error"
 - ✅ Good: "Something went wrong. We're looking into it. Try again in a few minutes?"
 
 ### Success Messages
+
 - ❌ Bad: "Operation completed successfully"
 - ✅ Good: "Done! Your appointment is confirmed for Tuesday at 10am"
 
 ### Loading Messages
+
 - ❌ Bad: "Loading..."
 - ✅ Good: "Finding your clients..." or "Preparing your formulas..."
 

@@ -9,12 +9,14 @@
 ## 🔥 Core Principles
 
 ### 1. Quality First, Always
+
 - **Zero compromises** on security, performance, or user experience
 - Every feature must be battle-tested before deployment
 - Proactive issue detection and resolution
 - Comprehensive testing at every level
 
 ### 2. Security is Non-Negotiable
+
 - All database functions must have `SET search_path = public`
 - RLS policies on every table
 - No hardcoded secrets or API keys in client code
@@ -22,6 +24,7 @@
 - Security headers configured (already in vercel.json)
 
 ### 3. Performance Standards
+
 - **LCP**: Target ≤2.5s
 - **INP**: Target ≤200ms
 - **CLS**: Target ≤0.1
@@ -30,6 +33,7 @@
 - Image optimization (WebP preferred)
 
 ### 4. Accessibility Requirements
+
 - WCAG 2.2 AA compliance minimum
 - Keyboard navigation fully supported
 - ARIA labels on all interactive elements
@@ -42,6 +46,7 @@
 ## 🏗️ Architecture Standards
 
 ### Database (Supabase)
+
 ```sql
 -- All functions MUST include:
 CREATE OR REPLACE FUNCTION public.function_name()
@@ -57,6 +62,7 @@ $$;
 ```
 
 ### Component Structure
+
 ```typescript
 // Components should be:
 // 1. Small and focused (single responsibility)
@@ -81,6 +87,7 @@ const Button = ({ children }: any) => (
 ```
 
 ### Form Validation
+
 ```typescript
 // ALL forms must use Zod validation
 import { z } from 'zod';
@@ -95,6 +102,7 @@ const schema = z.object({
 ```
 
 ### Error Handling
+
 ```typescript
 // Always provide user-friendly error messages
 // Always log errors for debugging
@@ -114,6 +122,7 @@ try {
 ## 🎨 Design System
 
 ### Color Usage
+
 ```css
 /* ✅ ALWAYS use semantic tokens */
 color: hsl(var(--primary));
@@ -125,17 +134,20 @@ background: white;
 ```
 
 ### Typography
+
 - Font: DM Sans (body), Space Grotesk (headings)
 - Line height: 1.4-1.6 for readability
 - Font sizes using Tailwind scale
 - No custom font sizes without design system update
 
 ### Spacing
+
 - Use 4px grid system
 - Consistent padding/margin across components
 - Responsive spacing (mobile-first)
 
 ### Components
+
 - All interactive elements in `/components/ui`
 - Feature-specific components in feature folders
 - Shared layouts in `/components`
@@ -146,6 +158,7 @@ background: white;
 ## 🔒 Security Checklist
 
 ### Before Every Deploy
+
 - [ ] All functions have `SET search_path = public`
 - [ ] No console.log statements in production code
 - [ ] No hardcoded API keys or secrets
@@ -157,6 +170,7 @@ background: white;
 - [ ] CORS properly configured
 
 ### Database Security
+
 - [ ] RLS enabled on all tables
 - [ ] Policies prevent privilege escalation
 - [ ] No recursive policy issues
@@ -168,6 +182,7 @@ background: white;
 ## ⚡ Performance Checklist
 
 ### Build Optimization
+
 - [x] esbuild minification
 - [x] Tree shaking enabled
 - [x] Code splitting by route
@@ -176,6 +191,7 @@ background: white;
 - [ ] Lighthouse scores tracked
 
 ### Runtime Performance
+
 - [ ] Images lazy loaded
 - [ ] Heavy components lazy loaded
 - [ ] React Query caching configured
@@ -183,6 +199,7 @@ background: white;
 - [ ] Virtualized long lists
 
 ### Asset Optimization
+
 - [ ] Images converted to WebP/AVIF
 - [ ] Fonts self-hosted
 - [ ] CSS purged and minified
@@ -193,18 +210,21 @@ background: white;
 ## 📱 User Experience Standards
 
 ### Loading States
+
 - Every async operation has loading indicator
 - Skeleton screens for content loading
 - Optimistic UI updates where possible
 - Error states with retry options
 
 ### Feedback
+
 - Toast notifications for all actions
 - Success animations for completions
 - Error messages with actionable advice
 - Progress indicators for multi-step flows
 
 ### Navigation
+
 - Breadcrumbs on deep pages
 - Back buttons on all sub-pages
 - Clear active states in navigation
@@ -215,6 +235,7 @@ background: white;
 ## 🧪 Testing Standards
 
 ### E2E Tests (Playwright)
+
 ```typescript
 // Test critical user flows:
 // - Authentication
@@ -231,7 +252,9 @@ test('stylist can create appointment', async ({ page }) => {
 ```
 
 ### Manual Testing Checklist
+
 Before every deploy:
+
 - [ ] Signup flow works
 - [ ] Login flow works
 - [ ] Appointment creation works
@@ -246,6 +269,7 @@ Before every deploy:
 ## 🚀 Deployment Workflow
 
 ### Pre-Deploy Checklist
+
 1. [ ] All tests passing
 2. [ ] No TypeScript errors
 3. [ ] No console errors in browser
@@ -256,6 +280,7 @@ Before every deploy:
 8. [ ] Domain configured (hair.app)
 
 ### Deploy Steps
+
 ```bash
 # 1. Final build test
 npm run build
@@ -274,7 +299,9 @@ vercel --prod
 ```
 
 ### Post-Deploy Monitoring
+
 First 24 hours:
+
 - [ ] Check Supabase logs hourly
 - [ ] Monitor error rates
 - [ ] Review user feedback
@@ -287,6 +314,7 @@ First 24 hours:
 ## 🎯 Feature Development Process
 
 ### Adding New Features
+
 1. **Plan** - Document requirements and edge cases
 2. **Design** - Create UI mockups if needed
 3. **Database** - Update schema with migration
@@ -297,7 +325,9 @@ First 24 hours:
 8. **Deploy** - Staged rollout if possible
 
 ### Code Review Standards
+
 Every change should verify:
+
 - ✅ TypeScript types correct
 - ✅ Accessibility maintained
 - ✅ Design system followed
@@ -310,6 +340,7 @@ Every change should verify:
 ## 📊 Analytics & Monitoring
 
 ### Key Metrics to Track
+
 ```typescript
 import { analytics } from '@/lib/analytics';
 
@@ -328,6 +359,7 @@ analytics.error('Payment failed', 'Stripe API');
 ```
 
 ### Production Monitoring
+
 - Supabase Dashboard: Database performance
 - Vercel Analytics: Page loads and errors
 - Google Analytics 4: User behavior
@@ -340,6 +372,7 @@ analytics.error('Payment failed', 'Stripe API');
 ### Common Issues
 
 **Build Fails**
+
 ```bash
 # Clear cache and rebuild
 rm -rf node_modules .next
@@ -348,6 +381,7 @@ npm run build
 ```
 
 **TypeScript Errors**
+
 ```bash
 # Check types
 npm run type-check
@@ -357,12 +391,14 @@ npm run type-check
 ```
 
 **Database Errors**
+
 - Check RLS policies in Supabase dashboard
 - Verify function search_path is set
 - Check for recursive policies
 - Review audit logs
 
 **Performance Issues**
+
 - Run Lighthouse audit
 - Check bundle size
 - Review network tab
@@ -373,11 +409,10 @@ npm run type-check
 ## 🎓 Best Practices Reference
 
 ### React Patterns
+
 ```typescript
 // ✅ Memoization for expensive operations
-const expensiveValue = useMemo(() => 
-  computeExpensive(data), [data]
-);
+const expensiveValue = useMemo(() => computeExpensive(data), [data]);
 
 // ✅ Callback stability
 const handleClick = useCallback(() => {
@@ -391,6 +426,7 @@ useEffect(() => {
 ```
 
 ### Supabase Patterns
+
 ```typescript
 // ✅ Type-safe queries
 const { data, error } = await supabase
@@ -400,15 +436,16 @@ const { data, error } = await supabase
 
 // ✅ Edge function invocation
 const { data } = await supabase.functions.invoke('chat', {
-  body: { message: 'Hello' }
+  body: { message: 'Hello' },
 });
 
 // ✅ Real-time subscriptions
 const channel = supabase
   .channel('messages')
-  .on('postgres_changes', 
+  .on(
+    'postgres_changes',
     { event: '*', schema: 'public', table: 'messages' },
-    (payload) => console.log(payload)
+    payload => console.log(payload)
   )
   .subscribe();
 ```
@@ -418,6 +455,7 @@ const channel = supabase
 ## 📝 Soft Launch Checklist (Tomorrow)
 
 ### Final Verification
+
 - [x] Domain configured: hair.app
 - [x] Security audit passed (95/100)
 - [x] Performance optimized (84/100)
@@ -429,6 +467,7 @@ const channel = supabase
 - [ ] SMS provider tested (if using)
 
 ### Launch Day Tasks
+
 1. **Morning** - Verify all systems operational
 2. **Deploy** - Push to production if any last changes
 3. **Smoke Test** - Run through critical flows
@@ -436,6 +475,7 @@ const channel = supabase
 5. **Respond** - Be ready for user feedback
 
 ### Success Metrics (Week 1)
+
 - [ ] Zero critical errors
 - [ ] Core Web Vitals in "Good" range
 - [ ] User signups working smoothly
@@ -448,6 +488,7 @@ const channel = supabase
 ## 🎉 Success Criteria
 
 ### App Health Score: 92/100
+
 - Security: 95/100 ✅
 - Performance: 84/100 ✅
 - Accessibility: 88/100 ✅
@@ -456,6 +497,7 @@ const channel = supabase
 - Database: 96/100 ✅
 
 ### Production Ready ✅
+
 All P0 and P1 issues resolved. The app is secure, performant, accessible, and ready for real users.
 
 ---
@@ -463,12 +505,14 @@ All P0 and P1 issues resolved. The app is secure, performant, accessible, and re
 ## 📞 Support Resources
 
 ### Documentation
+
 - Supabase Docs: https://supabase.com/docs
 - React Docs: https://react.dev
 - Tailwind Docs: https://tailwindcss.com
 - TypeScript Docs: https://www.typescriptlang.org/docs
 
 ### Internal Files
+
 - `MASTER_QA_REPORT.md` - Comprehensive audit results
 - `SECURITY_REPORT.md` - Security analysis
 - `PERF_REPORT.md` - Performance optimization guide
@@ -479,6 +523,7 @@ All P0 and P1 issues resolved. The app is secure, performant, accessible, and re
 ## 💡 Future Enhancements (Post-Launch)
 
 ### Performance (P2)
+
 - [ ] Self-host fonts → 200-400ms faster FCP
 - [ ] Convert images to WebP → 25-35% size reduction
 - [ ] Implement service worker → 50-80% faster repeat visits
@@ -486,6 +531,7 @@ All P0 and P1 issues resolved. The app is secure, performant, accessible, and re
 - [ ] Lazy load Calendar and Formula Generator
 
 ### Features (P3)
+
 - [ ] 2FA for accounts
 - [ ] GDPR data export
 - [ ] Advanced analytics dashboard
@@ -493,6 +539,7 @@ All P0 and P1 issues resolved. The app is secure, performant, accessible, and re
 - [ ] Progressive Web App (PWA)
 
 ### Infrastructure (P3)
+
 - [ ] CI/CD pipeline with automated tests
 - [ ] Staging environment
 - [ ] Error tracking with Sentry

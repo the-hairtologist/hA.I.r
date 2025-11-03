@@ -42,7 +42,9 @@ export const IntegrationStatus = ({
         email: 'active', // Resend is always active
       });
     } catch (error) {
-      logger.error('Error checking integration statuses', error, { component: 'IntegrationStatus' });
+      logger.error('Error checking integration statuses', error, {
+        component: 'IntegrationStatus',
+      });
     } finally {
       setLoading(false);
     }

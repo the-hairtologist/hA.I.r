@@ -9,6 +9,7 @@
 ### 1. Create Your Account (2 minutes)
 
 **Option A: Email Signup**
+
 1. Go to https://your-app-url.lovable.app
 2. Click "Sign Up"
 3. Enter your email and password
@@ -16,6 +17,7 @@
 5. Select "I'm a Stylist"
 
 **Option B: Google Signup (Recommended)**
+
 1. Click "Sign up with Google"
 2. Select your Google account
 3. Confirm permissions
@@ -45,6 +47,7 @@
 ### 4. Generate Your First Formula (30 seconds)
 
 **Quick Formula (Fastest):**
+
 1. Click "Quick Formula" on dashboard
 2. Enter client details:
    - Current level (1-10)
@@ -55,6 +58,7 @@
 4. AI generates formula in 3 seconds!
 
 **AI Assistant (Most Detailed):**
+
 1. Click "AI Assistant"
 2. Chat with AI: "I need a formula for level 5 hair to platinum"
 3. AI asks clarifying questions
@@ -128,6 +132,7 @@
 **What it does:** Generates professional color formulas in seconds.
 
 **How to use:**
+
 1. Enter client's current hair level (1-10)
 2. Enter target level (1-10)
 3. Select hair condition (excellent, good, fair, damaged)
@@ -140,6 +145,7 @@
    - Application instructions
 
 **Pro Tips:**
+
 - Upload client photos for better accuracy
 - Save frequently-used formulas
 - Share formulas with clients
@@ -150,6 +156,7 @@
 **What it does:** Chat with AI for personalized formula help.
 
 **How to use:**
+
 1. Click "AI Assistant" on dashboard
 2. Type your question or request
 3. AI responds with detailed guidance
@@ -157,6 +164,7 @@
 5. Save conversation for reference
 
 **Example Questions:**
+
 - "How do I tone down brassy level 7 hair?"
 - "What's the best developer for grey coverage?"
 - "Give me a formula for balayage highlights"
@@ -165,6 +173,7 @@
 ### Appointment Management 📅
 
 **Features:**
+
 - Calendar view of all appointments
 - Automatic email confirmations
 - SMS reminders 24hrs before
@@ -172,6 +181,7 @@
 - Client appointment history
 
 **Stylist Actions:**
+
 - Create appointments
 - Edit appointments
 - Cancel with reason
@@ -179,6 +189,7 @@
 - Add appointment notes
 
 **Client Actions:**
+
 - View upcoming appointments
 - Request reschedule
 - Cancel appointment
@@ -187,6 +198,7 @@
 ### Client Management 👥
 
 **For Stylists:**
+
 - Client contact information
 - Appointment history
 - Formula history
@@ -196,6 +208,7 @@
 - Retention scores (AI-powered)
 
 **Features:**
+
 - Search clients by name or email
 - Filter by activity, retention risk
 - Export client list
@@ -207,6 +220,7 @@
 **Powered by Stripe**
 
 **Features:**
+
 - One-time payments
 - Subscription billing
 - Customer portal (manage payment methods)
@@ -214,6 +228,7 @@
 - Payment history
 
 **For Stylists:**
+
 - Set up products and pricing
 - Create payment links
 - Track revenue
@@ -257,24 +272,28 @@
 ### For Stylists
 
 **Maximize AI Formulas:**
+
 - Be specific with hair condition
 - Upload photos for best results
 - Save successful formulas
 - Use AI Assistant for complex cases
 
 **Client Management:**
+
 - Add detailed notes after each appointment
 - Track allergies and sensitivities
 - Set reminders for rebooking
 - Upload before/after photos
 
 **Efficiency:**
+
 - Use Quick Formula for routine jobs
 - Set up services in advance
 - Enable email and SMS reminders
 - Use calendar sync (Google Calendar)
 
 **Revenue:**
+
 - Offer subscription packages
 - Track commission products
 - Send automated rebooking reminders
@@ -283,18 +302,21 @@
 ### For Clients
 
 **Get the Best Experience:**
+
 - Complete your profile fully
 - Upload reference photos
 - Add your hair goals
 - Enable SMS notifications
 
 **Before Appointments:**
+
 - Upload inspiration photos
 - Communicate allergies clearly
 - Arrive 5 minutes early
 - Confirm appointment if asked
 
 **After Appointments:**
+
 - Leave a review
 - Upload result photos
 - Book next appointment
@@ -346,16 +368,19 @@
 ## Get Help
 
 **In-App Support:**
+
 - Click "Help" icon (?) in navigation
 - Browse help articles
 - Submit support ticket
 
 **Documentation:**
+
 - Full user guide: [link]
 - Video tutorials: [link]
 - FAQ: [link]
 
 **Contact:**
+
 - Email: support@hair-ai.com
 - Live chat: Available in app
 - Response time: Within 24 hours
@@ -390,6 +415,7 @@
 ### Email Sequences (Stylists Only)
 
 Automate client communication:
+
 1. Go to "Email Sequences"
 2. Create sequence (e.g., "New Client Onboarding")
 3. Add emails with triggers and delays
@@ -399,6 +425,7 @@ Automate client communication:
 ### Predictive Analytics (Stylists Only)
 
 AI-powered insights:
+
 - Client retention risk scores
 - Revenue forecasting
 - Rebooking predictions
@@ -408,6 +435,7 @@ AI-powered insights:
 ### Video Analysis (Coming Soon)
 
 Upload client hair videos for:
+
 - AI-powered hair analysis
 - Porosity detection
 - Condition assessment
@@ -420,6 +448,7 @@ Upload client hair videos for:
 You're all set up and ready to use hA.I.r!
 
 **Need More Help?**
+
 - Browse documentation
 - Watch video tutorials
 - Contact support

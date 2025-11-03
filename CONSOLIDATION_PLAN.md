@@ -1,6 +1,7 @@
 # App Consolidation Plan - Eliminate Redundancy
 
 ## 🎯 GOAL
+
 Streamline the app by consolidating duplicate features and simplifying navigation while maintaining all functionality.
 
 ---
@@ -8,17 +9,21 @@ Streamline the app by consolidating duplicate features and simplifying navigatio
 ## 📋 CONSOLIDATION STRATEGY
 
 ### 1. **MERGE: Profile + Account Settings → Settings**
+
 **Current State:**
+
 - `/profile` - User bio, business details, professional info
 - `/settings` - Avatar, role switching, data export, account deletion
 
 **Consolidated:**
+
 - `/settings` - Single page with tabs:
   - **Profile**: Business info, bio, specialty, color line
   - **Account**: Email, password, avatar, data export
   - **Preferences**: Role switching, notifications
 
 **Benefits:**
+
 - One-stop shop for all user management
 - Clearer mental model
 - Fewer menu items
@@ -26,20 +31,23 @@ Streamline the app by consolidating duplicate features and simplifying navigatio
 ---
 
 ### 2. **UNIFY: Appointments Pages**
+
 **Current State:**
+
 - Stylists: `/appointments` + `/book-for-client`
 - Clients: `/my-appointments` + `/book-appointment`
 
 **Consolidated:**
+
 - **Stylists**: `/appointments` with tabs:
   - View All
   - Book for Client (integrated as action button)
-  
 - **Clients**: `/appointments` (same route for both roles)
   - Shows relevant view based on role
   - "Book Appointment" becomes primary action
 
 **Benefits:**
+
 - Consistent route across roles
 - Less cognitive load
 - Easier to maintain
@@ -47,16 +55,20 @@ Streamline the app by consolidating duplicate features and simplifying navigatio
 ---
 
 ### 3. **UNIFY: Formulas Pages**
+
 **Current State:**
+
 - Stylists: `/formulas` (create/manage)
 - Clients: `/my-formulas` (view only)
 
 **Consolidated:**
+
 - `/formulas` for both roles
   - Stylists: Full CRUD capabilities
   - Clients: Read-only view of their formulas
 
 **Benefits:**
+
 - Single codebase with role-based rendering
 - Consistent experience
 - Less duplication
@@ -64,17 +76,21 @@ Streamline the app by consolidating duplicate features and simplifying navigatio
 ---
 
 ### 4. **MERGE: Financial Tools → Finance**
+
 **Current State:**
+
 - `/payments` - Track service payments
 - `/commissions` - Track product commissions
 
 **Consolidated:**
+
 - `/finance` with tabs:
   - **Payments**: Service revenue tracking
   - **Commissions**: Product commission tracking
   - **Overview**: Combined financial dashboard
 
 **Benefits:**
+
 - Unified financial view
 - Better reporting capabilities
 - Clearer navigation label
@@ -82,18 +98,22 @@ Streamline the app by consolidating duplicate features and simplifying navigatio
 ---
 
 ### 5. **MERGE: Learning Resources → Resources**
+
 **Current State:**
+
 - `/ai-assistant` - AI chat for color formulas
 - `/knowledge` - Educational articles
 - `/help` - FAQs and support
 
 **Consolidated:**
+
 - `/resources` with sections:
   - **AI Assistant**: Chat interface (prominent)
   - **Knowledge Base**: Articles & tutorials
   - **Help & Support**: FAQs, contact
 
 **Benefits:**
+
 - One place for all learning
 - AI assistant more discoverable
 - Reduces menu clutter
@@ -103,6 +123,7 @@ Streamline the app by consolidating duplicate features and simplifying navigatio
 ### 6. **SIMPLIFY: Navigation Structure**
 
 **BEFORE (Stylist):**
+
 ```
 Main Menu:
 - Dashboard
@@ -110,7 +131,7 @@ Main Menu:
   - View Appointments
   - Book for Client
 - Clients
-- Portfolio  
+- Portfolio
 - Messages
 - Services
 - Schedule
@@ -130,6 +151,7 @@ Account:
 ```
 
 **AFTER (Stylist):**
+
 ```
 Main:
 - Dashboard
@@ -158,6 +180,7 @@ Account:
 ### 7. **COMPONENT CONSOLIDATION**
 
 **Merge Navigation Components:**
+
 - Keep: `AppSidebar` (desktop sidebar)
 - Remove: `Navigation` (redundant with sidebar)
 - Keep: `MobileNav` (mobile bottom nav)
@@ -168,6 +191,7 @@ Account:
 ## 📊 IMPACT SUMMARY
 
 ### Items Consolidated:
+
 ✅ 2 profile pages → 1
 ✅ 4 appointment pages → 2
 ✅ 2 formula pages → 1
@@ -176,6 +200,7 @@ Account:
 ✅ 3 navigation components → 2
 
 ### Total Reduction:
+
 - **Pages**: 31 → 24 (23% reduction)
 - **Menu Items**: 17 → 11 (35% reduction)
 - **Codebase**: ~30% less duplicate code
@@ -195,26 +220,31 @@ Account:
 ## 🚀 IMPLEMENTATION ORDER
 
 ### Phase 1: Settings Consolidation
+
 1. Merge Profile → Settings (Profile tab)
 2. Update all navigation links
 3. Test both stylist & client flows
 
-### Phase 2: Appointments Unification  
+### Phase 2: Appointments Unification
+
 1. Create unified Appointments component
 2. Role-based view switching
 3. Update booking flows
 
 ### Phase 3: Formulas & Finance
+
 1. Unify Formulas pages
 2. Merge Payments + Commissions → Finance
 3. Update dashboard quick actions
 
 ### Phase 4: Resources Hub
+
 1. Create Resources page structure
 2. Migrate AI Assistant
 3. Integrate Knowledge + Help
 
 ### Phase 5: Navigation Cleanup
+
 1. Update AppSidebar with new structure
 2. Remove Navigation component
 3. Update MobileNav

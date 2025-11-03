@@ -58,7 +58,10 @@ export function CalendarSyncIndicator() {
         });
       }
     } catch (error) {
-      logger.error('Error loading calendar connection', error, { component: 'CalendarSyncIndicator', userId: user?.id });
+      logger.error('Error loading calendar connection', error, {
+        component: 'CalendarSyncIndicator',
+        userId: user?.id,
+      });
     } finally {
       setLoading(false);
     }
@@ -81,7 +84,10 @@ export function CalendarSyncIndicator() {
       await loadConnectionStatus();
       toast.success('Calendar synced successfully!');
     } catch (error: any) {
-      logger.error('Error syncing calendar', error, { component: 'CalendarSyncIndicator', connectionId: connection?.id });
+      logger.error('Error syncing calendar', error, {
+        component: 'CalendarSyncIndicator',
+        connectionId: connection?.id,
+      });
       toast.error('Failed to sync calendar');
     } finally {
       setSyncing(false);
