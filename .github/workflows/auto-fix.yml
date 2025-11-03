@@ -70,7 +70,8 @@ jobs:
           BRANCH_NAME="auto-fix/automated-fixes-$(date +%Y%m%d-%H%M%S)"
           git checkout -b "$BRANCH_NAME"
           
-          git add .
+          # Add all changes except workflow files (requires workflows permission)
+          git add --all -- ':!.github/workflows/'
           
           COMMIT_MSG="🤖 Auto-fix: Code formatting, linting, and dependency updates
 
