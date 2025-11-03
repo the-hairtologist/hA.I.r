@@ -6,6 +6,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 import { visualizer } from 'rollup-plugin-visualizer';
 import compression from 'vite-plugin-compression';
 
+// Vite configuration - Tailwind CSS v3 with PostCSS
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   // Load and validate environment variables
