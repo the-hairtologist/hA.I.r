@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { haptic } from '@/platform/haptics';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 
 interface FloatingAction {
   label: string;
@@ -112,7 +113,7 @@ export const FloatingActionButton = ({
             className="flex items-center gap-3 animate-fade-in"
             style={{ animationDelay: `${index * 50}ms` }}
           >
-            <span className="text-sm font-medium bg-card px-3 py-1 rounded-lg brutal-border brutal-shadow-xs whitespace-nowrap max-w-[140px] truncate">
+            <span className={cn(mobileFirst.text.sm, "font-medium bg-card px-3 py-1 rounded-lg brutal-border brutal-shadow-xs whitespace-nowrap max-w-[140px] truncate")}>
               {action.label}
             </span>
             <Button

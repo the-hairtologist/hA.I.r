@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import { haptic } from '@/platform/haptics';
 import { useSidebar } from '@/components/ui/sidebar';
 import { NotificationDot } from './NotificationDot';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 
 interface MobileHeaderProps {
   notificationCount?: number;
@@ -68,7 +69,7 @@ export const MobileHeader = ({ notificationCount = 0 }: MobileHeaderProps) => {
           aria-label="Go to dashboard"
         >
           <Scissors className="h-6 w-6 text-primary" />
-          <h1 className="text-lg font-bold font-pixel bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+          <h1 className={cn(mobileFirst.text.lg, "font-bold font-pixel bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent")}>
             hA.I.r
           </h1>
         </button>
