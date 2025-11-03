@@ -1,55 +1,31 @@
-name: Production Deploy
+# This workflow is disabled - using Lovable's built-in deployment
+# To deploy: Click "Publish" button in Lovable dashboard
+# Your app will be available at https://[your-project].lovable.app
+
+name: Production Deploy (DISABLED)
 
 on:
-  push:
-    branches: [main]
-    tags:
-      - 'v*'
-  workflow_dispatch:
+  workflow_dispatch:  # Manual trigger only
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  deploy-production:
-    name: Deploy to Production
+  notify-only:
+    name: Deployment Info
     runs-on: ubuntu-latest
-    environment:
-      name: production
-      url: https://hair.lovable.app
     steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-      
-      - name: Install dependencies
-        run: npm ci --legacy-peer-deps
-      
-      - name: Run tests
-        run: npx playwright test || true
-        env:
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
-      
-      - name: Build production
-        run: npm run build
-        env:
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
-          VITE_GA4_MEASUREMENT_ID: ${{ secrets.VITE_GA4_MEASUREMENT_ID }}
-          VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
-      
-      - name: Deploy
+      - name: Deployment Notice
         run: |
-          echo "Production deployment would go here"
-          echo "Using Lovable's built-in deployment or external service"
-      
-      - name: Notify deployment
-        run: |
-          echo "✅ Production deployment complete"
-          echo "🌐 URL: https://hair.lovable.app"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "🚀 This project uses Lovable's built-in deployment"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo ""
+          echo "To deploy to production:"
+          echo "1. Open your project in Lovable"
+          echo "2. Click the 'Publish' button (top-right)"
+          echo "3. Your app will be live at https://[your-project].lovable.app"
+          echo ""
+          echo "✅ No manual deployment needed!"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
