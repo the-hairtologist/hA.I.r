@@ -30,11 +30,10 @@ All GitHub infrastructure and automation is now configured and ready!
 Update these files with your actual information:
 
 #### README.md
-Replace in lines 3-7:
+Badge URLs updated to:
 ```markdown
-YOUR_USERNAME/YOUR_REPO
+the-hairtologist/hA.I.r
 ```
-With your actual GitHub username and repository name.
 
 #### .github/dependabot.yml
 Replace in lines 11, 13, 49, 52:
@@ -76,7 +75,7 @@ git commit -m "test: verify CI pipeline"
 git push
 
 # Watch the magic happen!
-# Go to: https://github.com/YOUR_USERNAME/YOUR_REPO/actions
+# Go to: https://github.com/the-hairtologist/hA.I.r/actions
 ```
 
 You should see:
@@ -166,10 +165,10 @@ npm test
 npm run test:report
 
 # Check CI status
-# Visit: https://github.com/YOUR_USERNAME/YOUR_REPO/actions
+# Visit: https://github.com/the-hairtologist/hA.I.r/actions
 
 # View security scan
-# Visit: https://github.com/YOUR_USERNAME/YOUR_REPO/security
+# Visit: https://github.com/the-hairtologist/hA.I.r/security
 ```
 
 ## 📚 Reference Documentation
