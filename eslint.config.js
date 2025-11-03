@@ -4,6 +4,7 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from 'typescript-eslint';
 
+// ESLint configuration - E2E tests excluded from linting
 export default tseslint.config(
   { ignores: ['dist', 'dev-dist', 'E2E/**'] },
   {
