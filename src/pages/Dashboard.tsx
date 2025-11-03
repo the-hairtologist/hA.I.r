@@ -668,7 +668,7 @@ const Dashboard = () => {
   if (loading) {
     return (
       <DashboardLayout>
-        <div className="p-4 md:p-6 lg:p-8">
+        <div className={cn(mobileFirst.padding.md, "md:p-6 lg:p-8")}>
           <DashboardFullSkeleton />
         </div>
       </DashboardLayout>

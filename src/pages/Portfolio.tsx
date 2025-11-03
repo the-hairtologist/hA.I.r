@@ -37,6 +37,8 @@ import { OptimizedImage } from '@/components/OptimizedImage';
 import { EmptyState } from '@/components/EmptyState';
 import { networkErrors } from '@/lib/errorMessages';
 import { logger } from '@/lib/logger';
+import { cn } from '@/lib/utils';
+import { mobileFirst, touchButton } from '@/lib/responsive/mobile-first-utils';
 
 const BackgroundRemovalDialog = lazy(() =>
   import('@/components/BackgroundRemovalDialog').then(m => ({
@@ -308,10 +310,10 @@ const Portfolio = () => {
   if (loading) {
     return (
       <DashboardLayout>
-        <div className="container mx-auto p-6 max-w-6xl">
+        <div className={cn("container mx-auto max-w-6xl", mobileFirst.padding.md)}>
           <div className="mb-8">
-            <h1 className="text-4xl font-pixel mb-2">My Portfolio</h1>
-            <p className="text-muted-foreground font-sans">
+            <h1 className={cn(mobileFirst.text['3xl'], "font-pixel mb-2 break-words")}>My Portfolio</h1>
+            <p className={cn(mobileFirst.text.sm, "text-muted-foreground font-sans break-words")}>
               Showcase your best work to attract more clients
             </p>
           </div>
@@ -323,9 +325,9 @@ const Portfolio = () => {
 
   return (
     <DashboardLayout>
-      <div className="container mx-auto p-6 max-w-6xl animate-fade-in">
+      <div className={cn("container mx-auto max-w-6xl animate-fade-in", mobileFirst.padding.md)}>
         <div className="mb-8">
-          <h1 className="text-4xl font-pixel mb-2">My Portfolio</h1>
+          <h1 className={cn(mobileFirst.text['3xl'], "font-pixel mb-2 break-words")}>My Portfolio</h1>
           <p className="text-muted-foreground font-sans">
             Showcase your best work to attract more clients
           </p>

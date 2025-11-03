@@ -9,6 +9,8 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Package, Sparkles, Clock, TrendingUp, BarChart3 } from 'lucide-react';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { cn } from '@/lib/utils';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 
 const Products = () => {
   return (
@@ -39,13 +41,13 @@ const Products = () => {
                 Product Inventory
               </CardTitle>
 
-              <CardDescription className="text-lg mt-3 font-medium">
+              <CardDescription className={cn(mobileFirst.text.base, "mt-3 font-medium")}>
                 Track products, monitor stock & boost profits
               </CardDescription>
             </CardHeader>
 
-            <CardContent className="pb-8 space-y-6">
-              <p className="text-muted-foreground text-lg leading-relaxed text-center max-w-2xl mx-auto">
+            <CardContent className={cn(mobileFirst.padding.lg, "space-y-6")}>
+              <p className={cn(mobileFirst.text.base, "text-muted-foreground leading-relaxed text-center max-w-2xl mx-auto break-words")}>
                 We're building an amazing inventory management system to help
                 you track hair products, monitor stock levels, and analyze usage
                 patterns.

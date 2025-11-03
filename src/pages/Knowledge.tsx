@@ -22,6 +22,8 @@ import {
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useUserRole } from '@/hooks/useUserRole';
+import { cn } from '@/lib/utils';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 
 const Knowledge = () => {
   const navigate = useNavigate();
@@ -325,15 +327,15 @@ const Knowledge = () => {
               : 'Browse articles, guides, and resources'}
         </p>
         {/* Search Bar */}
-        <Card className="mb-8 border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))]">
-          <CardContent className="p-6">
+        <Card className="mb-8 border-brutal">
+          <CardContent className={mobileFirst.padding.md}>
             <div className="relative">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
               <Input
                 placeholder="Search articles, guides, and resources..."
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                className="pl-12 h-14 text-lg border-2 border-foreground"
+                className={cn(mobileFirst.text.base, "pl-12 h-14 border-2 border-foreground")}
               />
             </div>
           </CardContent>
@@ -342,10 +344,10 @@ const Knowledge = () => {
         {/* Quick Access Card - AI Assistant for Stylists Only */}
         {(isStylist || !isClient) && (
           <Card
-            className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all cursor-pointer bg-gradient-to-br from-purple-400 to-pink-400 mb-8"
+            className="border-brutal hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all cursor-pointer bg-gradient-to-br from-purple-400 to-pink-400 mb-8"
             onClick={() => navigate('/ai-assistant')}
           >
-            <CardContent className="p-6">
+            <CardContent className={mobileFirst.padding.md}>
               <div className="flex items-center gap-4">
                 <div className="w-16 h-16 rounded-2xl bg-background border-2 border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] flex items-center justify-center">
                   <Lightbulb className="h-8 w-8 text-primary" />
@@ -389,7 +391,7 @@ const Knowledge = () => {
                         </Badge>
                         <ExternalLink className="h-4 w-4 text-foreground" />
                       </div>
-                      <CardTitle className="text-lg font-pixel text-foreground">
+                      <CardTitle className={cn(mobileFirst.text.base, "font-pixel text-foreground break-words")}>
                         {article.title}
                       </CardTitle>
                       <CardDescription className="font-sans text-foreground/80 font-medium">

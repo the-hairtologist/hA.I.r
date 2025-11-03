@@ -33,6 +33,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { useUserRole } from '@/hooks/useUserRole';
 import { haptic } from '@/platform/haptics';
 import { useNavigate } from 'react-router-dom';
+import { cn } from '@/lib/utils';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 
 const Help = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -466,14 +468,14 @@ const Help = () => {
           <TabsContent value="videos" className="space-y-6 mt-6">
             {/* Interactive Demo - Available for All Roles */}
             <Card className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-primary/20 brutal-border hover:brutal-shadow-lg transition-all duration-300 animate-fade-in">
-              <CardContent className="p-6">
-                <div className="flex items-start gap-4">
+              <CardContent className={mobileFirst.padding.md}>
+                <div className="flex flex-col sm:flex-row items-start gap-4">
                   <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shrink-0 brutal-shadow-md">
                     <Play className="h-8 w-8 text-primary-foreground" />
                   </div>
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between gap-3 mb-2">
-                      <h3 className="font-bold text-lg">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-col sm:flex-row items-start justify-between gap-3 mb-2">
+                      <h3 className={cn(mobileFirst.text.base, "font-bold break-words")}>
                         Interactive Feature Demo
                       </h3>
                       <Badge variant="secondary" className="shrink-0">
@@ -481,7 +483,7 @@ const Help = () => {
                         Live Preview
                       </Badge>
                     </div>
-                    <p className="text-sm text-muted-foreground mb-4">
+                    <p className={cn(mobileFirst.text.sm, "text-muted-foreground mb-4 break-words")}>
                       {isStylist
                         ? 'See how hA.I.r helps you save time, increase revenue, and manage your salon business effortlessly'
                         : isClient
@@ -520,20 +522,20 @@ const Help = () => {
                 className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border-primary/20 brutal-border hover:brutal-shadow-lg transition-all duration-300 animate-fade-in"
                 style={{ animationDelay: '100ms' }}
               >
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-4">
+                <CardContent className={mobileFirst.padding.md}>
+                  <div className="flex flex-col sm:flex-row items-start gap-4">
                     <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center shrink-0 brutal-shadow-md">
                       <Sparkles className="h-8 w-8 text-primary-foreground" />
                     </div>
-                    <div className="flex-1">
-                      <div className="flex items-start justify-between gap-3 mb-2">
-                        <h3 className="font-bold text-lg">AI Ad Generator</h3>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-col sm:flex-row items-start justify-between gap-3 mb-2">
+                        <h3 className={cn(mobileFirst.text.base, "font-bold break-words")}>AI Ad Generator</h3>
                         <Badge variant="secondary" className="shrink-0">
                           <Sparkles className="h-3 w-3 mr-1" />
                           AI-Powered
                         </Badge>
                       </div>
-                      <p className="text-sm text-muted-foreground mb-4">
+                      <p className={cn(mobileFirst.text.sm, "text-muted-foreground mb-4 break-words")}>
                         Create professional marketing content in seconds.
                         Generate headlines, body copy, CTAs, and even images for
                         social media, emails, and ads.

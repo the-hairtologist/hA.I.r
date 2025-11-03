@@ -33,6 +33,8 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
 import { logger } from '@/lib/logger';
+import { cn } from '@/lib/utils';
+import { mobileFirst, touchButton } from '@/lib/responsive/mobile-first-utils';
 
 export default function EmailCampaigns() {
   const { toast } = useToast();
@@ -107,28 +109,29 @@ export default function EmailCampaigns() {
 
   return (
     <DashboardLayout>
-      <div className="container mx-auto p-6 space-y-6">
+      <div className={cn("container mx-auto space-y-6", mobileFirst.padding.md)}>
         {/* Header */}
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-bold">Email Campaigns</h1>
-            <p className="text-muted-foreground">
+            <h1 className={cn(mobileFirst.text['2xl'], "font-bold break-words")}>Email Campaigns</h1>
+            <p className={cn(mobileFirst.text.sm, "text-muted-foreground break-words")}>
               Monitor and manage your automated email campaigns
             </p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 w-full sm:w-auto">
             <Button
               onClick={() => navigate('/email-settings')}
               variant="outline"
-              className="gap-2"
+              className={cn(touchButton.md, "gap-2 flex-1 sm:flex-initial")}
             >
               <Mail className="w-4 h-4" />
-              Customize Emails
+              <span className="hidden xs:inline">Customize Emails</span>
+              <span className="xs:hidden">Customize</span>
             </Button>
             <Button
               onClick={triggerManualSend}
               disabled={triggering}
-              className="gap-2"
+              className={cn(touchButton.md, "gap-2 flex-1 sm:flex-initial")}
             >
               <RefreshCw
                 className={`w-4 h-4 ${triggering ? 'animate-spin' : ''}`}
@@ -206,10 +209,10 @@ export default function EmailCampaigns() {
           <Card className="border-dashed">
             <CardContent className="py-8 text-center">
               <Mail className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">
+              <h3 className={cn(mobileFirst.text.lg, "font-semibold mb-2 break-words")}>
                 No campaigns sent yet
               </h3>
-              <p className="text-sm text-muted-foreground mb-4 max-w-md mx-auto">
+              <p className={cn(mobileFirst.text.sm, "text-muted-foreground mb-4 max-w-md mx-auto break-words")}>
                 Your automated rebooking reminders will start sending once you
                 have clients with appointments 6+ weeks ago. Click "Send Now" to
                 trigger a manual check.
