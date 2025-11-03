@@ -143,7 +143,9 @@ export async function wrapAICall<T>(
         return { data: null, error: lastError };
       }
       // Exponential backoff: 100ms * 2^(attempt + 1)
-      await new Promise(resolve => setTimeout(resolve, 100 * Math.pow(2, attempt + 1)));
+      await new Promise(resolve =>
+        setTimeout(resolve, 100 * Math.pow(2, attempt + 1))
+      );
     }
   }
 

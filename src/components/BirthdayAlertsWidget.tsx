@@ -40,7 +40,7 @@ export function BirthdayAlertsWidget() {
     try {
       // Get stylist profile
       if (!user?.id) return;
-      
+
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id')
@@ -99,7 +99,10 @@ export function BirthdayAlertsWidget() {
 
       setUpcomingBirthdays(upcoming as BirthdayClient[]);
     } catch (error) {
-      logger.error('Error loading birthdays', error, { component: 'BirthdayAlertsWidget', userId: user?.id });
+      logger.error('Error loading birthdays', error, {
+        component: 'BirthdayAlertsWidget',
+        userId: user?.id,
+      });
     } finally {
       setLoading(false);
     }

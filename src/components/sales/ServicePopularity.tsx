@@ -18,7 +18,7 @@ export function ServicePopularity() {
     queryKey: ['service-popularity', user?.id],
     queryFn: async () => {
       if (!user?.id) return [];
-      
+
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id')

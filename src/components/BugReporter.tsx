@@ -31,7 +31,9 @@ export function BugReporter() {
       setScreenshot(dataUrl);
       toast.success('Screenshot captured');
     } catch (error) {
-      productionLogger.error('Failed to capture screenshot', error, { component: 'BugReporter' });
+      productionLogger.error('Failed to capture screenshot', error, {
+        component: 'BugReporter',
+      });
       toast.error('Failed to capture screenshot');
     }
   };
@@ -95,7 +97,9 @@ export function BugReporter() {
       setScreenshot(null);
       setIsOpen(false);
     } catch (error) {
-      productionLogger.error('Bug report submission failed', error, { component: 'BugReporter' });
+      productionLogger.error('Bug report submission failed', error, {
+        component: 'BugReporter',
+      });
       toast.error('Failed to submit bug report');
     } finally {
       setIsSubmitting(false);

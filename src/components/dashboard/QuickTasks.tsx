@@ -24,7 +24,7 @@ export const QuickTasks = () => {
     queryKey: ['quick-tasks', session?.user?.id],
     queryFn: async () => {
       if (!session?.user?.id) return [];
-      
+
       const { data } = await supabase
         .from('stylist_todos')
         .select('*')
@@ -39,7 +39,7 @@ export const QuickTasks = () => {
   const addTask = useMutation({
     mutationFn: async (task: string) => {
       if (!session?.user?.id) throw new Error('Not authenticated');
-      
+
       const { error } = await supabase
         .from('stylist_todos')
         .insert([{ user_id: session.user.id, task, completed: false }]);

@@ -329,7 +329,9 @@ const Help = () => {
                       </div>
                     </div>
                     <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                      <span className="text-sm font-medium">Add new client</span>
+                      <span className="text-sm font-medium">
+                        Add new client
+                      </span>
                       <div className="flex gap-1">
                         <kbd className="px-2 py-1 bg-background rounded text-xs border">
                           ⌘ / Ctrl

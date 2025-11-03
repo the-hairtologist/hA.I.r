@@ -90,7 +90,10 @@ export const HairMemoryTimeline = ({ clientId }: HairMemoryTimelineProps) => {
 
       setEvents(timeline);
     } catch (error) {
-      logger.error('Error loading timeline', error, { component: 'HairMemoryTimeline', clientId });
+      logger.error('Error loading timeline', error, {
+        component: 'HairMemoryTimeline',
+        clientId,
+      });
     } finally {
       setLoading(false);
     }

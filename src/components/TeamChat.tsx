@@ -62,13 +62,17 @@ export function TeamChat({ stylistId }: TeamChatProps) {
       .limit(100);
 
     if (data) {
-      setMessages(data.map(msg => ({
-        ...msg,
-        created_at: msg.created_at || new Date().toISOString(),
-        stylist_profiles: msg.stylist_profiles ? {
-          business_name: msg.stylist_profiles.business_name || 'Unknown'
-        } : undefined
-      })));
+      setMessages(
+        data.map(msg => ({
+          ...msg,
+          created_at: msg.created_at || new Date().toISOString(),
+          stylist_profiles: msg.stylist_profiles
+            ? {
+                business_name: msg.stylist_profiles.business_name || 'Unknown',
+              }
+            : undefined,
+        }))
+      );
     }
   };
 

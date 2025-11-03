@@ -45,7 +45,10 @@ export const DataExport = () => {
         description: 'Your data has been downloaded as a JSON file.',
       });
     } catch (error) {
-      logger.error('Error exporting data', error, { component: 'DataExport', userId: user?.id });
+      logger.error('Error exporting data', error, {
+        component: 'DataExport',
+        userId: user?.id,
+      });
       toast({
         title: 'Export Failed',
         description:

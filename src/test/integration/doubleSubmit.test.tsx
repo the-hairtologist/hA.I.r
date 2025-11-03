@@ -27,12 +27,13 @@ vi.mock('@/lib/logger', () => ({
   },
 }));
 
-const createQueryClient = () => new QueryClient({
-  defaultOptions: {
-    queries: { retry: false },
-    mutations: { retry: false },
-  },
-});
+const createQueryClient = () =>
+  new QueryClient({
+    defaultOptions: {
+      queries: { retry: false },
+      mutations: { retry: false },
+    },
+  });
 
 const createWrapper = (): React.FC<{ children: ReactNode }> => {
   const queryClient = createQueryClient();
@@ -166,9 +167,12 @@ describe('useFormSubmit', () => {
       const mockSubmit = vi
         .fn()
         .mockRejectedValue(new Error('Submission failed'));
-      const { result } = renderHook(() => useFormSubmit(mockSubmit, { enableRetry: false }), {
-        wrapper: createWrapper(),
-      });
+      const { result } = renderHook(
+        () => useFormSubmit(mockSubmit, { enableRetry: false }),
+        {
+          wrapper: createWrapper(),
+        }
+      );
 
       await act(async () => {
         await result.current.handleSubmit();
@@ -183,9 +187,13 @@ describe('useFormSubmit', () => {
       type FormData = { name: string };
 
       const mockSubmit = vi.fn().mockResolvedValue(undefined);
-      const { result } = renderHook(() => useFormSubmit<FormData>(mockSubmit, { initialValues: { name: '' } }), {
-        wrapper: createWrapper(),
-      });
+      const { result } = renderHook(
+        () =>
+          useFormSubmit<FormData>(mockSubmit, { initialValues: { name: '' } }),
+        {
+          wrapper: createWrapper(),
+        }
+      );
       act(() => {
         result.current.setFieldValue('name', 'Updated');
         result.current.setFieldTouched('name', true);

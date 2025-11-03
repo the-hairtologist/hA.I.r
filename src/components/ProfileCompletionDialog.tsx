@@ -229,16 +229,22 @@ export const ProfileCompletionDialog = ({
 
   const handleDismiss = () => {
     localStorage.setItem('profile_setup_dismissed', 'true');
-    localStorage.setItem('profile_setup_dismissed_at', new Date().toISOString());
+    localStorage.setItem(
+      'profile_setup_dismissed_at',
+      new Date().toISOString()
+    );
     onOpenChange(false);
   };
 
   return (
-    <Dialog open={open} onOpenChange={(newOpen) => {
-      if (!newOpen) {
-        handleDismiss();
-      }
-    }}>
+    <Dialog
+      open={open}
+      onOpenChange={newOpen => {
+        if (!newOpen) {
+          handleDismiss();
+        }
+      }}
+    >
       <DialogContent
         className="max-w-2xl max-h-[90vh] overflow-y-auto brutal-border brutal-shadow-md"
         onInteractOutside={e => e.preventDefault()}

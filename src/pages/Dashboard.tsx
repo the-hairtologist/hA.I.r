@@ -412,7 +412,7 @@ const Dashboard = () => {
     if (userRole && profile) {
       // Force fresh data from React Query cache on dashboard load
       queryClient.invalidateQueries();
-      
+
       loadDashboardData();
 
       // GuidedTour handles onboarding automatically via useTour hook
@@ -480,7 +480,9 @@ const Dashboard = () => {
         // Delay showing by 3 seconds to let user see dashboard first
         const timer = setTimeout(() => {
           // Double-check flags before showing (user might have dismissed during delay)
-          const stillDismissed = localStorage.getItem('profile_setup_dismissed');
+          const stillDismissed = localStorage.getItem(
+            'profile_setup_dismissed'
+          );
           const stillCompleted = localStorage.getItem('profile_completed');
           if (stillDismissed !== 'true' && stillCompleted !== 'true') {
             setShowProfileCompletion(true);

@@ -22,7 +22,7 @@ function analyzeFile(filePath) {
 
   // Count supabase queries
   const supabaseQueries = (content.match(/supabase\.from\(/g) || []).length;
-  
+
   // Count useQuery hooks
   const reactQueries = (content.match(/useQuery\(/g) || []).length;
 
@@ -77,8 +77,12 @@ walkDir(srcDir);
 console.log('📊 Query Analysis Results');
 console.log('========================\n');
 console.log(`Total queries found: ${results.totalQueries}`);
-console.log(`Components with queries: ${Object.keys(results.componentQueries).length}`);
-console.log(`Optimization opportunities: ${results.optimizationOpportunities.length}`);
+console.log(
+  `Components with queries: ${Object.keys(results.componentQueries).length}`
+);
+console.log(
+  `Optimization opportunities: ${results.optimizationOpportunities.length}`
+);
 console.log(`Potential duplicates: ${results.duplicatePatterns.length}\n`);
 
 if (results.optimizationOpportunities.length > 0) {

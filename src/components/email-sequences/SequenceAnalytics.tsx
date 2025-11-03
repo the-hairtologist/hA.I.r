@@ -11,7 +11,7 @@ export const SequenceAnalytics = () => {
     queryKey: ['sequence_analytics'],
     queryFn: async () => {
       if (!user?.id) return null;
-      
+
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id')

@@ -118,7 +118,11 @@ export const RealRevenueChart = () => {
       setTotalRevenue(total);
       setGrowthRate(growth);
     } catch (error) {
-      logger.error('Error loading revenue data', 'RealRevenueChart', error as Error);
+      logger.error(
+        'Error loading revenue data',
+        'RealRevenueChart',
+        error as Error
+      );
     } finally {
       setLoading(false);
     }

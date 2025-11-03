@@ -3,23 +3,35 @@
  * Comprehensive audit log viewer for admins
  */
 
-import { useState, useEffect, useCallback } from "react";
-import { DashboardLayout } from "@/components/DashboardLayout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { FileText, Search, Download, Filter, Calendar } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
-import { format } from "date-fns";
-import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
-import { Navigate } from "react-router-dom";
-import { LoadingSpinner } from "@/components/LoadingSpinner";
-import { exportToCSV } from "@/lib/csvExport";
-import { logger } from "@/lib/logging/productionLogger";
-import { trackSelect } from "@/lib/logging/supabaseTracker";
+import { useState, useEffect, useCallback } from 'react';
+import { DashboardLayout } from '@/components/DashboardLayout';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { FileText, Search, Download, Filter, Calendar } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
+import { format } from 'date-fns';
+import { useEnhancedAuth } from '@/contexts/EnhancedAuthContext';
+import { Navigate } from 'react-router-dom';
+import { LoadingSpinner } from '@/components/LoadingSpinner';
+import { exportToCSV } from '@/lib/csvExport';
+import { logger } from '@/lib/logging/productionLogger';
+import { trackSelect } from '@/lib/logging/supabaseTracker';
 
 interface AuditLog {
   id: string;
@@ -36,10 +48,10 @@ export default function AuditLogs() {
   const { user, isAdmin, loading: authLoading } = useEnhancedAuth();
   const [logs, setLogs] = useState<AuditLog[]>([]);
   const [loadingLogs, setLoadingLogs] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [actionFilter, setActionFilter] = useState("all");
-  const [tableFilter, setTableFilter] = useState("all");
-  const [dateRange, setDateRange] = useState("7");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [actionFilter, setActionFilter] = useState('all');
+  const [tableFilter, setTableFilter] = useState('all');
+  const [dateRange, setDateRange] = useState('7');
 
   const loadLogs = useCallback(async () => {
     try {
@@ -51,22 +63,22 @@ export default function AuditLogs() {
       const result = await trackSelect(
         async () => {
           return await supabase
-            .from("audit_logs")
-            .select("*")
-            .gte("created_at", cutoffDate.toISOString())
-            .order("created_at", { ascending: false })
+            .from('audit_logs')
+            .select('*')
+            .gte('created_at', cutoffDate.toISOString())
+            .order('created_at', { ascending: false })
             .limit(500);
         },
-        "audit_logs",
-        "AuditLogs"
+        'audit_logs',
+        'AuditLogs'
       );
 
       const { data, error } = result;
       if (error) throw error;
       setLogs(data || []);
     } catch (error) {
-      logger.error("Error loading audit logs", error, { context: "AuditLogs" });
-      toast.error("Failed to load audit logs");
+      logger.error('Error loading audit logs', error, { context: 'AuditLogs' });
+      toast.error('Failed to load audit logs');
     } finally {
       setLoadingLogs(false);
     }
@@ -98,8 +110,9 @@ export default function AuditLogs() {
       log.table_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       log.user_id.includes(searchTerm);
 
-    const matchesAction = actionFilter === "all" || log.action === actionFilter;
-    const matchesTable = tableFilter === "all" || log.table_name === tableFilter;
+    const matchesAction = actionFilter === 'all' || log.action === actionFilter;
+    const matchesTable =
+      tableFilter === 'all' || log.table_name === tableFilter;
 
     return matchesSearch && matchesAction && matchesTable;
   });
@@ -109,32 +122,31 @@ export default function AuditLogs() {
 
   const handleExport = () => {
     const exportData = filteredLogs.map(log => ({
-      timestamp: format(new Date(log.created_at), "PPpp"),
+      timestamp: format(new Date(log.created_at), 'PPpp'),
       user_id: log.user_id,
       action: log.action,
       table: log.table_name,
-      record_id: log.record_id || "N/A",
-      changes: log.new_data ? JSON.stringify(log.new_data) : "N/A",
+      record_id: log.record_id || 'N/A',
+      changes: log.new_data ? JSON.stringify(log.new_data) : 'N/A',
     }));
 
-    exportToCSV(exportData, `audit_logs_${format(new Date(), "yyyy-MM-dd")}`);
-    toast.success("Audit logs exported!");
+    exportToCSV(exportData, `audit_logs_${format(new Date(), 'yyyy-MM-dd')}`);
+    toast.success('Audit logs exported!');
   };
 
   const getActionBadge = (action: string) => {
-    const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
-      INSERT: "default",
-      UPDATE: "secondary",
-      DELETE: "destructive",
-      ADMIN_GRANT: "default",
-      ADMIN_REVOKE: "destructive",
+    const variants: Record<
+      string,
+      'default' | 'secondary' | 'destructive' | 'outline'
+    > = {
+      INSERT: 'default',
+      UPDATE: 'secondary',
+      DELETE: 'destructive',
+      ADMIN_GRANT: 'default',
+      ADMIN_REVOKE: 'destructive',
     };
 
-    return (
-      <Badge variant={variants[action] || "outline"}>
-        {action}
-      </Badge>
-    );
+    return <Badge variant={variants[action] || 'outline'}>{action}</Badge>;
   };
 
   return (
@@ -165,7 +177,7 @@ export default function AuditLogs() {
                 <Input
                   placeholder="Search logs..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={e => setSearchTerm(e.target.value)}
                   className="pl-10"
                 />
               </div>
@@ -249,7 +261,7 @@ export default function AuditLogs() {
               </div>
             ) : (
               <div className="space-y-2 sm:space-y-3 max-h-[600px] overflow-y-auto">
-                {filteredLogs.map((log) => (
+                {filteredLogs.map(log => (
                   <div
                     key={log.id}
                     className="p-3 sm:p-4 border-2 border-foreground rounded-lg hover:bg-muted/50 transition-colors"
@@ -258,10 +270,12 @@ export default function AuditLogs() {
                       {/* Badges and timestamp - wrap on mobile */}
                       <div className="flex flex-wrap items-center gap-2">
                         {getActionBadge(log.action)}
-                        <Badge variant="outline" className="text-xs">{log.table_name}</Badge>
+                        <Badge variant="outline" className="text-xs">
+                          {log.table_name}
+                        </Badge>
                         <span className="text-xs text-muted-foreground flex items-center gap-1 whitespace-nowrap">
                           <Calendar className="h-3 w-3" />
-                          {format(new Date(log.created_at), "PPp")}
+                          {format(new Date(log.created_at), 'PPp')}
                         </span>
                       </div>
 
@@ -299,6 +313,3 @@ export default function AuditLogs() {
     </DashboardLayout>
   );
 }
-
-
-

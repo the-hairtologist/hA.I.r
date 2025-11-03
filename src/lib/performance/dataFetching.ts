@@ -11,17 +11,17 @@ export async function batchFetch<T>(
   delayMs = 50
 ): Promise<T[]> {
   const results: T[] = [];
-  
+
   for (const operation of operations) {
     const result = await operation();
     results.push(result);
-    
+
     // Small delay between requests
     if (delayMs > 0) {
       await new Promise(resolve => setTimeout(resolve, delayMs));
     }
   }
-  
+
   return results;
 }
 
@@ -33,7 +33,7 @@ export function debounce<T extends (...args: any[]) => any>(
   waitMs: number
 ): (...args: Parameters<T>) => void {
   let timeoutId: NodeJS.Timeout;
-  
+
   return function (...args: Parameters<T>) {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => func(...args), waitMs);
@@ -53,15 +53,15 @@ class DataCache {
 
   get<T>(key: string): T | null {
     const cached = this.cache.get(key);
-    
+
     if (!cached) return null;
-    
+
     const isExpired = Date.now() - cached.timestamp > this.ttl;
     if (isExpired) {
       this.cache.delete(key);
       return null;
     }
-    
+
     return cached.data as T;
   }
 
@@ -95,11 +95,11 @@ export function memoize<T extends (...args: any[]) => any>(
   return ((...args: Parameters<T>) => {
     const key = getCacheKey(...args);
     const cached = dataCache.get(key);
-    
+
     if (cached !== null) {
       return cached;
     }
-    
+
     const result = fn(...args);
     dataCache.set(key, result);
     return result;
