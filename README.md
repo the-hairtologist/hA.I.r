@@ -1,13 +1,13 @@
 # hA.I.r - AI-Powered Hair Salon Management Platform
 
-[![CI Fast](https://github.com/YOUR_USERNAME/YOUR_REPO/actions/workflows/ci-fast.yml/badge.svg)](https://github.com/YOUR_USERNAME/YOUR_REPO/actions/workflows/ci-fast.yml)
-[![Deep Tests](https://github.com/YOUR_USERNAME/YOUR_REPO/actions/workflows/deep-tests.yml/badge.svg)](https://github.com/YOUR_USERNAME/YOUR_REPO/actions/workflows/deep-tests.yml)
-[![Security Scan](https://github.com/YOUR_USERNAME/YOUR_REPO/actions/workflows/security-scan.yml/badge.svg)](https://github.com/YOUR_USERNAME/YOUR_REPO/actions/workflows/security-scan.yml)
-[![Performance](https://github.com/YOUR_USERNAME/YOUR_REPO/actions/workflows/performance-analysis.yml/badge.svg)](https://github.com/YOUR_USERNAME/YOUR_REPO/actions/workflows/performance-analysis.yml)
+[![CI Fast](https://github.com/the-hairtologist/hA.I.r/actions/workflows/ci-fast.yml/badge.svg)](https://github.com/the-hairtologist/hA.I.r/actions/workflows/ci-fast.yml)
+[![Deep Tests](https://github.com/the-hairtologist/hA.I.r/actions/workflows/deep-tests.yml/badge.svg)](https://github.com/the-hairtologist/hA.I.r/actions/workflows/deep-tests.yml)
+[![Security Scan](https://github.com/the-hairtologist/hA.I.r/actions/workflows/security-scan.yml/badge.svg)](https://github.com/the-hairtologist/hA.I.r/actions/workflows/security-scan.yml)
+[![Performance](https://github.com/the-hairtologist/hA.I.r/actions/workflows/performance-analysis.yml/badge.svg)](https://github.com/the-hairtologist/hA.I.r/actions/workflows/performance-analysis.yml)
 
 AI-powered platform for hair stylists to manage clients, appointments, formulas, and business operations with intelligent automation.
 
-> **Note**: Replace `YOUR_USERNAME/YOUR_REPO` in the badge URLs above with your actual GitHub repository details.
+
 
 ---
 
@@ -119,10 +119,10 @@ npm run test:report
 
 ```sh
 # Clone the repository
-git clone <YOUR_GIT_URL>
+git clone https://github.com/the-hairtologist/hA.I.r.git
 
 # Navigate to project directory
-cd <YOUR_PROJECT_NAME>
+cd hA.I.r
 
 # Install dependencies
 npm i

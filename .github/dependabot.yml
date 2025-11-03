@@ -9,9 +9,9 @@ updates:
       time: "09:00"
     open-pull-requests-limit: 10
     reviewers:
-      - "yourusername" # Replace with actual GitHub username
+      - "the-hairtologist"
     assignees:
-      - "yourusername" # Replace with actual GitHub username
+      - "the-hairtologist"
     labels:
       - "dependencies"
       - "automated"
@@ -62,7 +62,7 @@ updates:
       day: "monday"
       time: "09:00"
     reviewers:
-      - "yourusername" # Replace with actual GitHub username
+      - "the-hairtologist"
     labels:
       - "dependencies"
       - "github-actions"

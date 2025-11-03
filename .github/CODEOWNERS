@@ -2,53 +2,49 @@
 # These owners will be requested for review when someone opens a PR that modifies code in these locations
 
 # Default owner for everything in the repo
-* @yourusername
+* @the-hairtologist
 
 # GitHub Configuration & CI/CD
-/.github/ @yourusername
-/.github/workflows/ @yourusername
+/.github/ @the-hairtologist
+/.github/workflows/ @the-hairtologist
 
 # Core Application
-/src/ @yourusername
+/src/ @the-hairtologist
 
 # Authentication & Security
-/src/components/auth/ @yourusername
-/src/hooks/useAuth.ts @yourusername
-/supabase/migrations/ @yourusername
+/src/components/auth/ @the-hairtologist
+/src/hooks/useAuth.ts @the-hairtologist
+/supabase/migrations/ @the-hairtologist
 
 # Database & Backend
-/supabase/ @yourusername
-/src/integrations/supabase/ @yourusername
+/supabase/ @the-hairtologist
+/src/integrations/supabase/ @the-hairtologist
 
 # UI Components
-/src/components/ui/ @yourusername
+/src/components/ui/ @the-hairtologist
 
 # Testing
-/E2E/ @yourusername
-/playwright.config.ts @yourusername
-/vitest.config.ts @yourusername
+/E2E/ @the-hairtologist
+/playwright.config.ts @the-hairtologist
+/vitest.config.ts @the-hairtologist
 
 # Build & Configuration
-/vite.config.ts @yourusername
-/tsconfig*.json @yourusername
-/tailwind.config.ts @yourusername
+/vite.config.ts @the-hairtologist
+/tsconfig*.json @the-hairtologist
+/tailwind.config.ts @the-hairtologist
 
 # Documentation
-/*.md @yourusername
-/docs/ @yourusername
+/*.md @the-hairtologist
+/docs/ @the-hairtologist
 
 # Mobile Configuration
-/capacitor.config.ts @yourusername
-/android/ @yourusername
-/ios/ @yourusername
+/capacitor.config.ts @the-hairtologist
+/android/ @the-hairtologist
+/ios/ @the-hairtologist
 
 # Dependencies
-/package.json @yourusername
-/package-lock.json @yourusername
+/package.json @the-hairtologist
+/package-lock.json @the-hairtologist
 
 # Environment & Secrets
-/.env.example @yourusername
-
-# IMPORTANT: Replace @yourusername with your actual GitHub username
-# You can also add team names like @org/team-name if using GitHub Organizations
-# Example: /src/components/ @org/frontend-team
+/.env.example @the-hairtologist
