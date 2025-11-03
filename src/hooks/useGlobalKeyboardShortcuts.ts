@@ -5,7 +5,7 @@
 
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAnnouncer } from '@/components/AccessibilityAnnouncer';
+import { useAnnouncer } from '@/hooks/useAnnouncer';
 
 export function useGlobalKeyboardShortcuts() {
   const navigate = useNavigate();
