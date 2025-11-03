@@ -2,12 +2,16 @@ name: Device Tests
 
 on:
   push:
-    branches: [main]
+    branches: [main, hA.I.r, develop]
   pull_request:
-    branches: [main]
+    branches: [main, hA.I.r, develop]
   workflow_dispatch:
   schedule:
     - cron: '0 0 * * 0' # Weekly on Sunday
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   mobile-tests:
@@ -21,7 +25,7 @@ jobs:
           - 'iPhone 15 Pro'
           - 'iPhone 12'
           - 'Pixel 7'
-          - 'Galaxy S23'
+          - 'Samsung Galaxy S23'
     steps:
       - uses: actions/checkout@v4
       
@@ -31,8 +35,14 @@ jobs:
           node-version: '20'
           cache: 'npm'
       
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
+      
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --legacy-peer-deps
       
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
@@ -59,7 +69,7 @@ jobs:
       fail-fast: false
       matrix:
         device:
-          - 'iPad Pro'
+          - 'iPad Air'
           - 'Desktop Chrome'
           - 'Desktop Firefox'
     steps:
@@ -72,7 +82,7 @@ jobs:
           cache: 'npm'
       
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --legacy-peer-deps
       
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps

@@ -2,8 +2,12 @@ name: Performance Tests
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, hA.I.r, develop]
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   lighthouse:
@@ -19,7 +23,7 @@ jobs:
           cache: 'npm'
       
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --legacy-peer-deps
       
       - name: Build
         run: npm run build
@@ -49,7 +53,7 @@ jobs:
           cache: 'npm'
       
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --legacy-peer-deps
       
       - name: Build with bundle analysis
         run: npm run build
