@@ -14,7 +14,7 @@
         "test:watch": "vitest",
         "test:ui": "vitest --ui",
         "type-check": "tsc --noEmit",
-        "clean": "rimraf node_modules dist && npm install"
+        "clean": "rimraf node_modules dist && npm install",
         "format": "prettier --write .",
         "format:check": "prettier --check ."
     },
