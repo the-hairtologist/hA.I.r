@@ -1,4 +1,4 @@
-﻿import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { Home, Calendar, MessageSquare, User, Users, Sparkles, Shield, Activity, CalendarCheck, Settings, Plus, LayoutGrid } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -9,6 +9,7 @@ import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import { logger } from "@/lib/logging/productionLogger";
 import { prefetchOnHover } from "@/lib/performance/ResourceHints";
 import { MoreMenu } from "./MoreMenu";
+import { mobileFirst } from "@/lib/responsive/mobile-first-utils";
 
 interface NavItem {
   icon: React.ComponentType<{ className?: string }>;
@@ -117,7 +118,8 @@ const NavButton = ({
       {/* Label */}
       <span 
         className={cn(
-          "text-xs font-sans font-medium transition-all duration-200 truncate max-w-[60px] sm:max-w-[70px]",
+          mobileFirst.text.xs,
+          "font-sans font-medium transition-all duration-200 truncate max-w-[60px] sm:max-w-[70px]",
           active ? "text-primary scale-105" : "text-muted-foreground"
         )}
       >
