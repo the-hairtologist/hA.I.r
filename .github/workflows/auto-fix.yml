@@ -82,8 +82,18 @@ jobs:
           BRANCH_NAME="auto-fix/automated-fixes-$(date +%Y%m%d-%H%M%S)"
           git checkout -b "$BRANCH_NAME"
           
-          # Add all changes except workflow files (requires workflows permission)
+          # Final safety check: ensure workflow files are reset and never staged
+          git checkout HEAD -- .github/workflows/ || true
+          git restore --staged .github/workflows/ 2>/dev/null || true
+          
+          # Add all changes except workflow files
           git add --all -- ':!.github/workflows/'
+          
+          # Double-check nothing from .github/workflows is staged
+          if git diff --cached --name-only | grep -q "^.github/workflows/"; then
+            echo "ERROR: Workflow files are staged, unstaging them now"
+            git restore --staged .github/workflows/
+          fi
           
           COMMIT_MSG="🤖 Auto-fix: Code formatting, linting, and dependency updates
 
