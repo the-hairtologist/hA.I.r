@@ -6,7 +6,9 @@ import { test, expect } from '@playwright/test';
  */
 
 // Helper function to login
-async function login(page: any) {
+import { Page } from '@playwright/test';
+
+async function login(page: Page) {
   await page.goto('/auth');
   await page.fill('input[type="email"]', 'test@example.com');
   await page.fill('input[type="password"]', 'password123');

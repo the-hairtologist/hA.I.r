@@ -1,11 +1,11 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, Page } from '@playwright/test';
 
 /**
  * System Health Checks
  * Monitors for common issues like console errors, failed network requests, and broken functionality
  */
 
-async function login(page: any) {
+async function login(page: Page) {
   await page.goto('/auth');
   await page.fill('input[type="email"]', 'test@example.com');
   await page.fill('input[type="password"]', 'password123');
@@ -276,12 +276,24 @@ test.describe('Performance Health', () => {
     const cls = await page.evaluate(() => {
       return new Promise<number>(resolve => {
         let clsScore = 0;
-        const observer = new PerformanceObserver(list => {
-          for (const entry of list.getEntries()) {
-            if ((entry as any).hadRecentInput) continue;
-            clsScore += (entry as any).value;
+        const observer = new PerformanceObserver(
+          (list: PerformanceObserverEntryList) => {
+            /**
+             * @ts-ignore - DOM types in browser context are not validated by TypeScript in Playwright
+             */
+            const entries = list.getEntries();
+            for (const entry of entries) {
+              /**
+               * @ts-ignore - DOM types in browser context are not validated by TypeScript in Playwright
+               */
+              const layoutShift = entry;
+              /** @ts-expect-error LayoutShift property only exists in browser context */
+              if (layoutShift.hadRecentInput) continue;
+              /** @ts-expect-error LayoutShift property only exists in browser context */
+              clsScore += layoutShift.value ?? 0;
+            }
           }
-        });
+        );
         observer.observe({ type: 'layout-shift', buffered: true });
 
         setTimeout(() => {

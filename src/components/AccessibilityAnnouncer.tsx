@@ -19,8 +19,9 @@ export function AccessibilityAnnouncer({
   const announcerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (announcerRef.current && message) {
-      announcerRef.current.textContent = '';
+    const announcerNode = announcerRef.current;
+    if (announcerNode && message) {
+      announcerNode.textContent = '';
       setTimeout(() => {
         if (announcerRef.current) {
           announcerRef.current.textContent = message;
@@ -28,9 +29,11 @@ export function AccessibilityAnnouncer({
       }, 100);
     }
 
+    // Capture the node for cleanup to avoid ref changes
+    const cleanupNode = announcerNode;
     return () => {
-      if (clearOnUnmount && announcerRef.current) {
-        announcerRef.current.textContent = '';
+      if (clearOnUnmount && cleanupNode) {
+        cleanupNode.textContent = '';
       }
     };
   }, [message, clearOnUnmount]);
@@ -39,30 +42,14 @@ export function AccessibilityAnnouncer({
     <div
       ref={announcerRef}
       role="status"
-      aria-live={priority}
+      aria-live={priority === 'assertive' ? 'assertive' : 'polite'}
       aria-atomic="true"
       className="sr-only"
     />
   );
 }
 
-export function useAnnouncer() {
-  const announce = (
-    message: string,
-    priority: 'polite' | 'assertive' = 'polite'
-  ) => {
-    const announcer = document.getElementById('global-announcer');
-    if (announcer) {
-      announcer.setAttribute('aria-live', priority);
-      announcer.textContent = '';
-      setTimeout(() => {
-        announcer.textContent = message;
-      }, 100);
-    }
-  };
-
-  return { announce };
-}
+// useAnnouncer hook moved to src/hooks/useAnnouncer.ts
 
 export function GlobalAnnouncer() {
   return (

@@ -1,11 +1,20 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, Page } from '@playwright/test';
 
 /**
  * UI/UX Consistency Tests
  * Verifies design system adherence, visual hierarchy, and consistent styling
  */
 
-async function login(page: any) {
+type ButtonStyle = {
+  backgroundColor: string;
+  color: string;
+  borderRadius: string;
+  padding: string;
+  fontSize: string;
+  fontWeight: string;
+};
+
+async function login(page: Page) {
   await page.goto('/auth');
   await page.fill('input[type="email"]', 'test@example.com');
   await page.fill('input[type="password"]', 'password123');
@@ -20,7 +29,7 @@ test.describe('Design System Consistency', () => {
 
   test('primary buttons should have consistent styling', async ({ page }) => {
     const pages = ['/dashboard', '/appointments', '/clients', '/services'];
-    const buttonStyles: any[] = [];
+    const buttonStyles: ButtonStyle[] = [];
 
     for (const pagePath of pages) {
       await page.goto(pagePath);
@@ -39,9 +48,8 @@ test.describe('Design System Consistency', () => {
             padding: computed.padding,
             fontSize: computed.fontSize,
             fontWeight: computed.fontWeight,
-          };
+          } as ButtonStyle;
         });
-
         buttonStyles.push(style);
       }
     }

@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 
-async function loginAsClient(page: any) {
+import { Page } from '@playwright/test';
+
+async function loginAsClient(page: Page) {
   await page.goto('/auth');
   await page.getByLabel(/email/i).fill('client@example.com');
   await page.getByLabel(/password/i).fill('password123');
@@ -170,7 +172,7 @@ test.describe('Client Requests', () => {
     await page.waitForTimeout(1000);
 
     // Script should be escaped/removed, not executed
-    const dialogs: any[] = [];
+    const dialogs: string[] = [];
     page.on('dialog', dialog => dialogs.push(dialog));
 
     await page.waitForTimeout(500);

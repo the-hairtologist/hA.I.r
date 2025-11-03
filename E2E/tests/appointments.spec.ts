@@ -1,7 +1,9 @@
 import { test, expect } from '@playwright/test';
 
 // Test helper to login
-async function login(page: any) {
+import { Page } from '@playwright/test';
+
+async function login(page: Page) {
   await page.goto('/auth');
   await page.getByLabel(/email/i).fill('stylist@example.com');
   await page.getByLabel(/password/i).fill('password123');
