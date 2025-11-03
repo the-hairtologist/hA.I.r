@@ -31,12 +31,20 @@ jobs:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
       
+      - name: Start preview server
+        run: npm run preview &
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+      
+      - name: Wait for server
+        run: npx wait-on http://localhost:4173 --timeout 60000
+      
       - name: Run Lighthouse CI
         uses: treosh/lighthouse-ci-action@v10
         with:
           urls: |
             http://localhost:4173
-          configPath: './.lighthouserc.json'
           uploadArtifacts: true
           temporaryPublicStorage: true
 
