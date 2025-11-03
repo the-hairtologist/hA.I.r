@@ -12,6 +12,8 @@ import {
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
+import { cn } from '@/lib/utils';
 
 interface CalendarViewProps {
   appointments: any[];
@@ -68,7 +70,7 @@ export const CalendarView = ({
           </div>
         </div>
       </CardHeader>
-      <CardContent className="p-2 sm:p-6">
+      <CardContent className={cn(mobileFirst.padding.sm)}>
         <div className="grid grid-cols-7 gap-1 sm:gap-2">
           {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
             <div

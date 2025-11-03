@@ -31,15 +31,23 @@ export default tseslint.config(
       'react-hooks/rules-of-hooks': 'error',
       'prefer-const': 'warn',
       
-      // Mobile-First Pattern Enforcement
+      // Mobile-First Pattern Enforcement - Enhanced Rules
       'no-restricted-syntax': [
         'warn',
         {
-          selector: 'JSXAttribute[name.name="className"] Literal[value=/^(?=.*\\b(p-6|p-8|px-6|py-6|text-lg|text-xl|text-2xl|gap-6|space-x-6|space-y-6)\\b)(?!.*\\bmd:).*$/]',
-          message: '⚠️ Mobile-First: Use mobileFirst utilities from @/lib/responsive/mobile-first-utils instead of desktop-first classes. Import { mobileFirst } and use mobileFirst.padding.md, mobileFirst.text.lg, etc.'
+          selector: 'JSXAttribute[name.name="className"] Literal[value=/\\b(p-6|p-8|p-10|p-12)\\b(?!.*\\bmd:)/]',
+          message: '⚠️ Mobile-First: Use mobileFirst.padding.* utilities instead of fixed padding (p-6, p-8, etc.). Mobile-first pattern required.'
         },
         {
-          selector: 'JSXAttribute[name.name="className"] TemplateLiteral > * Literal[value=/\\b(p-6|p-8|px-6|py-6|text-lg|text-xl|gap-6)\\b/]',
+          selector: 'JSXAttribute[name.name="className"] Literal[value=/\\b(text-lg|text-xl|text-2xl|text-3xl)\\b(?!.*\\bmd:)/]',
+          message: '⚠️ Mobile-First: Use mobileFirst.text.* utilities instead of fixed text sizes (text-lg, text-xl, etc.). Mobile-first pattern required.'
+        },
+        {
+          selector: 'JSXAttribute[name.name="className"] Literal[value=/\\b(gap-6|gap-8|gap-10|gap-12)\\b(?!.*\\bmd:)/]',
+          message: '⚠️ Mobile-First: Use mobileFirst.gap.* utilities for responsive spacing.'
+        },
+        {
+          selector: 'JSXAttribute[name.name="className"] TemplateLiteral > * Literal[value=/\\b(p-6|p-8|p-10|p-12|text-lg|text-xl|text-2xl|text-3xl|gap-6|gap-8|gap-10|gap-12)\\b/]',
           message: '⚠️ Mobile-First: Detected desktop-first pattern in template literal. Use mobileFirst utilities for consistent mobile-first design.'
         }
       ]

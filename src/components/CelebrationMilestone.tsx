@@ -7,6 +7,7 @@ import { Sparkles, Gift, Copy, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Confetti from 'react-confetti';
 import { logger } from '@/lib/logging/productionLogger';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 
 interface CelebrationMilestoneProps {
   clientId: string;
@@ -111,7 +112,7 @@ export const CelebrationMilestone = ({
 
       <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
         <Card className="max-w-md w-full border-2 border-primary/20 shadow-2xl animate-scale-in">
-          <CardContent className="p-8 text-center space-y-6">
+          <CardContent className={cn("text-center space-y-6", mobileFirst.padding.lg)}>
             {/* Close button */}
             <Button
               variant="ghost"
@@ -132,24 +133,30 @@ export const CelebrationMilestone = ({
 
             {/* Message */}
             <div className="space-y-2">
-              <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              <h2 className={cn(
+                mobileFirst.text['3xl'],
+                "font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent"
+              )}>
                 Congratulations!
               </h2>
-              <p className="text-xl font-semibold">{getMilestoneMessage()}</p>
+              <p className={cn(mobileFirst.text.xl, "font-semibold")}>{getMilestoneMessage()}</p>
               <p className="text-muted-foreground">
                 You're an amazing client and we appreciate your loyalty!
               </p>
             </div>
 
             {/* Reward */}
-            <div className="bg-gradient-to-br from-primary/10 to-accent/10 p-6 rounded-xl space-y-4">
+            <div className={cn(
+              "bg-gradient-to-br from-primary/10 to-accent/10 rounded-xl space-y-4",
+              mobileFirst.padding.md
+            )}>
               <div className="flex items-center justify-center gap-2 text-primary">
                 <Gift className="h-6 w-6" />
-                <span className="text-lg font-semibold">Special Reward</span>
+                <span className={cn(mobileFirst.text.lg, "font-semibold")}>Special Reward</span>
               </div>
 
               <div className="space-y-3">
-                <div className="text-3xl font-bold text-primary">
+                <div className={cn(mobileFirst.text['3xl'], "font-bold text-primary")}>
                   ${milestone.discount_amount} OFF
                 </div>
                 <p className="text-sm text-muted-foreground">

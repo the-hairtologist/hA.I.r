@@ -14,6 +14,8 @@ import { format, isSameDay, addDays } from 'date-fns';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { logger } from '@/lib/logging/productionLogger';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
+import { cn } from '@/lib/utils';
 
 interface BirthdayClient {
   id: string;
@@ -150,7 +152,10 @@ export function BirthdayAlertsWidget() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-sm sm:text-base lg:text-lg">
+        <CardTitle className={cn(
+          mobileFirst.text.base,
+          "flex items-center gap-2"
+        )}>
           <Cake className="h-5 w-5 text-accent" />
           Upcoming Birthdays
         </CardTitle>

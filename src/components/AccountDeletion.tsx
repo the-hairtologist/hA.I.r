@@ -22,6 +22,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
+import { cn } from '@/lib/utils';
 
 export const AccountDeletion = () => {
   const [confirmText, setConfirmText] = useState('');
@@ -76,15 +78,21 @@ export const AccountDeletion = () => {
   const isConfirmValid = confirmText === 'DELETE' && understand;
 
   return (
-    <Card className="p-6 border-destructive/50">
+    <Card className={cn(mobileFirst.padding.md, "border-destructive/50")}>
       <div className="space-y-4">
         <div className="flex items-start space-x-3">
           <AlertTriangle className="h-5 w-5 text-destructive mt-0.5" />
           <div>
-            <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-destructive">
+            <h3 className={cn(
+              mobileFirst.text.lg,
+              "font-semibold text-destructive"
+            )}>
               Delete Account
             </h3>
-            <p className="text-xs sm:text-sm lg:text-base text-muted-foreground mt-1">
+            <p className={cn(
+              mobileFirst.text.sm,
+              "text-muted-foreground mt-1"
+            )}>
               Permanently delete your account and all associated data.
             </p>
           </div>

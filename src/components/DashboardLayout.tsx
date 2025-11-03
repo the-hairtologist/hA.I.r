@@ -43,6 +43,8 @@ import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { OfflineIndicator } from '@/components/OfflineIndicator';
 import { SessionExpiryWarning } from '@/components/SessionExpiryWarning';
 import { KeyboardShortcuts } from '@/components/KeyboardShortcuts';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
+import { cn } from '@/lib/utils';
 
 import { useRealtimeNotifications } from '@/hooks/useRealtimeNotifications';
 import { useState, useEffect } from 'react';
@@ -357,7 +359,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             role="main"
             aria-label="Main content"
           >
-            <div className="container mx-auto px-4 py-4 sm:px-5 sm:py-5 md:p-6 animate-fade-in-fast w-full max-w-full">
+            <div className={cn(
+              "container mx-auto animate-fade-in-fast w-full max-w-full",
+              mobileFirst.padding.md
+            )}>
               <Breadcrumbs />
               {children}
             </div>

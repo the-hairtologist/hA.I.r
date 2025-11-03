@@ -27,6 +27,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { logger } from '@/lib/logging/productionLogger';
 import { userJourney } from '@/lib/logging/userJourneyTracker';
 import { trackSelect } from '@/lib/logging/supabaseTracker';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
+import { cn } from '@/lib/utils';
 
 export const AIRetentionDashboard = () => {
   const { user } = useAuth();
@@ -135,10 +137,10 @@ export const AIRetentionDashboard = () => {
           <CardContent className="pt-6">
             <div className="text-center">
               <Users className="h-8 w-8 mx-auto mb-2 text-info" />
-              <div className="text-xl sm:text-2xl font-bold">
+              <div className={cn(mobileFirst.text['2xl'], "font-bold")}>
                 {riskScores.length}
               </div>
-              <div className="text-xs sm:text-sm text-muted-foreground">
+              <div className={cn(mobileFirst.text.sm, "text-muted-foreground")}>
                 Total Clients
               </div>
             </div>
@@ -149,8 +151,8 @@ export const AIRetentionDashboard = () => {
           <CardContent className="pt-6">
             <div className="text-center">
               <TrendingDown className="h-8 w-8 mx-auto mb-2 text-warning" />
-              <div className="text-xl sm:text-2xl font-bold">{atRiskCount}</div>
-              <div className="text-xs sm:text-sm text-muted-foreground">
+              <div className={cn(mobileFirst.text['2xl'], "font-bold")}>{atRiskCount}</div>
+              <div className={cn(mobileFirst.text.sm, "text-muted-foreground")}>
                 At Risk
               </div>
             </div>
@@ -161,10 +163,10 @@ export const AIRetentionDashboard = () => {
           <CardContent className="pt-6">
             <div className="text-center">
               <AlertTriangle className="h-8 w-8 mx-auto mb-2 text-destructive" />
-              <div className="text-xl sm:text-2xl font-bold">
+              <div className={cn(mobileFirst.text['2xl'], "font-bold")}>
                 {criticalCount}
               </div>
-              <div className="text-xs sm:text-sm text-muted-foreground">
+              <div className={cn(mobileFirst.text.sm, "text-muted-foreground")}>
                 Critical
               </div>
             </div>

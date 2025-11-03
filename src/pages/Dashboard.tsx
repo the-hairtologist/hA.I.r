@@ -85,6 +85,7 @@ import {
 import { MobilePageTemplate } from '@/components/layouts/MobilePageTemplate';
 import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 import { useIsMobile } from '@/lib/responsive/hooks';
+import { cn } from '@/lib/utils';
 
 const Dashboard = () => {
   // Performance tracking for this heavy page
@@ -726,12 +727,15 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="bg-blue-600 p-3 xs:p-4 sm:p-5 md:p-6 relative overflow-hidden">
+          <div className={cn("bg-blue-600 relative overflow-hidden", mobileFirst.padding.md)}>
             <div className="window-scrollbar"></div>
 
             <div className="w-full">
               <h2
-                className="text-base xs:text-lg sm:text-xl md:text-2xl lg:text-3xl font-pixel font-bold mb-2 sm:mb-3 text-pink-400 uppercase leading-tight animate-fade-in break-words"
+                className={cn(
+                  mobileFirst.text['2xl'],
+                  "font-pixel font-bold mb-2 sm:mb-3 text-pink-400 uppercase leading-tight animate-fade-in break-words"
+                )}
                 style={{ animationDelay: '100ms' }}
               >
                 Welcome back,{' '}
@@ -742,7 +746,10 @@ const Dashboard = () => {
               {(userRole === 'stylist' || isAdmin) && (
                 <div className="space-y-2 sm:space-y-3">
                   <p
-                    className="text-xs sm:text-sm md:text-base lg:text-lg font-sans font-medium text-pink-200 animate-fade-in"
+                    className={cn(
+                      mobileFirst.text.base,
+                      "font-sans font-medium text-pink-200 animate-fade-in"
+                    )}
                     style={{ animationDelay: '200ms' }}
                   >
                     Your schedule at a glance 📅
@@ -771,7 +778,10 @@ const Dashboard = () => {
 
         {/* Customize Dashboard Controls */}
         {isEditMode && (
-          <div className="mb-4 sm:mb-6 p-3 xs:p-4 sm:p-5 md:p-6 bg-primary/5 border-2 border-primary/20 rounded-lg animate-fade-in">
+          <div className={cn(
+            "mb-4 sm:mb-6 bg-primary/5 border-2 border-primary/20 rounded-lg animate-fade-in",
+            mobileFirst.padding.md
+          )}>
             <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
               <div className="flex-1 min-w-0">
                 <h3 className="text-xs sm:text-sm font-pixel text-foreground mb-1 flex items-center gap-2">
@@ -825,7 +835,10 @@ const Dashboard = () => {
             {/* Dashboard Customization Prompt - Stylists & Admins only, not clients */}
             {(userRole === 'stylist' || isAdmin) && (
               <div
-                className="mb-4 p-4 sm:p-5 md:p-6 rounded-xl border-2 border-border/50 bg-card/40 backdrop-blur-sm brutal-shadow-sm animate-fade-in"
+                className={cn(
+                  "mb-4 rounded-xl border-2 border-border/50 bg-card/40 backdrop-blur-sm brutal-shadow-sm animate-fade-in",
+                  mobileFirst.padding.md
+                )}
                 style={{ animationDelay: '300ms' }}
               >
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">

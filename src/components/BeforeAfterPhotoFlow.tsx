@@ -31,6 +31,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
+import { cn } from '@/lib/utils';
 
 interface BeforeAfterPhotoFlowProps {
   clientId: string;
@@ -205,7 +207,7 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
               : 'border-green-500'
         }`}
       >
-        <CardContent className="p-6">
+        <CardContent className={cn(mobileFirst.padding.md)}>
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <Camera className="h-5 w-5" />

@@ -5,6 +5,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { X } from 'lucide-react';
 import { initAnalytics } from '@/lib/analytics';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
+import { cn } from '@/lib/utils';
 
 const COOKIE_CONSENT_KEY = 'hair-cookie-consent';
 
@@ -78,12 +80,12 @@ export const CookieConsent = () => {
 
   return (
     <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-end justify-center p-4">
-      <Card className="max-w-2xl w-full p-6 brutal-border brutal-shadow-lg">
+      <Card className={cn("max-w-2xl w-full brutal-border brutal-shadow-lg", mobileFirst.padding.md)}>
         {!showPreferences ? (
           <div className="space-y-4">
             <div className="flex items-start justify-between">
               <div>
-                <h3 className="text-lg font-semibold mb-2">
+                <h3 className={cn(mobileFirst.text.lg, "font-semibold mb-2")}>
                   Cookie Preferences
                 </h3>
                 <p className="text-sm text-muted-foreground">
