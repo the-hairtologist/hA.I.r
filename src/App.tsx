@@ -37,6 +37,7 @@ import { useGlobalLoading } from '@/hooks/useGlobalLoading';
 
 // Import advanced accessibility features
 import { GlobalAnnouncer } from '@/components/AccessibilityAnnouncer';
+import { MobileBottomNav } from '@/components/mobile/MobileBottomNav';
 
 // Simplified - no problematic lazy loading
 
@@ -129,6 +130,7 @@ const App = () => {
                             }
                           >
                             <Routes>{AppRoutes()}</Routes>
+                            <MobileBottomNav />
                           </Suspense>
                         </TourProvider>
                       </EnhancedAuthProvider>
