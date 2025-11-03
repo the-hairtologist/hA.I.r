@@ -22,7 +22,6 @@ import {
   User,
 } from 'lucide-react';
 import { LoadingDots } from '@/components/ui/loading-dots';
-import { PageHeader } from '@/components/PageHeader';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -55,6 +54,9 @@ import { CameraCapture } from '@/components/CameraCapture';
 import { VoiceControl } from '@/components/VoiceControl';
 import { useAIAnalytics } from '@/hooks/useAIAnalytics';
 import { useFeatureFlag } from '@/lib/featureFlags';
+import { MobilePageTemplate, MobilePageHeader } from '@/components/layouts/MobilePageTemplate';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
+import { useIsMobile } from '@/lib/responsive/hooks';
 
 const Knowledge = () => {
   const navigate = useNavigate();
@@ -650,11 +652,23 @@ const Knowledge = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-accent/10">
-      <PageHeader
+    <MobilePageTemplate
+      title="AI Assistant"
+      hasBottomNav
+    >
+      <MobilePageHeader
         title="AI Assistant"
-        icon={<Sparkles className="h-6 w-6" />}
-        backTo="/dashboard"
+        backButton={
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate('/dashboard')}
+            className="min-h-[44px]"
+          >
+            ← Back
+          </Button>
+        }
+        actions={<Sparkles className="h-5 w-5 text-primary" />}
       />
 
       <main className="container mx-auto px-4 py-6 max-w-6xl">
@@ -1064,7 +1078,7 @@ const Knowledge = () => {
           />
         )}
       </main>
-    </div>
+    </MobilePageTemplate>
   );
 };
 

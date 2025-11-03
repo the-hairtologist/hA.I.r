@@ -25,13 +25,11 @@ import { DashboardLayout } from '@/components/DashboardLayout';
 import { NotificationEnhancer } from '@/components/NotificationEnhancer';
 import { useAnalytics } from '@/hooks/useAnalytics';
 import { usePerformance } from '@/hooks/usePerformance';
-
 import { AppointmentTimerWidget } from '@/components/AppointmentTimerWidget';
 import { logger } from '@/lib/logging/productionLogger';
 import { BirthdayAlertsWidget } from '@/components/BirthdayAlertsWidget';
 import { StatsToggleButton } from '@/components/admin/StatsToggleButton';
 import { WaitlistDialog } from '@/components/WaitlistDialog';
-
 import { EmptyStateGuidance } from '@/components/dashboard/EmptyStateGuidance';
 import {
   useDashboardLayout,
@@ -84,6 +82,9 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
+import { MobilePageTemplate } from '@/components/layouts/MobilePageTemplate';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
+import { useIsMobile } from '@/lib/responsive/hooks';
 
 const Dashboard = () => {
   // Performance tracking for this heavy page

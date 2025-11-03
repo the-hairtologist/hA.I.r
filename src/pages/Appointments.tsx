@@ -53,7 +53,6 @@ import {
   CalendarDays,
   Repeat,
 } from 'lucide-react';
-import { PageHeader } from '@/components/PageHeader';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { CalendarView } from '@/components/CalendarView';
@@ -87,6 +86,9 @@ import { AIScheduleOptimizer } from '@/components/AIScheduleOptimizer';
 import { PrerequisiteCheck } from '@/components/PrerequisiteCheck';
 import { triggerAppointmentBooked } from '@/lib/zapierTriggers';
 import { AppointmentPhotoButton } from '@/components/AppointmentPhotoButton';
+import { MobilePageTemplate, MobilePageHeader } from '@/components/layouts/MobilePageTemplate';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
+import { useIsMobile } from '@/lib/responsive/hooks';
 
 const Appointments = () => {
   // Performance tracking
@@ -455,30 +457,38 @@ const Appointments = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5">
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg"
-      >
-        Skip to main content
-      </a>
-      <PageHeader
+    <MobilePageTemplate
+      title={userRole === 'client' ? 'My Appointments' : 'Appointments'}
+      hasBottomNav
+    >
+      <MobilePageHeader
         title={userRole === 'client' ? 'My Appointments' : 'Appointments'}
-        icon={<CalendarIcon className="h-6 w-6" />}
-        backTo="/dashboard"
+        backButton={
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate('/dashboard')}
+            className="min-h-[44px]"
+          >
+            ← Back
+          </Button>
+        }
         actions={
-          userRole === 'stylist' ? (
-            <div className="flex items-center gap-2">
-              <Label htmlFor="availability" className="whitespace-nowrap">
-                Accepting Bookings
-              </Label>
-              <Switch
-                id="availability"
-                checked={stylistProfile?.is_available}
-                onCheckedChange={toggleAvailability}
-              />
-            </div>
-          ) : undefined
+          <>
+            <CalendarIcon className="h-5 w-5 text-primary" />
+            {userRole === 'stylist' && (
+              <div className="flex items-center gap-2">
+                <Label htmlFor="availability" className={mobileFirst.text.xs}>
+                  Bookings
+                </Label>
+                <Switch
+                  id="availability"
+                  checked={stylistProfile?.is_available}
+                  onCheckedChange={toggleAvailability}
+                />
+              </div>
+            )}
+          </>
         }
       />
 
@@ -1169,7 +1179,7 @@ const Appointments = () => {
             onSuccess={refetchAppointments}
           />
         )}
-    </div>
+    </MobilePageTemplate>
   );
 };
 
