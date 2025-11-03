@@ -41,6 +41,8 @@ export const SuccessAnimation = ({
 
       return () => clearTimeout(timer);
     }
+    // onComplete is intentionally included - it's correct to re-run if callback changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [show, variant, duration, onComplete]);
 
   if (!visible) return null;
