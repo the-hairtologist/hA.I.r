@@ -1,0 +1,175 @@
+name: Deep Testing Suite
+
+# Comprehensive tests - only on PRs and scheduled runs
+on:
+  pull_request:
+    branches: [main, hA.I.r, develop]
+  schedule:
+    - cron: '0 2 * * *' # Daily at 2 AM UTC
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Define env vars once
+env:
+  VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+  VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+  VITE_SUPABASE_PROJECT_ID: ${{ secrets.VITE_SUPABASE_PROJECT_ID }}
+
+jobs:
+  # Full E2E Test Suite
+  e2e-comprehensive:
+    name: 🧪 E2E Tests - ${{ matrix.browser }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: ['Desktop Chrome', 'Desktop Firefox', 'Desktop Safari']
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
+      
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+      
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+      
+      - name: Run E2E tests
+        run: npx playwright test --project="${{ matrix.browser }}"
+      
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2e-results-${{ matrix.browser }}
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 30
+
+  # Accessibility Testing
+  accessibility-tests:
+    name: ♿ Accessibility Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+      
+      - name: Install Playwright Browsers
+        run: npx playwright install chromium --with-deps
+      
+      - name: Run accessibility tests
+        run: npx playwright test E2E/tests/accessibility.spec.ts --project="Desktop Chrome"
+      
+      - name: Upload accessibility report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: accessibility-report
+          path: playwright-report/
+          retention-days: 30
+
+  # Mobile Device Testing Matrix
+  mobile-device-tests:
+    name: 📱 Mobile - ${{ matrix.device }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        device:
+          - 'iPhone 15 Pro'
+          - 'iPhone 12'
+          - 'Pixel 7'
+          - 'Samsung Galaxy S23'
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
+      
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+      
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+      
+      - name: Run tests on ${{ matrix.device }}
+        run: npx playwright test --project="${{ matrix.device }}"
+      
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mobile-results-${{ matrix.device }}
+          path: test-results/
+          retention-days: 30
+
+  # Tablet & Desktop Testing
+  tablet-desktop-tests:
+    name: 💻 ${{ matrix.device }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        device:
+          - 'iPad Air'
+          - 'Desktop Chrome'
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+      
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+      
+      - name: Run tests on ${{ matrix.device }}
+        run: npx playwright test --project="${{ matrix.device }}"
+      
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: device-results-${{ matrix.device }}
+          path: test-results/
+          retention-days: 30

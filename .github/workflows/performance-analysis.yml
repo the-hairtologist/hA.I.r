@@ -1,0 +1,122 @@
+name: Performance Analysis
+
+# Performance tests - only on PRs to avoid noise
+on:
+  pull_request:
+    branches: [main, hA.I.r, develop]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+  VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+  VITE_SUPABASE_PROJECT_ID: ${{ secrets.VITE_SUPABASE_PROJECT_ID }}
+
+jobs:
+  # Lighthouse Performance Testing
+  lighthouse-ci:
+    name: 🔦 Lighthouse CI
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+      
+      - name: Build
+        run: npm run build
+      
+      - name: Start preview server
+        run: npm run preview &
+      
+      - name: Wait for server
+        run: npx wait-on http://localhost:4173 --timeout 60000
+      
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v10
+        with:
+          urls: |
+            http://localhost:4173
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+
+  # Bundle Size Analysis
+  bundle-analysis:
+    name: 📦 Bundle Size Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+      
+      - name: Build with analysis
+        run: npm run build
+      
+      - name: Analyze bundle
+        run: |
+          echo "📊 Bundle Size Analysis"
+          echo "======================="
+          du -sh dist/assets/*.js | sort -h
+          echo ""
+          echo "Total dist size:"
+          du -sh dist/
+      
+      - name: Upload bundle stats
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundle-stats
+          path: dist/stats.html
+          retention-days: 30
+
+  # Core Web Vitals Check
+  web-vitals:
+    name: 📈 Core Web Vitals
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+      
+      - name: Install Playwright
+        run: npx playwright install chromium --with-deps
+      
+      - name: Build
+        run: npm run build
+      
+      - name: Measure Web Vitals
+        run: |
+          npm run preview &
+          npx wait-on http://localhost:4173
+          npx playwright test E2E/tests/performance.spec.ts --project="Desktop Chrome"
+        continue-on-error: true
+      
+      - name: Upload vitals report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: web-vitals-report
+          path: test-results/
+          retention-days: 30
