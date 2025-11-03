@@ -142,7 +142,10 @@ export function ClientCSVImport({
         onImportComplete();
       }
     } catch (error) {
-      logger.error('Error importing CSV', error, { component: 'ClientCSVImport', stylistId });
+      logger.error('Error importing CSV', error, {
+        component: 'ClientCSVImport',
+        stylistId,
+      });
       toast.error('Failed to process CSV file');
     } finally {
       setImporting(false);

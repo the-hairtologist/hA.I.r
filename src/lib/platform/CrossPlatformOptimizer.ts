@@ -178,7 +178,11 @@ class CrossPlatformOptimizer {
       try {
         navigator.vibrate(pattern);
       } catch (error) {
-        logger.warn('[Platform] Haptics not available:', 'CrossPlatformOptimizer', error as any);
+        logger.warn(
+          '[Platform] Haptics not available:',
+          'CrossPlatformOptimizer',
+          error as any
+        );
       }
     }
   }

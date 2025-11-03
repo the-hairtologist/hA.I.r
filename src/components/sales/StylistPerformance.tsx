@@ -18,7 +18,7 @@ export function StylistPerformance() {
     queryKey: ['stylist-performance', user?.id],
     queryFn: async () => {
       if (!user?.id) return null;
-      
+
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id, average_rating, total_reviews')

@@ -14,7 +14,9 @@ export const PageHeaderSkeleton = () => (
 );
 
 export const StatsSkeleton = ({ count = 4 }: { count?: number }) => (
-  <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-${count} gap-6 mb-8`}>
+  <div
+    className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-${count} gap-6 mb-8`}
+  >
     {[...Array(count)].map((_, i) => (
       <Card
         key={i}

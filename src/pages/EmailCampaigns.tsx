@@ -94,7 +94,11 @@ export default function EmailCampaigns() {
       // Refetch stats after a delay
       setTimeout(() => refetch(), 3000);
     } catch (error: any) {
-      logger.error('Error triggering reminders', 'EmailCampaigns', error as Error);
+      logger.error(
+        'Error triggering reminders',
+        'EmailCampaigns',
+        error as Error
+      );
       toast({
         title: 'Error',
         description: error.message || 'Failed to trigger reminders',

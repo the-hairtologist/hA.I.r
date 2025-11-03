@@ -104,10 +104,10 @@ export const ReEngagementDialog: React.FC<ReEngagementDialogProps> = ({
           } else {
             errorCount++;
           }
-          } catch (error) {
-            logger.error('Failed to send message', 'ReEngagementDialog', error);
-            errorCount++;
-          }
+        } catch (error) {
+          logger.error('Failed to send message', 'ReEngagementDialog', error);
+          errorCount++;
+        }
       }
 
       if (successCount > 0) {

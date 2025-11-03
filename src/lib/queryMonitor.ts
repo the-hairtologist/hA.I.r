@@ -158,9 +158,12 @@ export const queryMonitor = new QueryMonitor();
 
 // Cleanup every 5 minutes
 if (typeof window !== 'undefined') {
-  setInterval(() => {
-    queryMonitor.cleanup();
-  }, 5 * 60 * 1000);
+  setInterval(
+    () => {
+      queryMonitor.cleanup();
+    },
+    5 * 60 * 1000
+  );
 }
 
 // Export metrics to console on demand

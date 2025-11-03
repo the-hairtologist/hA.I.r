@@ -56,7 +56,11 @@ const SmartSchedulingSuggestionsComponent = ({
         setPatterns(data.patterns);
       }
     } catch (error) {
-      logger.error('Failed to fetch scheduling suggestions', 'SmartSchedulingSuggestions', error);
+      logger.error(
+        'Failed to fetch scheduling suggestions',
+        'SmartSchedulingSuggestions',
+        error
+      );
       toast.error('Could not load scheduling suggestions');
     } finally {
       setLoading(false);

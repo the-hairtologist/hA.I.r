@@ -19,7 +19,7 @@ export const ClientPreferenceCenter = () => {
     queryKey: ['client_email_preferences'],
     queryFn: async () => {
       if (!user?.id) return null;
-      
+
       const { data: clientProfile } = await supabase
         .from('client_profiles')
         .select('id')
@@ -54,7 +54,7 @@ export const ClientPreferenceCenter = () => {
   const updateMutation = useMutation({
     mutationFn: async (newPrefs: any) => {
       if (!user?.id) throw new Error('Not authenticated');
-      
+
       const { data: clientProfile } = await supabase
         .from('client_profiles')
         .select('id, email')

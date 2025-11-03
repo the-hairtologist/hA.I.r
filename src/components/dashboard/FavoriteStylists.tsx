@@ -74,7 +74,11 @@ export function FavoriteStylists({ clientId }: FavoriteStylistsProps) {
         setStylists(topStylists);
       }
     } catch (error) {
-      logger.error('Error loading favorite stylists', 'FavoriteStylists', error as Error);
+      logger.error(
+        'Error loading favorite stylists',
+        'FavoriteStylists',
+        error as Error
+      );
     } finally {
       setLoading(false);
     }

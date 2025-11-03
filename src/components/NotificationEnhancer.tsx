@@ -59,7 +59,11 @@ export const NotificationEnhancer = ({
       }
       setLastCheck(new Date());
     } catch (error) {
-      logger.error('Error checking notifications', error, { component: 'NotificationEnhancer', userId, userRole });
+      logger.error('Error checking notifications', error, {
+        component: 'NotificationEnhancer',
+        userId,
+        userRole,
+      });
     }
   };
 
@@ -129,7 +133,10 @@ export const NotificationEnhancer = ({
         .maybeSingle();
 
       if (profileError) {
-        logger.error('Error loading stylist profile', profileError, { component: 'NotificationEnhancer', userId });
+        logger.error('Error loading stylist profile', profileError, {
+          component: 'NotificationEnhancer',
+          userId,
+        });
       }
 
       if (stylistProfile) {

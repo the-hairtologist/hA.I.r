@@ -195,7 +195,10 @@ export const usePredictiveInsights = (stylistId?: string) => {
 
       setClientInsights(insights.slice(0, 5)); // Top 5 insights
     } catch (error) {
-      logger.error('Error analyzing client patterns', error, { component: 'usePredictiveInsights', stylistId });
+      logger.error('Error analyzing client patterns', error, {
+        component: 'usePredictiveInsights',
+        stylistId,
+      });
     } finally {
       setLoading(false);
     }
