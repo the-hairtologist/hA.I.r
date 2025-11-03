@@ -53,7 +53,7 @@ jobs:
         run: npx playwright test --project="${{ matrix.browser }}"
       
       - name: Upload test results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: e2e-results-${{ matrix.browser }}
@@ -85,7 +85,7 @@ jobs:
         run: npx playwright test E2E/tests/accessibility.spec.ts --project="Desktop Chrome"
       
       - name: Upload accessibility report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: accessibility-report
@@ -130,7 +130,7 @@ jobs:
         run: npx playwright test --project="${{ matrix.device }}"
       
       - name: Upload test results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: mobile-results-${{ matrix.device }}
@@ -167,7 +167,7 @@ jobs:
         run: npx playwright test --project="${{ matrix.device }}"
       
       - name: Upload test results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: device-results-${{ matrix.device }}
