@@ -55,6 +55,7 @@ import {
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 import { CalendarView } from '@/components/CalendarView';
 import { WeeklyScheduleView } from '@/components/WeeklyScheduleView';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -87,7 +88,6 @@ import { PrerequisiteCheck } from '@/components/PrerequisiteCheck';
 import { triggerAppointmentBooked } from '@/lib/zapierTriggers';
 import { AppointmentPhotoButton } from '@/components/AppointmentPhotoButton';
 import { MobilePageTemplate, MobilePageHeader } from '@/components/layouts/MobilePageTemplate';
-import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 import { useIsMobile } from '@/lib/responsive/hooks';
 
 const Appointments = () => {
@@ -439,7 +439,7 @@ const Appointments = () => {
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center gap-2">
               <CalendarIcon className="h-6 w-6 text-primary" />
-              <h1 className="text-xl sm:text-2xl font-pixel">
+              <h1 className={cn(mobileFirst.text['2xl'], "font-pixel")}>
                 My Appointments
               </h1>
             </div>
@@ -645,7 +645,7 @@ const Appointments = () => {
             <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
               <CardHeader className="border-b-[2px] border-border py-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="font-pixel text-base sm:text-lg">
+                  <CardTitle className={cn(mobileFirst.text.lg, "font-pixel")}>
                     Today's Schedule - {format(new Date(), 'EEEE, MMMM d')}
                   </CardTitle>
                   {todayAppointments.length > 0 && (

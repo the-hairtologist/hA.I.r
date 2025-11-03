@@ -18,6 +18,8 @@ import {
 } from 'lucide-react';
 import { SEOHead } from '@/components/SEOHead';
 import { Badge } from '@/components/ui/badge';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
+import { cn } from '@/lib/utils';
 
 const BookAppointment = () => {
   const navigate = useNavigate();
@@ -39,7 +41,7 @@ const BookAppointment = () => {
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-pixel mb-2">
             Book Your Appointment
           </h1>
-          <p className="font-sans text-muted-foreground text-sm sm:text-base lg:text-lg">
+          <p className={cn(mobileFirst.text.lg, "font-sans text-muted-foreground")}>
             Choose a service and find the perfect time for your next
             transformation
           </p>
@@ -90,7 +92,7 @@ const BookAppointment = () => {
 
         {/* Popular Services */}
         <div className="mb-8">
-          <h2 className="text-lg sm:text-xl lg:text-2xl font-pixel mb-4">
+          <h2 className={cn(mobileFirst.text['2xl'], "font-pixel mb-4")}>
             Popular Services
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -149,7 +151,7 @@ const BookAppointment = () => {
         <Card className="bg-gradient-to-br from-primary/10 to-secondary/10 brutal-border">
           <CardContent className="p-6 sm:p-8 text-center">
             <Sparkles className="h-12 w-12 mx-auto mb-4 text-primary" />
-            <h3 className="text-lg sm:text-xl lg:text-2xl font-pixel mb-2">
+            <h3 className={cn(mobileFirst.text['2xl'], "font-pixel mb-2")}>
               Ready to Transform Your Look?
             </h3>
             <p className="text-xs sm:text-sm lg:text-base font-sans text-muted-foreground mb-6 max-w-2xl mx-auto">

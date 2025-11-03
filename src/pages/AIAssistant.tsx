@@ -48,6 +48,7 @@ import { AIFeedbackPrompt } from '@/components/AIFeedbackPrompt';
 import { HairAnalysisPanel } from '@/components/HairAnalysisPanel';
 import { ModelPerformanceIndicator } from '@/components/ModelPerformanceIndicator';
 import { logger } from '@/lib/logger';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 import { FormulaOutcomeFeedback } from '@/components/FormulaOutcomeFeedback';
 import { AIFeatureErrorBoundary } from '@/components/AIFeatureErrorBoundary';
 import { CameraCapture } from '@/components/CameraCapture';
@@ -55,8 +56,8 @@ import { VoiceControl } from '@/components/VoiceControl';
 import { useAIAnalytics } from '@/hooks/useAIAnalytics';
 import { useFeatureFlag } from '@/lib/featureFlags';
 import { MobilePageTemplate, MobilePageHeader } from '@/components/layouts/MobilePageTemplate';
-import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 import { useIsMobile } from '@/lib/responsive/hooks';
+import { cn } from '@/lib/utils';
 
 const Knowledge = () => {
   const navigate = useNavigate();
@@ -677,7 +678,7 @@ const Knowledge = () => {
           <div className="max-w-2xl mx-auto text-center p-5 bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 rounded-2xl border-4 border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground)_/_0.2)]">
             <div className="flex items-center justify-center gap-3 mb-2">
               <Sparkles className="h-7 w-7 text-primary animate-pulse" />
-              <h2 className="text-lg sm:text-xl md:text-2xl font-pixel bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+              <h2 className={cn(mobileFirst.text['2xl'], "font-pixel bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent")}>
                 AI Hair Pro
               </h2>
             </div>
@@ -858,7 +859,7 @@ const Knowledge = () => {
                       </div>
                     </div>
                     <div className="space-y-3 max-w-md text-center">
-                      <p className="text-lg font-pixel gradient-text">
+                      <p className={cn(mobileFirst.text.lg, "font-pixel gradient-text")}>
                         Ready to Create Magic ✨
                       </p>
                       <p className="text-sm font-sans text-muted-foreground leading-relaxed">

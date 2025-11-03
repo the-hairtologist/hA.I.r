@@ -30,6 +30,8 @@ import { FormFieldError } from '@/components/FormFieldError';
 import { eventTracker } from '@/lib/analytics/eventTracker';
 import { PasswordStrength } from '@/components/PasswordStrength';
 import { signInWithGoogle } from '@/lib/api/auth';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
+import { cn } from '@/lib/utils';
 
 type AuthState = {
   email: string;
@@ -364,7 +366,7 @@ const Auth = () => {
               <div className="w-10 h-10 sm:w-12 sm:h-12 border-[3px] border-black bg-primary shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center">
                 <Scissors className="h-5 w-5 sm:h-6 sm:w-6 text-primary-foreground" />
               </div>
-              <CardTitle className="text-xl sm:text-2xl md:text-3xl font-pixel text-foreground uppercase">
+              <CardTitle className={cn(mobileFirst.text['3xl'], "font-pixel text-foreground uppercase")}>
                 hA.I.r
               </CardTitle>
             </div>
@@ -767,7 +769,7 @@ const Auth = () => {
         >
           <DialogContent className="border-[4px] border-black rounded-none shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] bg-background">
             <DialogHeader>
-              <DialogTitle className="font-pixel uppercase text-xl">
+              <DialogTitle className={cn(mobileFirst.text.xl, "font-pixel uppercase")}>
                 Reset Password
               </DialogTitle>
               <DialogDescription className="font-pixel text-xs uppercase text-muted-foreground">
