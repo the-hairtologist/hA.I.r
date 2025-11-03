@@ -1,6 +1,13 @@
 # hA.I.r - AI-Powered Hair Salon Management Platform
 
+[![CI Fast](https://github.com/YOUR_USERNAME/YOUR_REPO/actions/workflows/ci-fast.yml/badge.svg)](https://github.com/YOUR_USERNAME/YOUR_REPO/actions/workflows/ci-fast.yml)
+[![Deep Tests](https://github.com/YOUR_USERNAME/YOUR_REPO/actions/workflows/deep-tests.yml/badge.svg)](https://github.com/YOUR_USERNAME/YOUR_REPO/actions/workflows/deep-tests.yml)
+[![Security Scan](https://github.com/YOUR_USERNAME/YOUR_REPO/actions/workflows/security-scan.yml/badge.svg)](https://github.com/YOUR_USERNAME/YOUR_REPO/actions/workflows/security-scan.yml)
+[![Performance](https://github.com/YOUR_USERNAME/YOUR_REPO/actions/workflows/performance-analysis.yml/badge.svg)](https://github.com/YOUR_USERNAME/YOUR_REPO/actions/workflows/performance-analysis.yml)
+
 AI-powered platform for hair stylists to manage clients, appointments, formulas, and business operations with intelligent automation.
+
+> **Note**: Replace `YOUR_USERNAME/YOUR_REPO` in the badge URLs above with your actual GitHub repository details.
 
 ---
 
@@ -223,6 +230,42 @@ This is a Lovable-managed project. Changes can be made via:
 2. **Local IDE** - Clone, edit, push
 3. **GitHub Web Editor** - Direct file editing
 4. **GitHub Codespaces** - Cloud development environment
+
+### Contribution Workflow
+
+1. **Create a feature branch** from `main`
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+
+2. **Make your changes** following the project guidelines
+   - Follow TypeScript/React best practices
+   - Maintain WCAG 2.2 AA compliance
+   - Add tests for new features
+   - Update documentation as needed
+
+3. **Test locally**
+   ```bash
+   npm test          # Run all tests
+   npm run lint      # Check code quality
+   npm run build     # Verify build
+   ```
+
+4. **Submit a Pull Request**
+   - Use the [PR template](.github/pull_request_template.md)
+   - Reference related issues
+   - Ensure all CI checks pass
+   - Request review from code owners
+
+### Reporting Issues
+
+- 🐛 **Bugs**: Use the [Bug Report Template](.github/ISSUE_TEMPLATE/bug_report.yml)
+- ✨ **Features**: Use the [Feature Request Template](.github/ISSUE_TEMPLATE/feature_request.yml)
+- 🔒 **Security**: Follow the [Security Vulnerability Process](.github/ISSUE_TEMPLATE/security_vulnerability.md)
+
+### Branch Protection
+
+The `main` branch is protected. See [Branch Protection Guide](.github/BRANCH_PROTECTION.md) for setup instructions.
 
 ## 📝 License
 

@@ -1,0 +1,54 @@
+# Code Owners for hA.I.r
+# These owners will be requested for review when someone opens a PR that modifies code in these locations
+
+# Default owner for everything in the repo
+* @yourusername
+
+# GitHub Configuration & CI/CD
+/.github/ @yourusername
+/.github/workflows/ @yourusername
+
+# Core Application
+/src/ @yourusername
+
+# Authentication & Security
+/src/components/auth/ @yourusername
+/src/hooks/useAuth.ts @yourusername
+/supabase/migrations/ @yourusername
+
+# Database & Backend
+/supabase/ @yourusername
+/src/integrations/supabase/ @yourusername
+
+# UI Components
+/src/components/ui/ @yourusername
+
+# Testing
+/E2E/ @yourusername
+/playwright.config.ts @yourusername
+/vitest.config.ts @yourusername
+
+# Build & Configuration
+/vite.config.ts @yourusername
+/tsconfig*.json @yourusername
+/tailwind.config.ts @yourusername
+
+# Documentation
+/*.md @yourusername
+/docs/ @yourusername
+
+# Mobile Configuration
+/capacitor.config.ts @yourusername
+/android/ @yourusername
+/ios/ @yourusername
+
+# Dependencies
+/package.json @yourusername
+/package-lock.json @yourusername
+
+# Environment & Secrets
+/.env.example @yourusername
+
+# IMPORTANT: Replace @yourusername with your actual GitHub username
+# You can also add team names like @org/team-name if using GitHub Organizations
+# Example: /src/components/ @org/frontend-team
