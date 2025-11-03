@@ -95,6 +95,9 @@ const isValidColor = (color: string): boolean => {
 };
 
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
+  // Hooks must be called before any conditional returns
+  const styleRef = React.useRef<HTMLStyleElement>(null);
+  
   const colorConfig = Object.entries(config).filter(
     ([_, config]) => config.theme || config.color
   );
@@ -134,7 +137,6 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
 
   // Use textContent instead of dangerouslySetInnerHTML for safer rendering
   // This prevents any potential script execution
-  const styleRef = React.useRef<HTMLStyleElement>(null);
   
   React.useEffect(() => {
     if (styleRef.current && cssText) {
