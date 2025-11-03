@@ -36,7 +36,7 @@ interface UseAICallReturn<T, Body> {
  * ```typescript
  * const { invoke, loading, error } = useAICall<{ result: string }, { prompt: string }>('ai-formula-analyzer', {
  *   model: 'gemini-2.5-flash',
- *   onSuccess: (data) => logger.info('Success', 'Component', { result: data.result })
+ *   onSuccess: (data) => console.log('Success:', data.result)
  * });
  *
  * await invoke({ prompt: "some formula" });

@@ -3,7 +3,6 @@ import { Star } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { ReviewCard } from './ReviewCard';
 import { Skeleton } from '@/components/ui/skeleton';
-import { logger } from '@/lib/logger';
 
 interface Review {
   id: string;
@@ -96,7 +95,7 @@ export const ReviewsList = ({ stylistId, limit }: ReviewsListProps) => {
         setReviews(reviewsWithProfiles as any);
       }
     } catch (error) {
-      logger.error('Error loading reviews', 'ReviewsList', error as Error);
+      console.error('Error loading reviews:', error);
     } finally {
       setLoading(false);
     }

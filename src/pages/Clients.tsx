@@ -52,7 +52,7 @@ import {
 import { InviteClientDialog } from '@/components/clients';
 import { SearchInput } from '@/components/SearchInput';
 import { ClientCardSkeleton } from '@/components/LoadingSkeleton';
-
+import { useRealtimeUpdates } from '@/hooks/useRealtimeUpdates';
 import { useDebounce } from '@/hooks/useDebounce';
 import {
   Select,
@@ -190,6 +190,22 @@ export default function Clients() {
     isLoading: loading,
     refetch: refetchClients,
   } = useClients(stylistId);
+
+  // Override with optimized query when stylistId available
+  useEffect(() => {
+    if (!stylistId) return;
+
+    const loadOptimizedClients = async () => {
+      try {
+        const data = await getClientsByStylist(stylistId);
+        // React Query will cache this automatically
+      } catch (error) {
+        logger.error('Error loading optimized clients', 'Clients', error as Error);
+      }
+    };
+
+    loadOptimizedClients();
+  }, [stylistId]);
 
   const clients = clientsData?.clients || [];
   const totalClients = clientsData?.total || 0;
@@ -524,7 +540,7 @@ export default function Clients() {
       await bulkDeleteMutation.mutateAsync(clientIds);
       clearSelection();
     } catch (error) {
-      logger.error('Error deleting clients', 'Clients', error as Error);
+      console.error('Error deleting clients:', error);
     }
   };
 

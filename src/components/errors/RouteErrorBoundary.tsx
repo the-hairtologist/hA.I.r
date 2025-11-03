@@ -8,7 +8,6 @@ import { AlertCircle, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useNavigate } from 'react-router-dom';
-import { logger } from '@/lib/logger';
 
 interface Props {
   children: React.ReactNode;
@@ -34,10 +33,7 @@ export class RouteErrorBoundary extends React.Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    logger.error('Route error caught', 'RouteErrorBoundary', {
-      error,
-      errorInfo: errorInfo.componentStack,
-    });
+    console.error('Route Error Boundary caught error:', error, errorInfo);
   }
 
   handleReset = () => {

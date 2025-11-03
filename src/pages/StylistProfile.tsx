@@ -9,7 +9,6 @@ import { Separator } from '@/components/ui/separator';
 import { ReviewsList } from '@/components/reviews/ReviewsList';
 import { ShareButtons } from '@/components/ShareButtons';
 import { SEOHead } from '@/components/SEOHead';
-import { logger } from '@/lib/logger';
 
 import {
   ArrowLeft,
@@ -54,7 +53,7 @@ const StylistProfile = () => {
       if (error) throw error;
       setStylist(data);
     } catch (error: any) {
-      logger.error('Error loading stylist', 'StylistProfile', error);
+      console.error('Error loading stylist:', error);
       toast.error('Failed to load stylist profile');
       navigate('/stylist-discovery');
     } finally {

@@ -28,7 +28,7 @@ import { Switch } from '@/components/ui/switch';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
 import { PortfolioSkeleton } from '@/components/LoadingSkeleton';
 import { PortfolioGridSkeleton } from '@/components/skeletons/PortfolioGridSkeleton';
-import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
+import { useRealtimeUpdates } from '@/hooks/useRealtimeUpdates';
 import { PortfolioInsights } from '@/components/PortfolioInsights';
 import { CameraCapture } from '@/components/CameraCapture';
 import { VoiceControl } from '@/components/VoiceControl';
@@ -135,13 +135,12 @@ const Portfolio = () => {
     }
   };
 
-  // Real-time updates via centralized manager
-  useRealtimeSubscription({
-    table: 'portfolio_photos',
-    event: '*',
-    onUpdate: () => loadPhotos(stylistProfileId),
-    enabled: !!stylistProfileId,
-  });
+  // Real-time updates
+  useRealtimeUpdates(
+    'portfolio_photos',
+    () => loadPhotos(stylistProfileId),
+    stylistProfileId
+  );
 
   const handleFileSelect = async (
     imageUrl: string,

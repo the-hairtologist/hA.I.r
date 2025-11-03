@@ -5,8 +5,6 @@
  * Use these utilities in all components to maintain device consistency.
  */
 
-import { logger } from '@/lib/logger';
-
 // ============================================
 // RESPONSIVE SCALE SYSTEM
 // ============================================
@@ -245,8 +243,9 @@ export const warnFixedSizing = (
   value: string
 ) => {
   if (import.meta.env.DEV && hasFixedPixels(value)) {
-    const message = `⚠️ [Responsive System] ${componentName}: "${property}: ${value}" uses fixed pixels. Consider using responsive units (rem, %, clamp, etc.) for better device consistency.`;
-    logger.warn(message, 'ResponsiveSystem');
+    console.warn(
+      `⚠️ [Responsive System] ${componentName}: "${property}: ${value}" uses fixed pixels. Consider using responsive units (rem, %, clamp, etc.) for better device consistency.`
+    );
   }
 };
 

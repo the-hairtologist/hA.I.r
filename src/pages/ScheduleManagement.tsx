@@ -528,7 +528,7 @@ const ScheduleManagement = () => {
       setReason('');
       loadData();
     } catch (error: any) {
-      logger.error('Error blocking date', 'ScheduleManagement', error);
+      console.error('Error blocking date:', error);
       toast.error('Error blocking date');
     } finally {
       setSubmitting(false);
@@ -557,7 +557,7 @@ const ScheduleManagement = () => {
       toast.success('Blocked date removed');
       loadData();
     } catch (error: any) {
-      logger.error('Error removing blocked date', 'ScheduleManagement', error);
+      console.error('Error removing blocked date:', error);
       toast.error('Error removing blocked date');
     }
   };
@@ -607,7 +607,7 @@ const ScheduleManagement = () => {
       setRangeReason('');
       loadData();
     } catch (error: any) {
-      logger.error('Error blocking date range', 'ScheduleManagement', error);
+      console.error('Error blocking date range:', error);
       toast.error('Error blocking dates');
     } finally {
       setSubmitting(false);

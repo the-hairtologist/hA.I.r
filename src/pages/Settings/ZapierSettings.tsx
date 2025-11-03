@@ -207,7 +207,7 @@ export const ZapierSettings = () => {
       });
       loadWebhooks(); // Refresh to show updated stats
     } catch (error: any) {
-      logger.error('Error testing webhook', 'ZapierSettings', error);
+      console.error('Error testing webhook:', error);
       toast.error('Failed to send test webhook');
     } finally {
       setTesting(null);

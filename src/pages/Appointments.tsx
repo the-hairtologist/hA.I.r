@@ -62,7 +62,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
 import { SearchInput } from '@/components/SearchInput';
 import { AppointmentSkeleton } from '@/components/LoadingSkeleton';
-
+import { useRealtimeUpdates } from '@/hooks/useRealtimeUpdates';
 import {
   Select,
   SelectContent,

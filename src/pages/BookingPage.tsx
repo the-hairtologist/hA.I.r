@@ -148,7 +148,7 @@ const BookingPage = () => {
       setQrCodeUrl(qrDataUrl);
       setShowQrDialog(true);
     } catch (error) {
-      logger.error('Error generating QR code', 'BookingPage', error as Error);
+      console.error('Error generating QR code:', error);
       toast.error('Failed to generate QR code');
     }
   };
@@ -188,7 +188,7 @@ const BookingPage = () => {
       toast.success('Perfect. Your settings are locked in.');
       queryClient.invalidateQueries({ queryKey: ['stylist-profile'] });
     } catch (error) {
-      logger.error('Error saving settings', 'BookingPage', error as Error);
+      console.error('Error saving settings:', error);
       toast.error('Failed to save settings');
     } finally {
       setIsSaving(false);

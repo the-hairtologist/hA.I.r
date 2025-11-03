@@ -78,7 +78,7 @@ class AppleIAPManager {
 
       logger.info('Initialization complete', 'IAP');
     } catch (error) {
-      logger.error('Initialization failed', 'IAP', error as Error);
+      console.error('[IAP] Initialization failed:', error);
       throw error;
     }
   }

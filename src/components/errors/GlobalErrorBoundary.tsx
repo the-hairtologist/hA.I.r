@@ -6,7 +6,6 @@
 import React from 'react';
 import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { logger } from '@/lib/logger';
 import {
   Card,
   CardContent,
@@ -40,10 +39,12 @@ export class GlobalErrorBoundary extends React.Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    logger.error('Global error caught', 'GlobalErrorBoundary', {
-      error,
-      errorInfo: errorInfo.componentStack,
-    });
+    console.error('[GlobalErrorBoundary] CAUGHT ERROR:', error);
+    console.error('[GlobalErrorBoundary] Error Info:', errorInfo);
+    console.error(
+      '[GlobalErrorBoundary] Component Stack:',
+      errorInfo.componentStack
+    );
 
     this.setState({
       error,
@@ -59,10 +60,9 @@ export class GlobalErrorBoundary extends React.Component<Props, State> {
         });
       })
       .catch(loggingError => {
-        logger.error(
-          'Error logging to Sentry failed',
-          'GlobalErrorBoundary',
-          loggingError as Error
+        console.error(
+          '[GlobalErrorBoundary] Error logging failed:',
+          loggingError
         );
       });
   }

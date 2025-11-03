@@ -1,46 +1,13 @@
-# CRITICAL: Prevent GitHub workflow permission errors
-# Must exclude .github/workflows/ with multiple patterns for safety
-.github/workflows
-.github/workflows/
-.github/workflows/**
-.github/workflows/*.yml
-.github/workflows/*.yaml
-
-# Build outputs
 node_modules
 dist
 build
-coverage
-*.tsbuildinfo
-
-# Capacitor
-android
-ios
-dev-dist
-
-# Generated files
-src/integrations/supabase/types.ts
-
-# Environment and config
-.env
-.env.*
-!.env.example
 .git
-
-# Documentation and scripts
 *.md
+*.json
 *.sql
 *.ps1
 *.sh
-
-# IDE
 .vscode
-
-# Public assets
 public
-
-# Lock files
-package-lock.json
-bun.lockb
-pnpm-lock.yaml
-yarn.lock
+.env*
+coverage
