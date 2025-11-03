@@ -5,6 +5,7 @@ import { componentTagger } from 'lovable-tagger';
 import { VitePWA } from 'vite-plugin-pwa';
 import { visualizer } from 'rollup-plugin-visualizer';
 import compression from 'vite-plugin-compression';
+import tailwindcss from '@tailwindcss/vite';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -40,6 +41,7 @@ export default defineConfig(({ mode }) => {
       port: 8080,
     },
     plugins: [
+      tailwindcss(),
       react(),
       mode === 'development' && componentTagger(),
       visualizer({
