@@ -8,14 +8,20 @@ import { test, expect } from '@playwright/test';
 const MOBILE_VIEWPORT = { width: 375, height: 667 }; // iPhone SE
 const TABLET_VIEWPORT = { width: 768, height: 1024 }; // iPad Mini
 const DESKTOP_VIEWPORT = { width: 1440, height: 900 }; // Desktop
+const SMALL_MOBILE = { width: 320, height: 568 }; // iPhone SE (older)
+const LARGE_MOBILE = { width: 390, height: 844 }; // iPhone 12 Pro
 
 // Test routes that should be mobile-optimized
 const ROUTES = [
   { path: '/', name: 'Landing' },
   { path: '/auth', name: 'Auth' },
-  { path: '/dashboard', name: 'Dashboard', requiresAuth: true },
-  { path: '/clients', name: 'Clients', requiresAuth: true },
-  { path: '/appointments', name: 'Appointments', requiresAuth: true },
+];
+
+const PROTECTED_ROUTES = [
+  { path: '/dashboard', name: 'Dashboard' },
+  { path: '/clients', name: 'Clients' },
+  { path: '/appointments', name: 'Appointments' },
+  { path: '/ai-assistant', name: 'AI Assistant' },
 ];
 
 test.describe('Mobile-First Implementation', () => {
@@ -43,20 +49,23 @@ test.describe('Mobile-First Implementation', () => {
 
     test('bottom navigation has 60x60px targets', async ({ page }) => {
       await page.setViewportSize(MOBILE_VIEWPORT);
-      // TODO: Add auth and navigate to dashboard
       await page.goto('/');
 
-      // Check if bottom nav exists
+      // Check if bottom nav exists on landing
       const bottomNav = page.locator('nav[aria-label="Main navigation"]');
-      if (await bottomNav.isVisible()) {
-        const navItems = await bottomNav.locator('a').all();
+      const isVisible = await bottomNav.isVisible().catch(() => false);
+      
+      if (!isVisible) {
+        test.skip('Bottom nav not visible on public pages - expected behavior');
+      }
 
-        for (const item of navItems) {
-          const box = await item.boundingBox();
-          if (box) {
-            expect(box.width).toBeGreaterThanOrEqual(60);
-            expect(box.height).toBeGreaterThanOrEqual(60);
-          }
+      const navItems = await bottomNav.locator('a, button').all();
+
+      for (const item of navItems) {
+        const box = await item.boundingBox();
+        if (box && await item.isVisible()) {
+          expect(box.width, 'Bottom nav item width').toBeGreaterThanOrEqual(60);
+          expect(box.height, 'Bottom nav item height').toBeGreaterThanOrEqual(60);
         }
       }
     });
@@ -164,11 +173,14 @@ test.describe('Mobile-First Implementation', () => {
   });
 
   test.describe('Breakpoint Behavior', () => {
-    test('layout adapts across breakpoints', async ({ page }) => {
+    test('layout adapts across all breakpoints', async ({ page }) => {
       const viewports = [
-        { ...MOBILE_VIEWPORT, name: 'Mobile' },
-        { ...TABLET_VIEWPORT, name: 'Tablet' },
-        { ...DESKTOP_VIEWPORT, name: 'Desktop' },
+        { ...SMALL_MOBILE, name: 'Small-Mobile-320' },
+        { ...MOBILE_VIEWPORT, name: 'Mobile-375' },
+        { ...LARGE_MOBILE, name: 'Mobile-390' },
+        { ...TABLET_VIEWPORT, name: 'Tablet-768' },
+        { width: 1024, height: 768, name: 'Desktop-1024' },
+        { ...DESKTOP_VIEWPORT, name: 'Desktop-1440' },
       ];
 
       for (const viewport of viewports) {
@@ -178,6 +190,9 @@ test.describe('Mobile-First Implementation', () => {
         // Check that page renders without errors
         const documentWidth = await page.evaluate(() => document.documentElement.scrollWidth);
         expect(documentWidth, `Layout broken on ${viewport.name}`).toBeGreaterThan(0);
+
+        // Verify no horizontal overflow
+        expect(documentWidth, `Horizontal overflow on ${viewport.name}`).toBeLessThanOrEqual(viewport.width + 1);
 
         // Take screenshot for manual review
         await page.screenshot({ 

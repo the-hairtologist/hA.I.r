@@ -1,0 +1,99 @@
+name: Lighthouse CI
+
+# Mobile-first performance monitoring
+on:
+  pull_request:
+    branches: [main, hA.I.r, develop]
+  workflow_dispatch:
+
+env:
+  VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+  VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+  VITE_SUPABASE_PROJECT_ID: ${{ secrets.VITE_SUPABASE_PROJECT_ID }}
+
+jobs:
+  lighthouse-mobile:
+    name: 📱 Lighthouse Mobile Performance
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+      
+      - name: Build application
+        run: npm run build
+      
+      - name: Start server
+        run: |
+          npm run preview &
+          npx wait-on http://localhost:4173 --timeout 60000
+      
+      - name: Run Lighthouse CI (Mobile)
+        uses: treosh/lighthouse-ci-action@v11
+        with:
+          urls: |
+            http://localhost:4173/
+            http://localhost:4173/auth
+          configPath: '.lighthouserc.json'
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+          runs: 3
+      
+      - name: Upload Lighthouse Reports
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: lighthouse-reports
+          path: .lighthouseci/
+          retention-days: 30
+
+  lighthouse-desktop:
+    name: 🖥️ Lighthouse Desktop Performance
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+      
+      - name: Build application
+        run: npm run build
+      
+      - name: Start server
+        run: |
+          npm run preview &
+          npx wait-on http://localhost:4173 --timeout 60000
+      
+      - name: Run Lighthouse CI (Desktop)
+        uses: treosh/lighthouse-ci-action@v11
+        with:
+          urls: |
+            http://localhost:4173/
+            http://localhost:4173/auth
+          configPath: '.lighthouserc-desktop.json'
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+          runs: 3
+      
+      - name: Upload Lighthouse Reports
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: lighthouse-reports-desktop
+          path: .lighthouseci/
+          retention-days: 30

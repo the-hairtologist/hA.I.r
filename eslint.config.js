@@ -25,11 +25,24 @@ export default tseslint.config(
       ],
       '@typescript-eslint/no-unused-vars': 'off',
       // Pragmatic rules for existing codebase
-      '@typescript-eslint/no-explicit-any': 'warn', // Change from error to warning
-      '@typescript-eslint/no-require-imports': 'warn', // Allow require imports with warning
-      'react-hooks/exhaustive-deps': 'warn', // Hooks deps as warnings not errors
-      'react-hooks/rules-of-hooks': 'error', // Keep this as error (critical)
-      'prefer-const': 'warn', // Prefer const as warning
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-require-imports': 'warn',
+      'react-hooks/exhaustive-deps': 'warn',
+      'react-hooks/rules-of-hooks': 'error',
+      'prefer-const': 'warn',
+      
+      // Mobile-First Pattern Enforcement
+      'no-restricted-syntax': [
+        'warn',
+        {
+          selector: 'JSXAttribute[name.name="className"] Literal[value=/^(?=.*\\b(p-6|p-8|px-6|py-6|text-lg|text-xl|text-2xl|gap-6|space-x-6|space-y-6)\\b)(?!.*\\bmd:).*$/]',
+          message: '⚠️ Mobile-First: Use mobileFirst utilities from @/lib/responsive/mobile-first-utils instead of desktop-first classes. Import { mobileFirst } and use mobileFirst.padding.md, mobileFirst.text.lg, etc.'
+        },
+        {
+          selector: 'JSXAttribute[name.name="className"] TemplateLiteral > * Literal[value=/\\b(p-6|p-8|px-6|py-6|text-lg|text-xl|gap-6)\\b/]',
+          message: '⚠️ Mobile-First: Detected desktop-first pattern in template literal. Use mobileFirst utilities for consistent mobile-first design.'
+        }
+      ]
     },
   }
 );
