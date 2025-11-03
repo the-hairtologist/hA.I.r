@@ -56,6 +56,7 @@ import { MobileNavCustomizer } from '@/components/MobileNavCustomizer';
 import { FirstTimeTooltip } from '@/components/FirstTimeTooltip';
 import { ZapierSettings } from '@/pages/Settings/ZapierSettings';
 import { cn } from '@/lib/utils';
+import { mobileFirst, touchButton } from '@/lib/responsive/mobile-first-utils';
 import { FormFieldError } from '@/components/FormFieldError';
 import { useDevMode } from '@/hooks/useDevMode';
 import { SaveIndicator } from '@/components/SaveIndicator';
@@ -555,23 +556,23 @@ const Settings = () => {
           {/* Profile Tab */}
           <TabsContent value="profile" className="space-y-6">
             {/* Developer Mode Toggle - Prominent Position */}
-            <Card className="border-[3px] border-yellow-500 shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+            <Card className="border-brutal">
+              <CardHeader className={mobileFirst.padding.md}>
+                <CardTitle className={cn(mobileFirst.text.lg, "flex items-center gap-2")}>
                   <Code className="h-5 w-5" />
                   Developer Mode
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className={mobileFirst.text.sm}>
                   Enable debug tools and performance metrics
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between p-4 border-2 border-foreground/10 rounded-lg bg-muted/30">
+              <CardContent className={mobileFirst.padding.md}>
+                <div className={cn("flex items-center justify-between border-2 border-foreground/10 rounded-lg bg-muted/30", mobileFirst.padding.md)}>
                   <div className="space-y-0.5">
-                    <Label htmlFor="dev-mode-top" className="font-semibold">
+                    <Label htmlFor="dev-mode-top" className={cn(mobileFirst.text.sm, "font-semibold break-words")}>
                       Show Debug Tools
                     </Label>
-                    <p className="text-sm text-muted-foreground">
+                    <p className={cn(mobileFirst.text.xs, "text-muted-foreground break-words")}>
                       Display performance metrics, error tracking, and testing
                       utilities
                     </p>
@@ -585,16 +586,16 @@ const Settings = () => {
               </CardContent>
             </Card>
 
-            <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-              <CardHeader>
-                <CardTitle>Profile Information</CardTitle>
-                <CardDescription>
+            <Card className="border-brutal">
+              <CardHeader className={mobileFirst.padding.md}>
+                <CardTitle className={mobileFirst.text.lg}>Profile Information</CardTitle>
+                <CardDescription className={mobileFirst.text.sm}>
                   {userRole === 'stylist'
                     ? 'Manage your business profile and professional details'
                     : 'Manage your personal profile'}
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className={cn(mobileFirst.padding.md, "space-y-4")}>
                 <div>
                   <Label htmlFor="fullName">Full Name</Label>
                   <Input
@@ -1307,7 +1308,7 @@ const Settings = () => {
                   <Button
                     onClick={handleSaveProfile}
                     disabled={!hasChanges || isSavingProfile}
-                    className="w-full sm:w-auto min-h-[44px]"
+                    className={cn(touchButton.md, "w-full sm:w-auto")}
                     data-save-profile
                     aria-busy={isSavingProfile}
                     aria-label={
@@ -1330,7 +1331,7 @@ const Settings = () => {
                     <Button
                       variant="outline"
                       onClick={handlePreviewProfile}
-                      className="w-full sm:w-auto"
+                      className={cn(touchButton.md, "w-full sm:w-auto")}
                     >
                       <Eye className="mr-2 h-4 w-4" />
                       Preview Public Profile
@@ -1344,14 +1345,14 @@ const Settings = () => {
 
           {/* Account Tab */}
           <TabsContent value="account" className="space-y-6">
-            <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-              <CardHeader>
-                <CardTitle>Account Settings</CardTitle>
-                <CardDescription>
+            <Card className="border-brutal">
+              <CardHeader className={mobileFirst.padding.md}>
+                <CardTitle className={mobileFirst.text.lg}>Account Settings</CardTitle>
+                <CardDescription className={mobileFirst.text.sm}>
                   Manage your account details and security
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className={cn(mobileFirst.padding.md, "space-y-4")}>
                 <div>
                   <Label>Email</Label>
                   <Input value={userEmail} disabled />
@@ -1391,14 +1392,14 @@ const Settings = () => {
 
           {/* Security Tab */}
           <TabsContent value="security" className="space-y-6">
-            <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-              <CardHeader>
-                <CardTitle>Security Settings</CardTitle>
-                <CardDescription>
+            <Card className="border-brutal">
+              <CardHeader className={mobileFirst.padding.md}>
+                <CardTitle className={mobileFirst.text.lg}>Security Settings</CardTitle>
+                <CardDescription className={mobileFirst.text.sm}>
                   Manage your password and security preferences
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className={cn(mobileFirst.padding.md, "space-y-4")}>
                 <div className="space-y-4">
                   <div>
                     <Label htmlFor="current-password">Current Password</Label>
@@ -1484,7 +1485,7 @@ const Settings = () => {
                         !newPassword ||
                         !confirmPassword
                       }
-                      className="w-full sm:w-auto"
+                      className={cn(touchButton.md, "w-full sm:w-auto")}
                     >
                       {isChangingPassword ? (
                         <>
@@ -1502,12 +1503,12 @@ const Settings = () => {
                   </div>
                 </div>
 
-                <div className="mt-6 p-4 bg-muted/50 rounded-lg">
-                  <h4 className="font-semibold text-sm mb-2 flex items-center gap-2">
-                    <Shield className="h-4 w-4 text-primary" />
+                <div className={cn("mt-6 bg-muted/50 rounded-lg", mobileFirst.padding.md)}>
+                  <h4 className={cn(mobileFirst.text.sm, "font-semibold mb-2 flex items-center gap-2 break-words")}>
+                    <Shield className="h-4 w-4 text-primary flex-shrink-0" />
                     Password Requirements
                   </h4>
-                  <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
+                  <ul className={cn(mobileFirst.text.xs, "text-muted-foreground space-y-1 list-disc list-inside break-words")}>
                     <li>At least 8 characters long</li>
                     <li>Mix of uppercase and lowercase recommended</li>
                     <li>
@@ -1522,24 +1523,24 @@ const Settings = () => {
 
           {/* Notifications Tab */}
           <TabsContent value="notifications" className="space-y-6">
-            <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-              <CardHeader>
-                <CardTitle>Notification Preferences</CardTitle>
-                <CardDescription>
+            <Card className="border-brutal">
+              <CardHeader className={mobileFirst.padding.md}>
+                <CardTitle className={mobileFirst.text.lg}>Notification Preferences</CardTitle>
+                <CardDescription className={mobileFirst.text.sm}>
                   Choose how you want to be notified
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className={cn(mobileFirst.padding.md, "space-y-6")}>
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between p-4 border-2 border-foreground/10 rounded-lg">
-                    <div className="space-y-0.5">
+                  <div className={cn("flex items-center justify-between border-2 border-foreground/10 rounded-lg", mobileFirst.padding.md)}>
+                    <div className="space-y-0.5 min-w-0 flex-1">
                       <Label
                         htmlFor="email-notifications"
-                        className="font-semibold"
+                        className={cn(mobileFirst.text.sm, "font-semibold break-words")}
                       >
                         Email Notifications
                       </Label>
-                      <p className="text-sm text-muted-foreground">
+                      <p className={cn(mobileFirst.text.xs, "text-muted-foreground break-words")}>
                         Receive notifications via email
                       </p>
                     </div>

@@ -40,7 +40,8 @@ import { SkeletonList } from '@/components/ui/skeleton-list';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { useBulkSelection } from '@/hooks/useBulkSelection';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
-import { cn } from '@/lib/utils';
+import { cn, responsive } from '@/lib/utils';
+import { mobileFirst, touchButton } from '@/lib/responsive/mobile-first-utils';
 import { logger } from '@/lib/logger';
 import {
   Dialog,
@@ -646,37 +647,37 @@ export default function Clients() {
               variant="outline"
               onClick={handleExportCSV}
               disabled={filteredClients.length === 0}
-              className="gap-1.5 xs:gap-2 text-xs xs:text-sm min-h-[44px] flex-1 xs:flex-none"
+              className={cn(touchButton.md, "gap-2 flex-1 xs:flex-none")}
             >
-              <Download className="h-3.5 w-3.5 xs:h-4 xs:w-4" />
+              <Download className="h-4 w-4" />
               <span className="hidden xxs:inline">Export</span>
             </Button>
             <Button
               variant="outline"
               onClick={() => navigate('/formulas')}
-              className="gap-1.5 xs:gap-2 text-xs xs:text-sm min-h-[44px] flex-1 xs:flex-none border-[2px] xs:border-[3px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] xs:shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] xs:hover:translate-x-[2px] xs:hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_hsl(var(--foreground))] xs:hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
+              className={cn(touchButton.md, "gap-2 flex-1 xs:flex-none")}
             >
-              <FileText className="h-3.5 w-3.5 xs:h-4 xs:w-4" />
+              <FileText className="h-4 w-4" />
               <span className="hidden xxs:inline">Formulas</span>
             </Button>
             <Button
               onClick={() => setInviteDialogOpen(true)}
               variant="outline"
-              className="gap-1.5 xs:gap-2 text-xs xs:text-sm min-h-[44px] flex-1 xs:flex-none border-[2px] xs:border-[3px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] xs:shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] xs:hover:translate-x-[2px] xs:hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_hsl(var(--foreground))] xs:hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
+              className={cn(touchButton.md, "gap-2 flex-1 xs:flex-none")}
             >
-              <UserPlus className="h-3.5 w-3.5 xs:h-4 xs:w-4" />
+              <UserPlus className="h-4 w-4" />
               <span className="hidden sm:inline">Invite</span>
             </Button>
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen} modal={true}>
               <DialogTrigger asChild>
-                <Button className="gap-1.5 xs:gap-2 text-xs xs:text-sm min-h-[44px] flex-1 xs:flex-none border-[2px] xs:border-[3px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] xs:shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] xs:hover:translate-x-[2px] xs:hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_hsl(var(--foreground))] xs:hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all">
-                  <Plus className="h-3.5 w-3.5 xs:h-4 xs:w-4" />
+                <Button className={cn(touchButton.md, "gap-2 flex-1 xs:flex-none")}>
+                  <Plus className="h-4 w-4" />
                   <span className="hidden xxs:inline">Add</span>
                 </Button>
               </DialogTrigger>
-              <DialogContent className="max-w-[calc(100vw-2rem)] xs:max-w-md max-h-[85vh] xs:max-h-[90vh] overflow-y-auto border-[2px] xs:border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] xs:shadow-[6px_6px_0px_0px_hsl(var(--foreground))]">
+              <DialogContent className={cn("w-[calc(100vw-2rem)] sm:max-w-md max-h-[90vh] overflow-y-auto", mobileFirst.padding.md)}>
                 <DialogHeader>
-                  <DialogTitle className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-pixel gradient-text break-words">
+                  <DialogTitle className={cn(mobileFirst.text.xl, "font-pixel gradient-text break-words")}>
                     Add a New Client
                   </DialogTitle>
                 </DialogHeader>

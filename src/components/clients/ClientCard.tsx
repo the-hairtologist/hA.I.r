@@ -9,6 +9,8 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { User, Phone, Mail, Calendar } from 'lucide-react';
 import { format } from 'date-fns';
+import { cn } from '@/lib/utils';
+import { mobileFirst, touchButton } from '@/lib/responsive/mobile-first-utils';
 
 interface ClientCardProps {
   client: {
@@ -52,48 +54,48 @@ const ClientCardComponent = ({
       className="brutal-border hover:shadow-brutal-lg transition-all cursor-pointer"
       onClick={onClick}
     >
-      <CardHeader>
-        <div className="flex items-start justify-between">
-          <div className="flex items-center gap-3">
-            <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
-              <User className="h-6 w-6 text-primary" />
+      <CardHeader className={mobileFirst.padding.md}>
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-center gap-3 min-w-0 flex-1">
+            <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+              <User className="h-6 w-6 sm:h-7 sm:w-7 text-primary" />
             </div>
-            <div>
-              <CardTitle className="text-lg">{client.full_name}</CardTitle>
-              <p className="text-sm text-muted-foreground">
+            <div className="min-w-0 flex-1">
+              <CardTitle className={cn(mobileFirst.text.base, "truncate break-words")}>{client.full_name}</CardTitle>
+              <p className={cn(mobileFirst.text.sm, "text-muted-foreground")}>
                 Member since {memberSince}
               </p>
             </div>
           </div>
           {appointmentCount > 0 && (
-            <Badge variant="secondary">{appointmentCount} visits</Badge>
+            <Badge variant="secondary" className={cn(mobileFirst.text.xs, "flex-shrink-0")}>{appointmentCount} visits</Badge>
           )}
         </div>
       </CardHeader>
-      <CardContent className="space-y-2">
-        <div className="flex items-center gap-2 text-sm">
-          <Mail className="h-4 w-4 text-muted-foreground" />
-          <span>{client.email}</span>
+      <CardContent className={cn(mobileFirst.padding.md, "space-y-2")}>
+        <div className={cn("flex items-center gap-2", mobileFirst.text.sm)}>
+          <Mail className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+          <span className="truncate break-words">{client.email}</span>
         </div>
         {client.phone && (
-          <div className="flex items-center gap-2 text-sm">
-            <Phone className="h-4 w-4 text-muted-foreground" />
-            <span>{client.phone}</span>
+          <div className={cn("flex items-center gap-2", mobileFirst.text.sm)}>
+            <Phone className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+            <span className="break-words">{client.phone}</span>
           </div>
         )}
-        <div className="flex items-center gap-2 text-sm">
-          <Calendar className="h-4 w-4 text-muted-foreground" />
-          <span>Last visit: {lastVisit}</span>
+        <div className={cn("flex items-center gap-2", mobileFirst.text.sm)}>
+          <Calendar className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+          <span className="break-words">Last visit: {lastVisit}</span>
         </div>
         {(onEdit || onDelete) && (
           <div className="flex gap-2 mt-4">
             {onEdit && (
-              <Button size="sm" variant="outline" onClick={onEdit}>
+              <Button size="sm" variant="outline" onClick={onEdit} className={touchButton.sm}>
                 Edit
               </Button>
             )}
             {onDelete && (
-              <Button size="sm" variant="destructive" onClick={onDelete}>
+              <Button size="sm" variant="destructive" onClick={onDelete} className={touchButton.sm}>
                 Delete
               </Button>
             )}
