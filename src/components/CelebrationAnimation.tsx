@@ -6,6 +6,7 @@ import { X, Sparkles, TrendingUp } from 'lucide-react';
 import { haptic } from '@/platform/haptics';
 import { cn } from '@/lib/utils';
 import { logger } from '@/lib/logging/productionLogger';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 
 interface CelebrationAnimationProps {
   open: boolean;
@@ -110,10 +111,10 @@ export const CelebrationAnimation = ({
           <div className="text-8xl animate-bounce mb-4">{emoji}</div>
 
           <div className="space-y-2">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold gradient-text">
+            <h2 className={cn(mobileFirst.text['4xl'], "font-bold gradient-text")}>
               {title}
             </h2>
-            <p className="text-base sm:text-lg lg:text-xl text-muted-foreground">
+            <p className={cn(mobileFirst.text.xl, "text-muted-foreground")}>
               {message}
             </p>
           </div>
@@ -125,7 +126,10 @@ export const CelebrationAnimation = ({
                 <span>You've earned a special reward!</span>
               </div>
 
-              <div className="bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 p-6 rounded-lg brutal-border-subtle">
+              <div className={cn(
+                "bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 rounded-lg brutal-border-subtle",
+                mobileFirst.padding.md
+              )}>
                 <div className="space-y-3">
                   <div className="flex items-center justify-center gap-2">
                     <Sparkles className="h-5 w-5 text-primary" />
@@ -134,12 +138,15 @@ export const CelebrationAnimation = ({
                     </p>
                   </div>
 
-                  <div className="font-mono text-xl sm:text-2xl lg:text-3xl font-bold tracking-wider bg-background px-4 py-3 rounded brutal-border-subtle">
+                  <div className={cn(
+                    mobileFirst.text['3xl'],
+                    "font-mono font-bold tracking-wider bg-background px-4 py-3 rounded brutal-border-subtle"
+                  )}>
                     {discountCode}
                   </div>
 
                   {discountAmount && (
-                    <p className="text-base sm:text-lg lg:text-xl font-bold text-success">
+                    <p className={cn(mobileFirst.text.xl, "font-bold text-success")}>
                       ${discountAmount} OFF
                     </p>
                   )}

@@ -9,6 +9,8 @@ import { Button } from '@/components/ui/button';
 import { AlertCircle, RefreshCw } from 'lucide-react';
 import { logger } from '@/lib/logging/productionLogger';
 import { userJourney } from '@/lib/logging/userJourneyTracker';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
+import { cn } from '@/lib/utils';
 
 interface Props {
   children: React.ReactNode;
@@ -76,7 +78,7 @@ export class AIFeatureErrorBoundary extends React.Component<Props, State> {
         <div className="p-4">
           <Alert variant="destructive" className="border-2">
             <AlertCircle className="h-5 w-5" />
-            <AlertTitle className="text-lg font-pixel">
+            <AlertTitle className={cn(mobileFirst.text.lg, "font-pixel")}>
               {this.props.featureName} Temporarily Unavailable
             </AlertTitle>
             <AlertDescription className="mt-2 space-y-3">

@@ -22,6 +22,7 @@ import { OptimizedImage } from '@/components/OptimizedImage';
 import { uploadToStorage } from '@/utils/supabaseStorageHelper';
 import { logger } from '@/lib/logging/productionLogger';
 import { userJourney } from '@/lib/logging/userJourneyTracker';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 
 interface CameraCaptureProps {
   onCapture: (
@@ -327,7 +328,7 @@ export const CameraCapture = ({
         onConsent={handleConsentResponse}
         context={context}
       />
-      <Card className={cn('p-6 space-y-4', className)}>
+      <Card className={cn("space-y-4", mobileFirst.padding.md, className)}>
         {preview && processing ? (
           <div className="space-y-4 animate-in fade-in-50">
             <div className="relative rounded-lg overflow-hidden">

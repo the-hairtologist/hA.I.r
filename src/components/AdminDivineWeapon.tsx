@@ -30,6 +30,8 @@ import { securityGuardian } from '@/lib/ai/SecurityGuardian';
 import { predictiveAnalytics } from '@/lib/ai/PredictiveAnalytics';
 import { useDevMode } from '@/hooks/useDevMode';
 import { DeveloperPanel } from './admin/DeveloperPanel';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
+import { cn } from '@/lib/utils';
 
 export const AdminDivineWeapon = () => {
   const { toast } = useToast();
@@ -121,7 +123,7 @@ export const AdminDivineWeapon = () => {
   }
 
   return (
-    <div className="space-y-6 p-6">
+    <div className={cn("space-y-6", mobileFirst.padding.md)}>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>

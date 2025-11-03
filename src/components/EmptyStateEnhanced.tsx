@@ -6,6 +6,7 @@
 import { LucideIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 
 interface EmptyStateEnhancedProps {
   icon: LucideIcon;
@@ -41,7 +42,10 @@ export const EmptyStateEnhanced = ({
     >
       {illustration || (
         <div className="relative mb-6">
-          <div className="bg-gradient-to-br from-primary/10 to-accent/10 p-8 rounded-full brutal-border brutal-shadow-xs">
+          <div className={cn(
+            "bg-gradient-to-br from-primary/10 to-accent/10 rounded-full brutal-border brutal-shadow-xs",
+            mobileFirst.padding.lg
+          )}>
             <Icon className="h-16 w-16 text-primary" aria-hidden="true" />
           </div>
           <div className="absolute -bottom-2 -right-2 bg-secondary p-2 rounded-full brutal-border">

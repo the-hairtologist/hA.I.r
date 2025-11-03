@@ -5,6 +5,8 @@ import { Sparkles, Loader2, LucideIcon } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { logger } from '@/lib/logging/productionLogger';
 import { userJourney } from '@/lib/logging/userJourneyTracker';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
+import { cn } from '@/lib/utils';
 
 interface AIEnhancedEmptyStateProps {
   icon: LucideIcon;
@@ -110,10 +112,10 @@ export const AIEnhancedEmptyState = ({
 
           {/* Text */}
           <div className="space-y-2">
-            <h3 className="text-lg sm:text-xl lg:text-2xl font-pixel font-bold">
+            <h3 className={cn(mobileFirst.text['2xl'], "font-pixel font-bold")}>
               {title}
             </h3>
-            <p className="text-xs sm:text-sm lg:text-base font-sans text-muted-foreground">
+            <p className={cn(mobileFirst.text.sm, "font-sans text-muted-foreground")}>
               {description}
             </p>
           </div>
@@ -135,7 +137,7 @@ export const AIEnhancedEmptyState = ({
                     key={idx}
                     className="p-3 rounded-lg border-2 border-border bg-background/50 hover:border-primary/30 transition-all text-left"
                   >
-                    <p className="text-[11px] sm:text-xs lg:text-sm text-foreground">
+                    <p className={cn(mobileFirst.text.sm, "text-foreground")}>
                       {suggestion.text}
                     </p>
                   </div>

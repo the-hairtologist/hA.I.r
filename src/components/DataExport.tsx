@@ -6,6 +6,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { logger } from '@/lib/logging/productionLogger';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
+import { cn } from '@/lib/utils';
 
 export const DataExport = () => {
   const [isExporting, setIsExporting] = useState(false);
@@ -58,15 +60,15 @@ export const DataExport = () => {
   };
 
   return (
-    <Card className="p-6 brutal-border brutal-shadow-sm">
+    <Card className={cn(mobileFirst.padding.md, "brutal-border brutal-shadow-sm")}>
       <div className="space-y-4">
         <div className="flex items-start space-x-3">
           <FileJson className="h-5 w-5 text-primary mt-0.5" />
           <div className="flex-1">
-            <h3 className="text-base sm:text-lg lg:text-xl font-semibold">
+            <h3 className={cn(mobileFirst.text.lg, "font-semibold")}>
               Export Your Data
             </h3>
-            <p className="text-xs sm:text-sm lg:text-base text-muted-foreground mt-1">
+            <p className={cn(mobileFirst.text.sm, "text-muted-foreground mt-1")}>
               Download a complete copy of all your personal data stored in our
               system. This includes your profile, appointments, messages,
               formulas, and more.

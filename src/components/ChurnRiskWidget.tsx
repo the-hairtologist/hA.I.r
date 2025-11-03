@@ -30,6 +30,8 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
+import { cn } from '@/lib/utils';
 
 interface ChurnRiskWidgetProps {
   stylistId: string;
@@ -86,7 +88,10 @@ export const ChurnRiskWidget: React.FC<ChurnRiskWidgetProps> = ({
   if (loading) {
     return (
       <Card>
-        <CardContent className="flex items-center justify-center p-6">
+        <CardContent className={cn(
+          "flex items-center justify-center",
+          mobileFirst.padding.md
+        )}>
           <Loader2 className="h-6 w-6 animate-spin text-primary" />
           <span className="ml-2 text-sm text-muted-foreground">
             Analyzing churn risk...

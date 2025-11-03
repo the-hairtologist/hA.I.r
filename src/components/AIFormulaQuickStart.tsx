@@ -8,6 +8,8 @@ import {
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Sparkles, Zap, Palette, Info } from 'lucide-react';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
+import { cn } from '@/lib/utils';
 
 interface AIFormulaQuickStartProps {
   onSelectTemplate: (prompt: string) => void;
@@ -47,7 +49,7 @@ export const AIFormulaQuickStart = ({
     <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-accent/5">
       <CardHeader>
         <div className="space-y-2">
-          <CardTitle className="text-lg flex items-center gap-2">
+          <CardTitle className={cn(mobileFirst.text.lg, "flex items-center gap-2")}>
             <Sparkles className="h-5 w-5 text-primary" />
             Quick Start Templates
           </CardTitle>

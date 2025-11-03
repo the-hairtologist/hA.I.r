@@ -16,6 +16,8 @@ import { analytics } from '@/lib/analytics';
 import { logger } from '@/lib/logging/productionLogger';
 import { userJourney } from '@/lib/logging/userJourneyTracker';
 import { trackSelect } from '@/lib/logging/supabaseTracker';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
+import { cn } from '@/lib/utils';
 
 interface ProductRecommendation {
   id: string;
@@ -207,15 +209,15 @@ const AIProductRecommendationsComponent = ({
 
                 {/* Product Info */}
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <h4 className="font-semibold text-xs sm:text-sm">
-                        {rec.name}
-                      </h4>
-                      <p className="text-[11px] sm:text-xs text-muted-foreground">
-                        {rec.brand}
-                      </p>
-                    </div>
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <h4 className={cn(mobileFirst.text.sm, "font-semibold")}>
+                          {rec.name}
+                        </h4>
+                        <p className={cn(mobileFirst.text.sm, "text-muted-foreground")}>
+                          {rec.brand}
+                        </p>
+                      </div>
                     <Badge variant="outline" className="text-[11px] sm:text-xs">
                       {rec.category}
                     </Badge>
@@ -225,12 +227,12 @@ const AIProductRecommendationsComponent = ({
                     {rec.description}
                   </p>
 
-                  <div className="flex items-center gap-4 mt-3">
-                    <div>
-                      <span className="text-base sm:text-lg font-bold text-primary">
-                        ${rec.price.toFixed(2)}
-                      </span>
-                    </div>
+                    <div className="flex items-center gap-4 mt-3">
+                      <div>
+                        <span className={cn(mobileFirst.text.lg, "font-bold text-primary")}>
+                          ${rec.price.toFixed(2)}
+                        </span>
+                      </div>
                     <div className="text-[11px] sm:text-xs text-success font-medium">
                       Earn ${commission}
                       <span className="text-muted-foreground ml-1">
