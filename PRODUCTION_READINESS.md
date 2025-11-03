@@ -3,6 +3,7 @@
 ## ✅ Completed (Already in Place)
 
 ### Security
+
 - [x] RLS policies on all tables
 - [x] Role-based access control (admin, stylist, client)
 - [x] SECURITY DEFINER functions
@@ -11,6 +12,7 @@
 - [x] Input validation with Zod schemas
 
 ### Performance
+
 - [x] PWA with offline support
 - [x] Code splitting & lazy loading
 - [x] Image optimization
@@ -18,7 +20,8 @@
 - [x] Offline queue system
 - [x] Mobile optimizations
 
-### User Experience  
+### User Experience
+
 - [x] Responsive design (320px - 2xl)
 - [x] Dark mode support
 - [x] Touch-optimized UI (44x44px targets)
@@ -31,49 +34,54 @@
 ## 🔧 Recommended Implementations
 
 ### 1. Database Performance (CRITICAL)
+
 **Why**: After 1 month with real data, queries will slow down without indexes.
 
 **Action**: Add database indexes on frequently queried columns:
+
 ```sql
 -- Appointments (most queried table)
-CREATE INDEX IF NOT EXISTS idx_appointments_stylist_date 
+CREATE INDEX IF NOT EXISTS idx_appointments_stylist_date
   ON appointments(stylist_id, appointment_date);
-  
-CREATE INDEX IF NOT EXISTS idx_appointments_client_date 
+
+CREATE INDEX IF NOT EXISTS idx_appointments_client_date
   ON appointments(client_id, appointment_date);
 
-CREATE INDEX IF NOT EXISTS idx_appointments_status 
+CREATE INDEX IF NOT EXISTS idx_appointments_status
   ON appointments(status) WHERE status != 'cancelled';
 
 -- Formulas (search by client)
-CREATE INDEX IF NOT EXISTS idx_formulas_client_created 
+CREATE INDEX IF NOT EXISTS idx_formulas_client_created
   ON formulas(client_id, created_at DESC);
 
 -- Messages (chat performance)
-CREATE INDEX IF NOT EXISTS idx_messages_conversation 
+CREATE INDEX IF NOT EXISTS idx_messages_conversation
   ON messages(sender_id, recipient_id, created_at DESC);
 
 -- User roles (permission checks)
-CREATE INDEX IF NOT EXISTS idx_user_roles_lookup 
+CREATE INDEX IF NOT EXISTS idx_user_roles_lookup
   ON user_roles(user_id, role);
 ```
 
 ### 2. Error Tracking & Monitoring
+
 **Why**: You need to know when users hit errors in production.
 
 **Recommended Tools**:
+
 - **Sentry** (error tracking)
 - **LogRocket** (session replay)
 - **Mixpanel/Amplitude** (product analytics)
 
 **Quick Setup (Sentry)**:
+
 ```bash
 npm install @sentry/react
 ```
 
 ```typescript
 // src/lib/monitoring.ts
-import * as Sentry from "@sentry/react";
+import * as Sentry from '@sentry/react';
 
 Sentry.init({
   dsn: import.meta.env.VITE_SENTRY_DSN,
@@ -92,9 +100,11 @@ Sentry.init({
 ```
 
 ### 3. Analytics Implementation
+
 **Why**: Understand which features users actually use.
 
 **Track These Events**:
+
 - User sign ups (role selection)
 - Feature usage (AI Assistant, Quick Formula, etc.)
 - Appointment creation/completion
@@ -103,6 +113,7 @@ Sentry.init({
 - Error rates by page
 
 **Implementation**:
+
 ```typescript
 // src/lib/analytics.ts
 export const trackEvent = (event: string, properties?: Record<string, any>) => {
@@ -114,7 +125,7 @@ export const trackEvent = (event: string, properties?: Record<string, any>) => {
       userRole: getCurrentUserRole(),
     });
   }
-  
+
   // Also log to console in dev
   if (import.meta.env.DEV) {
     console.log('📊 Analytics:', event, properties);
@@ -123,9 +134,11 @@ export const trackEvent = (event: string, properties?: Record<string, any>) => {
 ```
 
 ### 4. Data Retention & Cleanup
+
 **Why**: Old data accumulates and slows queries.
 
 **Create Cleanup Policies**:
+
 ```sql
 -- Delete old error logs (keep 30 days)
 CREATE EXTENSION IF NOT EXISTS pg_cron;
@@ -141,18 +154,20 @@ SELECT cron.schedule(
   'archive-old-appointments',
   '0 3 * * 0', -- 3 AM Sunday
   $$
-    UPDATE appointments 
-    SET archived = true 
-    WHERE appointment_date < NOW() - INTERVAL '2 years' 
+    UPDATE appointments
+    SET archived = true
+    WHERE appointment_date < NOW() - INTERVAL '2 years'
     AND archived = false
   $$
 );
 ```
 
 ### 5. Rate Limiting
+
 **Why**: Prevent abuse and control costs.
 
 **Add to Edge Functions**:
+
 ```typescript
 // supabase/functions/_shared/rate-limit.ts
 const RATE_LIMITS = {
@@ -162,12 +177,12 @@ const RATE_LIMITS = {
 };
 
 export async function checkRateLimit(
-  userId: string, 
+  userId: string,
   endpoint: string
 ): Promise<boolean> {
   const limit = RATE_LIMITS[endpoint];
   if (!limit) return true;
-  
+
   const key = `ratelimit:${endpoint}:${userId}`;
   // Use Redis or Supabase edge function KV store
   // Return false if exceeded
@@ -175,14 +190,17 @@ export async function checkRateLimit(
 ```
 
 ### 6. Backup Strategy
+
 **Why**: Data loss is catastrophic.
 
 **Supabase Automated Backups**:
+
 - Enable Point-in-Time Recovery (PITR)
 - Set retention to 30 days minimum
 - Test restore process monthly
 
 **Critical Data Export**:
+
 ```typescript
 // Create weekly exports of critical data
 SELECT cron.schedule(
@@ -197,9 +215,11 @@ SELECT cron.schedule(
 ```
 
 ### 7. Performance Monitoring
+
 **Why**: Catch performance regressions early.
 
 **Setup Web Vitals Tracking**:
+
 ```typescript
 // src/lib/web-vitals.ts
 import { onCLS, onFID, onLCP, onFCP, onTTFB } from 'web-vitals';
@@ -214,18 +234,22 @@ export function initWebVitals() {
 ```
 
 ### 8. Notification Management
+
 **Why**: Users need control over notification fatigue.
 
 **Add Frequency Controls**:
+
 - Max 1 rebooking reminder per week
 - Batch notifications (daily digest option)
 - Smart timing (business hours only)
 - Snooze functionality
 
 ### 9. A/B Testing Infrastructure
+
 **Why**: Optimize features based on data, not guesses.
 
 **Simple Feature Flags**:
+
 ```typescript
 // src/lib/feature-flags.ts
 export const FEATURES = {
@@ -242,14 +266,17 @@ export function isFeatureEnabled(feature: keyof typeof FEATURES): boolean {
 ```
 
 ### 10. Cost Monitoring
+
 **Why**: Prevent surprise bills.
 
 **Set Budget Alerts**:
+
 - Supabase: Database size, bandwidth, edge function invocations
 - Storage: File uploads (implement size limits)
 - AI API calls: Track usage per user/day
 
 **Implement Quotas**:
+
 ```typescript
 // Daily limits per user role
 const DAILY_LIMITS = {
@@ -264,13 +291,15 @@ const DAILY_LIMITS = {
 ## 📊 Metrics to Monitor Daily
 
 ### Business Metrics
+
 - [ ] Daily Active Users (DAU)
 - [ ] Appointments created/completed
 - [ ] Formulas saved
 - [ ] Subscription conversion rate
 - [ ] Churn rate
 
-### Technical Metrics  
+### Technical Metrics
+
 - [ ] Error rate by page
 - [ ] API response times (P50, P95, P99)
 - [ ] Database query performance
@@ -279,6 +308,7 @@ const DAILY_LIMITS = {
 - [ ] Offline queue size
 
 ### User Experience
+
 - [ ] Time to first formula
 - [ ] AI response time
 - [ ] Page load times (LCP < 2.5s)
@@ -290,6 +320,7 @@ const DAILY_LIMITS = {
 ## 🚨 Production Launch Checklist
 
 **24 Hours Before Launch**:
+
 - [ ] Run security audit (`npm run security-audit`)
 - [ ] Check all RLS policies
 - [ ] Verify database backups enabled
@@ -300,6 +331,7 @@ const DAILY_LIMITS = {
 - [ ] Review environment variables
 
 **Launch Day**:
+
 - [ ] Deploy to production
 - [ ] Verify PWA manifest
 - [ ] Test mobile install flow
@@ -308,6 +340,7 @@ const DAILY_LIMITS = {
 - [ ] Check API quotas
 
 **Week 1**:
+
 - [ ] Review user feedback
 - [ ] Analyze feature usage
 - [ ] Optimize slow queries
@@ -315,6 +348,7 @@ const DAILY_LIMITS = {
 - [ ] Fine-tune caching
 
 **Month 1**:
+
 - [ ] Add database indexes based on slow query log
 - [ ] Review and cleanup unused features
 - [ ] Optimize bundle size
@@ -326,6 +360,7 @@ const DAILY_LIMITS = {
 ## 🔒 Security Maintenance
 
 **Monthly**:
+
 - [ ] Rotate API keys
 - [ ] Review user permissions
 - [ ] Audit admin actions
@@ -333,6 +368,7 @@ const DAILY_LIMITS = {
 - [ ] Review RLS policies
 
 **Quarterly**:
+
 - [ ] Penetration testing
 - [ ] Security audit
 - [ ] Compliance review (GDPR, CCPA)
@@ -345,6 +381,7 @@ const DAILY_LIMITS = {
 **If Publishing to App Stores**:
 
 ### iOS (Apple App Store)
+
 - [ ] Set up Apple Developer Account ($99/year)
 - [ ] Configure Xcode signing certificates
 - [ ] Add privacy policy URL
@@ -353,6 +390,7 @@ const DAILY_LIMITS = {
 - [ ] Submit for App Store review (7-14 days)
 
 ### Android (Google Play)
+
 - [ ] Set up Google Play Console ($25 one-time)
 - [ ] Configure signing key
 - [ ] Add privacy policy URL
@@ -361,6 +399,7 @@ const DAILY_LIMITS = {
 - [ ] Submit for production review (1-3 days)
 
 **Capacitor Setup** (if going native):
+
 ```bash
 # Install Capacitor
 npm install @capacitor/core @capacitor/cli
@@ -384,13 +423,15 @@ npx cap open android
 ## 🎯 Success Metrics (Month 1)
 
 ### Goals
+
 - [ ] 95%+ uptime
 - [ ] <2% error rate
 - [ ] <3s average page load
-- [ ] >80% feature adoption (AI Assistant)
+- [ ] > 80% feature adoption (AI Assistant)
 - [ ] <5% churn rate
 
 ### Red Flags
+
 - ⚠️ Error rate >5%
 - ⚠️ API response time >1s
 - ⚠️ Database CPU >80%

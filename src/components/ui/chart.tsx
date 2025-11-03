@@ -80,13 +80,21 @@ const isValidColor = (color: string): boolean => {
   ];
 
   const trimmed = color.trim().toLowerCase();
-  
+
   // Block dangerous CSS functions and keywords
   const dangerousPatterns = [
-    'url(', 'import', '@import', 'expression', 'javascript:',
-    'behavior', 'binding', '-moz-binding', 'data:', 'vbscript:',
+    'url(',
+    'import',
+    '@import',
+    'expression',
+    'javascript:',
+    'behavior',
+    'binding',
+    '-moz-binding',
+    'data:',
+    'vbscript:',
   ];
-  
+
   if (dangerousPatterns.some(pattern => trimmed.includes(pattern))) {
     return false;
   }
@@ -111,7 +119,7 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
           const color =
             itemConfig.theme?.[theme as keyof typeof itemConfig.theme] ||
             itemConfig.color;
-          
+
           // Strict validation - only safe color formats allowed
           if (color && isValidColor(color)) {
             // Sanitize key to prevent CSS injection via variable names
@@ -135,7 +143,7 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
   // Use textContent instead of dangerouslySetInnerHTML for safer rendering
   // This prevents any potential script execution
   const styleRef = React.useRef<HTMLStyleElement>(null);
-  
+
   React.useEffect(() => {
     if (styleRef.current && cssText) {
       styleRef.current.textContent = cssText;
@@ -306,11 +314,11 @@ const ChartLegend = RechartsPrimitive.Legend;
 const ChartLegendContent = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<'div'> & {
-      hideIcon?: boolean;
-      nameKey?: string;
-      payload?: any[];
-      verticalAlign?: 'top' | 'bottom';
-    }
+    hideIcon?: boolean;
+    nameKey?: string;
+    payload?: any[];
+    verticalAlign?: 'top' | 'bottom';
+  }
 >(
   (
     { className, hideIcon = false, payload, verticalAlign = 'bottom', nameKey },

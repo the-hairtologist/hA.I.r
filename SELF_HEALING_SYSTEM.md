@@ -7,12 +7,14 @@ Your hA.I.r app now has a complete **AI-powered self-healing system** that autom
 ## 🚀 Features
 
 ### 1. **Automated Error Recovery**
+
 - **Circuit Breakers**: Prevents cascading failures by opening circuits after 5 consecutive failures
 - **Exponential Backoff**: Smart retry logic with delays: 1s → 2s → 4s
 - **Automatic Recovery**: Attempts to fix network, auth, and data errors automatically
 - **Fallback Strategies**: Uses cached data when primary sources fail
 
 ### 2. **Continuous Health Monitoring**
+
 - **Database Connectivity**: Checks database connection every 30 seconds
 - **Authentication Service**: Monitors auth system health
 - **Memory Usage**: Tracks memory consumption (warns at 90%)
@@ -20,12 +22,14 @@ Your hA.I.r app now has a complete **AI-powered self-healing system** that autom
 - **Storage Health**: Validates local storage functionality
 
 ### 3. **AI Maintenance Assistant**
+
 - **Error Analysis**: Uses Lovable AI to analyze errors and suggest fixes
 - **Predictive Insights**: Predicts potential issues based on patterns
 - **Maintenance Reports**: Generates comprehensive health reports
 - **Optimization Suggestions**: Recommends performance improvements
 
 ### 4. **Data Integrity Checker**
+
 - **Validation Rules**: Checks required fields, formats, and constraints
 - **Orphaned Records**: Detects broken references between tables
 - **Duplicate Detection**: Finds duplicate entries
@@ -34,6 +38,7 @@ Your hA.I.r app now has a complete **AI-powered self-healing system** that autom
 ## 📊 Access the System
 
 Navigate to **System Health** in your sidebar (under Tools section) to:
+
 - View live system metrics
 - Run manual maintenance
 - Check data integrity
@@ -43,6 +48,7 @@ Navigate to **System Health** in your sidebar (under Tools section) to:
 ## 🛡️ How It Works
 
 ### Initialization
+
 The system initializes automatically when your app starts:
 
 ```typescript
@@ -54,6 +60,7 @@ useEffect(() => {
 ```
 
 ### Error Handling
+
 All errors are automatically caught and processed:
 
 ```typescript
@@ -67,7 +74,9 @@ errorRecovery.handleError(error, {
 ```
 
 ### Health Checks
+
 Automated health checks run every 30 seconds:
+
 - Database connection test
 - Auth service check
 - Memory usage monitoring
@@ -76,6 +85,7 @@ Automated health checks run every 30 seconds:
 ## 📈 Database Logging
 
 All errors are logged to the `error_logs` table:
+
 - Component that failed
 - Action attempted
 - Error message & stack trace
@@ -88,6 +98,7 @@ All errors are logged to the `error_logs` table:
 ## 🎯 Circuit Breaker Pattern
 
 When a component fails 5+ times within a short period:
+
 1. Circuit opens → stops trying that operation
 2. Prevents cascading failures
 3. Automatically resets after 1 minute
@@ -96,23 +107,27 @@ When a component fails 5+ times within a short period:
 ## 🔧 Manual Actions
 
 ### Run Full Maintenance
+
 ```typescript
 const result = await selfHealing.runMaintenance();
 // Returns: { issuesFound, issuesFixed, report }
 ```
 
 ### Check Data Integrity
+
 ```typescript
 const issues = await dataIntegrity.runFullCheck();
 const fixed = await dataIntegrity.autoFix(issues);
 ```
 
 ### Force Health Check
+
 ```typescript
 await healthMonitor.checkNow();
 ```
 
 ### Get System Status
+
 ```typescript
 const status = selfHealing.getStatus();
 // Returns: { initialized, health, errorRecovery }
@@ -121,6 +136,7 @@ const status = selfHealing.getStatus();
 ## 📝 Using in Your Code
 
 ### Wrap Operations with Recovery
+
 ```typescript
 import { withRecovery } from '@/lib/selfHealing';
 
@@ -138,6 +154,7 @@ const result = await withRecovery(
 ```
 
 ### Log to System
+
 ```typescript
 import { logger } from '@/lib/logger';
 
@@ -149,6 +166,7 @@ logger.error('Error occurred', 'ComponentName', error);
 ## 🚨 Alerts & Notifications
 
 The system automatically shows toast notifications for:
+
 - Critical failures
 - High memory usage
 - Slow performance
@@ -158,6 +176,7 @@ The system automatically shows toast notifications for:
 ## 📊 Monitoring Dashboard
 
 Access `/system-health` to view:
+
 - **Live Monitor**: Real-time metrics and controls
 - **Features**: Documentation of all capabilities
 - **Documentation**: How to use the system
@@ -181,6 +200,7 @@ Access `/system-health` to view:
 ## 🚀 Future Enhancements
 
 The system is designed to be extended with:
+
 - Machine learning for anomaly detection
 - Automated performance optimization
 - Predictive scaling
@@ -204,7 +224,7 @@ The system is designed to be extended with:
 ✅ **Proactive Monitoring**: Detects problems before users notice  
 ✅ **AI-Powered**: Smart analysis and predictions  
 ✅ **Developer Friendly**: Easy to extend and customize  
-✅ **Production Ready**: Battle-tested patterns and practices  
+✅ **Production Ready**: Battle-tested patterns and practices
 
 ---
 

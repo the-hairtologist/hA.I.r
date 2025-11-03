@@ -37,7 +37,7 @@ export const ClientEnrollments = () => {
     queryKey: ['email_enrollments'],
     queryFn: async () => {
       if (!user?.id) return [];
-      
+
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id')
@@ -69,7 +69,7 @@ export const ClientEnrollments = () => {
     queryKey: ['stylist_clients'],
     queryFn: async () => {
       if (!user?.id) return [];
-      
+
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id')
@@ -95,7 +95,7 @@ export const ClientEnrollments = () => {
     queryKey: ['active_sequences'],
     queryFn: async () => {
       if (!user?.id) return [];
-      
+
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id')
@@ -135,7 +135,7 @@ export const ClientEnrollments = () => {
   const enrollMutation = useMutation({
     mutationFn: async () => {
       if (!user?.id) throw new Error('Not authenticated');
-      
+
       // Check for duplicate before enrolling
       const existing = await checkDuplicateEnrollment();
       if (existing && existing.status === 'active') {

@@ -12,12 +12,14 @@
 The database linter automatically scans your Supabase database for security vulnerabilities, missing RLS policies, and performance issues.
 
 **How to Run:**
+
 1. Open Lovable Cloud Backend
 2. Navigate to Database → Linter
 3. Click "Run Security Scan"
 4. Review findings
 
 **Command Line Alternative:**
+
 ```typescript
 import { supabase } from '@/integrations/supabase/client';
 
@@ -35,11 +37,13 @@ console.log('Security findings:', results);
 **Impact:** Unrestricted data access, potential data breaches
 
 **Finding:**
+
 ```
 Table "public.user_data" has RLS disabled
 ```
 
 **Fix:**
+
 ```sql
 -- Enable RLS on the table
 ALTER TABLE public.user_data ENABLE ROW LEVEL SECURITY;
@@ -57,11 +61,12 @@ USING (auth.uid() = user_id);
 ```
 
 **Verification:**
+
 ```sql
 -- Check if RLS is enabled
-SELECT tablename, rowsecurity 
-FROM pg_tables 
-WHERE schemaname = 'public' 
+SELECT tablename, rowsecurity
+FROM pg_tables
+WHERE schemaname = 'public'
 AND tablename = 'user_data';
 ```
 
@@ -73,19 +78,21 @@ AND tablename = 'user_data';
 **Impact:** Users can access data they shouldn't see
 
 **Finding:**
+
 ```
 Policy allows unrestricted access: USING (true)
 ```
 
 **Fix:**
+
 ```sql
 -- Bad: Allows everyone to see everything
 CREATE POLICY "bad_policy" ON appointments FOR SELECT USING (true);
 
 -- Good: Restrict to relevant users
-CREATE POLICY "good_policy" ON appointments FOR SELECT 
+CREATE POLICY "good_policy" ON appointments FOR SELECT
 USING (
-  auth.uid() = client_id OR 
+  auth.uid() = client_id OR
   auth.uid() IN (
     SELECT user_id FROM stylist_profiles WHERE id = stylist_id
   )
@@ -93,6 +100,7 @@ USING (
 ```
 
 **Verification:**
+
 ```sql
 -- Review all policies on a table
 SELECT schemaname, tablename, policyname, permissive, roles, cmd, qual
@@ -108,11 +116,13 @@ WHERE tablename = 'appointments';
 **Impact:** Specific operations may fail or be unrestricted
 
 **Finding:**
+
 ```
 Table "appointments" has SELECT policy but no INSERT policy
 ```
 
 **Fix:**
+
 ```sql
 -- Add missing INSERT policy
 CREATE POLICY "Clients can create own appointments"
@@ -148,14 +158,16 @@ USING (
 **Impact:** Orphaned records, data inconsistency
 
 **Finding:**
+
 ```
 Foreign key missing ON DELETE CASCADE
 ```
 
 **Fix:**
+
 ```sql
 -- Drop existing constraint
-ALTER TABLE appointments 
+ALTER TABLE appointments
 DROP CONSTRAINT appointments_client_id_fkey;
 
 -- Add with cascade
@@ -174,22 +186,24 @@ ON DELETE CASCADE;
 **Impact:** Slow query performance
 
 **Finding:**
+
 ```
 Column "appointments.stylist_id" frequently queried but not indexed
 ```
 
 **Fix:**
+
 ```sql
 -- Add index on frequently queried column
 CREATE INDEX idx_appointments_stylist_id ON appointments(stylist_id);
 
 -- Composite index for common query patterns
-CREATE INDEX idx_appointments_stylist_date 
+CREATE INDEX idx_appointments_stylist_date
 ON appointments(stylist_id, appointment_date);
 
 -- Partial index for specific conditions
-CREATE INDEX idx_active_appointments 
-ON appointments(stylist_id) 
+CREATE INDEX idx_active_appointments
+ON appointments(stylist_id)
 WHERE status = 'scheduled';
 ```
 
@@ -201,11 +215,13 @@ WHERE status = 'scheduled';
 **Impact:** PII data breach, compliance violations
 
 **Finding:**
+
 ```
 Column "users.password_hash" accessible via RLS policy
 ```
 
 **Fix:**
+
 ```sql
 -- Exclude sensitive columns from SELECT
 CREATE POLICY "Users can view safe profile data"
@@ -230,7 +246,7 @@ BEGIN
   IF auth.uid() != user_id THEN
     RAISE EXCEPTION 'Unauthorized';
   END IF;
-  
+
   RETURN (
     SELECT jsonb_build_object(
       'phone', phone,
@@ -251,15 +267,17 @@ $$;
 **Impact:** Migration/restoration failures
 
 **Finding:**
+
 ```
 CHECK constraint uses now() function
 ```
 
 **Fix:**
+
 ```sql
 -- Bad: Uses volatile function
-ALTER TABLE events 
-ADD CONSTRAINT check_future_date 
+ALTER TABLE events
+ADD CONSTRAINT check_future_date
 CHECK (event_date > now());
 
 -- Good: Use trigger instead
@@ -390,8 +408,8 @@ CREATE POLICY "Conditional appointment access"
 ON appointments
 FOR UPDATE
 USING (
-  CASE 
-    WHEN status = 'scheduled' THEN 
+  CASE
+    WHEN status = 'scheduled' THEN
       auth.uid() IN (
         SELECT user_id FROM client_profiles WHERE id = client_id
       )
@@ -412,19 +430,19 @@ USING (
 
 ```typescript
 // Always verify user authentication
-const authHeader = req.headers.get("Authorization");
+const authHeader = req.headers.get('Authorization');
 if (!authHeader) {
-  return new Response(JSON.stringify({ error: "Unauthorized" }), {
+  return new Response(JSON.stringify({ error: 'Unauthorized' }), {
     status: 401,
     headers: corsHeaders,
   });
 }
 
-const token = authHeader.replace("Bearer ", "");
+const token = authHeader.replace('Bearer ', '');
 const { data: userData, error: userError } = await supabase.auth.getUser(token);
 
 if (userError || !userData.user) {
-  return new Response(JSON.stringify({ error: "Invalid token" }), {
+  return new Response(JSON.stringify({ error: 'Invalid token' }), {
     status: 401,
     headers: corsHeaders,
   });
@@ -435,7 +453,7 @@ if (userError || !userData.user) {
 
 ```typescript
 // Validate all user inputs
-import { z } from "zod";
+import { z } from 'zod';
 
 const schema = z.object({
   email: z.string().email(),
@@ -446,7 +464,7 @@ const schema = z.object({
 try {
   const validData = schema.parse(requestBody);
 } catch (error) {
-  return new Response(JSON.stringify({ error: "Invalid input" }), {
+  return new Response(JSON.stringify({ error: 'Invalid input' }), {
     status: 400,
     headers: corsHeaders,
   });
@@ -461,16 +479,16 @@ const rateLimits = new Map<string, { count: number; resetAt: number }>();
 function checkRateLimit(userId: string, limit: number): boolean {
   const now = Date.now();
   const userLimit = rateLimits.get(userId);
-  
+
   if (!userLimit || now > userLimit.resetAt) {
     rateLimits.set(userId, { count: 1, resetAt: now + 60000 });
     return true;
   }
-  
+
   if (userLimit.count >= limit) {
     return false;
   }
-  
+
   userLimit.count++;
   return true;
 }
@@ -511,6 +529,7 @@ function checkRateLimit(userId: string, limit: number): boolean {
 ### Data Breach Response Plan
 
 **1. Immediate Actions (0-1 hour):**
+
 - [ ] Identify affected tables
 - [ ] Disable compromised policies
 - [ ] Block suspicious IP addresses
@@ -518,6 +537,7 @@ function checkRateLimit(userId: string, limit: number): boolean {
 - [ ] Alert security team
 
 **2. Investigation (1-4 hours):**
+
 - [ ] Review audit logs
 - [ ] Identify breach source
 - [ ] Determine data exposure
@@ -525,6 +545,7 @@ function checkRateLimit(userId: string, limit: number): boolean {
 - [ ] Preserve evidence
 
 **3. Containment (4-24 hours):**
+
 - [ ] Fix security vulnerability
 - [ ] Update RLS policies
 - [ ] Force password reset if needed
@@ -532,6 +553,7 @@ function checkRateLimit(userId: string, limit: number): boolean {
 - [ ] Deploy security patches
 
 **4. Recovery (1-7 days):**
+
 - [ ] Notify affected users
 - [ ] Provide remediation steps
 - [ ] Monitor for continued attacks
@@ -539,6 +561,7 @@ function checkRateLimit(userId: string, limit: number): boolean {
 - [ ] Conduct post-mortem
 
 **5. Prevention (Ongoing):**
+
 - [ ] Implement additional monitoring
 - [ ] Update security policies
 - [ ] Train team on new threats
@@ -580,17 +603,20 @@ function checkRateLimit(userId: string, limit: number): boolean {
 ## Resources
 
 **Official Documentation:**
+
 - Supabase RLS: https://supabase.com/docs/guides/auth/row-level-security
 - PostgreSQL Security: https://www.postgresql.org/docs/current/auth-pg-hba-conf.html
 - OWASP Top 10: https://owasp.org/www-project-top-ten/
 
 **Tools:**
+
 - Database Linter (built-in)
 - Audit logs (Lovable Cloud Backend)
 - Edge function logs (Lovable Cloud Backend)
 - Security scan (Lovable Cloud Backend)
 
 **Support:**
+
 - Lovable Cloud: Open backend dashboard
 - Security team: security@yourcompany.com
 - Emergency: Use incident response plan
@@ -602,6 +628,7 @@ function checkRateLimit(userId: string, limit: number): boolean {
 Regular database security maintenance is essential for protecting user data and maintaining trust. Follow this guide weekly, monthly, and quarterly to ensure your database remains secure.
 
 **Remember:**
+
 - Security is everyone's responsibility
 - Test all policy changes thoroughly
 - Document all security decisions
@@ -609,6 +636,7 @@ Regular database security maintenance is essential for protecting user data and 
 - When in doubt, be more restrictive
 
 **Next Steps:**
+
 1. Run your first linter scan today
 2. Fix all critical issues immediately
 3. Schedule recurring security reviews

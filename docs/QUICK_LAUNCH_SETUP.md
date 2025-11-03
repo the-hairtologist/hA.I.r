@@ -5,6 +5,7 @@
 All code is already integrated! This guide just connects external services.
 
 **What's Already Done:**
+
 - ✅ Analytics tracking code (GA4 + Sentry)
 - ✅ Webhook edge functions deployed
 - ✅ All 61 backend functions operational
@@ -81,8 +82,9 @@ All code is already integrated! This guide just connects external services.
 ### 2.4 Test Error Tracking (After Deploy)
 
 Open browser console on your deployed site and run:
+
 ```javascript
-throw new Error("Test Sentry Integration");
+throw new Error('Test Sentry Integration');
 ```
 
 Check Sentry dashboard for the error within 1 minute.
@@ -96,7 +98,7 @@ Check Sentry dashboard for the error within 1 minute.
 1. Go to **[Resend Webhooks](https://resend.com/webhooks)**
 2. Click **"Add Webhook"**
 3. Enter:
-   - **Endpoint URL:** 
+   - **Endpoint URL:**
      ```
      https://iyotklwiwyljospfqnoy.supabase.co/functions/v1/resend-webhook
      ```
@@ -155,6 +157,7 @@ Check Sentry dashboard for the error within 1 minute.
 ## 🧪 Step 5: Verification Testing (5 minutes)
 
 ### 5.1 PageSpeed Test
+
 ```bash
 # Test mobile performance
 https://pagespeed.web.dev/
@@ -162,21 +165,25 @@ https://pagespeed.web.dev/
 ```
 
 ### 5.2 Analytics Test
+
 1. Visit your deployed site
 2. Navigate between pages
 3. Check GA4 Realtime → Should see page views
 
 ### 5.3 Sentry Test
+
 1. Open browser console
 2. Run: `throw new Error("Production test");`
 3. Check Sentry dashboard → Should see error
 
 ### 5.4 Resend Webhook Test
+
 1. Create a test appointment in your app
 2. Check Resend dashboard → Webhooks → Events
 3. Should see `email.sent` event
 
 ### 5.5 Stripe Webhook Test
+
 1. Complete a test Stripe checkout
 2. Check Stripe dashboard → Webhooks → Events
 3. Should see `checkout.session.completed` event with ✅
@@ -200,6 +207,7 @@ After completing all steps, verify:
 ## 🚀 Ready to Launch!
 
 Once all checkmarks are done, you have:
+
 - **Analytics:** Full user behavior tracking
 - **Error Monitoring:** Automatic error detection and alerts
 - **Email Tracking:** Open/click rates for all communications
@@ -221,21 +229,25 @@ Once all checkmarks are done, you have:
 ## 🔧 Troubleshooting
 
 ### GA4 not tracking
+
 - Verify `VITE_GA4_MEASUREMENT_ID` is set in Lovable secrets
 - Check browser console for errors
 - Disable ad blockers for testing
 
 ### Sentry not capturing errors
+
 - Verify `VITE_SENTRY_DSN` is set correctly
 - Check Sentry project settings → Client Keys
 - Ensure you're testing on deployed site (not localhost)
 
 ### Resend webhook failing
+
 - Verify webhook URL is exact match
 - Check Resend dashboard → Webhooks → Events for error messages
 - Edge function logs: Check Lovable Cloud → Functions → resend-webhook
 
 ### Stripe webhook failing
+
 - Verify `STRIPE_WEBHOOK_SECRET` is added to Lovable secrets
 - Check webhook signature verification
 - Test mode: Use Stripe CLI for local testing

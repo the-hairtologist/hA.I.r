@@ -13,6 +13,7 @@ This document outlines the major refactoring improvements made to the codebase, 
 **Purpose**: Provides consistent, level-based logging across the entire application.
 
 #### **Features**:
+
 - **Log Levels**: DEBUG, INFO, WARN, ERROR
 - **Color-coded console output** for easy debugging
 - **Production-safe**: Only logs WARN/ERROR in production
@@ -20,6 +21,7 @@ This document outlines the major refactoring improvements made to the codebase, 
 - **Context tracking**: Associate logs with specific components
 
 #### **Usage**:
+
 ```typescript
 import { log } from '@/lib/logger';
 
@@ -37,6 +39,7 @@ log.error('Failed to save', 'Database', error);
 ```
 
 #### **Benefits**:
+
 - ✅ Consistent logging format
 - ✅ Easy to filter by level
 - ✅ Production-ready
@@ -51,6 +54,7 @@ log.error('Failed to save', 'Database', error);
 **Purpose**: Provides consistent error handling and user-friendly error messages.
 
 #### **Features**:
+
 - **Automatic error mapping**: Maps technical errors to user-friendly messages
 - **Consistent toast notifications**
 - **Error logging integration**
@@ -58,8 +62,13 @@ log.error('Failed to save', 'Database', error);
 - **Safe async wrappers**
 
 #### **Usage**:
+
 ```typescript
-import { handleError, withErrorHandling, validateRequired } from '@/lib/errorHandler';
+import {
+  handleError,
+  withErrorHandling,
+  validateRequired,
+} from '@/lib/errorHandler';
 
 // Basic error handling
 try {
@@ -70,24 +79,19 @@ try {
 }
 
 // Wrap async functions
-const safeLoadData = withErrorHandling(
-  async () => {
-    const data = await fetchData();
-    return data;
-  },
-  'Load Data'
-);
+const safeLoadData = withErrorHandling(async () => {
+  const data = await fetchData();
+  return data;
+}, 'Load Data');
 
 // Validate required fields
-validateRequired(
-  { email, password },
-  ['email', 'password'],
-  'Sign In Form'
-);
+validateRequired({ email, password }, ['email', 'password'], 'Sign In Form');
 ```
 
 #### **Error Message Mapping**:
+
 The system automatically converts technical errors to user-friendly messages:
+
 - `invalid_credentials` → "Invalid email or password"
 - `email_exists` → "An account with this email already exists"
 - `23505` (DB unique constraint) → "This record already exists"
@@ -101,22 +105,24 @@ The system automatically converts technical errors to user-friendly messages:
 **Purpose**: Centralizes authentication state and methods.
 
 #### **Features**:
+
 - ✅ Session persistence
 - ✅ Auto-refresh handling
 - ✅ Integrated logging
 - ✅ Error handling built-in
 
 #### **Usage**:
+
 ```typescript
 import { useAuth } from '@/hooks/useAuth';
 
 function MyComponent() {
-  const { 
-    user, 
-    isAuthenticated, 
-    loading, 
-    signIn, 
-    signOut 
+  const {
+    user,
+    isAuthenticated,
+    loading,
+    signIn,
+    signOut
   } = useAuth();
 
   const handleSignIn = async () => {
@@ -144,22 +150,24 @@ function MyComponent() {
 **Purpose**: Handles fetching and updating user profiles.
 
 #### **Features**:
+
 - Fetches base profile, stylist profile, and client profile
 - Optimistic updates
 - Automatic refetching
 - Error handling built-in
 
 #### **Usage**:
+
 ```typescript
 import { useProfile } from '@/hooks/useProfile';
 
 function ProfilePage() {
-  const { 
-    profile, 
-    stylistProfile, 
-    loading, 
+  const {
+    profile,
+    stylistProfile,
+    loading,
     updateProfile,
-    updateStylistProfile 
+    updateStylistProfile
   } = useProfile(userId);
 
   const handleSave = async () => {
@@ -182,6 +190,7 @@ function ProfilePage() {
 **Purpose**: Comprehensive appointment data management.
 
 #### **Features**:
+
 - ✅ Fetching with filters (stylist/client/status)
 - ✅ Realtime subscriptions
 - ✅ CRUD operations
@@ -189,18 +198,19 @@ function ProfilePage() {
 - ✅ Optimistic updates
 
 #### **Usage**:
+
 ```typescript
 import { useAppointments } from '@/hooks/useAppointments';
 
 function AppointmentsPage() {
-  const { 
-    appointments, 
-    loading, 
+  const {
+    appointments,
+    loading,
     createAppointment,
     updateAppointment,
     cancelAppointment,
     sendSMSNotification
-  } = useAppointments({ 
+  } = useAppointments({
     stylistId: '123',
     status: 'confirmed'
   });
@@ -228,6 +238,7 @@ function AppointmentsPage() {
 **Purpose**: Handles complex form state with validation.
 
 #### **Features**:
+
 - ✅ Value management
 - ✅ Error tracking
 - ✅ Touch/dirty state
@@ -235,6 +246,7 @@ function AppointmentsPage() {
 - ✅ Form submission handling
 
 #### **Usage**:
+
 ```typescript
 import { useFormState } from '@/hooks/useFormState';
 import { signInSchema, createValidator } from '@/lib/validation';
@@ -253,10 +265,10 @@ function SignInForm() {
     <form onSubmit={form.handleSubmit}>
       <Input {...form.getFieldProps('email')} />
       {form.errors.email && <ErrorText>{form.errors.email}</ErrorText>}
-      
+
       <Input {...form.getFieldProps('password')} type="password" />
       {form.errors.password && <ErrorText>{form.errors.password}</ErrorText>}
-      
+
       <Button type="submit" disabled={form.isSubmitting}>
         {form.isSubmitting ? 'Signing in...' : 'Sign In'}
       </Button>
@@ -274,6 +286,7 @@ function SignInForm() {
 **Purpose**: Provides reusable Zod schemas for common forms.
 
 #### **Available Schemas**:
+
 - `signInSchema` - Email + password
 - `signUpSchema` - Registration form
 - `profileSchema` - User profile
@@ -286,8 +299,13 @@ function SignInForm() {
 - `messageSchema` - Messages
 
 #### **Usage**:
+
 ```typescript
-import { signUpSchema, validateWithSchema, createValidator } from '@/lib/validation';
+import {
+  signUpSchema,
+  validateWithSchema,
+  createValidator,
+} from '@/lib/validation';
 
 // Manual validation
 const result = validateWithSchema(signUpSchema, formData);
@@ -308,6 +326,7 @@ const form = useFormState({
 ## 🎨 **Migration Guide**
 
 ### Before (Old Pattern):
+
 ```typescript
 // ❌ Multiple useState, manual error handling, no validation
 function OldComponent() {
@@ -316,7 +335,7 @@ function OldComponent() {
   const [data, setData] = useState(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  
+
   const handleSubmit = async () => {
     setLoading(true);
     try {
@@ -347,11 +366,12 @@ function OldComponent() {
 ```
 
 ### After (New Pattern):
+
 ```typescript
 // ✅ Clean, validated, with proper error handling
 function NewComponent() {
   const { signIn } = useAuth();
-  
+
   const form = useFormState({
     initialValues: { email: '', password: '' },
     validate: createValidator(signInSchema),
@@ -364,10 +384,10 @@ function NewComponent() {
     <form onSubmit={form.handleSubmit}>
       <Input {...form.getFieldProps('email')} />
       {form.errors.email && <ErrorText>{form.errors.email}</ErrorText>}
-      
+
       <Input {...form.getFieldProps('password')} type="password" />
       {form.errors.password && <ErrorText>{form.errors.password}</ErrorText>}
-      
+
       <Button type="submit" disabled={form.isSubmitting}>
         Sign In
       </Button>
@@ -381,24 +401,28 @@ function NewComponent() {
 ## 📈 **Benefits Summary**
 
 ### Code Quality:
+
 - ✅ **-140+ console.log statements** → Centralized logging
 - ✅ **Consistent error handling** across 50+ components
 - ✅ **Reduced code duplication** by 60%+
 - ✅ **Type-safe validation** for all forms
 
 ### Developer Experience:
+
 - ✅ **Easier debugging** with structured logs
 - ✅ **Faster development** with reusable hooks
 - ✅ **Better error messages** for users
 - ✅ **Clear patterns** to follow
 
 ### Performance:
+
 - ✅ **Optimistic updates** for better UX
 - ✅ **Realtime subscriptions** built-in
 - ✅ **Efficient state management**
 - ✅ **Production-optimized** logging
 
 ### Maintainability:
+
 - ✅ **Single source of truth** for validation
 - ✅ **Centralized error mapping**
 - ✅ **Consistent patterns** across codebase
@@ -409,6 +433,7 @@ function NewComponent() {
 ## 🚀 **Next Steps**
 
 ### Recommended Migrations:
+
 1. **Start with new components** - Use the new patterns for all new features
 2. **Gradually refactor existing pages** - Start with the most complex ones
 3. **Update error handling** - Replace `console.error` with `log.error`
@@ -416,6 +441,7 @@ function NewComponent() {
 5. **Use custom hooks** - Replace manual data fetching with hooks
 
 ### Priority Pages to Refactor:
+
 1. ✅ Authentication pages (already using patterns)
 2. Appointment booking flows
 3. Profile pages

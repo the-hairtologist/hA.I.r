@@ -69,7 +69,9 @@ export const CelebrationAnimation = ({
       haptic.success();
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
-      logger.error('Failed to copy discount code', error, { component: 'CelebrationAnimation' });
+      logger.error('Failed to copy discount code', error, {
+        component: 'CelebrationAnimation',
+      });
     }
   };
 

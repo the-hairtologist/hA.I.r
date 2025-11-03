@@ -196,14 +196,18 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
         profile,
         roles,
         primaryRole,
-        stylistProfile: stylistProfile ? {
-          ...stylistProfile,
-          is_available: stylistProfile.is_available ?? false,
-        } as StylistProfile : null,
-        clientProfile: clientProfile ? {
-          ...clientProfile,
-          user_id: clientProfile.user_id ?? user.id,
-        } as ClientProfile : null,
+        stylistProfile: stylistProfile
+          ? ({
+              ...stylistProfile,
+              is_available: stylistProfile.is_available ?? false,
+            } as StylistProfile)
+          : null,
+        clientProfile: clientProfile
+          ? ({
+              ...clientProfile,
+              user_id: clientProfile.user_id ?? user.id,
+            } as ClientProfile)
+          : null,
         loading: false,
         initialized: true,
       });

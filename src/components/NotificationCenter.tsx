@@ -68,7 +68,10 @@ export const NotificationCenter = ({ userId }: { userId: string }) => {
       setNotifications(appointments || []);
       setUnreadCount(messages?.length || 0);
     } catch (error) {
-      logger.error('Error loading notifications', error, { component: 'NotificationCenter', userId });
+      logger.error('Error loading notifications', error, {
+        component: 'NotificationCenter',
+        userId,
+      });
     }
   };
 

@@ -48,7 +48,11 @@ export const NotificationManager = ({
 
       setLastCheck(new Date());
     } catch (error) {
-      logger.error('Error checking notifications', error, { component: 'NotificationManager', userId, userRole });
+      logger.error('Error checking notifications', error, {
+        component: 'NotificationManager',
+        userId,
+        userRole,
+      });
     }
   };
 

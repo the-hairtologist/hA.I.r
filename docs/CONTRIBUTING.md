@@ -5,12 +5,14 @@ Welcome! This guide will help you get started contributing to the hA.I.r project
 ## Getting Started
 
 ### Prerequisites
+
 - **Node.js:** 18+ (LTS recommended)
 - **Package Manager:** npm 9+
 - **Git:** For version control
 - **Editor:** VS Code recommended (with extensions below)
 
 ### Recommended VS Code Extensions
+
 - ESLint
 - Prettier
 - Tailwind CSS IntelliSense
@@ -18,6 +20,7 @@ Welcome! This guide will help you get started contributing to the hA.I.r project
 - Playwright Test for VS Code
 
 ### Initial Setup
+
 ```bash
 # Clone the repository (via Lovable)
 # Navigate to project directory
@@ -39,6 +42,7 @@ npm run dev
 ### 1. Understanding the Codebase
 
 **Project Structure:**
+
 ```
 src/
 ├── components/          # Reusable UI components
@@ -62,6 +66,7 @@ docs/                   # Comprehensive documentation
 ```
 
 **Key Conventions:**
+
 - **Components:** PascalCase (e.g., `AppointmentCard.tsx`)
 - **Hooks:** camelCase with `use` prefix (e.g., `useAppointments.ts`)
 - **Utils:** camelCase (e.g., `formatDate.ts`)
@@ -70,6 +75,7 @@ docs/                   # Comprehensive documentation
 ### 2. Making Changes
 
 #### Feature Development Process
+
 1. **Understand the requirement** - Check existing issues or discuss with team
 2. **Create a branch** - Use descriptive names (e.g., `feature/ai-formula-export`)
 3. **Write tests first** (TDD) - See `docs/TESTING.md`
@@ -81,6 +87,7 @@ docs/                   # Comprehensive documentation
 #### Code Style Guidelines
 
 **TypeScript:**
+
 ```typescript
 // ✅ GOOD - Explicit types, descriptive names
 interface AppointmentFormData {
@@ -96,12 +103,13 @@ const createAppointment = async (
 };
 
 // ❌ BAD - Implicit any, unclear names
-const create = async (d) => {
+const create = async d => {
   // Implementation
 };
 ```
 
 **React Components:**
+
 ```typescript
 // ✅ GOOD - Typed props, early returns, semantic HTML
 interface ButtonProps {
@@ -133,6 +141,7 @@ export const Button = ({ children, onClick, loading }) => {
 ```
 
 **Tailwind CSS:**
+
 ```tsx
 // ✅ GOOD - Semantic tokens from design system
 <div className="bg-background text-foreground border-border">
@@ -148,6 +157,7 @@ export const Button = ({ children, onClick, loading }) => {
 ### 3. Database Changes
 
 **Using Migrations:**
+
 ```sql
 -- supabase/migrations/YYYYMMDDHHMMSS_description.sql
 
@@ -174,6 +184,7 @@ EXECUTE FUNCTION public.update_updated_at_column();
 ```
 
 **Important:**
+
 - Always enable RLS on new tables
 - Use `SECURITY DEFINER` functions with `SET search_path = public, pg_temp`
 - Test policies with different user roles
@@ -182,6 +193,7 @@ EXECUTE FUNCTION public.update_updated_at_column();
 ### 4. Edge Functions
 
 **Creating a New Function:**
+
 ```typescript
 // supabase/functions/my-function/index.ts
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
@@ -208,9 +220,7 @@ serve(async (req: Request) => {
     Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
   );
 
-  const { data: result, error } = await supabase
-    .from('table')
-    .insert(data);
+  const { data: result, error } = await supabase.from('table').insert(data);
 
   if (error) {
     console.error('Database error:', error);
@@ -229,6 +239,7 @@ serve(async (req: Request) => {
 ## Testing Guidelines
 
 ### Running Tests Locally
+
 ```bash
 # Unit tests (fast feedback)
 npm run test:watch
@@ -247,6 +258,7 @@ npm run test:coverage
 ### Writing Tests
 
 **Unit Test Example:**
+
 ```typescript
 // src/utils/validation.test.ts
 import { describe, it, expect } from 'vitest';
@@ -265,6 +277,7 @@ describe('validateEmail', () => {
 ```
 
 **Component Test Example:**
+
 ```typescript
 // src/components/Button.test.tsx
 import { render, screen } from '@testing-library/react';
@@ -275,9 +288,9 @@ describe('Button', () => {
   it('should call onClick when clicked', async () => {
     const handleClick = vi.fn();
     render(<Button onClick={handleClick}>Click me</Button>);
-    
+
     await userEvent.click(screen.getByRole('button'));
-    
+
     expect(handleClick).toHaveBeenCalledOnce();
   });
 });
@@ -290,6 +303,7 @@ describe('Button', () => {
 ### Using Semantic Tokens
 
 **Always use design system tokens:**
+
 ```tsx
 // ✅ GOOD
 <Card className="bg-card text-card-foreground border-border">
@@ -305,6 +319,7 @@ describe('Button', () => {
 ```
 
 **Available Tokens (see `src/index.css`):**
+
 - `--background`, `--foreground`
 - `--card`, `--card-foreground`
 - `--primary`, `--primary-foreground`
@@ -316,6 +331,7 @@ describe('Button', () => {
 ### Accessibility Requirements
 
 **All interactive elements must:**
+
 - Have visible focus indicators
 - Be keyboard accessible (tab navigation)
 - Have proper ARIA labels
@@ -323,6 +339,7 @@ describe('Button', () => {
 - Have touch targets ≥44px
 
 **Example:**
+
 ```tsx
 <button
   onClick={handleClick}
@@ -338,6 +355,7 @@ describe('Button', () => {
 ## Common Pitfalls
 
 ### 1. Direct Supabase Client Imports
+
 ```typescript
 // ❌ BAD - Never modify this file
 import { supabase } from '@/integrations/supabase/client';
@@ -348,6 +366,7 @@ import { supabase } from '@/integrations/supabase/client';
 ```
 
 ### 2. Ignoring TypeScript Errors
+
 ```typescript
 // ❌ BAD - Silencing errors
 const data = result as any;
@@ -361,6 +380,7 @@ const data = result as Result;
 ```
 
 ### 3. Missing Error Boundaries
+
 ```tsx
 // ❌ BAD - Unhandled errors crash app
 <MyComponent data={data} />
@@ -376,12 +396,14 @@ const data = result as Result;
 ## Resources
 
 ### Internal Documentation
+
 - [API Reference](./API.md)
 - [Database Schema](./DATABASE_SCHEMA.md)
 - [Architecture](./ARCHITECTURE.md)
 - [Testing Guide](./TESTING.md)
 
 ### External Resources
+
 - [React Docs](https://react.dev)
 - [TypeScript Handbook](https://www.typescriptlang.org/docs)
 - [Tailwind CSS](https://tailwindcss.com/docs)
@@ -394,11 +416,13 @@ const data = result as Result;
 ## Getting Help
 
 ### Communication Channels
+
 - **Questions:** Open a GitHub Discussion
 - **Bugs:** Create an issue with reproducible steps
 - **Features:** Submit a feature request with use case
 
 ### Code Review Process
+
 1. Self-review your changes (use the PR checklist)
 2. Address automated checks (tests, linting)
 3. Request review from at least one team member

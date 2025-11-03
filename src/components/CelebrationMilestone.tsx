@@ -46,7 +46,10 @@ export const CelebrationMilestone = ({
         setTimeout(() => setShowConfetti(false), 5000);
       }
     } catch (error) {
-      logger.error('Error checking milestones', error, { component: 'CelebrationMilestone', clientId });
+      logger.error('Error checking milestones', error, {
+        component: 'CelebrationMilestone',
+        clientId,
+      });
     }
   };
 
@@ -66,7 +69,10 @@ export const CelebrationMilestone = ({
 
       if (onClose) onClose();
     } catch (error) {
-      logger.error('Error marking milestone as celebrated', error, { component: 'CelebrationMilestone', milestoneId: milestone?.id });
+      logger.error('Error marking milestone as celebrated', error, {
+        component: 'CelebrationMilestone',
+        milestoneId: milestone?.id,
+      });
     }
   };
 

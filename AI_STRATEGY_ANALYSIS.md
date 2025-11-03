@@ -16,7 +16,7 @@
    - FormulaSuccessPredictor suggests, stylist decides
    - ClientRiskIndicator flags concerns, stylist intervenes
    - Human review required for all critical decisions
-   
+
    **Status**: ✅ **PERFECT** - AI augments professional judgment
 
 2. **Privacy & Data Compliance** ✅
@@ -24,7 +24,7 @@
    - RLS policies on all sensitive tables
    - Input validation and sanitization
    - Secure authentication
-   
+
    **Status**: ✅ **EXCEEDS** industry standards
 
 3. **Small Automation Already Implemented** ✅
@@ -32,14 +32,14 @@
    - Referral tracking
    - Automated appointment confirmations
    - Content suggestions
-   
+
    **Status**: ✅ **ALIGNED** with best practices
 
 4. **Feedback-Driven Iteration** ✅
    - AI analytics tracking (`useAIAnalytics` hook)
    - Formula outcome feedback system
    - Model performance monitoring
-   
+
    **Status**: ✅ **IMPLEMENTED** - ready for data collection
 
 #### ⚠️ **CRITICAL GAPS TO ADDRESS**
@@ -49,6 +49,7 @@
 **Issue**: AI suggestions are displayed without accuracy disclaimers or confidence indicators.
 
 **Current State**:
+
 ```typescript
 // FormulaSuccessPredictor shows probability directly
 <div className="text-2xl font-bold text-success">
@@ -57,6 +58,7 @@
 ```
 
 **Recommended Addition**:
+
 ```typescript
 // Add confidence indicator and disclaimer
 <div className="space-y-2">
@@ -85,12 +87,14 @@
 **Issue**: AI Assistant uses generic responses without brand personality.
 
 **Current State**:
+
 ```typescript
 // hair-assistant-chat edge function
-const systemPrompt = "You are a helpful AI assistant...";
+const systemPrompt = 'You are a helpful AI assistant...';
 ```
 
 **Recommended Enhancement**:
+
 ```typescript
 const systemPrompt = `You are hA.I.r's AI assistant, a knowledgeable and supportive expert in professional hair care.
 
@@ -136,15 +140,17 @@ const suggestions = [
   {
     type: 'milestone',
     client: 'Sarah Johnson',
-    message: '🎉 Sarah just completed her 10th appointment! Consider a personal thank-you call.',
-    automated: false
+    message:
+      '🎉 Sarah just completed her 10th appointment! Consider a personal thank-you call.',
+    automated: false,
   },
   {
     type: 'concern',
     client: 'Emily Chen',
-    message: '🤝 Emily has rescheduled 3 times. A quick check-in text might help.',
-    automated: false
-  }
+    message:
+      '🤝 Emily has rescheduled 3 times. A quick check-in text might help.',
+    automated: false,
+  },
 ];
 ```
 
@@ -159,6 +165,7 @@ const suggestions = [
 **Opportunity**: Build internal workflow for content generation.
 
 **Concept**:
+
 ```typescript
 // Future: Creative Agent for social media content
 interface CreativeAgent {
@@ -173,7 +180,7 @@ const agent = {
   theme: 'Spring Hair Refresh',
   variations: 5,
   tone: 'playful',
-  format: 'social'
+  format: 'social',
 };
 
 // AI generates 5 caption variations in brand voice
@@ -214,16 +221,18 @@ const agent = {
 **Current State**: General responsive design with Tailwind breakpoints
 
 **Recommended Testing Matrix**:
+
 ```markdown
-| Device Width | Test Scenarios | Status |
-|--------------|----------------|--------|
-| 375px | iPhone SE, older Android | ⏳ To Test |
-| 414px | iPhone 11/12/13 Pro Max | ⏳ To Test |
-| 768px | iPad, tablets | ⏳ To Test |
-| 1024px | iPad Pro landscape | ✅ Tested |
-| 1280px+ | Desktop | ✅ Tested |
+| Device Width | Test Scenarios           | Status     |
+| ------------ | ------------------------ | ---------- |
+| 375px        | iPhone SE, older Android | ⏳ To Test |
+| 414px        | iPhone 11/12/13 Pro Max  | ⏳ To Test |
+| 768px        | iPad, tablets            | ⏳ To Test |
+| 1024px       | iPad Pro landscape       | ✅ Tested  |
+| 1280px+      | Desktop                  | ✅ Tested  |
 
 Critical Pages to Test:
+
 - [ ] Dashboard (all 3 roles)
 - [ ] Appointment booking flow
 - [ ] Formula creation
@@ -232,6 +241,7 @@ Critical Pages to Test:
 ```
 
 **Action Items**:
+
 1. Test at 375px (smallest iPhone) - check for layout jumps/cutoffs
 2. Test at 414px (most common iPhone size)
 3. Test at 768px (iPad portrait) - ensure touch targets are comfortable
@@ -244,6 +254,7 @@ Critical Pages to Test:
 **Issue**: We have service worker but haven't validated offline experience.
 
 **Test Script**:
+
 ```markdown
 Offline Testing Protocol:
 
@@ -257,12 +268,12 @@ Offline Testing Protocol:
    - [ ] Form data persists
    - [ ] Graceful error for uncached data
    - [ ] Offline indicator shows
-   
 5. Turn WiFi back on
 6. Verify data sync
 ```
 
 **Expected Behavior**:
+
 - Cached pages load instantly
 - Uncached pages show friendly offline message
 - Forms save data locally, sync when online
@@ -274,6 +285,7 @@ Offline Testing Protocol:
 **Not Immediate**: But documented for future reference
 
 **Requirements for App Store Submission**:
+
 - [ ] iOS: Xcode + Apple Developer Account ($99/year)
 - [ ] Android: Android Studio + Google Play Developer Account ($25 one-time)
 - [ ] App Store assets: Screenshots, descriptions, keywords
@@ -299,13 +311,14 @@ Offline Testing Protocol:
 **Current State**: None
 
 **Required Sections**:
+
 1. **Acceptance of Terms** - By using hA.I.r, users agree to these terms
 2. **User Accounts** - Registration, security, termination
 3. **Service Description** - What hA.I.r provides (AI features, scheduling, client management)
 4. **User Responsibilities**:
    - Stylists: Maintain licenses, verify AI suggestions, responsible for client outcomes
    - Clients: Provide accurate information, follow aftercare
-5. **AI Disclaimer**: 
+5. **AI Disclaimer**:
    - AI suggestions are recommendations, not guarantees
    - Professional judgment required
    - No liability for AI-generated content
@@ -317,7 +330,8 @@ Offline Testing Protocol:
 
 **Action**: Create `/terms` page with comprehensive ToS
 
-**Resources**: 
+**Resources**:
+
 - Use termsfeed.com or privacypolicies.com generators
 - Customize for AI features and hair salon context
 - Have lawyer review (recommended but not required for MVP)
@@ -329,14 +343,15 @@ Offline Testing Protocol:
 **Current State**: Basic privacy references, no dedicated page
 
 **Required Additions**:
+
 1. **Data Collection**: What we collect (client info, photos, formulas, appointment history)
 2. **AI Processing**: How AI uses data (anonymized training, prediction models)
 3. **Data Storage**: Where data is stored (Supabase, Lovable Cloud)
 4. **Third-Party Services**: Lovable AI, Stripe (if implemented), email providers
-5. **User Rights**: 
+5. **User Rights**:
    - GDPR: Right to access, delete, export
    - CCPA: California privacy rights
-6. **Photo/Image Handling**: 
+6. **Photo/Image Handling**:
    - Client photos for hair analysis
    - Portfolio images
    - Consent and usage rights
@@ -354,6 +369,7 @@ Offline Testing Protocol:
 **Current State**: None
 
 **Required if implementing subscriptions**:
+
 ```markdown
 Refund Policy for hA.I.r
 
@@ -384,11 +400,11 @@ Refund Policy for hA.I.r
 **Not Required for MVP**: But plan for scale
 
 **Steps for Future**:
+
 1. **LLC Formation** ($50-$150)
    - Protects personal assets
    - Professional credibility
    - Tax benefits
-   
 2. **EIN (Tax ID)** - Free from irs.gov/ein
    - Required for business bank account
    - Required for Stripe business account
@@ -397,7 +413,6 @@ Refund Policy for hA.I.r
 3. **Business Bank Account**
    - Separate personal/business finances
    - Required for Stripe payouts
-   
 4. **Trademark** (Optional)
    - Protects "hA.I.r" brand name
    - $250-$750 filing fee
@@ -444,18 +459,18 @@ Refund Policy for hA.I.r
 ```typescript
 // Component: DailyClarityCheckIn.tsx
 interface ClarityMetrics {
-  clarity: number;    // 1-10
-  energy: number;     // 1-10
-  focus: number;      // 1-10
-  joy: number;        // 1-10
+  clarity: number; // 1-10
+  energy: number; // 1-10
+  focus: number; // 1-10
+  joy: number; // 1-10
   date: string;
 }
 
 // If average ≤ 6, suggest:
-- "Consider a 10-minute break"
-- "Delegate next task"
-- "Change environment"
-- "Review your 'why'"
+-'Consider a 10-minute break' -
+  'Delegate next task' -
+  'Change environment' -
+  "Review your 'why'";
 ```
 
 **UI Placement**: Optional morning dashboard widget
@@ -476,19 +491,23 @@ interface ClarityMetrics {
 Weekly Scorecard:
 
 📊 Usefulness Score (1-10)
+
 - Are clients getting value?
 - Are features being used?
 - Measure: Feature adoption rate, client retention
 
 ⚡ Speed Score (1-10)
+
 - Are you learning faster than failing?
 - Measure: Time to resolve client issues, feature iteration speed
 
 🎯 Truth Score (1-10)
+
 - Are metrics meaningful?
 - Measure: Real revenue vs vanity metrics, client testimonials vs follower count
 
 🧘 Calm Score (1-10)
+
 - Is the app stable?
 - Measure: Error rate, system uptime, support ticket volume
 ```
@@ -504,6 +523,7 @@ Weekly Scorecard:
 **Priority**: Foundation for production launch
 
 **Tasks**:
+
 1. ✅ Create Terms of Service page (`/terms`)
 2. ✅ Create comprehensive Privacy Policy page (`/privacy`)
 3. ✅ Add policy links to footer
@@ -518,6 +538,7 @@ Weekly Scorecard:
 **Priority**: Reduce AI liability, build user confidence
 
 **Tasks**:
+
 1. Add "AI-Generated" badges to all AI outputs
 2. Add confidence indicators to predictions
 3. Add disclaimers: "Verify with professional judgment"
@@ -532,6 +553,7 @@ Weekly Scorecard:
 **Priority**: Prevent over-automation
 
 **Tasks**:
+
 1. Create "Personal Touch Opportunities" dashboard widget
 2. Flag clients who might need personal outreach
 3. Distinguish automated vs personal actions in UI
@@ -546,6 +568,7 @@ Weekly Scorecard:
 **Priority**: Future scaling
 
 **Tasks**:
+
 1. Form LLC (state website)
 2. Get EIN (irs.gov/ein)
 3. Open business bank account
@@ -560,6 +583,7 @@ Weekly Scorecard:
 **Priority**: Optional expansion
 
 **Tasks**:
+
 1. Comprehensive offline testing
 2. App store assets (screenshots, descriptions)
 3. iOS submission (requires Xcode + Apple Developer account)
@@ -573,26 +597,26 @@ Weekly Scorecard:
 
 ## 📊 COMPARISON SCORECARD
 
-| Best Practice | Current Score | Target Score | Priority |
-|--------------|---------------|--------------|----------|
-| AI Augmentation (not replacement) | 10/10 ✅ | 10/10 | - |
-| Privacy & Data Compliance | 10/10 ✅ | 10/10 | - |
-| Small Task Automation | 9/10 ✅ | 10/10 | Low |
-| Feedback-Driven Iteration | 9/10 ✅ | 10/10 | Low |
-| AI Output Review/Disclaimers | 4/10 ⚠️ | 10/10 | **HIGH** |
-| Brand Voice Consistency | 6/10 ⚠️ | 9/10 | Medium |
-| Human Touch Balance | 7/10 ⚠️ | 9/10 | Medium |
-| PWA Responsiveness | 8/10 ⚠️ | 10/10 | **HIGH** |
-| Offline Functionality | 7/10 ⚠️ | 9/10 | Medium |
-| Terms of Service | 0/10 🔴 | 10/10 | **CRITICAL** |
-| Privacy Policy | 3/10 🔴 | 10/10 | **CRITICAL** |
-| Refund Policy | 0/10 🔴 | 10/10 | Medium* |
-| Founder Wellness Integration | 2/10 🔴 | 7/10 | Low |
-| Business Health Metrics | 3/10 🔴 | 8/10 | Low |
+| Best Practice                     | Current Score | Target Score | Priority     |
+| --------------------------------- | ------------- | ------------ | ------------ |
+| AI Augmentation (not replacement) | 10/10 ✅      | 10/10        | -            |
+| Privacy & Data Compliance         | 10/10 ✅      | 10/10        | -            |
+| Small Task Automation             | 9/10 ✅       | 10/10        | Low          |
+| Feedback-Driven Iteration         | 9/10 ✅       | 10/10        | Low          |
+| AI Output Review/Disclaimers      | 4/10 ⚠️       | 10/10        | **HIGH**     |
+| Brand Voice Consistency           | 6/10 ⚠️       | 9/10         | Medium       |
+| Human Touch Balance               | 7/10 ⚠️       | 9/10         | Medium       |
+| PWA Responsiveness                | 8/10 ⚠️       | 10/10        | **HIGH**     |
+| Offline Functionality             | 7/10 ⚠️       | 9/10         | Medium       |
+| Terms of Service                  | 0/10 🔴       | 10/10        | **CRITICAL** |
+| Privacy Policy                    | 3/10 🔴       | 10/10        | **CRITICAL** |
+| Refund Policy                     | 0/10 🔴       | 10/10        | Medium\*     |
+| Founder Wellness Integration      | 2/10 🔴       | 7/10         | Low          |
+| Business Health Metrics           | 3/10 🔴       | 8/10         | Low          |
 
 **Overall Readiness**: 7.2/10 → Target: 9.5/10
 
-*Refund Policy critical only when monetizing
+\*Refund Policy critical only when monetizing
 
 ---
 
@@ -674,12 +698,14 @@ Weekly Scorecard:
 ## 🚀 ACTION PLAN: NEXT 7 DAYS
 
 ### Day 1-2: Legal Foundation (6-8 hours)
+
 - [ ] Create Terms of Service page
 - [ ] Create Privacy Policy page
 - [ ] Add policy links to footer
 - [ ] Update auth forms with "By signing up..." text
 
 ### Day 3-4: Responsiveness Testing (3-4 hours)
+
 - [ ] Test at 375px breakpoint
 - [ ] Test at 414px breakpoint
 - [ ] Test at 768px breakpoint
@@ -687,12 +713,14 @@ Weekly Scorecard:
 - [ ] Fix critical layout problems
 
 ### Day 5: Offline Testing (1 hour)
+
 - [ ] Test offline dashboard loading
 - [ ] Test offline form data persistence
 - [ ] Test offline error messages
 - [ ] Document offline capabilities
 
 ### Day 6-7: AI Trust Enhancements (4-6 hours)
+
 - [ ] Add "AI-Generated" badges to predictions
 - [ ] Add confidence disclaimers
 - [ ] Update AI system prompts with brand voice
@@ -706,6 +734,7 @@ Weekly Scorecard:
 ## 📈 EXPECTED OUTCOMES
 
 ### Short-Term (Next 30 Days)
+
 - ✅ Legal compliance for serious user growth
 - ✅ Enhanced user trust in AI features
 - ✅ Validated responsiveness across all devices
@@ -713,6 +742,7 @@ Weekly Scorecard:
 - ✅ Reduced over-automation concerns
 
 ### Medium-Term (3-6 Months)
+
 - 🎯 Human touch balance in place
 - 🎯 Business formation (if monetizing)
 - 🎯 Founder wellness integration
@@ -720,6 +750,7 @@ Weekly Scorecard:
 - 🎯 Comprehensive offline experience
 
 ### Long-Term (6-12 Months)
+
 - 🌟 Native app store presence (optional)
 - 🌟 Business health scorecard
 - 🌟 Industry-leading AI trust standards
@@ -732,6 +763,6 @@ Weekly Scorecard:
 
 ---
 
-*"I don't chase trends. I build for usefulness. I test before I trust. I learn faster than I fail. I measure truth, not noise."*
+_"I don't chase trends. I build for usefulness. I test before I trust. I learn faster than I fail. I measure truth, not noise."_
 
 **You're already living these principles. Now let's formalize the foundation.** 🚀

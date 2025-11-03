@@ -8,7 +8,9 @@ import { Input } from './input';
 
 describe('Input', () => {
   it('should render input element', () => {
-    const { container } = renderWithProviders(<Input placeholder="Enter text" />);
+    const { container } = renderWithProviders(
+      <Input placeholder="Enter text" />
+    );
     const input = container.querySelector('input');
     expect(input).toBeInTheDocument();
     expect(input?.placeholder).toBe('Enter text');
@@ -72,7 +74,9 @@ describe('Input', () => {
   });
 
   it('should render with custom className', () => {
-    const { container } = renderWithProviders(<Input className="custom-class" />);
+    const { container } = renderWithProviders(
+      <Input className="custom-class" />
+    );
     const input = container.querySelector('input');
     expect(input).toHaveClass('custom-class');
   });

@@ -53,7 +53,11 @@ export const ServiceTypeColorManager = ({
       if (error) throw error;
       setServiceColors(data || []);
     } catch (error) {
-      logger.error('Failed to load service colors', 'ServiceTypeColorManager', error);
+      logger.error(
+        'Failed to load service colors',
+        'ServiceTypeColorManager',
+        error
+      );
       toast.error('Failed to load service colors');
     }
   }, [stylistId]);
@@ -108,7 +112,11 @@ export const ServiceTypeColorManager = ({
       setAddDialogOpen(false);
       toast.success('Service type added');
     } catch (error: any) {
-      logger.error('Failed to add service type', 'ServiceTypeColorManager', error);
+      logger.error(
+        'Failed to add service type',
+        'ServiceTypeColorManager',
+        error
+      );
       if (error.code === '23505') {
         toast.error('This service type already exists');
       } else {
@@ -136,7 +144,11 @@ export const ServiceTypeColorManager = ({
       setServiceColors(prev => prev.filter(sc => sc.id !== id));
       toast.success('Service type deleted');
     } catch (error) {
-      logger.error('Failed to delete service type', 'ServiceTypeColorManager', error);
+      logger.error(
+        'Failed to delete service type',
+        'ServiceTypeColorManager',
+        error
+      );
       toast.error('Failed to delete service type');
     }
   };

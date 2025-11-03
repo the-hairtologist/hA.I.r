@@ -15,6 +15,7 @@
 **Purpose**: Track data transformations through the pipeline (DB → API → State → UI)
 
 **Features**:
+
 - Stage-based logging (`database`, `api`, `transform`, `state`, `ui`, `validation`)
 - Flow history tracking (last 10 stages per feature)
 - Performance analysis (identify bottlenecks)
@@ -22,6 +23,7 @@
 - DEV-only logging (silent in production)
 
 **Usage Example**:
+
 ```typescript
 import { flowLogger, logDB, logState, logUI } from '@/lib/dataFlow/flowLogger';
 
@@ -48,6 +50,7 @@ console.log('Bottlenecks:', analysis.stages);
 **Purpose**: Centralized React Query cache invalidation to prevent stale data
 
 **Patterns Available**:
+
 - `appointments` - Invalidates appointments, calendar, dashboard
 - `clients` - Invalidates clients, stats, retention scores
 - `formulas` - Invalidates formula library
@@ -59,13 +62,14 @@ console.log('Bottlenecks:', analysis.stages);
 - `analytics` - Revenue and analytics refresh
 
 **Usage Example**:
+
 ```typescript
 import { invalidationPatterns, invalidateRelated } from '@/lib/dataFlow/queryInvalidation';
 import { useQueryClient } from '@tanstack/react-query';
 
 function AppointmentForm() {
   const queryClient = useQueryClient();
-  
+
   const createAppointment = useMutation({
     mutationFn: ...,
     onSuccess: (data) => {
@@ -86,6 +90,7 @@ function AppointmentForm() {
 **Location**: `src/lib/validation/schemas.ts` (enhanced existing file)
 
 **New Additions**:
+
 - `clientCreateSchema` - Full client creation with all fields
 - `aiPromptSchema` - AI prompt validation (3-2000 chars)
 - `searchQuerySchema` - Search with filters
@@ -94,17 +99,22 @@ function AppointmentForm() {
 - `sanitizeObject()` - Deep object sanitization
 
 **Security Improvements**:
+
 - Length limits on all text inputs
 - URL protocol validation
 - Empty value filtering
 - Character restrictions
 
 **Usage Example**:
+
 ```typescript
-import { clientCreateSchema, sanitizeExternalUrl } from '@/lib/validation/schemas';
+import {
+  clientCreateSchema,
+  sanitizeExternalUrl,
+} from '@/lib/validation/schemas';
 
 const form = useForm({
-  resolver: zodResolver(clientCreateSchema)
+  resolver: zodResolver(clientCreateSchema),
 });
 
 // Validate before external API call
@@ -123,6 +133,7 @@ if (!safeUrl) {
 **Purpose**: Catch data-related errors with graceful fallbacks
 
 **Features**:
+
 - User-friendly error messages
 - "Try Again" recovery
 - Dev-only error details
@@ -131,6 +142,7 @@ if (!safeUrl) {
 - User journey tracking
 
 **Usage Example**:
+
 ```typescript
 import { DataErrorBoundary } from '@/components/errors/DataErrorBoundary';
 
@@ -151,12 +163,14 @@ function ClientsPage() {
 ## 📊 Impact Summary
 
 ### Before Enhancements
+
 - ❌ No data flow visibility
 - ❌ Manual query invalidation (error-prone)
 - ❌ Bare console.error calls (333 instances)
 - ❌ Generic error boundaries
 
 ### After Enhancements
+
 - ✅ Complete data pipeline tracking
 - ✅ Automated query invalidation patterns
 - ✅ Structured logging with context
@@ -168,6 +182,7 @@ function ClientsPage() {
 ## 🎯 How to Use in Development
 
 ### Track a Complex Feature
+
 ```typescript
 // Example: Track AI Formula Analysis
 import { flowLogger } from '@/lib/dataFlow/flowLogger';
@@ -175,21 +190,37 @@ import { flowLogger } from '@/lib/dataFlow/flowLogger';
 function AIFormulaAnalyzer() {
   const analyzeFormula = async (formulaId: string) => {
     // 1. Database fetch
-    flowLogger.database('ai-formula-analysis', 'SELECT * FROM formulas', formula);
-    
+    flowLogger.database(
+      'ai-formula-analysis',
+      'SELECT * FROM formulas',
+      formula
+    );
+
     // 2. API call to AI service
-    flowLogger.api('ai-formula-analysis', '/api/ai/analyze', { formulaId }, analysis);
-    
+    flowLogger.api(
+      'ai-formula-analysis',
+      '/api/ai/analyze',
+      { formulaId },
+      analysis
+    );
+
     // 3. Transform AI response
-    flowLogger.transform('ai-formula-analysis', 'api-response', 'ui-format', transformedData);
-    
+    flowLogger.transform(
+      'ai-formula-analysis',
+      'api-response',
+      'ui-format',
+      transformedData
+    );
+
     // 4. Update state
     flowLogger.state('ai-formula-analysis', 'analysisResult', transformedData);
-    
+
     // 5. UI render
-    flowLogger.ui('ai-formula-analysis', 'AnalysisCard', { result: transformedData });
+    flowLogger.ui('ai-formula-analysis', 'AnalysisCard', {
+      result: transformedData,
+    });
   };
-  
+
   // Later: Analyze for bottlenecks
   const perf = flowLogger.analyzeFlow('ai-formula-analysis');
   if (perf.totalTime > 2000) {
@@ -199,6 +230,7 @@ function AIFormulaAnalyzer() {
 ```
 
 ### Apply Query Invalidation
+
 ```typescript
 import { invalidateRelated } from '@/lib/dataFlow/queryInvalidation';
 
@@ -213,11 +245,12 @@ const updateProfile = useMutation({
     // - client history
     // - appointments
     // - AI insights
-  }
+  },
 });
 ```
 
 ### Add Error Boundaries
+
 ```typescript
 // Wrap data-heavy components
 <DataErrorBoundary feature="Revenue Analytics" onReset={refetch}>
@@ -232,6 +265,7 @@ const updateProfile = useMutation({
 When debugging data issues, follow this flow:
 
 1. **Check Data Flow Logs**
+
    ```typescript
    const history = flowLogger.getFlowHistory('feature-name');
    console.table(history);
@@ -254,21 +288,25 @@ When debugging data issues, follow this flow:
 ## 📈 Metrics
 
 ### Code Quality
+
 - **Before**: 333 bare console.error calls
 - **After**: Structured logging with context
 - **Improvement**: 100% traced errors
 
 ### Data Flow
+
 - **Before**: Manual tracking
 - **After**: Automatic stage logging
 - **Improvement**: 5-stage pipeline visibility
 
 ### Cache Management
+
 - **Before**: Ad-hoc invalidation
 - **After**: Centralized patterns
 - **Improvement**: 95% fewer stale data bugs
 
 ### Error Handling
+
 - **Before**: Generic error boundaries
 - **After**: Feature-specific fallbacks
 - **Improvement**: 80% better UX during errors

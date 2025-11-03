@@ -3,6 +3,7 @@
 ## Prerequisites
 
 ### 1. Clean Up Duplicate Secret
+
 ⚠️ **Action Required**: Remove duplicate secret from Lovable Cloud
 
 1. Go to Backend (Cloud dashboard)
@@ -25,12 +26,14 @@
 ## 🎯 Test Flow 1: Create Appointment (All Integrations)
 
 ### Step 1: Navigate to Appointments
+
 ```
 Go to: /appointments
 Click: "New Appointment" or "+" button
 ```
 
 ### Step 2: Fill Out Appointment Form
+
 - **Client**: Select existing client or create new
 - **Service**: Choose service type (e.g., "Color & Highlights")
 - **Date & Time**: Pick future date/time
@@ -38,6 +41,7 @@ Click: "New Appointment" or "+" button
 - **Notes**: "Integration test - checking all systems"
 
 ### Step 3: Save Appointment
+
 Click **"Create Appointment"** or **"Save"**
 
 ### Step 4: Verify Integrations ✅
@@ -64,18 +68,22 @@ Click **"Create Appointment"** or **"Save"**
 ## 🎯 Test Flow 2: Payment Integration (Stripe)
 
 ### Step 1: Create Paid Appointment
+
 ```
 Go to: /book-appointment OR /client-discovery
 Select: A stylist (if you're a client) or create for client (if you're stylist)
 ```
 
 ### Step 2: Select Service with Payment
+
 - Choose paid service
 - Price should display (e.g., "$120")
 - Click **"Book with Payment"** or similar
 
 ### Step 3: Complete Stripe Checkout
+
 Use Stripe test card:
+
 ```
 Card Number: 4242 4242 4242 4242
 Expiry: Any future date (e.g., 12/25)
@@ -110,6 +118,7 @@ ZIP: Any 5 digits (e.g., 12345)
 ## 🎯 Test Flow 3: SMS Reminders (Optional - Twilio)
 
 ### When Configured:
+
 - 24 hours before appointment
 - Client receives SMS reminder
 - Check Twilio logs for delivery status
@@ -119,6 +128,7 @@ ZIP: Any 5 digits (e.g., 12345)
 ## 📊 Monitoring & Verification
 
 ### Check Edge Function Logs:
+
 ```
 Backend → Edge Functions → View Logs
 
@@ -129,6 +139,7 @@ Functions to monitor:
 ```
 
 ### Check Database:
+
 ```
 Backend → Database → Tables
 
@@ -139,6 +150,7 @@ Tables to verify:
 ```
 
 ### Check Email Delivery:
+
 ```
 Resend Dashboard → Logs
 - View sent emails
@@ -166,18 +178,21 @@ After creating a test appointment, verify:
 ## 🐛 Troubleshooting
 
 ### Email Not Received
+
 1. Check spam folder
 2. Verify RESEND_API_KEY is set
 3. Check logs: Backend → Functions → send-appointment-confirmation
 4. Verify client email is correct
 
 ### Calendar Not Syncing
+
 1. Check connection: `/integrations/calendar`
 2. Reconnect if showing "Not Connected"
 3. Check logs: Backend → Functions → google-calendar-sync
 4. Verify OAuth permissions granted
 
 ### Stripe Payment Failed
+
 1. Use test card: 4242 4242 4242 4242
 2. Check STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET
 3. Verify webhook endpoint is configured in Stripe Dashboard
@@ -188,6 +203,7 @@ After creating a test appointment, verify:
 ## 🎉 All Tests Passing?
 
 If all integrations work:
+
 1. ✅ Resend Email - Confirmed
 2. ✅ Google Calendar - Connected & Syncing
 3. ✅ Stripe Payments - Processing

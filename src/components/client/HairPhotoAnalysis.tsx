@@ -100,7 +100,11 @@ export const HairPhotoAnalysis = ({
         onAnalysisComplete(analysisResult);
       }
     } catch (error) {
-      logger.error('Hair photo analysis process failed', 'HairPhotoAnalysis', error);
+      logger.error(
+        'Hair photo analysis process failed',
+        'HairPhotoAnalysis',
+        error
+      );
       // Error toast already shown by useHairAnalysis hook
     } finally {
       setIsUploading(false);

@@ -4,11 +4,10 @@
 > **Last Updated**: 2025-10-23
 > **Forms Migrated**: 8/8 (100%)
 
-
-
 ## Quick Start
 
 ### 1. Define Your Schema (or use existing)
+
 ```typescript
 import { z } from 'zod';
 import { emailSchema, nameSchema, clientSchema } from '@/lib/validation';
@@ -22,24 +21,27 @@ const myFormSchema = z.object({
 ```
 
 ### 2. Use the Enhanced Hook
+
 ```typescript
 import { useFormSubmit } from '@/hooks/useFormSubmit';
 
-const { values, errors, touched, handleSubmit, setFieldValue, isSubmitting } = useFormSubmit(
-  async (data) => {
-    // Your submission logic
-    await supabase.from('table').insert(data);
-  },
-  {
-    schema: myFormSchema,
-    initialValues: { name: '', email: '', customField: '' },
-    successMessage: 'Success!',
-    onSuccess: () => console.log('Done!'),
-  }
-);
+const { values, errors, touched, handleSubmit, setFieldValue, isSubmitting } =
+  useFormSubmit(
+    async data => {
+      // Your submission logic
+      await supabase.from('table').insert(data);
+    },
+    {
+      schema: myFormSchema,
+      initialValues: { name: '', email: '', customField: '' },
+      successMessage: 'Success!',
+      onSuccess: () => console.log('Done!'),
+    }
+  );
 ```
 
 ### 3. Render Fields with StandardFormField
+
 ```typescript
 import { StandardFormField } from '@/components/forms/StandardFormField';
 
@@ -73,6 +75,7 @@ import { StandardFormField } from '@/components/forms/StandardFormField';
 All schemas are in `src/lib/validation.ts`:
 
 ### Base Schemas (Reusable)
+
 - `emailSchema` - Optional email validation
 - `requiredEmailSchema` - Required email validation
 - `phoneSchema` - Optional phone with format validation
@@ -84,6 +87,7 @@ All schemas are in `src/lib/validation.ts`:
 - `durationSchema` - Duration in minutes (15-480)
 
 ### Domain Schemas (Ready to Use)
+
 - `clientSchema` - For adding clients
 - `appointmentSchema` - For appointments
 - `serviceSchema` - For services (with deposit validation)
@@ -95,34 +99,41 @@ All schemas are in `src/lib/validation.ts`:
 ## Features
 
 ### Automatic Validation
+
 ```typescript
 // Schema is automatically validated on submit
 const { handleSubmit } = useFormSubmit(
-  async (data) => { /* ... */ },
-  { schema: mySchema }  // ✅ Auto-validates before submission
+  async data => {
+    /* ... */
+  },
+  { schema: mySchema } // ✅ Auto-validates before submission
 );
 ```
 
 ### Field-Level Errors
+
 ```typescript
 // Access errors by field name
-errors.email      // "Invalid email address"
-errors.name       // "Name must be at least 2 characters"
+errors.email; // "Invalid email address"
+errors.name; // "Name must be at least 2 characters"
 ```
 
 ### Touched State Tracking
+
 ```typescript
 // Only show errors for fields user has interacted with
-touched.email     // true/false
+touched.email; // true/false
 ```
 
 ### Double-Submit Prevention
+
 ```typescript
 // Automatically prevents double submissions (< 1s apart)
 // Built into useFormSubmit by default
 ```
 
 ### Character Counters
+
 ```typescript
 // Automatically shows for textareas with maxLength
 <StandardFormField
@@ -135,20 +146,23 @@ touched.email     // true/false
 ## Anti-Patterns (DON'T)
 
 ❌ **Manual state management**
+
 ```typescript
 // DON'T
-const [name, setName] = useState("");
-const [email, setEmail] = useState("");
+const [name, setName] = useState('');
+const [email, setEmail] = useState('');
 const [errors, setErrors] = useState({});
 ```
 
 ✅ **Use the hook**
+
 ```typescript
 // DO
 const { values, setFieldValue } = useFormSubmit(...);
 ```
 
 ❌ **Manual validation**
+
 ```typescript
 // DON'T
 if (!email.includes('@')) {
@@ -157,14 +171,16 @@ if (!email.includes('@')) {
 ```
 
 ✅ **Use schema**
+
 ```typescript
 // DO
 const schema = z.object({
-  email: emailSchema
+  email: emailSchema,
 });
 ```
 
 ❌ **Inline schemas**
+
 ```typescript
 // DON'T - Schema in component
 const schema = z.object({
@@ -173,6 +189,7 @@ const schema = z.object({
 ```
 
 ✅ **Centralized schemas**
+
 ```typescript
 // DO - Schema in validation.ts
 import { emailSchema } from '@/lib/validation';
@@ -181,6 +198,7 @@ import { emailSchema } from '@/lib/validation';
 ## Accessibility Built-In
 
 StandardFormField automatically handles:
+
 - ✅ `aria-invalid` on validation errors
 - ✅ `aria-describedby` linking errors to fields
 - ✅ `role="alert"` on error messages
@@ -223,7 +241,7 @@ export function AddClientForm({ onSuccess }: { onSuccess: () => void }) {
       const { error } = await supabase
         .from('client_profiles')
         .insert(data);
-      
+
       if (error) throw error;
     },
     {
@@ -253,7 +271,7 @@ export function AddClientForm({ onSuccess }: { onSuccess: () => void }) {
         touched={touched.full_name}
         required
       />
-      
+
       <StandardFormField
         name="email"
         label="Email"
@@ -264,7 +282,7 @@ export function AddClientForm({ onSuccess }: { onSuccess: () => void }) {
         error={errors.email}
         touched={touched.email}
       />
-      
+
       <StandardFormField
         name="phone"
         label="Phone"
@@ -275,7 +293,7 @@ export function AddClientForm({ onSuccess }: { onSuccess: () => void }) {
         error={errors.phone}
         touched={touched.phone}
       />
-      
+
       <StandardFormField
         name="notes"
         label="Notes"
@@ -287,7 +305,7 @@ export function AddClientForm({ onSuccess }: { onSuccess: () => void }) {
         maxLength={500}
         rows={3}
       />
-      
+
       <Button type="submit" disabled={isSubmitting}>
         {isSubmitting ? 'Adding...' : 'Add Client'}
       </Button>
@@ -299,26 +317,27 @@ export function AddClientForm({ onSuccess }: { onSuccess: () => void }) {
 ## Advanced: Cross-Field Validation
 
 ```typescript
-const serviceSchema = z.object({
-  require_deposit: z.boolean(),
-  deposit_amount: z.number().min(0),
-}).refine(
-  (data) => !data.require_deposit || data.deposit_amount > 0,
-  {
+const serviceSchema = z
+  .object({
+    require_deposit: z.boolean(),
+    deposit_amount: z.number().min(0),
+  })
+  .refine(data => !data.require_deposit || data.deposit_amount > 0, {
     message: 'Deposit amount required when deposit is enabled',
     path: ['deposit_amount'], // Error shows on this field
-  }
-);
+  });
 ```
 
 ## Next Steps
 
 **Phase 1 Complete** ✅
+
 - Enhanced `useFormSubmit` hook
 - Created `StandardFormField` component
 - Updated validation schemas
 
 **Phase 2 - Form Migration** (Next)
+
 - Migrate high-priority forms
 - Update existing implementations
 - Remove deprecated hooks

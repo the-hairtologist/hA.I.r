@@ -11,11 +11,11 @@ import {
   sanitizeEmail,
   rateLimiter,
   RATE_LIMITS,
-  
+
   // Error handling
   withRetry,
   offlineQueue,
-  
+
   // Database
   useEnhancedQuery,
   createPaginationParams,
@@ -28,6 +28,7 @@ import {
 ## 1. Secure Form Handling
 
 ### Basic Form with Sanitization
+
 ```typescript
 import { useState } from 'react';
 import { sanitizeInput, sanitizeEmail, sanitizePhone } from '@/lib';
@@ -80,6 +81,7 @@ export const ClientForm = () => {
 ```
 
 ### Form with Rate Limiting
+
 ```typescript
 import { rateLimiter, RATE_LIMITS, sanitizeInput } from '@/lib';
 import { toast } from 'sonner';
@@ -109,6 +111,7 @@ export const ContactForm = () => {
 ## 2. API Calls with Retry Logic
 
 ### Basic Retry Pattern
+
 ```typescript
 import { withRetry } from '@/lib';
 import { supabase } from '@/integrations/supabase/client';
@@ -136,6 +139,7 @@ export const fetchAppointments = async (stylistId: string) => {
 ```
 
 ### React Hook with Retry
+
 ```typescript
 import { useState, useEffect } from 'react';
 import { withRetry } from '@/lib';
@@ -149,7 +153,11 @@ export const useAppointments = (stylistId: string) => {
     const fetchData = async () => {
       try {
         const appointments = await withRetry(
-          () => supabase.from('appointments').select('*').eq('stylist_id', stylistId),
+          () =>
+            supabase
+              .from('appointments')
+              .select('*')
+              .eq('stylist_id', stylistId),
           { maxRetries: 3 }
         );
         setData(appointments.data || []);
@@ -172,6 +180,7 @@ export const useAppointments = (stylistId: string) => {
 ## 3. Enhanced Queries with Caching
 
 ### Simple Enhanced Query
+
 ```typescript
 import { useEnhancedQuery } from '@/lib';
 import { supabase } from '@/integrations/supabase/client';
@@ -198,7 +207,7 @@ export const AppointmentList = ({ stylistId }: { stylistId: string }) => {
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
-  
+
   return (
     <div>
       {data?.map(apt => (
@@ -210,6 +219,7 @@ export const AppointmentList = ({ stylistId }: { stylistId: string }) => {
 ```
 
 ### Enhanced Query with Offline Support
+
 ```typescript
 import { useEnhancedQuery } from '@/lib';
 
@@ -235,6 +245,7 @@ export const ClientDashboard = ({ clientId }: { clientId: string }) => {
 ## 4. Pagination Pattern
 
 ### Server-Side Pagination
+
 ```typescript
 import { createPaginationParams, calculatePaginationRange } from '@/lib';
 import { supabase } from '@/integrations/supabase/client';
@@ -283,6 +294,7 @@ export const ClientList = ({ page = 1, pageSize = 50 }) => {
 ## 5. Offline-First Operations
 
 ### Save with Offline Queue
+
 ```typescript
 import { offlineQueue, withRetry } from '@/lib';
 import { supabase } from '@/integrations/supabase/client';
@@ -297,7 +309,7 @@ export const saveAppointment = async (appointmentData: any) => {
       10, // high priority
       { operation: 'save-appointment', data: appointmentData }
     );
-    
+
     toast.info('Saved locally. Will sync when online.');
     return;
   }
@@ -316,6 +328,7 @@ export const saveAppointment = async (appointmentData: any) => {
 ```
 
 ### Monitor Offline Queue
+
 ```typescript
 import { offlineQueue } from '@/lib';
 
@@ -347,13 +360,14 @@ export const OfflineStatusIndicator = () => {
 ## 6. Batch Operations
 
 ### Batch Fetch Multiple IDs
+
 ```typescript
 import { batchFetch } from '@/lib';
 import { supabase } from '@/integrations/supabase/client';
 
 export const fetchClientsInBatches = async (clientIds: string[]) => {
   const clients = await batchFetch(
-    async (ids) => {
+    async ids => {
       const { data } = await supabase
         .from('client_profiles')
         .select('*')
@@ -373,6 +387,7 @@ export const fetchClientsInBatches = async (clientIds: string[]) => {
 ## 7. Cache Management
 
 ### Invalidate Cache on Mutation
+
 ```typescript
 import { queryCache, invalidateQueryCache } from '@/lib';
 import { supabase } from '@/integrations/supabase/client';
@@ -386,7 +401,7 @@ export const updateAppointment = async (id: string, updates: any) => {
   if (!error) {
     // Invalidate all appointment caches
     invalidateQueryCache('appointments');
-    
+
     // Or invalidate specific cache
     const cacheKey = createCacheKey('appointments', { id });
     queryCache.invalidate(cacheKey);
@@ -399,6 +414,7 @@ export const updateAppointment = async (id: string, updates: any) => {
 ## 8. Rate-Limited API Calls
 
 ### Protected API Endpoint
+
 ```typescript
 import { rateLimiter, RATE_LIMITS, withRetry } from '@/lib';
 import { supabase } from '@/integrations/supabase/client';
@@ -409,10 +425,10 @@ export const generateAIFormula = async (params: any) => {
   if (!rateLimiter.isAllowed('ai-formula', RATE_LIMITS.AI)) {
     const remaining = rateLimiter.getRemaining('ai-formula', RATE_LIMITS.AI);
     const retryAfter = rateLimiter.getRetryAfter('ai-formula', RATE_LIMITS.AI);
-    
+
     toast.error(
       `Rate limit exceeded. ${remaining} requests remaining. ` +
-      `Retry in ${Math.ceil(retryAfter / 1000)}s`
+        `Retry in ${Math.ceil(retryAfter / 1000)}s`
     );
     return null;
   }
@@ -430,6 +446,7 @@ export const generateAIFormula = async (params: any) => {
 ## 9. Combined Pattern (Most Common)
 
 ### Complete Feature Implementation
+
 ```typescript
 import {
   useEnhancedQuery,
@@ -485,7 +502,7 @@ export const AppointmentManager = ({ stylistId }: { stylistId: string }) => {
         () => supabase.from('appointments').insert(sanitizedData),
         { maxRetries: 3 }
       );
-      
+
       toast.success('Appointment created!');
       refetch(); // Refresh list
     } catch (error) {
@@ -513,6 +530,7 @@ export const AppointmentManager = ({ stylistId }: { stylistId: string }) => {
 ## 10. Testing Your Integration
 
 ### Verify Security
+
 ```typescript
 import { sanitizeInput, detectSQLInjection } from '@/lib';
 
@@ -528,6 +546,7 @@ console.log(isMalicious); // Should be true
 ```
 
 ### Verify Rate Limiting
+
 ```typescript
 import { rateLimiter, RATE_LIMITS } from '@/lib';
 
@@ -539,6 +558,7 @@ for (let i = 0; i < 10; i++) {
 ```
 
 ### Verify Retry Logic
+
 ```typescript
 import { withRetry } from '@/lib';
 
@@ -561,6 +581,7 @@ console.log(result); // Should be 'Success!' after 3 attempts
 ### Common Issues
 
 **Issue: "Module not found"**
+
 ```typescript
 // ❌ Wrong
 import { withRetry } from '@/lib/errorHandling/retryLogic';
@@ -570,17 +591,19 @@ import { withRetry } from '@/lib';
 ```
 
 **Issue: "Query not using cache"**
+
 ```typescript
 // Make sure cacheTable and cacheParams are provided
 const { data } = useEnhancedQuery({
   queryKey: ['data'],
   queryFn: fetchData,
   cacheTable: 'table_name', // ← Required for caching
-  cacheParams: { id },        // ← Required for caching
+  cacheParams: { id }, // ← Required for caching
 });
 ```
 
 **Issue: "Rate limit not working"**
+
 ```typescript
 // Use a consistent key for the same operation
 rateLimiter.isAllowed('my-operation', RATE_LIMITS.API);

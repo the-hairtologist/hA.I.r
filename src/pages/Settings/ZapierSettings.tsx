@@ -93,7 +93,7 @@ export const ZapierSettings = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setWebhooks(data as any || []);
+      setWebhooks((data as any) || []);
     } catch (error: any) {
       logger.error('Error loading webhooks', 'ZapierSettings', error as Error);
       toast.error('Failed to load webhooks');
@@ -377,14 +377,15 @@ export const ZapierSettings = () => {
                             >
                               {webhook.is_active ? 'Active' : 'Inactive'}
                             </Badge>
-                            {successRate < 80 && (webhook.total_triggers || 0) > 0 && (
-                              <Badge
-                                variant="destructive"
-                                className="text-[10px] sm:text-xs"
-                              >
-                                {successRate}% success
-                              </Badge>
-                            )}
+                            {successRate < 80 &&
+                              (webhook.total_triggers || 0) > 0 && (
+                                <Badge
+                                  variant="destructive"
+                                  className="text-[10px] sm:text-xs"
+                                >
+                                  {successRate}% success
+                                </Badge>
+                              )}
                           </div>
                           <p className="text-[10px] sm:text-xs text-muted-foreground break-all mb-2">
                             {webhook.webhook_url}

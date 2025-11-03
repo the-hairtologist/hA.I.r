@@ -1,24 +1,24 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { requireRole } from '../_shared/auth-middleware.ts';
-import { checkRateLimit as checkRateLimitShared, createRateLimitResponse } from '../_shared/rate-limiter.ts';
+import { requireRole } from '../\_shared/auth-middleware.ts';
+import { checkRateLimit as checkRateLimitShared, createRateLimitResponse } from '../\_shared/rate-limiter.ts';
 
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+'Access-Control-Allow-Origin': '\*',
+'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
 serve(async (req) => {
-  if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
-  }
+if (req.method === 'OPTIONS') {
+return new Response(null, { headers: corsHeaders });
+}
 
-  try {
-    const authResult = await requireRole(req, ['stylist', 'admin']);
-    if (authResult instanceof Response) return authResult;
-    
+try {
+const authResult = await requireRole(req, ['stylist', 'admin']);
+if (authResult instanceof Response) return authResult;
+
     const { user, supabase } = authResult;
-    
+
     // Rate limiting
     const rateLimit = await checkRateLimitShared(user.id, 'ai_chat', supabase);
     if (!rateLimit.allowed) {
@@ -26,8 +26,8 @@ serve(async (req) => {
     }
 
     const {
-      currentService, 
-      clientHistory = [], 
+      currentService,
+      clientHistory = [],
       clientProfile = null,
       availableServices = []
     } = await req.json();
@@ -49,6 +49,7 @@ serve(async (req) => {
     }
 
     const systemPrompt = `You are a salon revenue optimization AI expert. Your job is to suggest relevant upsell services that:
+
 1. Complement the current service naturally
 2. Address client's hair goals and concerns
 3. Consider seasonal trends (e.g., color protection in summer, hydration in winter)
@@ -86,19 +87,19 @@ Provide one highly relevant upsell suggestion with clear reasoning.`;
             parameters: {
               type: 'object',
               properties: {
-                addon: { 
+                addon: {
                   type: 'string',
                   description: 'Name of the suggested add-on service'
                 },
-                reasoning: { 
+                reasoning: {
                   type: 'string',
                   description: 'Clear, client-friendly explanation of why this upsell makes sense'
                 },
-                incomeBoost: { 
+                incomeBoost: {
                   type: 'number',
                   description: 'Estimated percentage income boost (10-50)'
                 },
-                confidence: { 
+                confidence: {
                   type: 'number',
                   description: 'Confidence score 0-100 based on context quality'
                 }
@@ -114,7 +115,7 @@ Provide one highly relevant upsell suggestion with clear reasoning.`;
     if (!aiResponse.ok) {
       const errorText = await aiResponse.text();
       console.error('AI API error:', aiResponse.status, errorText);
-      
+
       // Fallback to basic suggestion if AI fails
       return new Response(JSON.stringify({
         addon: 'Deep Conditioning Treatment',
@@ -145,9 +146,9 @@ Provide one highly relevant upsell suggestion with clear reasoning.`;
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
 
-  } catch (error) {
-    console.error('Error in ai-smart-upsell:', error);
-    
+} catch (error) {
+console.error('Error in ai-smart-upsell:', error);
+
     // Always return a fallback suggestion instead of error
     return new Response(JSON.stringify({
       addon: 'Professional Treatment',
@@ -160,5 +161,6 @@ Provide one highly relevant upsell suggestion with clear reasoning.`;
       status: 200, // Return 200 with fallback, not error
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
-  }
+
+}
 });

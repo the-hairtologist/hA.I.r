@@ -51,11 +51,15 @@ export function RevenueForecasting({ stylistId }: { stylistId: string }) {
           confidence_interval_high: data.confidence_interval_high || 0,
           predicted_appointments: data.predicted_appointments || 0,
           predicted_new_clients: data.predicted_new_clients || 0,
-          predicted_retention_rate: data.predicted_retention_rate || 0
+          predicted_retention_rate: data.predicted_retention_rate || 0,
         });
       }
     } catch (error) {
-      logger.error('Error loading forecast', 'RevenueForecasting', error as Error);
+      logger.error(
+        'Error loading forecast',
+        'RevenueForecasting',
+        error as Error
+      );
     } finally {
       setLoading(false);
     }

@@ -5,6 +5,7 @@
 **Code Updated!** All 11 edge functions now support custom domain configuration via the `FROM_EMAIL` environment variable.
 
 **What works now:**
+
 - ✅ Automatic fallback to sandbox domain (`onboarding@resend.dev`) for testing
 - ✅ Production-ready custom domain support
 - ✅ Consistent sender address across all email types
@@ -37,6 +38,7 @@ Using Resend's sandbox domain has limitations:
 Resend will provide you with DNS records to add at your domain registrar:
 
 **SPF Record** (Sender Policy Framework)
+
 ```
 Type: TXT
 Name: @ (or your subdomain)
@@ -44,6 +46,7 @@ Value: v=spf1 include:sendgrid.resend.com ~all
 ```
 
 **DKIM Record** (DomainKeys Identified Mail)
+
 ```
 Type: TXT
 Name: resend._domainkey
@@ -51,6 +54,7 @@ Value: [Provided by Resend - unique to your domain]
 ```
 
 **DMARC Record** (Optional but recommended)
+
 ```
 Type: TXT
 Name: _dmarc
@@ -58,6 +62,7 @@ Value: v=DMARC1; p=none; rua=mailto:dmarc@yourdomain.com
 ```
 
 ### Step 3: Wait for Verification
+
 - DNS propagation can take **24-48 hours**
 - Check status at [Resend Domains](https://resend.com/domains)
 - Status should show **"Verified"** when ready
@@ -67,12 +72,13 @@ Value: v=DMARC1; p=none; rua=mailto:dmarc@yourdomain.com
 Once your domain is verified in Resend:
 
 1. Go to **Project Settings** in Lovable Cloud
-2. Navigate to **Environment Variables** or **Secrets**  
+2. Navigate to **Environment Variables** or **Secrets**
 3. Add new variable:
    - **Name:** `FROM_EMAIL`
    - **Value:** `Your Brand <noreply@yourdomain.com>`
-   
+
 **Example values:**
+
 ```
 Salon Name <appointments@yoursalon.com>
 hA.I.r Notifications <notify@yourdomain.com>
@@ -90,6 +96,7 @@ If you're still in development and want to keep using the sandbox:
 ✅ **No action needed** - The app defaults to `onboarding@resend.dev`
 
 ⚠️ **Limitations:**
+
 - Lower deliverability rates
 - May end up in spam folders
 - Not suitable for customer-facing production use
@@ -101,6 +108,7 @@ If you're still in development and want to keep using the sandbox:
 ### Where to Add DNS Records?
 
 **Popular Domain Registrars:**
+
 - **Namecheap**: Advanced DNS → Add New Record
 - **GoDaddy**: DNS Management → Add Record
 - **Cloudflare**: DNS → Add Record
@@ -109,6 +117,7 @@ If you're still in development and want to keep using the sandbox:
 ### Verify DNS Propagation
 
 Use these tools to check if DNS records are live:
+
 - [DNSChecker.org](https://dnschecker.org)
 - [MXToolbox](https://mxtoolbox.com/dmarc.aspx)
 - `dig` command: `dig TXT yourdomain.com`
@@ -155,6 +164,7 @@ Use these tools to check if DNS records are live:
 ### Email Sender Address Format
 
 **Good Examples:**
+
 ```
 Your Salon Name <appointments@yoursalon.com>
 Sarah's Hair Studio <bookings@sarahshair.com>
@@ -162,6 +172,7 @@ Team at [Business] <hello@yourdomain.com>
 ```
 
 **Avoid:**
+
 ```
 noreply@yourdomain.com (customers can't reply)
 admin@yourdomain.com (too generic)
@@ -184,6 +195,7 @@ Update the `FROM_EMAIL` variable to match your preferred sender.
 ## Code Changes Summary
 
 **Updated Functions (11 total):**
+
 1. auto-send-aftercare
 2. automated-appointment-followup
 3. automated-reminders
@@ -197,9 +209,11 @@ Update the `FROM_EMAIL` variable to match your preferred sender.
 11. waitlist-notifications
 
 **Implementation:**
+
 ```typescript
 // Each function now uses:
-const FROM_EMAIL = Deno.env.get('FROM_EMAIL') || 'hA.I.r <onboarding@resend.dev>';
+const FROM_EMAIL =
+  Deno.env.get('FROM_EMAIL') || 'hA.I.r <onboarding@resend.dev>';
 
 // Then in email sending:
 await resend.emails.send({
@@ -226,6 +240,7 @@ p=reject     → Block suspicious emails entirely
 ### GDPR Compliance
 
 If serving EU customers:
+
 - Enable region selection in Resend (choose EU region)
 - Add unsubscribe links to marketing emails (already handled)
 - Store consent records (client_profiles.medical_info_consent)
@@ -235,11 +250,13 @@ If serving EU customers:
 ## Cost Considerations
 
 **Resend Pricing (as of 2025):**
+
 - Free tier: 3,000 emails/month
 - Pro plan: $20/month (50,000 emails)
 - Scale plan: Custom pricing
 
 **Current Usage Estimate:**
+
 - Appointment reminders: ~100-500/month per stylist
 - Aftercare emails: ~50-200/month per stylist
 - Marketing campaigns: Variable

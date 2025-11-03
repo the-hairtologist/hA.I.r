@@ -216,7 +216,11 @@ const ScheduleManagement = () => {
         .maybeSingle();
 
       if (error) {
-        logger.error('Error fetching stylist profile', 'ScheduleManagement', error as Error);
+        logger.error(
+          'Error fetching stylist profile',
+          'ScheduleManagement',
+          error as Error
+        );
         toast.error('Error loading schedule');
         navigate('/dashboard');
         return;
@@ -278,7 +282,11 @@ const ScheduleManagement = () => {
       if (error) throw error;
       setScheduleOverrides(data || []);
     } catch (error) {
-      logger.error('Error loading schedule overrides', 'ScheduleManagement', error as Error);
+      logger.error(
+        'Error loading schedule overrides',
+        'ScheduleManagement',
+        error as Error
+      );
     }
   };
 
@@ -338,7 +346,11 @@ const ScheduleManagement = () => {
       toast.success('Schedule saved successfully!');
       loadScheduleOverrides();
     } catch (error: any) {
-      logger.error('Error saving schedule', 'ScheduleManagement', error as Error);
+      logger.error(
+        'Error saving schedule',
+        'ScheduleManagement',
+        error as Error
+      );
       toast.error('Failed to save schedule');
     } finally {
       setSaving(false);
@@ -390,7 +402,11 @@ const ScheduleManagement = () => {
       setEditingOverride(null);
       loadScheduleOverrides();
     } catch (error) {
-      logger.error('Error saving override', 'ScheduleManagement', error as Error);
+      logger.error(
+        'Error saving override',
+        'ScheduleManagement',
+        error as Error
+      );
       toast.error('Failed to save schedule override');
     } finally {
       setSaving(false);
@@ -408,7 +424,11 @@ const ScheduleManagement = () => {
       toast.success('Schedule override deleted!');
       loadScheduleOverrides();
     } catch (error) {
-      logger.error('Error deleting override', 'ScheduleManagement', error as Error);
+      logger.error(
+        'Error deleting override',
+        'ScheduleManagement',
+        error as Error
+      );
       toast.error('Failed to delete schedule override');
     }
   };
@@ -441,7 +461,11 @@ const ScheduleManagement = () => {
         `You are now ${!stylistProfile.is_available ? 'accepting' : 'not accepting'} bookings`
       );
     } catch (error: any) {
-      logger.error('Error updating availability', 'ScheduleManagement', error as Error);
+      logger.error(
+        'Error updating availability',
+        'ScheduleManagement',
+        error as Error
+      );
       toast.error('Error updating availability');
     }
   };
@@ -478,7 +502,11 @@ const ScheduleManagement = () => {
 
       return appointments || [];
     } catch (error) {
-      logger.error('Error checking conflicts', 'ScheduleManagement', error as Error);
+      logger.error(
+        'Error checking conflicts',
+        'ScheduleManagement',
+        error as Error
+      );
       return [];
     }
   };
@@ -657,7 +685,11 @@ const ScheduleManagement = () => {
       setReason('');
       loadData();
     } catch (error: any) {
-      logger.error('Error blocking dates', 'ScheduleManagement', error as Error);
+      logger.error(
+        'Error blocking dates',
+        'ScheduleManagement',
+        error as Error
+      );
       toast.error('Error blocking dates');
     } finally {
       setSubmitting(false);
@@ -1461,7 +1493,11 @@ const ScheduleManagement = () => {
 
           <TabsContent value="blocked" className="space-y-6">
             <div className="flex justify-end">
-              <Dialog open={dialogOpen} onOpenChange={setDialogOpen} modal={true}>
+              <Dialog
+                open={dialogOpen}
+                onOpenChange={setDialogOpen}
+                modal={true}
+              >
                 <DialogTrigger asChild>
                   <Button>
                     <Plus className="h-4 w-4 mr-2" />

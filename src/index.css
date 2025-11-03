@@ -429,7 +429,7 @@
     /* ============================================ */
     /* Typography System */
     /* ============================================ */
-    
+
     /* Typography Scale - Base 16px */
     --text-xs: 0.75rem; /* 12px */
     --text-sm: 0.875rem; /* 14px */
@@ -444,7 +444,7 @@
     --leading-snug: 1.3;
     --leading-body: 1.5;
     --leading-relaxed: 1.6;
-    
+
     /* Letter Spacing */
     --tracking-normal: 0em;
     --tracking-tight: -0.01em;
@@ -506,7 +506,7 @@
     --elevation-none: none;
     --elevation-1: 0 1px 2px 0 hsla(var(--foreground), 0.12);
     --elevation-2: 0 3px 6px -1px hsla(var(--foreground), 0.16);
-    --elevation-3: 0 8px 24px -4px hsla(var(--foreground), 0.20);
+    --elevation-3: 0 8px 24px -4px hsla(var(--foreground), 0.2);
 
     /* ============================================ */
     /* Glow Effects */

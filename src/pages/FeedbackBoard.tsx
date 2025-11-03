@@ -372,7 +372,9 @@ const FeedbackBoard = () => {
                             feedbackId={item.id}
                             currentStatus={item.status || 'new'}
                             currentPriority={item.priority || 'medium'}
-                            currentAdminResponse={item.admin_response ?? undefined}
+                            currentAdminResponse={
+                              item.admin_response ?? undefined
+                            }
                           />
                         )}
                       </div>

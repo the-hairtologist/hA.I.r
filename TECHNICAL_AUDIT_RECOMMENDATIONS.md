@@ -11,6 +11,7 @@
 ### ✅ What You Already Have
 
 #### 1. **Automation Monitoring Dashboard** (`/admin/automation`)
+
 - **Status:** ✅ Implemented
 - **Features:**
   - Real-time edge function status
@@ -19,6 +20,7 @@
 - **Access:** Admin-only
 
 #### 2. **Error Tracking & Monitoring**
+
 - **Sentry Integration** (`src/lib/monitoring.ts`)
   - Automatic error capture
   - Performance monitoring (10% sample rate)
@@ -34,6 +36,7 @@
   - Suggested actions for users
 
 #### 3. **Performance Monitoring**
+
 - **Core Web Vitals** (`src/components/CoreWebVitals.tsx`)
   - LCP, CLS, INP tracking
   - Automatic reporting
@@ -45,6 +48,7 @@
   - Real-time connectivity monitoring
 
 #### 4. **Database Health**
+
 - **10 Automated Cleanup Jobs**
   - Error logs retention (30 days)
   - Audit logs (90 days)
@@ -62,6 +66,7 @@
 **Issue:** 441 `console.log/error/warn` statements in production code
 
 **Impact:**
+
 - Performance overhead in production
 - Exposes internal logic to users
 - Increases bundle size slightly
@@ -80,6 +85,7 @@ logger.error('Error occurred', 'ComponentName', error);
 ```
 
 **Action Plan:**
+
 1. Search for all `console.log` → replace with `logger.debug`
 2. Search for all `console.error` → replace with `logger.error`
 3. Logger automatically handles dev/prod environments
@@ -96,6 +102,7 @@ logger.error('Error occurred', 'ComponentName', error);
 **Issue:** No programmatic way to check system health
 
 **Why It Matters:**
+
 - Uptime monitoring services need an endpoint
 - Can't automate health checks
 - Manual verification required
@@ -104,42 +111,45 @@ logger.error('Error occurred', 'ComponentName', error);
 
 ```typescript
 // supabase/functions/health-check/index.ts
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 
-serve(async (req) => {
-  if (req.method === "OPTIONS") {
-    return new Response(null, { 
-      headers: { "Access-Control-Allow-Origin": "*" } 
+serve(async req => {
+  if (req.method === 'OPTIONS') {
+    return new Response(null, {
+      headers: { 'Access-Control-Allow-Origin': '*' },
     });
   }
 
   try {
     const health = {
-      status: "healthy",
+      status: 'healthy',
       timestamp: new Date().toISOString(),
       checks: {
         database: await checkDatabase(),
         ai: await checkAI(),
         storage: await checkStorage(),
-      }
+      },
     };
 
-    const allHealthy = Object.values(health.checks).every(c => c.status === "ok");
-    
+    const allHealthy = Object.values(health.checks).every(
+      c => c.status === 'ok'
+    );
+
     return new Response(JSON.stringify(health), {
       status: allHealthy ? 200 : 503,
-      headers: { "Content-Type": "application/json" }
+      headers: { 'Content-Type': 'application/json' },
     });
   } catch (error) {
     return new Response(
-      JSON.stringify({ status: "unhealthy", error: error.message }),
-      { status: 503, headers: { "Content-Type": "application/json" } }
+      JSON.stringify({ status: 'unhealthy', error: error.message }),
+      { status: 503, headers: { 'Content-Type': 'application/json' } }
     );
   }
 });
 ```
 
 **Benefits:**
+
 - Automated uptime monitoring
 - Early problem detection
 - API status checks
@@ -153,6 +163,7 @@ serve(async (req) => {
 **Issue:** Performance tracking scattered across multiple files
 
 **Current State:**
+
 - `src/lib/advancedPerformance.ts` - Advanced techniques
 - `src/lib/analytics/performanceTracker.ts` - Basic tracking
 - `src/lib/monitoring/PerformanceTracker.ts` - Duplicate functionality
@@ -161,6 +172,7 @@ serve(async (req) => {
 **Solution:** Consolidate into single performance module
 
 **Action:**
+
 1. Choose ONE primary tracker (recommend `performanceTracker.ts`)
 2. Migrate all performance logging there
 3. Export unified interface
@@ -178,6 +190,7 @@ performanceTracker.track('operation_name', duration);
 ```
 
 **Benefits:**
+
 - Easier to maintain
 - Consistent metrics
 - Better reporting
@@ -190,6 +203,7 @@ performanceTracker.track('operation_name', duration);
 **Issue:** Some queries lack optimal caching configuration
 
 **Current State:**
+
 - `useEnhancedQuery` - Good (has retry, caching)
 - `useOptimizedQuery` - Good (5min stale time)
 - Some direct `useQuery` calls - May lack optimization
@@ -207,15 +221,16 @@ const { data, isLoading } = useEnhancedQuery({
   cacheTime: 10 * 60 * 1000, // 10 minutes
   retryOptions: {
     maxRetries: 3,
-    backoff: 'exponential'
+    backoff: 'exponential',
   },
-  offlineSupport: true // Queue when offline
+  offlineSupport: true, // Queue when offline
 });
 ```
 
 **Action:** Audit all `useQuery` calls and standardize
 
 **Benefits:**
+
 - Fewer database calls
 - Better offline support
 - Automatic retry on failure
@@ -230,6 +245,7 @@ const { data, isLoading } = useEnhancedQuery({
 **Issue:** Large API responses not compressed
 
 **Current State:**
+
 - Some functions use `compressedJsonResponse` helper
 - Most functions use regular `Response` objects
 - Potential bandwidth savings
@@ -239,7 +255,7 @@ const { data, isLoading } = useEnhancedQuery({
 ```typescript
 // ❌ Current (many edge functions)
 return new Response(JSON.stringify(largeData), {
-  headers: { 'Content-Type': 'application/json' }
+  headers: { 'Content-Type': 'application/json' },
 });
 
 // ✅ Better (already exists in _shared/compression.ts)
@@ -249,6 +265,7 @@ return await compressedJsonResponse(largeData, 200);
 ```
 
 **Benefits:**
+
 - 60-80% bandwidth reduction on large responses
 - Faster mobile performance
 - Lower data costs for users
@@ -269,27 +286,28 @@ const startTime = Date.now();
 
 try {
   const result = await yourFunction();
-  
+
   return new Response(JSON.stringify(result), {
     headers: {
       'Content-Type': 'application/json',
       'X-Response-Time': `${Date.now() - startTime}ms`,
-      'X-Function-Name': 'function-name'
-    }
+      'X-Function-Name': 'function-name',
+    },
   });
 } catch (error) {
   const duration = Date.now() - startTime;
-  
+
   // Log slow functions
   if (duration > 5000) {
     console.error(`[SLOW FUNCTION] ${functionName} took ${duration}ms`);
   }
-  
+
   throw error;
 }
 ```
 
 **Benefits:**
+
 - Identify slow endpoints
 - Performance regression detection
 - User experience insights
@@ -301,6 +319,7 @@ try {
 **Issue:** Images loaded eagerly (all at once)
 
 **Current State:**
+
 - Hair photos load immediately
 - Portfolio images load on mount
 - No lazy loading strategy
@@ -327,6 +346,7 @@ try {
 ```
 
 **Benefits:**
+
 - Faster initial page load
 - Reduced bandwidth for users who don't scroll
 - Better Core Web Vitals (LCP)
@@ -340,6 +360,7 @@ try {
 **Issue:** Some queries may be N+1 problems
 
 **Potential Areas:**
+
 - Appointments with client/stylist lookups
 - Formulas with multiple joins
 - Client history timelines
@@ -352,7 +373,7 @@ SELECT * FROM client_profiles;
 -- Then for each: SELECT * FROM appointments WHERE client_id = ?
 
 -- ✅ Single Query with JOIN
-SELECT 
+SELECT
   cp.id, cp.full_name, cp.email,
   a.appointment_date, a.status
 FROM client_profiles cp
@@ -371,18 +392,22 @@ ORDER BY a.appointment_date DESC;
 ## 🚀 Quick Wins (Low Effort, High Impact)
 
 ### 1. Enable Gzip Compression in Supabase
+
 **Action:** Already enabled by default, verify in edge function responses  
 **Impact:** 60-80% bandwidth reduction
 
 ### 2. Add `staleTime` to All Queries
+
 **Action:** Set 5min stale time on all queries that don't need real-time data  
 **Impact:** Fewer database calls, better UX
 
 ### 3. Lazy Load Route Components
+
 **Action:** Already using `React.lazy()` - verify all routes lazy load  
 **Impact:** Faster initial page load
 
 ### 4. Remove Unused Dependencies
+
 **Action:** Run `npx depcheck` to find unused packages  
 **Impact:** Smaller bundle size
 
@@ -391,6 +416,7 @@ ORDER BY a.appointment_date DESC;
 ## 📈 Monitoring Dashboard Enhancements
 
 ### What You Have:
+
 - Automation monitoring (`/admin/automation`)
 - Basic status checks
 
@@ -422,6 +448,7 @@ interface SystemHealth {
 ```
 
 **Display:**
+
 - Real-time health metrics
 - 24-hour trend graphs
 - Alert thresholds
@@ -432,20 +459,24 @@ interface SystemHealth {
 ## 🎓 Lovable Documentation References
 
 ### Performance
+
 - [Performance Optimization Guide](https://docs.lovable.dev/tips-tricks/performance)
 - [Bundle Size Optimization](https://docs.lovable.dev/tips-tricks/bundle-optimization)
 - [Core Web Vitals](https://docs.lovable.dev/tips-tricks/web-vitals)
 
 ### Database
+
 - [Supabase Best Practices](https://docs.lovable.dev/features/cloud)
 - [Query Optimization](https://supabase.com/docs/guides/database/joins-and-nesting)
 - [RLS Performance](https://supabase.com/docs/guides/database/postgres/row-level-security#performance)
 
 ### Monitoring
+
 - [Error Tracking Setup](https://docs.sentry.io/platforms/javascript/guides/react/)
 - [Edge Function Logging](https://docs.lovable.dev/features/cloud#edge-functions)
 
 ### AI Integration
+
 - [Lovable AI Best Practices](https://docs.lovable.dev/features/ai)
 - [Cost Optimization](https://docs.lovable.dev/features/ai#cost-optimization)
 
@@ -454,24 +485,28 @@ interface SystemHealth {
 ## ✅ Implementation Roadmap
 
 ### Week 1 (Quick Wins)
+
 - [ ] Replace all `console.*` with `logger.*`
 - [ ] Add response time headers to edge functions
 - [ ] Enable lazy loading on all images
 - [ ] Audit and set `staleTime` on all queries
 
 ### Week 2 (Health Checks)
+
 - [ ] Create `/api/health` endpoint
 - [ ] Add database health checks
 - [ ] Add AI service health checks
 - [ ] Integrate with uptime monitoring service
 
 ### Week 3 (Performance)
+
 - [ ] Consolidate performance tracking
 - [ ] Add compression to all large responses
 - [ ] Optimize database queries
 - [ ] Add performance budget alerts
 
 ### Week 4 (Monitoring)
+
 - [ ] Enhance monitoring dashboard
 - [ ] Add 24-hour trend graphs
 - [ ] Set up alert thresholds
@@ -482,6 +517,7 @@ interface SystemHealth {
 ## 🎯 Success Metrics
 
 ### Before Optimization
+
 - Console statements: 441
 - Average edge function response: 2-4s
 - Bundle size: ~2.5MB
@@ -489,6 +525,7 @@ interface SystemHealth {
 - Cache hit rate: Unknown
 
 ### After Optimization (Target)
+
 - Console statements: 0 (use logger)
 - Average edge function response: 1-3s
 - Bundle size: ~2.2MB (-300KB)
@@ -500,18 +537,21 @@ interface SystemHealth {
 ## 💡 Key Takeaways
 
 ### Your Strengths ✅
+
 1. **Excellent monitoring foundation** (Sentry, logger, AI error tracking)
 2. **Automated maintenance** (10 cleanup jobs, cron automation)
 3. **Good performance infrastructure** (Core Web Vitals, performance tracking)
 4. **Smart caching patterns** (Enhanced Query hook, optimized queries)
 
 ### Focus Areas 🎯
+
 1. **Production hygiene** (remove console.log statements)
 2. **Centralization** (consolidate performance tracking)
 3. **Visibility** (add health checks, response times)
 4. **Optimization** (query patterns, image loading, compression)
 
 ### Philosophy 🧘
+
 **"Observe before you optimize."**
 
 - You have great diagnostic tools

@@ -17,6 +17,7 @@ How to implement push notifications for appointment reminders and important upda
 ## 🎯 Use Cases
 
 Perfect for:
+
 - Appointment reminders (24 hours before)
 - Client messages received
 - New appointment requests
@@ -66,6 +67,7 @@ Your Database (triggers)
 ### 2. iOS Configuration
 
 Add to `ios/App/App/Info.plist`:
+
 ```xml
 <key>UIBackgroundModes</key>
 <array>
@@ -74,12 +76,14 @@ Add to `ios/App/App/Info.plist`:
 ```
 
 In Xcode:
+
 1. Select target → Signing & Capabilities
 2. Add Capability → Push Notifications
 3. Add Capability → Background Modes
 4. Check "Remote notifications"
 
 Upload APNs Authentication Key:
+
 1. Apple Developer → Certificates, IDs & Profiles
 2. Keys → + (Create new key)
 3. Name: "hA.I.r Push Notifications"
@@ -92,6 +96,7 @@ Upload APNs Authentication Key:
 File: `android/app/google-services.json` (downloaded from Firebase)
 
 Update `android/app/build.gradle`:
+
 ```gradle
 dependencies {
     // ... existing dependencies
@@ -102,6 +107,7 @@ apply plugin: 'com.google.gms.google-services'
 ```
 
 Update `android/build.gradle`:
+
 ```gradle
 buildscript {
     dependencies {
@@ -117,9 +123,14 @@ buildscript {
 ### 1. Create Push Notification Service
 
 File: `src/lib/notifications/pushNotifications.ts`
+
 ```typescript
 import { Capacitor } from '@capacitor/core';
-import { PushNotifications, Token, ActionPerformed } from '@capacitor/push-notifications';
+import {
+  PushNotifications,
+  Token,
+  ActionPerformed,
+} from '@capacitor/push-notifications';
 import { supabase } from '@/integrations/supabase/client';
 
 export class PushNotificationService {
@@ -131,7 +142,7 @@ export class PushNotificationService {
 
     // Request permission
     const permStatus = await PushNotifications.requestPermissions();
-    
+
     if (permStatus.receive !== 'granted') {
       console.log('[Push] Permission denied');
       return;
@@ -143,10 +154,13 @@ export class PushNotificationService {
     await PushNotifications.register();
 
     // Handle successful registration
-    await PushNotifications.addListener('registration', async (token: Token) => {
-      console.log('[Push] Token:', token.value);
-      await this.saveTokenToBackend(token.value);
-    });
+    await PushNotifications.addListener(
+      'registration',
+      async (token: Token) => {
+        console.log('[Push] Token:', token.value);
+        await this.saveTokenToBackend(token.value);
+      }
+    );
 
     // Handle errors
     await PushNotifications.addListener('registrationError', (error: any) => {
@@ -154,13 +168,17 @@ export class PushNotificationService {
     });
 
     // Handle notification received (app in foreground)
-    await PushNotifications.addListener('pushNotificationReceived', (notification) => {
-      console.log('[Push] Received:', notification);
-      // Show in-app notification or update UI
-    });
+    await PushNotifications.addListener(
+      'pushNotificationReceived',
+      notification => {
+        console.log('[Push] Received:', notification);
+        // Show in-app notification or update UI
+      }
+    );
 
     // Handle notification tapped (app in background)
-    await PushNotifications.addListener('pushNotificationActionPerformed', 
+    await PushNotifications.addListener(
+      'pushNotificationActionPerformed',
       (action: ActionPerformed) => {
         console.log('[Push] Action:', action);
         this.handleNotificationTap(action);
@@ -169,19 +187,22 @@ export class PushNotificationService {
   }
 
   private async saveTokenToBackend(token: string) {
-    const { data: { session } } = await supabase.auth.getSession();
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
     if (!session) return;
 
-    const { error } = await supabase
-      .from('push_tokens')
-      .upsert({
+    const { error } = await supabase.from('push_tokens').upsert(
+      {
         user_id: session.user.id,
         token,
         platform: Capacitor.getPlatform(),
         updated_at: new Date().toISOString(),
-      }, {
-        onConflict: 'user_id,platform'
-      });
+      },
+      {
+        onConflict: 'user_id,platform',
+      }
+    );
 
     if (error) {
       console.error('[Push] Error saving token:', error);
@@ -192,7 +213,7 @@ export class PushNotificationService {
 
   private handleNotificationTap(action: ActionPerformed) {
     const data = action.notification.data;
-    
+
     // Navigate based on notification type
     switch (data.type) {
       case 'appointment_reminder':
@@ -220,6 +241,7 @@ export const pushNotifications = new PushNotificationService();
 ### 2. Initialize in App
 
 File: `src/App.tsx`
+
 ```typescript
 import { useEffect } from 'react';
 import { pushNotifications } from '@/lib/notifications/pushNotifications';
@@ -276,17 +298,19 @@ CREATE INDEX idx_push_tokens_user_id ON push_tokens(user_id);
 ### Edge Function: `send-push-notification`
 
 File: `supabase/functions/send-push-notification/index.ts`
+
 ```typescript
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
 };
 
-serve(async (req) => {
-  if (req.method === "OPTIONS") {
+serve(async req => {
+  if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
@@ -294,8 +318,8 @@ serve(async (req) => {
     const { userId, title, body, data } = await req.json();
 
     const supabaseAdmin = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
     // Get user's push tokens
@@ -308,19 +332,19 @@ serve(async (req) => {
       throw new Error('No push tokens found for user');
     }
 
-    const fcmServerKey = Deno.env.get("FCM_SERVER_KEY");
+    const fcmServerKey = Deno.env.get('FCM_SERVER_KEY');
     if (!fcmServerKey) {
       throw new Error('FCM_SERVER_KEY not configured');
     }
 
     // Send to each device
-    const promises = tokens.map(async (tokenData) => {
+    const promises = tokens.map(async tokenData => {
       const message = {
         to: tokenData.token,
         notification: {
           title,
           body,
-          sound: "default",
+          sound: 'default',
         },
         data: data || {},
       };
@@ -329,7 +353,7 @@ serve(async (req) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `key=${fcmServerKey}`,
+          Authorization: `key=${fcmServerKey}`,
         },
         body: JSON.stringify(message),
       });
@@ -338,19 +362,15 @@ serve(async (req) => {
     });
 
     const results = await Promise.all(promises);
-    
-    return new Response(
-      JSON.stringify({ success: true, results }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+
+    return new Response(JSON.stringify({ success: true, results }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
   } catch (error) {
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      { 
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-      }
-    );
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
   }
 });
 ```
@@ -372,7 +392,7 @@ DECLARE
 BEGIN
   -- Find appointments 24 hours from now
   FOR appointment_record IN
-    SELECT 
+    SELECT
       a.id,
       a.client_id,
       a.appointment_date,
@@ -444,8 +464,8 @@ await supabase.functions.invoke('send-push-notification', {
     body: 'This is a test!',
     data: {
       type: 'test',
-    }
-  }
+    },
+  },
 });
 ```
 
@@ -486,6 +506,7 @@ CREATE TABLE push_notification_logs (
 ## 🚨 Best Practices
 
 ### Do's ✅
+
 - Only send valuable, timely notifications
 - Allow users to customize notification preferences
 - Respect quiet hours (no notifications 10pm-8am)
@@ -494,6 +515,7 @@ CREATE TABLE push_notification_logs (
 - Use clear, actionable notification text
 
 ### Don'ts ❌
+
 - Don't send marketing spam
 - Don't send identical notifications repeatedly
 - Don't send notifications without user permission
@@ -522,11 +544,13 @@ ALTER TABLE profiles ADD COLUMN IF NOT EXISTS notification_preferences JSONB DEF
 ### iOS Issues
 
 **No token received:**
+
 - Check Xcode capabilities (Push Notifications enabled)
 - Verify APNs key uploaded to Firebase
 - Test on real device, not simulator
 
 **Notifications not showing:**
+
 - Check notification settings in iOS Settings app
 - Ensure app has permission granted
 - Verify badge, sound, alert enabled
@@ -534,11 +558,13 @@ ALTER TABLE profiles ADD COLUMN IF NOT EXISTS notification_preferences JSONB DEF
 ### Android Issues
 
 **No token received:**
+
 - Verify `google-services.json` in correct location
 - Check Firebase project has Android app added
 - Ensure package name matches exactly
 
 **Notifications not showing:**
+
 - Check Android notification settings
 - Verify channel importance level
 - Test with high-priority notification
@@ -566,6 +592,7 @@ ALTER TABLE profiles ADD COLUMN IF NOT EXISTS notification_preferences JSONB DEF
 **Need Help?** Email ThehA.I.rtologist@gmail.com
 
 **Documentation:**
+
 - [Capacitor Push Notifications](https://capacitorjs.com/docs/apis/push-notifications)
 - [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging)
 - [Apple Push Notifications](https://developer.apple.com/documentation/usernotifications)

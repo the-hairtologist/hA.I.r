@@ -41,7 +41,6 @@ export default function IntegrationsCalendar() {
       />
 
       <div className="space-y-6 px-4">
-
         <GoogleCalendarConnect />
 
         <div className="bg-muted/50 rounded-lg p-6">

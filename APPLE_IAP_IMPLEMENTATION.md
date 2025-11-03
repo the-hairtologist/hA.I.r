@@ -3,6 +3,7 @@
 ## ✅ What's Been Implemented
 
 ### 1. IAP Integration Code
+
 - **File**: `src/lib/iap/appleIAP.ts`
 - Platform detection (iOS vs web/Android)
 - Product registration for two subscription tiers
@@ -11,6 +12,7 @@
 - Active subscription checking
 
 ### 2. Receipt Verification Edge Function
+
 - **File**: `supabase/functions/verify-apple-receipt/index.ts`
 - Validates receipts with Apple's servers (production + sandbox)
 - Stores subscription status in profiles table
@@ -18,6 +20,7 @@
 - Audit logging for compliance
 
 ### 3. Updated Subscription Context
+
 - **File**: `src/contexts/SubscriptionContext.tsx`
 - Added payment method detection (`apple-iap` vs `stripe`)
 - Initializes Apple IAP on iOS
@@ -25,6 +28,7 @@
 - Automatic receipt restoration on iOS
 
 ### 4. Platform-Specific UI Components
+
 - **File**: `src/components/AppleIAPSubscription.tsx`
 - Displays IAP subscription plans on iOS
 - Handles purchase flow with Apple StoreKit
@@ -70,10 +74,10 @@ You must create these **EXACT** product IDs in App Store Connect:
 ### Step 3: Configure Subscription Details
 
 For each subscription:
+
 - **Localizations**: Add English description
   - Display Name: "Stylist Pro [Monthly/Yearly]"
   - Description: "Full access to all stylist features including client management, appointment booking, formula generator, AI assistant, payment tracking, and more."
-  
 - **Subscription Prices**: Set price tier
   - Monthly: $14.99 USD
   - Yearly: $143.99 USD
@@ -105,14 +109,14 @@ Add subscription tracking columns to profiles table:
 
 ```sql
 -- Add columns to track Apple IAP subscriptions
-ALTER TABLE profiles 
+ALTER TABLE profiles
 ADD COLUMN IF NOT EXISTS subscription_status TEXT DEFAULT 'inactive',
 ADD COLUMN IF NOT EXISTS subscription_product_id TEXT,
 ADD COLUMN IF NOT EXISTS subscription_end TIMESTAMPTZ,
 ADD COLUMN IF NOT EXISTS apple_receipt TEXT;
 
 -- Create index for faster subscription lookups
-CREATE INDEX IF NOT EXISTS idx_profiles_subscription 
+CREATE INDEX IF NOT EXISTS idx_profiles_subscription
 ON profiles(subscription_status, subscription_end);
 
 -- Add comment for documentation
@@ -135,6 +139,7 @@ COMMENT ON COLUMN profiles.apple_receipt IS 'Latest Apple receipt data (encrypte
    - Use this ID to test purchases
 
 2. **Test Purchase Flow**
+
    ```typescript
    // The code automatically detects sandbox vs production
    // Receipts are validated against appropriate Apple endpoint
@@ -155,6 +160,7 @@ COMMENT ON COLUMN profiles.apple_receipt IS 'Latest Apple receipt data (encrypte
 ### Test Stripe for Appointment Payments
 
 Ensure Stripe still works for physical service payments:
+
 - Appointment deposits ✅
 - Full service payments ✅
 - Receipt generation ✅
@@ -200,6 +206,7 @@ Ensure Stripe still works for physical service payments:
 ### Track IAP Events
 
 The implementation automatically logs:
+
 - Purchase attempts
 - Successful purchases
 - Failed purchases
@@ -208,10 +215,11 @@ The implementation automatically logs:
 - Subscription cancellations
 
 View logs:
+
 ```typescript
 // In Supabase dashboard
-SELECT * FROM audit_logs 
-WHERE action = 'IAP_PURCHASE' 
+SELECT * FROM audit_logs
+WHERE action = 'IAP_PURCHASE'
 ORDER BY created_at DESC;
 ```
 
@@ -219,7 +227,7 @@ ORDER BY created_at DESC;
 
 ```typescript
 // Check active subscriptions
-SELECT 
+SELECT
   id,
   email,
   subscription_status,
@@ -273,24 +281,29 @@ ORDER BY subscription_end ASC;
 ### Common Issues
 
 **Issue**: "Product not found"
+
 - **Fix**: Ensure product IDs in code match App Store Connect exactly
 - **Check**: `IAP_PRODUCTS` constants in `appleIAP.ts`
 
 **Issue**: "Receipt validation failed"
+
 - **Fix**: Verify shared secret is configured
 - **Check**: Supabase secrets for `APPLE_SHARED_SECRET`
 
 **Issue**: "Store not initialized"
+
 - **Fix**: Wait for `appleIAP.initialize()` to complete
 - **Check**: Console logs for initialization errors
 
 **Issue**: "Subscription not syncing"
+
 - **Fix**: Call `restorePurchases()` to re-sync
 - **Check**: Network logs for backend communication
 
 ### Debug Mode
 
 Enable verbose logging:
+
 ```typescript
 // Add to appleIAP.ts
 const DEBUG = true;
@@ -338,7 +351,7 @@ if (DEBUG) {
 
 - **Year 1**: Apple takes 30% ($4.50 per monthly sub)
 - **Year 2+**: Apple takes 15% ($2.25 per monthly sub) - Small Business Program
-- **Your Net**: 
+- **Your Net**:
   - Monthly: $10.50 (Year 1), $12.75 (Year 2+)
   - Yearly: $100.80 (Year 1), $122.40 (Year 2+)
 

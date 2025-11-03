@@ -3,6 +3,7 @@
 ## Quick Test (2 minutes)
 
 ### Test Flow
+
 1. **Generate Referral Code**
    - Go to `/referrals`
    - Click "Generate My Referral Code"
@@ -26,6 +27,7 @@
 ## Detailed Testing Checklist
 
 ### ✅ Code Generation
+
 - [ ] Referral code is unique
 - [ ] Code follows format (4 letters + 4 digits)
 - [ ] Share link works
@@ -33,6 +35,7 @@
 - [ ] Copy to clipboard works
 
 ### ✅ Code Usage
+
 - [ ] Can enter code during signup
 - [ ] Invalid code shows error
 - [ ] Valid code shows success
@@ -40,12 +43,14 @@
 - [ ] Self-referral blocked
 
 ### ✅ Rewards Tracking
+
 - [ ] Referrer sees referred stylist in list
 - [ ] Status updates from "pending" → "active"
 - [ ] Reward amount calculates correctly
 - [ ] Milestone rewards trigger at 5, 10, 25 referrals
 
 ### ✅ Milestone Celebrations
+
 - [ ] Confetti triggers on milestones
 - [ ] Toast notification shows
 - [ ] Discount code generated
@@ -58,16 +63,19 @@
 ### Create Test Accounts
 
 **Account 1 (Referrer)**
+
 - Email: `referrer@test.com`
 - Role: Stylist
 - Action: Generate referral code
 
 **Account 2 (Referee)**
+
 - Email: `referee1@test.com`
 - Role: Stylist
 - Action: Use referral code from Account 1
 
 **Account 3 (Referee)**
+
 - Email: `referee2@test.com`
 - Role: Stylist
 - Action: Use same referral code
@@ -77,16 +85,19 @@
 ## Expected Results
 
 ### After 1 Referral
+
 - Referrer sees 1 pending referral
 - Reward: $25 credit (when referee completes first appointment)
 
 ### After 5 Referrals
+
 - Confetti celebration 🎉
 - Milestone badge unlocked
 - Bonus discount code generated
 - Total rewards: $125+ base + $50 milestone
 
 ### After 10 Referrals
+
 - Bigger confetti celebration 🎊
 - "Top Referrer" badge
 - Enhanced discount code
@@ -97,6 +108,7 @@
 ## Database Verification
 
 ### Check Referral Records
+
 ```sql
 -- View all referrals
 SELECT * FROM stylist_referrals
@@ -107,7 +119,7 @@ SELECT * FROM stylist_referral_tracking
 ORDER BY referred_at DESC;
 
 -- Check rewards
-SELECT 
+SELECT
   r.referral_code,
   COUNT(rt.id) as total_referrals,
   SUM(CASE WHEN rt.status = 'active' THEN 1 ELSE 0 END) as active_referrals,
@@ -122,12 +134,14 @@ GROUP BY r.referral_code;
 ## Edge Cases to Test
 
 ### Invalid Scenarios
+
 - [ ] Using own referral code → Shows error
 - [ ] Using code twice → Prevented
 - [ ] Using expired code → Handled gracefully
 - [ ] Non-existent code → Shows helpful error
 
 ### Valid Scenarios
+
 - [ ] Multiple people use same code → All tracked
 - [ ] Referral code survives account deletion → Code disabled
 - [ ] Referred stylist becomes inactive → Status reflects
@@ -137,6 +151,7 @@ GROUP BY r.referral_code;
 ## Monitoring
 
 ### Check Referral Performance
+
 1. Go to `/referrals`
 2. View **Referral Stats** card:
    - Total referrals made
@@ -145,6 +160,7 @@ GROUP BY r.referral_code;
    - Conversion rate
 
 ### Track Milestones
+
 1. Go to `/referrals`
 2. View **Milestones** section:
    - Progress to next milestone
@@ -156,21 +172,25 @@ GROUP BY r.referral_code;
 ## Common Issues & Fixes
 
 ### Code Not Generating
+
 - **Issue**: Button click does nothing
 - **Fix**: Check if stylist profile exists
 - **SQL**: `SELECT * FROM stylist_profiles WHERE user_id = 'YOUR_USER_ID'`
 
 ### Code Not Validating
+
 - **Issue**: Valid code shows as invalid
 - **Fix**: Check `stylist_referrals` table
 - **SQL**: `SELECT * FROM stylist_referrals WHERE referral_code = 'CODE'`
 
 ### Rewards Not Tracking
+
 - **Issue**: Referral not appearing in list
 - **Fix**: Check `stylist_referral_tracking` table
 - **SQL**: `SELECT * FROM stylist_referral_tracking WHERE referrer_id = 'STYLIST_ID'`
 
 ### Milestones Not Triggering
+
 - **Issue**: No celebration at milestone
 - **Fix**: Check milestone logic in `useMilestoneCheck.ts`
 - **Test**: Manually insert test referrals to trigger milestone
@@ -197,12 +217,14 @@ Before launching referral program:
 ## Success Metrics to Track
 
 ### KPIs
+
 1. **Referral Rate**: % of stylists who generate code
 2. **Conversion Rate**: % of codes that are used
 3. **Activation Rate**: % of referred stylists who complete setup
 4. **Retention Rate**: % of referred stylists still active after 90 days
 
 ### Goals (from Phase Completion Summary)
+
 - **Target**: 30% stylist referral adoption
 - **Track**: Weekly referral velocity
 - **Measure**: Revenue from referred stylists
@@ -212,6 +234,7 @@ Before launching referral program:
 ## Analytics Events Tracked
 
 The system automatically tracks:
+
 - `referral_code_generated`
 - `referral_code_used`
 - `referral_milestone_reached`

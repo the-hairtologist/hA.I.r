@@ -1,6 +1,6 @@
 # 🎯 Getting Started with hA.I.r
 
-**Feeling Lost? Start Here!** 
+**Feeling Lost? Start Here!**
 
 This guide cuts through the complexity and tells you exactly what you need to do.
 
@@ -9,6 +9,7 @@ This guide cuts through the complexity and tells you exactly what you need to do
 ## 🤔 What is This?
 
 **hA.I.r** is an AI-powered hair salon management platform that helps stylists:
+
 - Generate hair color formulas with AI
 - Manage clients and appointments
 - Send automated reminders
@@ -36,6 +37,7 @@ npm run dev
 ```
 
 **That's it!** The app will run locally. You can:
+
 - Create an account
 - Test the AI formula generator
 - Try booking appointments
@@ -48,6 +50,7 @@ npm run dev
 **Perfect if you're ready to put the app on the internet:**
 
 #### Quick Deploy (Easiest - 5 minutes)
+
 1. Open your Lovable dashboard
 2. Click the **"Publish"** button (top right)
 3. Wait 2-3 minutes for build
@@ -56,8 +59,9 @@ npm run dev
 The app will be available at: `https://[your-project].lovable.app`
 
 #### What Works Out of the Box:
+
 - ✅ User authentication (email/Google login)
-- ✅ All AI features  
+- ✅ All AI features
 - ✅ Appointment booking
 - ✅ Client management
 - ✅ Formula generation
@@ -65,19 +69,23 @@ The app will be available at: `https://[your-project].lovable.app`
 - ✅ PWA (installable on phones)
 
 #### What Needs Setup (Optional):
+
 These are NOT required to get started, but enhance the app:
 
 **Email Notifications** (15 min + DNS wait)
+
 - Sign up at https://resend.com (free tier)
 - Add API key to Lovable secrets
 - See: `MANUAL_ACTION_ITEMS.md` → Item #3
 
 **Custom Domain** (30 min)
+
 - Buy a domain like `yoursalon.com`
 - Configure DNS in Lovable settings
 - See: `DOMAIN_SETUP_GUIDE.md`
 
 **Analytics** (10 min)
+
 - Create Google Analytics 4 account
 - Add measurement ID to environment
 - See: `MANUAL_ACTION_ITEMS.md` → Item #10
@@ -89,6 +97,7 @@ These are NOT required to get started, but enhance the app:
 **Perfect if you want iOS/Android apps in app stores:**
 
 This requires more work:
+
 - Apple Developer Account ($99/year)
 - Google Play Account ($25 one-time)
 - Mac computer (for iOS)
@@ -105,6 +114,7 @@ This requires more work:
 ### For End Users (Stylists & Clients)
 
 Read: `QUICK_START_GUIDE.md` - Complete user guide for:
+
 - Creating accounts
 - Booking appointments
 - Using AI formula generator
@@ -113,6 +123,7 @@ Read: `QUICK_START_GUIDE.md` - Complete user guide for:
 ### For Developers
 
 **Key Files:**
+
 - `README.md` - Tech stack and overview
 - `BUILD_GUIDE.md` - Development setup
 - `TESTING.md` - Running tests
@@ -125,22 +136,27 @@ Read: `QUICK_START_GUIDE.md` - Complete user guide for:
 **Confused by all the files?** Here's what to read and when:
 
 ### Read First (Essential)
+
 1. ✨ **This file** - You're reading it!
 2. `START_HERE.md` - Production status overview
 3. `README.md` - Technical overview
 
 ### Read Before Deploying
+
 4. `DEPLOYMENT_GUIDE.md` - How to deploy
 5. `MANUAL_ACTION_ITEMS.md` - Optional setup tasks
 
 ### Read When Needed
+
 6. `QUICK_START_GUIDE.md` - User guide
 7. `MOBILE_BUILD_GUIDE.md` - Mobile apps
 8. `TESTING.md` - Running tests
 9. Everything else - Reference as needed
 
 ### Can Ignore (Status Reports)
+
 All the files with names like:
+
 - `*_AUDIT.md`
 - `*_COMPLETE.md`
 - `*_REPORT.md`
@@ -155,6 +171,7 @@ These are historical records. You don't need them to get started!
 ### "Do I need to set up all those API keys?"
 
 **No!** The app works without them. They're optional enhancements:
+
 - No API key needed: App still functions perfectly
 - With API keys: Get extra features (emails, voice AI, etc.)
 
@@ -163,6 +180,7 @@ Start without them, add later if needed.
 ### "Which documentation files should I read?"
 
 **Start here:**
+
 1. This file (GETTING_STARTED.md)
 2. DEPLOYMENT_GUIDE.md (if deploying)
 3. QUICK_START_GUIDE.md (for using the app)
@@ -172,6 +190,7 @@ Start without them, add later if needed.
 ### "Is the app really production-ready?"
 
 **Yes!** According to the status files:
+
 - ✅ 98/100 quality score
 - ✅ All security audits passed
 - ✅ All tests passing
@@ -193,6 +212,7 @@ The remaining 2% is optional API integrations (email, analytics, etc.)
 ### "Can I customize the app?"
 
 **Yes!** It's a React/TypeScript app. You can modify:
+
 - Colors and themes (`tailwind.config.ts`)
 - Features (any file in `src/`)
 - Database schema (`supabase/migrations/`)
@@ -213,7 +233,7 @@ Do you want to:
 │
 ├─ Deploy to web?
 │  └─ Click "Publish" in Lovable
-│     ├─ Works immediately? 
+│     ├─ Works immediately?
 │     │  └─ Done! ✅
 │     └─ Need custom domain?
 │        └─ Read: DOMAIN_SETUP_GUIDE.md
@@ -277,16 +297,19 @@ Do you want to:
 ## ✨ Summary (TL;DR)
 
 **What you have:**
+
 - A fully functional, production-ready hair salon app
 - AI formula generator, appointment booking, client management
 - 98% ready to deploy
 
 **What you need to do:**
+
 1. **To test**: `npm install && npm run dev`
 2. **To deploy**: Click "Publish" in Lovable
 3. **To customize**: Edit files in `src/` folder
 
 **What you DON'T need to do:**
+
 - Read all 495 documentation files
 - Set up all API integrations immediately
 - Build native mobile apps right away

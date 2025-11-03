@@ -8,15 +8,15 @@
 
 ## 🎯 Security Scorecard
 
-| Category | Status | Score |
-|----------|--------|-------|
-| **Row Level Security** | ✅ Excellent | 100/100 |
-| **Authentication** | ✅ Secure | 100/100 |
-| **Secret Management** | ✅ Encrypted | 100/100 |
-| **Input Validation** | ✅ Strong | 95/100 |
-| **Data Encryption** | ✅ At Rest & Transit | 100/100 |
-| **CORS Configuration** | ✅ Proper | 100/100 |
-| **SQL Injection** | ✅ Protected | 100/100 |
+| Category               | Status               | Score   |
+| ---------------------- | -------------------- | ------- |
+| **Row Level Security** | ✅ Excellent         | 100/100 |
+| **Authentication**     | ✅ Secure            | 100/100 |
+| **Secret Management**  | ✅ Encrypted         | 100/100 |
+| **Input Validation**   | ✅ Strong            | 95/100  |
+| **Data Encryption**    | ✅ At Rest & Transit | 100/100 |
+| **CORS Configuration** | ✅ Proper            | 100/100 |
+| **SQL Injection**      | ✅ Protected         | 100/100 |
 
 ---
 
@@ -28,16 +28,17 @@
 
 ```sql
 -- Example: Client profiles access control
-CREATE POLICY "client_select_own" 
-ON client_profiles FOR SELECT 
+CREATE POLICY "client_select_own"
+ON client_profiles FOR SELECT
 USING (user_id = auth.uid());
 
-CREATE POLICY "client_select_by_stylist" 
-ON client_profiles FOR SELECT 
+CREATE POLICY "client_select_by_stylist"
+ON client_profiles FOR SELECT
 USING (is_client_of_stylist(id, auth.uid()));
 ```
 
 **Key Protections:**
+
 - Users can only access their own data
 - Stylists can only access clients they have relationships with
 - Admins have full access via role-based function
@@ -63,6 +64,7 @@ $$;
 ```
 
 **Security Features:**
+
 - Tokens never stored in plaintext
 - Access logged in `calendar_token_access_log`
 - Only accessible via security definer functions
@@ -90,6 +92,7 @@ useEffect(() => {
 ```
 
 **Protected Routes:**
+
 ```typescript
 // All sensitive routes wrapped
 <ProtectedRoute>
@@ -114,6 +117,7 @@ $$;
 ```
 
 **Usage in RLS policies:**
+
 ```sql
 CREATE POLICY "admins_can_view_all"
 ON appointments FOR SELECT
@@ -121,6 +125,7 @@ USING (has_role(auth.uid(), 'admin'));
 ```
 
 **Security:**
+
 - ❌ NO localStorage role storage
 - ❌ NO client-side role checks
 - ✅ Server-side validation only
@@ -129,6 +134,7 @@ USING (has_role(auth.uid(), 'admin'));
 ### 5. API Secret Management
 
 **All secrets stored in Supabase:**
+
 - `STRIPE_SECRET_KEY` - Payment processing
 - `STRIPE_WEBHOOK_SECRET` - Webhook verification
 - `GOOGLE_CLIENT_SECRET` - OAuth security
@@ -137,6 +143,7 @@ USING (has_role(auth.uid(), 'admin'));
 - `OPENAI_API_KEY` - AI features
 
 **Never exposed to client:**
+
 - No secrets in frontend code
 - No secrets in Git history
 - Environment variables not accessible in browser
@@ -151,7 +158,7 @@ const appointmentSchema = z.object({
   clientEmail: z.string().email().max(255),
   clientName: z.string().trim().min(1).max(100),
   serviceId: uuidSchema,
-  notes: z.string().max(1000).optional()
+  notes: z.string().max(1000).optional(),
 });
 
 // Validate before processing
@@ -159,6 +166,7 @@ const validated = appointmentSchema.parse(requestBody);
 ```
 
 **Protection Against:**
+
 - SQL Injection (via parameterized queries)
 - XSS (via React auto-escaping)
 - CSRF (via Supabase auth tokens)
@@ -170,14 +178,11 @@ const validated = appointmentSchema.parse(requestBody);
 
 ```typescript
 const signature = req.headers.get('stripe-signature');
-const event = stripe.webhooks.constructEvent(
-  body,
-  signature,
-  webhookSecret
-);
+const event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
 ```
 
 **Resend webhook verification:**
+
 ```typescript
 // Signature validation before processing
 if (!isValidWebhookSignature(req)) {
@@ -192,12 +197,14 @@ if (!isValidWebhookSignature(req)) {
 ```typescript
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*', // Configured per environment
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-  'Access-Control-Allow-Methods': 'POST, GET, OPTIONS'
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
 };
 ```
 
 **Security:**
+
 - Credentials properly handled
 - No overly permissive wildcards in production
 - Preflight requests handled
@@ -209,6 +216,7 @@ const corsHeaders = {
 ### ✅ All Critical Issues Resolved
 
 #### Fixed: Privilege Escalation Prevention
+
 **Issue:** Could self-assign admin role  
 **Fix:** `prevent_admin_role_insertion()` trigger blocks direct admin assignments
 
@@ -220,6 +228,7 @@ EXECUTE FUNCTION prevent_admin_role_insertion();
 ```
 
 #### Fixed: Data Anonymization
+
 **Issue:** Old client data retained indefinitely  
 **Fix:** Scheduled function `anonymize_old_client_data()` for GDPR compliance
 
@@ -254,16 +263,19 @@ When adding new features, ensure:
 ## 🔐 Encryption Details
 
 ### Data at Rest
+
 - Database: Encrypted by Supabase (AES-256)
 - Storage buckets: Encrypted by Supabase
 - Vault secrets: Encrypted with dedicated key
 
 ### Data in Transit
+
 - All connections over HTTPS/TLS 1.3
 - Certificate managed by Supabase
 - No mixed content allowed
 
 ### Sensitive Fields
+
 - Passwords: Hashed with bcrypt (handled by Supabase Auth)
 - OAuth tokens: Encrypted in Vault
 - Payment info: Never stored (handled by Stripe)
@@ -273,26 +285,32 @@ When adding new features, ensure:
 ## 🎯 Threat Model & Mitigations
 
 ### Threat 1: Unauthorized Data Access
+
 **Mitigation:** Comprehensive RLS policies on all tables  
 **Status:** ✅ Protected
 
 ### Threat 2: Privilege Escalation
+
 **Mitigation:** Role verification via security definer function, admin assignment trigger  
 **Status:** ✅ Protected
 
 ### Threat 3: SQL Injection
+
 **Mitigation:** Supabase client library (no raw SQL from client)  
 **Status:** ✅ Protected
 
 ### Threat 4: Cross-Site Scripting (XSS)
+
 **Mitigation:** React auto-escaping, no `dangerouslySetInnerHTML` with user input  
 **Status:** ✅ Protected
 
 ### Threat 5: Credential Theft
+
 **Mitigation:** Encrypted token storage, rotation, access logging  
 **Status:** ✅ Protected
 
 ### Threat 6: Man-in-the-Middle
+
 **Mitigation:** HTTPS only, HSTS enabled, secure cookies  
 **Status:** ✅ Protected
 
@@ -301,21 +319,27 @@ When adding new features, ensure:
 ## 🚀 Security Monitoring
 
 ### Audit Logs
+
 All sensitive operations logged in `audit_logs`:
+
 - Admin actions
 - Role assignments
 - Data deletions
 - Account changes
 
 ### Access Logs
+
 Token access tracked in `calendar_token_access_log`:
+
 - Every token retrieval logged
 - IP address recorded
 - User agent captured
 - Success/failure tracked
 
 ### Error Monitoring
+
 Production errors tracked with Sentry integration:
+
 - No sensitive data in logs
 - Stack traces sanitized
 - User identifiers hashed
@@ -334,6 +358,7 @@ Production errors tracked with Sentry integration:
 ## ✅ Conclusion
 
 Your application follows enterprise-grade security practices:
+
 - **Zero critical vulnerabilities**
 - **Industry-standard encryption**
 - **Comprehensive access control**

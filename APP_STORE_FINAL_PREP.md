@@ -7,6 +7,7 @@
 ## 1. App Icons & Graphics (BLOCKING SUBMISSION)
 
 ### iOS App Icon Requirements
+
 - **Size:** 1024x1024 pixels
 - **Format:** PNG (no transparency)
 - **Color Space:** sRGB or P3
@@ -18,12 +19,14 @@
   - Recognizable at small sizes
 
 ### Android App Icon Requirements
-- **Size:** 512x512 pixels  
+
+- **Size:** 512x512 pixels
 - **Format:** PNG (32-bit)
 - **Current Status:** ⚠️ Using placeholder icon
 - **Action Required:** Same design as iOS, optimized for Android
 
 ### Play Store Feature Graphic
+
 - **Size:** 1024x500 pixels
 - **Format:** PNG or JPEG
 - **Current Status:** ⚠️ Not created
@@ -41,6 +44,7 @@
 ### iOS Screenshot Requirements
 
 **iPhone 6.7" (iPhone 15 Pro Max)** - REQUIRED
+
 - Resolution: 1290 x 2796 pixels
 - Quantity: 3-10 screenshots
 - Priority screenshots:
@@ -50,34 +54,41 @@
   4. Client profile with hair history
   5. Portfolio gallery showcase
 
-**iPhone 6.5" (iPhone 14 Plus)** - REQUIRED  
+**iPhone 6.5" (iPhone 14 Plus)** - REQUIRED
+
 - Resolution: 1284 x 2778 pixels
 - Same content as 6.7"
 
 **iPhone 5.5" (iPhone 8 Plus)** - OPTIONAL
+
 - Resolution: 1242 x 2208 pixels
 - For legacy device support
 
 **iPad Pro 12.9" (6th gen)** - OPTIONAL
+
 - Resolution: 2048 x 2732 pixels
 - Show tablet-optimized layout
 
 ### Android Screenshot Requirements
 
 **Phone (Pixel 6/7/8)**
+
 - Resolution: 1080 x 2400 pixels minimum
 - Quantity: 2-8 screenshots
 - Same content as iOS
 
 **7" Tablet**
+
 - Resolution: 1200 x 1920 pixels minimum
 - Show tablet layout
 
-**10" Tablet**  
+**10" Tablet**
+
 - Resolution: 1536 x 2048 pixels minimum
 - Show full tablet experience
 
 ### Screenshot Content Guidelines
+
 - Show real UI (no mockups)
 - Include sample data (realistic names, dates)
 - Highlight key features with annotations
@@ -90,13 +101,14 @@
 ## 3. How to Capture Screenshots
 
 ### Method 1: Physical Device (RECOMMENDED)
+
 ```bash
 # Build and run on device
 npm run build
 npx cap sync ios
 npx cap open ios
 # Or for Android
-npx cap sync android  
+npx cap sync android
 npx cap open android
 
 # Then use device screenshot tools:
@@ -105,21 +117,24 @@ npx cap open android
 ```
 
 ### Method 2: Simulator/Emulator
+
 ```bash
 # iOS Simulator
 xcrun simctl io booted screenshot screenshot.png
 
-# Android Emulator  
+# Android Emulator
 adb exec-out screencap -p > screenshot.png
 ```
 
 ### Method 3: Browser DevTools
+
 - Open app in browser
 - Set device dimensions
 - Capture via browser tools or screenshot extension
 - Crop to exact dimensions needed
 
 ### Screenshot Editing Checklist
+
 - [ ] Crop to exact required dimensions
 - [ ] Remove personal/test data
 - [ ] Add annotations if needed (use tools like Figma, Sketch)
@@ -141,6 +156,7 @@ adb exec-out screencap -p > screenshot.png
 "Transform your salon business with AI-powered formula generation, smart booking, and comprehensive client management. Try free for 14 days!"
 
 **Description (4000 chars max):**
+
 ```
 Transform your hair salon business with AI-powered formula generation, smart appointment booking, and comprehensive client management.
 
@@ -201,7 +217,7 @@ Get professional color formulas in seconds. Just describe the desired result and
 PERFECT FOR:
 ✓ Independent Hair Stylists
 ✓ Salon Owners
-✓ Color Specialists  
+✓ Color Specialists
 ✓ Mobile Stylists
 ✓ Salon Coordinators
 
@@ -267,6 +283,7 @@ AI-powered color formulas, booking & client management for hair stylists
 **Category:** Business
 
 **Tags:**
+
 - hair salon
 - stylist tools
 - appointment booking
@@ -281,6 +298,7 @@ AI-powered color formulas, booking & client management for hair stylists
 ## 5. Developer Accounts Setup
 
 ### Apple Developer Account
+
 - **Cost:** $99/year
 - **URL:** https://developer.apple.com/programs/enroll/
 - **Requirements:**
@@ -291,7 +309,8 @@ AI-powered color formulas, booking & client management for hair stylists
 - **Processing Time:** 24-48 hours
 - **Status:** [ ] Not created yet
 
-### Google Play Console Account  
+### Google Play Console Account
+
 - **Cost:** $25 one-time fee
 - **URL:** https://play.google.com/console/signup
 - **Requirements:**
@@ -306,6 +325,7 @@ AI-powered color formulas, booking & client management for hair stylists
 ## 6. Build & Submission Commands
 
 ### iOS Build Process
+
 ```bash
 # 1. Build web assets
 npm run build
@@ -328,6 +348,7 @@ npx cap open ios
 ```
 
 ### Android Build Process
+
 ```bash
 # 1. Build web assets
 npm run build
@@ -352,6 +373,7 @@ npx cap open android
 ## 7. Pre-Submission Testing Checklist
 
 ### Functional Testing
+
 - [ ] All user roles work (Admin, Stylist, Client)
 - [ ] Authentication flow (signup, login, logout)
 - [ ] AI Formula Generator produces results
@@ -366,6 +388,7 @@ npx cap open android
 - [ ] Offline mode gracefully handles no connection
 
 ### Device Testing
+
 - [ ] iPhone 15 Pro Max (iOS 17)
 - [ ] iPhone 14 (iOS 16)
 - [ ] iPhone SE (iOS 15)
@@ -376,6 +399,7 @@ npx cap open android
 - [ ] Budget Android (Android 12)
 
 ### Performance Testing
+
 - [ ] App launches in <2 seconds
 - [ ] No memory leaks during 30-min session
 - [ ] Smooth 60fps scrolling
@@ -383,6 +407,7 @@ npx cap open android
 - [ ] No ANR (Android) or watchdog timeout (iOS)
 
 ### Security Testing
+
 - [ ] No API keys exposed in client code
 - [ ] Authentication tokens stored securely
 - [ ] HTTPS for all network requests
@@ -397,23 +422,27 @@ npx cap open android
 ### iOS App Review Guidelines
 
 **4.0 Design**
+
 - [x] App is fully functional
 - [x] Includes all necessary metadata
 - [x] App description matches functionality
 - [x] Screenshots show actual app
 
-**5.1 Privacy**  
+**5.1 Privacy**
+
 - [x] Privacy policy URL provided
 - [x] Permission requests have clear explanations
 - [x] Data collection disclosed in App Privacy section
 - [x] User data not shared without consent
 
 **3.1 Payments**
+
 - [x] Uses Apple's In-App Purchase for digital goods (subscriptions)
 - [x] Stripe only for physical goods/services (appointment payments)
 - [ ] Test In-App Purchase integration (if using subscriptions)
 
 **2.1 App Completeness**
+
 - [x] Not a beta/demo/trial version
 - [x] All features functional
 - [x] No broken links
@@ -422,16 +451,19 @@ npx cap open android
 ### Android Policy Compliance
 
 **User Data**
+
 - [x] Privacy policy linked in store listing
 - [x] Data safety section completed
 - [x] Permissions justified and necessary
 
 **Content**
+
 - [x] No prohibited content
 - [x] All content appropriate for rating
 - [x] No misleading claims
 
 **Functionality**
+
 - [x] App functions as described
 - [x] Meets target SDK requirements (API 33+)
 - [x] No malicious behavior
@@ -441,12 +473,14 @@ npx cap open android
 ## 9. Post-Submission Monitoring
 
 ### Day 1-3: Approval Process
+
 - [ ] Monitor App Store Connect / Play Console for status updates
 - [ ] Respond to any review feedback within 24 hours
 - [ ] Test production build immediately after approval
 - [ ] Verify app appears in search results
 
 ### Week 1: Launch Week
+
 - [ ] Check crash reports daily
 - [ ] Monitor user reviews and ratings
 - [ ] Track download numbers
@@ -454,6 +488,7 @@ npx cap open android
 - [ ] Fix critical bugs immediately
 
 ### Week 2-4: Optimization
+
 - [ ] Analyze user behavior (GA4)
 - [ ] A/B test app store screenshots
 - [ ] Optimize keywords based on search terms
@@ -465,16 +500,19 @@ npx cap open android
 ## 10. Emergency Contacts & Resources
 
 ### Technical Issues
+
 - Lovable Support: [Contact via platform]
 - Supabase Status: https://status.supabase.com
 - Stripe Status: https://status.stripe.com
 - Capacitor Discord: https://discord.gg/UPYYRhtyzp
 
 ### App Store Issues
+
 - Apple Developer Support: https://developer.apple.com/contact/
 - Google Play Support: https://support.google.com/googleplay/android-developer
 
 ### Critical Bug Response Plan
+
 1. Assess severity (crash, data loss, security)
 2. If critical: Submit expedited review request
 3. If non-critical: Include in next regular update
@@ -486,6 +524,7 @@ npx cap open android
 ## ✅ Final Go/No-Go Checklist
 
 **Before clicking "Submit for Review":**
+
 - [ ] All assets uploaded (icons, screenshots, graphics)
 - [ ] App descriptions proofread
 - [ ] Keywords optimized
@@ -509,21 +548,25 @@ npx cap open android
 ## 📅 Suggested Timeline
 
 **Week 1:**
+
 - Day 1-2: Create app icons and feature graphics
 - Day 3-4: Capture and edit screenshots
 - Day 5: Set up developer accounts
 - Day 6-7: Build and test on physical devices
 
 **Week 2:**
+
 - Day 1-2: Upload builds to TestFlight/Internal Testing
 - Day 3-5: Beta testing and bug fixes
 - Day 6-7: Final testing and polish
 
 **Week 3:**
+
 - Day 1: Submit to App Store and Play Store
 - Day 2-7: Wait for approval, respond to any feedback
 
 **Week 4:**
+
 - Day 1: Launch! Monitor closely
 - Day 2-7: Respond to reviews, fix bugs, optimize
 

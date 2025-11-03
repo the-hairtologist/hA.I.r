@@ -1,20 +1,33 @@
-﻿import { useState, useEffect, useCallback } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
-import { format, setHours, setMinutes, addMinutes, parseISO } from "date-fns";
-import { Loader2, AlertCircle } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { triggerAppointmentBooked } from "@/lib/zapierTriggers";
-import { FormFieldError } from "@/components/FormFieldError";
-import { networkErrors } from "@/lib/errorMessages";
-import { useFormSubmit } from "@/hooks/useFormSubmit";
-import { StandardFormField } from "@/components/forms/StandardFormField";
-import { z } from "zod";
-import { logger } from "@/lib/logging/productionLogger";
+﻿import { useState, useEffect, useCallback } from 'react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
+import { format, setHours, setMinutes, addMinutes, parseISO } from 'date-fns';
+import { Loader2, AlertCircle } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { triggerAppointmentBooked } from '@/lib/zapierTriggers';
+import { FormFieldError } from '@/components/FormFieldError';
+import { networkErrors } from '@/lib/errorMessages';
+import { useFormSubmit } from '@/hooks/useFormSubmit';
+import { StandardFormField } from '@/components/forms/StandardFormField';
+import { z } from 'zod';
+import { logger } from '@/lib/logging/productionLogger';
 
 const DEFAULT_APPOINTMENT_DURATION_MINUTES = 90;
 
@@ -43,8 +56,8 @@ interface QuickAppointmentService {
 
 // Quick appointment schema (inline since it's specific to this dialog)
 const quickAppointmentSchema = z.object({
-  client_id: z.string().min(1, "Please select a client"),
-  service_id: z.string().min(1, "Please select a service"),
+  client_id: z.string().min(1, 'Please select a client'),
+  service_id: z.string().min(1, 'Please select a service'),
   notes: z.string().max(500).optional(),
 });
 
@@ -62,7 +75,7 @@ export const QuickAppointmentDialog = ({
   const [clients, setClients] = useState<QuickAppointmentClient[]>([]);
   const [services, setServices] = useState<QuickAppointmentService[]>([]);
   const [hasConflict, setHasConflict] = useState(false);
-  const [conflictMessage, setConflictMessage] = useState("");
+  const [conflictMessage, setConflictMessage] = useState('');
 
   const {
     values,
@@ -74,16 +87,25 @@ export const QuickAppointmentDialog = ({
     isSubmitting,
     reset,
   } = useFormSubmit<QuickAppointmentInput>(
-    async (data) => {
-      const selectedServiceData = services.find((service) => service.id === data.service_id);
-      const selectedClientData = clients.find((client) => client.id === data.client_id);
+    async data => {
+      const selectedServiceData = services.find(
+        service => service.id === data.service_id
+      );
+      const selectedClientData = clients.find(
+        client => client.id === data.client_id
+      );
 
-      if (!selectedServiceData) throw new Error("Service not found");
-      const appointmentDuration = selectedServiceData.duration_minutes ?? DEFAULT_APPOINTMENT_DURATION_MINUTES;
-      const appointmentDate = setMinutes(setHours(selectedDate, selectedHour), selectedMinute);
+      if (!selectedServiceData) throw new Error('Service not found');
+      const appointmentDuration =
+        selectedServiceData.duration_minutes ??
+        DEFAULT_APPOINTMENT_DURATION_MINUTES;
+      const appointmentDate = setMinutes(
+        setHours(selectedDate, selectedHour),
+        selectedMinute
+      );
 
       const { data: newAppointment, error } = await supabase
-        .from("appointments")
+        .from('appointments')
         .insert({
           client_id: data.client_id,
           stylist_id: stylistId,
@@ -91,7 +113,7 @@ export const QuickAppointmentDialog = ({
           service_type: selectedServiceData.service_name,
           appointment_date: appointmentDate.toISOString(),
           duration_minutes: appointmentDuration,
-          status: "scheduled",
+          status: 'scheduled',
           notes: data.notes?.trim() || null,
         })
         .select()
@@ -107,15 +129,15 @@ export const QuickAppointmentDialog = ({
             client_name:
               selectedClientData?.user?.full_name ||
               selectedClientData?.full_name ||
-              "Unknown Client",
+              'Unknown Client',
             service_type: selectedServiceData.service_name,
             appointment_date: appointmentDate.toISOString(),
             duration_minutes: appointmentDuration,
             price: selectedServiceData.price,
           });
         } catch (zapierError) {
-          logger.warn("Zapier webhook failed", {
-            context: "QuickAppointmentDialog",
+          logger.warn('Zapier webhook failed', {
+            context: 'QuickAppointmentDialog',
             stylistId,
             appointmentId: newAppointment?.id,
             error: zapierError,
@@ -127,12 +149,15 @@ export const QuickAppointmentDialog = ({
       try {
         if (newAppointment) {
           await supabase.functions.invoke('send-sms-notification', {
-            body: { appointmentId: newAppointment.id, notificationType: 'confirmation' },
+            body: {
+              appointmentId: newAppointment.id,
+              notificationType: 'confirmation',
+            },
           });
         }
       } catch (notificationError) {
-        logger.warn("SMS notification failed", {
-          context: "QuickAppointmentDialog",
+        logger.warn('SMS notification failed', {
+          context: 'QuickAppointmentDialog',
           appointmentId: newAppointment?.id,
           error: notificationError,
         });
@@ -145,8 +170,8 @@ export const QuickAppointmentDialog = ({
           });
         }
       } catch (emailError) {
-        logger.warn("Email confirmation failed", {
-          context: "QuickAppointmentDialog",
+        logger.warn('Email confirmation failed', {
+          context: 'QuickAppointmentDialog',
           appointmentId: newAppointment?.id,
           error: emailError,
         });
@@ -159,8 +184,8 @@ export const QuickAppointmentDialog = ({
           });
         }
       } catch (calendarError) {
-        logger.warn("Calendar sync failed", {
-          context: "QuickAppointmentDialog",
+        logger.warn('Calendar sync failed', {
+          context: 'QuickAppointmentDialog',
           appointmentId: newAppointment?.id,
           error: calendarError,
         });
@@ -169,11 +194,11 @@ export const QuickAppointmentDialog = ({
     {
       schema: quickAppointmentSchema,
       initialValues: {
-        client_id: "",
-        service_id: "",
-        notes: "",
+        client_id: '',
+        service_id: '',
+        notes: '',
       },
-      successMessage: "Appointment created successfully!",
+      successMessage: 'Appointment created successfully!',
       onSuccess: () => {
         reset();
         onOpenChange(false);
@@ -185,10 +210,10 @@ export const QuickAppointmentDialog = ({
   const loadClientsAndServices = useCallback(async () => {
     try {
       const { data: clientsData, error: clientsError } = await supabase
-        .from("client_profiles")
-        .select("id, full_name, user:profiles(full_name)")
-        .eq("preferred_stylist_id", stylistId)
-        .order("full_name");
+        .from('client_profiles')
+        .select('id, full_name, user:profiles(full_name)')
+        .eq('preferred_stylist_id', stylistId)
+        .order('full_name');
 
       if (clientsError) {
         throw clientsError;
@@ -197,11 +222,11 @@ export const QuickAppointmentDialog = ({
       setClients(clientsData ?? []);
 
       const { data: servicesData, error: servicesError } = await supabase
-        .from("stylist_services")
-        .select("*")
-        .eq("stylist_id", stylistId)
-        .eq("is_active", true)
-        .order("service_name");
+        .from('stylist_services')
+        .select('*')
+        .eq('stylist_id', stylistId)
+        .eq('is_active', true)
+        .order('service_name');
 
       if (servicesError) {
         throw servicesError;
@@ -209,12 +234,12 @@ export const QuickAppointmentDialog = ({
 
       setServices(servicesData ?? []);
     } catch (error) {
-      logger.error("Failed to load quick appointment data", error, {
-        context: "QuickAppointmentDialog",
+      logger.error('Failed to load quick appointment data', error, {
+        context: 'QuickAppointmentDialog',
         stylistId,
       });
 
-      const errorConfig = networkErrors.loadFailed("clients and services");
+      const errorConfig = networkErrors.loadFailed('clients and services');
       toast.error(errorConfig.title, {
         description: errorConfig.description,
       });
@@ -229,7 +254,7 @@ export const QuickAppointmentDialog = ({
     void loadClientsAndServices();
     reset();
     setHasConflict(false);
-    setConflictMessage("");
+    setConflictMessage('');
   }, [loadClientsAndServices, open, reset]);
 
   const checkForConflicts = useCallback(async () => {
@@ -238,22 +263,29 @@ export const QuickAppointmentDialog = ({
     }
 
     try {
-      const selectedServiceData = services.find((service) => service.id === values.service_id);
+      const selectedServiceData = services.find(
+        service => service.id === values.service_id
+      );
 
       if (!selectedServiceData) {
         return;
       }
-      const appointmentDuration = selectedServiceData.duration_minutes ?? DEFAULT_APPOINTMENT_DURATION_MINUTES;
-      const appointmentStart = setMinutes(setHours(selectedDate, selectedHour), selectedMinute);
+      const appointmentDuration =
+        selectedServiceData.duration_minutes ??
+        DEFAULT_APPOINTMENT_DURATION_MINUTES;
+      const appointmentStart = setMinutes(
+        setHours(selectedDate, selectedHour),
+        selectedMinute
+      );
       const appointmentEnd = addMinutes(appointmentStart, appointmentDuration);
 
       const { data: existingAppointments, error } = await supabase
-        .from("appointments")
-        .select("*")
-        .eq("stylist_id", stylistId)
-        .neq("status", "cancelled")
-        .gte("appointment_date", appointmentStart.toISOString())
-        .lt("appointment_date", appointmentEnd.toISOString());
+        .from('appointments')
+        .select('*')
+        .eq('stylist_id', stylistId)
+        .neq('status', 'cancelled')
+        .gte('appointment_date', appointmentStart.toISOString())
+        .lt('appointment_date', appointmentEnd.toISOString());
 
       if (error) {
         throw error;
@@ -264,20 +296,27 @@ export const QuickAppointmentDialog = ({
         setConflictMessage(
           `This time slot conflicts with an existing appointment at ${format(
             parseISO(existingAppointments[0].appointment_date),
-            "h:mm a"
+            'h:mm a'
           )}`
         );
       } else {
         setHasConflict(false);
-        setConflictMessage("");
+        setConflictMessage('');
       }
     } catch (error) {
-      logger.error("Error checking appointment conflicts", error, {
-        context: "QuickAppointmentDialog",
+      logger.error('Error checking appointment conflicts', error, {
+        context: 'QuickAppointmentDialog',
         stylistId,
       });
     }
-  }, [selectedDate, selectedHour, selectedMinute, services, stylistId, values.service_id]);
+  }, [
+    selectedDate,
+    selectedHour,
+    selectedMinute,
+    services,
+    stylistId,
+    values.service_id,
+  ]);
 
   useEffect(() => {
     if (open && values.service_id) {
@@ -292,7 +331,10 @@ export const QuickAppointmentDialog = ({
     await submitForm();
   };
 
-  const appointmentDateTime = setMinutes(setHours(selectedDate, selectedHour), selectedMinute);
+  const appointmentDateTime = setMinutes(
+    setHours(selectedDate, selectedHour),
+    selectedMinute
+  );
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -334,19 +376,27 @@ export const QuickAppointmentDialog = ({
             <Label htmlFor="client">Client *</Label>
             <Select
               value={values.client_id}
-              onValueChange={(value) => {
+              onValueChange={value => {
                 setFieldValue('client_id', value);
                 setFieldTouched('client_id');
               }}
               disabled={clients.length === 0}
             >
               <SelectTrigger id="client">
-                <SelectValue placeholder={clients.length === 0 ? "No clients available" : "Select a client"} />
+                <SelectValue
+                  placeholder={
+                    clients.length === 0
+                      ? 'No clients available'
+                      : 'Select a client'
+                  }
+                />
               </SelectTrigger>
               <SelectContent>
-                {clients.map((client) => (
+                {clients.map(client => (
                   <SelectItem key={client.id} value={client.id}>
-                    {client.user?.full_name || client.full_name || "Unnamed Client"}
+                    {client.user?.full_name ||
+                      client.full_name ||
+                      'Unnamed Client'}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -360,19 +410,26 @@ export const QuickAppointmentDialog = ({
             <Label htmlFor="service">Service *</Label>
             <Select
               value={values.service_id}
-              onValueChange={(value) => {
+              onValueChange={value => {
                 setFieldValue('service_id', value);
                 setFieldTouched('service_id');
               }}
               disabled={services.length === 0}
             >
               <SelectTrigger id="service">
-                <SelectValue placeholder={services.length === 0 ? "No services available" : "Select a service"} />
+                <SelectValue
+                  placeholder={
+                    services.length === 0
+                      ? 'No services available'
+                      : 'Select a service'
+                  }
+                />
               </SelectTrigger>
               <SelectContent>
-                {services.map((service) => (
+                {services.map(service => (
                   <SelectItem key={service.id} value={service.id}>
-                    {service.service_name} ({service.duration_minutes} min - ${service.price})
+                    {service.service_name} ({service.duration_minutes} min - $
+                    {service.price})
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -386,8 +443,8 @@ export const QuickAppointmentDialog = ({
             name="notes"
             label="Notes (Optional)"
             type="textarea"
-            value={values.notes || ""}
-            onChange={(val) => setFieldValue('notes', String(val))}
+            value={values.notes || ''}
+            onChange={val => setFieldValue('notes', String(val))}
             onBlur={() => setFieldTouched('notes')}
             error={errors.notes}
             touched={touched.notes}
@@ -398,12 +455,21 @@ export const QuickAppointmentDialog = ({
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={isSubmitting}>
+          <Button
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+            disabled={isSubmitting}
+          >
             Cancel
           </Button>
           <Button
             onClick={handleSubmit}
-            disabled={isSubmitting || hasConflict || clients.length === 0 || services.length === 0}
+            disabled={
+              isSubmitting ||
+              hasConflict ||
+              clients.length === 0 ||
+              services.length === 0
+            }
           >
             {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Create Appointment
@@ -413,5 +479,3 @@ export const QuickAppointmentDialog = ({
     </Dialog>
   );
 };
-
-

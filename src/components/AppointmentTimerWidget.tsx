@@ -79,7 +79,10 @@ export function AppointmentTimerWidget() {
         setActiveSession(result.data as TimerSession);
       }
     } catch (error) {
-      logger.error('Error loading timer session', { component: 'AppointmentTimerWidget', error });
+      logger.error('Error loading timer session', {
+        component: 'AppointmentTimerWidget',
+        error,
+      });
       userJourney.trackError(error as Error, { action: 'load-timer-session' });
     }
   };

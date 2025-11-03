@@ -1,6 +1,7 @@
 # hA.I.r App Integration Roadmap
 
 ## Executive Summary
+
 Strategic recommendations for integrating third-party services, AI agents, and automation tools to maximize the hA.I.r app's value proposition for hair stylists.
 
 ---
@@ -8,7 +9,9 @@ Strategic recommendations for integrating third-party services, AI agents, and a
 ## Tier 1: Must-Have Integrations (Launch Critical)
 
 ### 1. Instagram Business API Integration ⭐ TOP PRIORITY
+
 **Why:** Your target market (hair stylists) lives on Instagram
+
 - **Auto-import portfolio** from Instagram posts
 - **Cross-post** new work to Instagram automatically
 - **Track engagement metrics** (likes, comments, saves)
@@ -20,6 +23,7 @@ Strategic recommendations for integrating third-party services, AI agents, and a
 **Business Impact:** 🔥 CRITICAL - This is where your users showcase their work
 
 **Implementation Requirements:**
+
 - Instagram Business Account
 - Facebook Developer App
 - OAuth flow for user authorization
@@ -27,8 +31,10 @@ Strategic recommendations for integrating third-party services, AI agents, and a
 ---
 
 ### 2. Google Calendar + Apple Calendar Integration ⭐ TOP PRIORITY
+
 **Status:** 60% Complete (CalendarSync component exists)
-**What's Missing:** 
+**What's Missing:**
+
 - Complete two-way sync implementation
 - Automated reminder system
 - Conflict detection across calendars
@@ -39,6 +45,7 @@ Strategic recommendations for integrating third-party services, AI agents, and a
 **Business Impact:** Essential for professional workflow
 
 **Implementation Requirements:**
+
 - Google Cloud Project with Calendar API enabled
 - OAuth 2.0 credentials
 - Webhook setup for real-time sync
@@ -46,7 +53,9 @@ Strategic recommendations for integrating third-party services, AI agents, and a
 ---
 
 ### 3. ElevenLabs Voice AI Agent ⭐ TOP PRIORITY
+
 **Why:** 24/7 phone answering = never miss a booking
+
 - **Answer phone calls** with natural voice AI
 - **Book appointments** via phone conversation
 - **Answer common questions** (hours, services, pricing)
@@ -58,6 +67,7 @@ Strategic recommendations for integrating third-party services, AI agents, and a
 **Business Impact:** 🚀 GAME CHANGER - Capture leads 24/7
 
 **Implementation Requirements:**
+
 - ElevenLabs API key
 - Phone number integration (Twilio)
 - Custom AI agent training
@@ -68,7 +78,9 @@ Strategic recommendations for integrating third-party services, AI agents, and a
 ## Tier 2: Growth Features (Month 1-2)
 
 ### 4. Square / Venmo / CashApp Payment Integration
+
 **Why:** Expand payment options beyond Stripe
+
 - Many stylists prefer **Square** for in-person + online
 - **Venmo/CashApp** popular with younger clientele
 - Reduce payment friction = more bookings
@@ -80,7 +92,9 @@ Strategic recommendations for integrating third-party services, AI agents, and a
 ---
 
 ### 5. Zapier Integration Hub
+
 **Why:** Connect to 5,000+ apps without custom code
+
 - **Automated workflows** (new client → welcome email → CRM)
 - **Social media automation** (new portfolio item → Twitter/Facebook)
 - **Accounting sync** (new payment → QuickBooks)
@@ -92,6 +106,7 @@ Strategic recommendations for integrating third-party services, AI agents, and a
 **Business Impact:** Enables unlimited custom automation
 
 **Implementation:**
+
 ```typescript
 // Simple webhook endpoint for Zapier
 supabase/functions/zapier-webhook/index.ts
@@ -103,7 +118,9 @@ supabase/functions/zapier-webhook/index.ts
 ---
 
 ### 6. Mailchimp / ConvertKit Email Marketing
+
 **Why:** Automated client retention campaigns
+
 - **Welcome series** for new clients
 - **Rebooking reminders** (6-8 weeks post-appointment)
 - **Birthday discounts**
@@ -119,7 +136,9 @@ supabase/functions/zapier-webhook/index.ts
 ## Tier 3: Premium Features (Month 3-4)
 
 ### 7. Google Reviews API Integration
+
 **Why:** Aggregate all reviews in one place
+
 - **Pull reviews** from Google Business Profile
 - **Display on stylist profiles**
 - **Automated review requests** post-appointment
@@ -131,7 +150,9 @@ supabase/functions/zapier-webhook/index.ts
 ---
 
 ### 8. QuickBooks / FreshBooks Accounting
+
 **Why:** Automated financial tracking
+
 - **Sync all transactions** automatically
 - **Expense tracking** (products, tools)
 - **Tax preparation** made easy
@@ -143,7 +164,9 @@ supabase/functions/zapier-webhook/index.ts
 ---
 
 ### 9. TikTok API Integration
+
 **Why:** TikTok is exploding for hair content
+
 - **Cross-post** hair transformation videos
 - **Track trending content**
 - **Engagement metrics**
@@ -156,7 +179,9 @@ supabase/functions/zapier-webhook/index.ts
 ## AI Agent Recommendations
 
 ### 1. ElevenLabs Conversational AI (Highest Priority)
+
 **Use Case:** Phone call answering and appointment booking
+
 - Natural voice conversations
 - Multi-language support
 - Handles appointment booking, rescheduling, cancellations
@@ -166,6 +191,7 @@ supabase/functions/zapier-webhook/index.ts
 **Setup Time:** 6-8 hours
 
 **Implementation Steps:**
+
 1. Create ElevenLabs account and get API key
 2. Design conversation flow (appointment booking logic)
 3. Set up Twilio phone number integration
@@ -175,7 +201,9 @@ supabase/functions/zapier-webhook/index.ts
 ---
 
 ### 2. AI SMS Assistant (Using Lovable AI)
+
 **Use Case:** Text-based appointment booking and client communication
+
 - 24/7 SMS response to booking requests
 - Appointment reminders and confirmations
 - Answer common questions via text
@@ -185,6 +213,7 @@ supabase/functions/zapier-webhook/index.ts
 **Setup Time:** 4-5 hours
 
 **Implementation:**
+
 ```typescript
 // Edge function using Lovable AI
 supabase/functions/sms-assistant/index.ts
@@ -197,7 +226,9 @@ supabase/functions/sms-assistant/index.ts
 ---
 
 ### 3. AI Email Responder
+
 **Use Case:** Automated email responses for common questions
+
 - Pricing inquiries
 - Service availability
 - Appointment changes
@@ -211,12 +242,16 @@ supabase/functions/sms-assistant/index.ts
 ## n8n Workflow Automation Recommendations
 
 ### Option 1: Self-Host n8n (Free, More Control)
+
 **Best For:** Tech-savvy users who want unlimited workflows
+
 - **One-time setup:** 2-3 hours
 - **Cost:** $0 (self-hosted on cloud VM ~$5-10/month)
 
 ### Option 2: n8n Cloud (Easier, Paid)
+
 **Best For:** Users who want plug-and-play
+
 - **Setup:** 30 minutes
 - **Cost:** $20/month for 2,500 workflow executions
 
@@ -242,7 +277,9 @@ supabase/functions/sms-assistant/index.ts
 ## Strategic Implementation Plan
 
 ### Phase 1: Launch Week (Week 1-2)
+
 **Goal:** Core integrations for professional credibility
+
 1. ✅ Finish Calendar Sync (3-4 hours)
 2. ✅ Instagram Integration (3-4 hours)
 
@@ -253,9 +290,8 @@ supabase/functions/sms-assistant/index.ts
 ---
 
 ### Phase 2: Growth Mode (Month 1)
-**Goal:** 24/7 availability and lead capture
-3. ✅ ElevenLabs Voice AI (6-8 hours)
-4. ✅ Zapier Integration (1-2 hours)
+
+**Goal:** 24/7 availability and lead capture 3. ✅ ElevenLabs Voice AI (6-8 hours) 4. ✅ Zapier Integration (1-2 hours)
 
 **Total Time:** 7-10 hours
 **Total Cost:** $11/month (ElevenLabs) + $0-20/month (Zapier)
@@ -264,9 +300,8 @@ supabase/functions/sms-assistant/index.ts
 ---
 
 ### Phase 3: Client Retention (Month 2-3)
-**Goal:** Automated marketing and payment flexibility
-5. ✅ Venmo/CashApp (2-3 hours)
-6. ✅ Mailchimp Integration (3-4 hours)
+
+**Goal:** Automated marketing and payment flexibility 5. ✅ Venmo/CashApp (2-3 hours) 6. ✅ Mailchimp Integration (3-4 hours)
 
 **Total Time:** 5-7 hours
 **Total Cost:** $0-9/month
@@ -275,10 +310,8 @@ supabase/functions/sms-assistant/index.ts
 ---
 
 ### Phase 4: Premium Features (Month 4+)
-**Goal:** Professional-grade analytics and reputation management
-7. ✅ Google Reviews API (4-5 hours)
-8. ✅ QuickBooks Integration (6-8 hours)
-9. ✅ TikTok API (3-4 hours)
+
+**Goal:** Professional-grade analytics and reputation management 7. ✅ Google Reviews API (4-5 hours) 8. ✅ QuickBooks Integration (6-8 hours) 9. ✅ TikTok API (3-4 hours)
 
 **Total Time:** 13-17 hours
 **Total Cost:** $30-50/month
@@ -289,48 +322,54 @@ supabase/functions/sms-assistant/index.ts
 ## Cost Summary
 
 ### Year 1 Integration Costs
-| Integration | Monthly Cost | Annual Cost |
-|------------|--------------|-------------|
-| Instagram API | $0 | $0 |
-| Calendar Sync | $0 | $0 |
-| ElevenLabs AI | $11 | $132 |
-| Zapier | $20 | $240 |
-| Mailchimp | $0-9 | $0-108 |
-| QuickBooks | $30 | $360 |
-| **TOTAL** | **$61-70** | **$732-840** |
+
+| Integration   | Monthly Cost | Annual Cost  |
+| ------------- | ------------ | ------------ |
+| Instagram API | $0           | $0           |
+| Calendar Sync | $0           | $0           |
+| ElevenLabs AI | $11          | $132         |
+| Zapier        | $20          | $240         |
+| Mailchimp     | $0-9         | $0-108       |
+| QuickBooks    | $30          | $360         |
+| **TOTAL**     | **$61-70**   | **$732-840** |
 
 ### Development Time Investment
-| Phase | Hours | Cumulative |
-|-------|-------|------------|
-| Phase 1 | 6-8 | 6-8 |
-| Phase 2 | 7-10 | 13-18 |
-| Phase 3 | 5-7 | 18-25 |
-| Phase 4 | 13-17 | 31-42 |
-| **TOTAL** | **31-42 hours** | - |
+
+| Phase     | Hours           | Cumulative |
+| --------- | --------------- | ---------- |
+| Phase 1   | 6-8             | 6-8        |
+| Phase 2   | 7-10            | 13-18      |
+| Phase 3   | 5-7             | 18-25      |
+| Phase 4   | 13-17           | 31-42      |
+| **TOTAL** | **31-42 hours** | -          |
 
 ---
 
 ## My Top 3 Recommendations (START HERE)
 
 ### 🥇 #1: Instagram Integration
+
 **Why:** Your users live on Instagram. This is non-negotiable.
 **Time:** 3-4 hours
 **Cost:** Free
 **Impact:** Portfolio import + social proof = trust + conversions
 
 ### 🥈 #2: ElevenLabs Voice AI Agent
+
 **Why:** 24/7 phone answering = never miss a lead
 **Time:** 6-8 hours
 **Cost:** $11/month
 **Impact:** 3-5x more bookings captured outside business hours
 
 ### 🥉 #3: Finish Calendar Sync
+
 **Why:** Two-way sync = professional workflow
 **Time:** 3-4 hours
 **Cost:** Free
 **Impact:** Prevent double-bookings, automated reminders
 
 **Total to Implement All 3:**
+
 - **Time:** 12-16 hours
 - **Cost:** $11/month
 - **ROI:** These 3 integrations alone could 2-3x your user acquisition
@@ -356,5 +395,5 @@ supabase/functions/sms-assistant/index.ts
 
 ---
 
-*Last Updated: 2025-10-11*
-*Created by: hA.I.r Development Team*
+_Last Updated: 2025-10-11_
+_Created by: hA.I.r Development Team_

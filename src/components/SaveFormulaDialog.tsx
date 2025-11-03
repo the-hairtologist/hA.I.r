@@ -73,7 +73,10 @@ export const SaveFormulaDialog = ({
 
       setClients(clientsData || []);
     } catch (error: any) {
-      logger.error('Error loading clients', error, { component: 'SaveFormulaDialog', stylistId });
+      logger.error('Error loading clients', error, {
+        component: 'SaveFormulaDialog',
+        stylistId,
+      });
       toast.error('Failed to load clients');
     } finally {
       setLoadingClients(false);
@@ -113,7 +116,11 @@ export const SaveFormulaDialog = ({
       setNotes('');
       onOpenChange(false);
     } catch (error: any) {
-      logger.error('Error saving formula', error, { component: 'SaveFormulaDialog', clientId: selectedClient, stylistId });
+      logger.error('Error saving formula', error, {
+        component: 'SaveFormulaDialog',
+        clientId: selectedClient,
+        stylistId,
+      });
       toast.error('Failed to save formula');
     } finally {
       setLoading(false);

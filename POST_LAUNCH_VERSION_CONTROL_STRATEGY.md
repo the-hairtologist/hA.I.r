@@ -21,6 +21,7 @@
 ### What to Pin
 
 **ALWAYS PIN:**
+
 - ✅ Pre-launch stable version (Oct 16, 2025) - **ALREADY PINNED**
 - ✅ Post-launch Day 1 version (after 24 hours stable)
 - ✅ Before adding any major feature
@@ -29,6 +30,7 @@
 - ✅ Before any database migration
 
 **DON'T PIN:**
+
 - ❌ Failed builds or broken versions
 - ❌ Mid-development work-in-progress
 - ❌ Experimental features not ready for production
@@ -37,6 +39,7 @@
 ### How to Pin
 
 **In Lovable:**
+
 1. Navigate to History tab
 2. Find the stable version
 3. Click "Pin" button
@@ -47,7 +50,9 @@
    - ❌ Bad: "Pin 1", "Stable", "Good version"
 
 **In GitHub:**
+
 1. Create a Git tag for major milestones:
+
    ```bash
    git tag -a v1.0.0 -m "Launch version - Oct 19, 2025"
    git push origin v1.0.0
@@ -66,6 +71,7 @@
 ### Branch Types
 
 #### 1. `main` Branch (Production)
+
 - **Purpose:** Always reflects production state
 - **Protection:** Require pull request reviews
 - **Deployment:** Auto-deploys to production on merge
@@ -76,6 +82,7 @@
   - Require at least 1 approval (if team)
 
 #### 2. Feature Branches
+
 - **Naming:** `feature/descriptive-name`
 - **Examples:**
   - `feature/ai-formula-v2`
@@ -85,6 +92,7 @@
 - **Merge:** Via pull request to `main`
 
 #### 3. Bugfix Branches
+
 - **Naming:** `fix/issue-description`
 - **Examples:**
   - `fix/booking-calendar-timezone`
@@ -94,6 +102,7 @@
 - **Merge:** Direct to `main` after quick review
 
 #### 4. Hotfix Branches
+
 - **Naming:** `hotfix/critical-issue`
 - **Examples:**
   - `hotfix/auth-security-patch`
@@ -113,6 +122,7 @@
 ### Daily Development Cycle
 
 **Morning (Start of Day):**
+
 ```bash
 1. Pull latest from main
    git pull origin main
@@ -128,6 +138,7 @@
 ```
 
 **During Development:**
+
 ```bash
 1. Create feature branch (if not exists)
    git checkout -b feature/my-feature
@@ -146,6 +157,7 @@
 ```
 
 **End of Day:**
+
 ```bash
 1. If feature complete:
    - Create pull request
@@ -171,11 +183,13 @@
 ### Scenario 1: Minor Bug (Non-Critical)
 
 **Symptoms:**
+
 - Feature broken but app still usable
 - Affects <10% of users
 - No data loss risk
 
 **Response:**
+
 1. **DON'T PANIC** - Minor bugs happen
 2. Create hotfix branch immediately
 3. Fix the issue (aim for <2 hours)
@@ -185,6 +199,7 @@
 7. Document what went wrong and how to prevent
 
 **Example:**
+
 ```bash
 # Create hotfix branch
 git checkout -b hotfix/booking-calendar-timezone
@@ -206,12 +221,14 @@ git push origin main
 ### Scenario 2: Major Bug (Critical)
 
 **Symptoms:**
+
 - Core feature completely broken
 - Affects >50% of users
 - Users cannot book appointments
 - Data integrity at risk
 
 **Response:**
+
 1. **ROLLBACK IMMEDIATELY** (do not try to fix first)
 2. Communicate with users
 3. Investigate root cause
@@ -222,6 +239,7 @@ git push origin main
 **Rollback Steps:**
 
 **Option A: Lovable History Rollback (Fastest - 5 minutes)**
+
 ```
 1. Open Lovable → History tab
 2. Find last known stable pinned version
@@ -233,6 +251,7 @@ git push origin main
 ```
 
 **Option B: Git Revert (If database involved)**
+
 ```bash
 # Find the bad commit
 git log --oneline
@@ -248,6 +267,7 @@ git revert <hash1> <hash2> <hash3>
 ```
 
 **Option C: Database Rollback (If schema changed)**
+
 ```sql
 -- CRITICAL: Only if you have database backup
 -- Contact Lovable support immediately
@@ -256,10 +276,11 @@ git revert <hash1> <hash2> <hash3>
 ```
 
 **Communication Template:**
+
 ```
 🚨 Service Notice 🚨
 
-We've identified an issue affecting booking appointments. 
+We've identified an issue affecting booking appointments.
 We've rolled back to a stable version while we fix this.
 
 Expected fix time: [2 hours / 4 hours / tomorrow]
@@ -274,12 +295,14 @@ Your data is safe. Apologies for the inconvenience.
 ### Scenario 3: Database Migration Failure
 
 **Symptoms:**
+
 - App crashes on load
 - Database errors in console
 - RLS policy errors
 - Cannot query specific tables
 
 **Response:**
+
 1. **DO NOT ROLLBACK CODE IMMEDIATELY**
 2. Check if migration completed
 3. If migration incomplete, complete it manually
@@ -287,6 +310,7 @@ Your data is safe. Apologies for the inconvenience.
 5. Test thoroughly before allowing user access
 
 **Migration Checklist (Before Running):**
+
 - [ ] Backup database (Lovable Cloud automatic)
 - [ ] Test migration locally first (if possible)
 - [ ] Review migration SQL carefully
@@ -303,6 +327,7 @@ Your data is safe. Apologies for the inconvenience.
 **Format:** `vMAJOR.MINOR.PATCH - Description`
 
 **Examples:**
+
 - `v1.0.0 - Launch Version (Oct 19, 2025)`
 - `v1.0.1 - Fixed booking timezone bug`
 - `v1.1.0 - Added AI formula suggestions v2`
@@ -312,37 +337,45 @@ Your data is safe. Apologies for the inconvenience.
 ### Change Log Template
 
 **For Each Significant Change:**
+
 ```markdown
 ## v1.0.1 - Fixed Booking Timezone Bug
+
 **Date:** 2025-10-20  
 **Type:** Bugfix  
 **Severity:** High  
 **Affected Users:** All users booking across timezones
 
 ### What Changed
+
 - Fixed timezone conversion in appointment booking
 - Ensured all times display in user's local timezone
 - Updated confirmation emails to show correct local times
 
 ### Why
+
 - Users in different timezones were seeing incorrect appointment times
 - Confusion led to missed appointments
 
 ### Impact
+
 - All booking times now accurate
 - Reduced no-shows by ~15%
 
 ### Files Changed
+
 - `src/components/BookingCalendar.tsx`
 - `src/utils/timezoneHelpers.ts`
 - `supabase/functions/send-confirmation-email/index.ts`
 
 ### Testing Done
+
 - Tested across 5 different timezones
 - Verified email confirmations show correct times
 - Confirmed no regression in existing functionality
 
 ### Migration Required
+
 - No database changes
 - No action required from users
 ```
@@ -354,6 +387,7 @@ Your data is safe. Apologies for the inconvenience.
 **Before Merging ANY Change to Main:**
 
 ### Code Quality
+
 - [ ] No TypeScript errors
 - [ ] No ESLint warnings
 - [ ] No console errors in browser
@@ -361,6 +395,7 @@ Your data is safe. Apologies for the inconvenience.
 - [ ] No hardcoded secrets or API keys
 
 ### Functionality
+
 - [ ] Feature works as expected
 - [ ] Edge cases handled
 - [ ] Error states tested
@@ -368,6 +403,7 @@ Your data is safe. Apologies for the inconvenience.
 - [ ] Success feedback provided
 
 ### Performance
+
 - [ ] Page loads <2s
 - [ ] No layout shift (CLS < 0.1)
 - [ ] Images optimized and compressed
@@ -375,6 +411,7 @@ Your data is safe. Apologies for the inconvenience.
 - [ ] API calls debounced/throttled
 
 ### Mobile
+
 - [ ] Tested on iPhone SE (375px)
 - [ ] Tested on Android phone
 - [ ] Tap targets ≥44px
@@ -382,6 +419,7 @@ Your data is safe. Apologies for the inconvenience.
 - [ ] Keyboard doesn't cover inputs
 
 ### Accessibility
+
 - [ ] Keyboard navigation works
 - [ ] Screen reader friendly (test with VoiceOver)
 - [ ] Color contrast ≥4.5:1
@@ -389,6 +427,7 @@ Your data is safe. Apologies for the inconvenience.
 - [ ] ARIA labels on interactive elements
 
 ### Security
+
 - [ ] RLS policies tested
 - [ ] No sensitive data exposed
 - [ ] Input validation on client AND server
@@ -396,6 +435,7 @@ Your data is safe. Apologies for the inconvenience.
 - [ ] Rate limiting in place
 
 ### Documentation
+
 - [ ] README updated (if needed)
 - [ ] Change log entry added
 - [ ] Comments added for complex logic
@@ -408,6 +448,7 @@ Your data is safe. Apologies for the inconvenience.
 **Every Friday 5pm (Before Weekend):**
 
 ### 1. Create Weekly Stable Version
+
 ```
 1. Run full test suite
 2. Review all changes made this week
@@ -417,6 +458,7 @@ Your data is safe. Apologies for the inconvenience.
 ```
 
 ### 2. Review Metrics
+
 ```
 - Error rate: Should be <0.5%
 - Performance: LCP <2.5s, CLS <0.1
@@ -425,6 +467,7 @@ Your data is safe. Apologies for the inconvenience.
 ```
 
 ### 3. Plan Next Week
+
 ```
 - Review backlog
 - Prioritize features vs. bugs
@@ -433,6 +476,7 @@ Your data is safe. Apologies for the inconvenience.
 ```
 
 ### 4. Communication
+
 ```
 - Update changelog on website
 - Email users if major changes
@@ -445,6 +489,7 @@ Your data is safe. Apologies for the inconvenience.
 ## 🎯 Best Practices Summary
 
 ### DO:
+
 - ✅ Pin every stable version
 - ✅ Test thoroughly before merging
 - ✅ Use descriptive branch names
@@ -455,6 +500,7 @@ Your data is safe. Apologies for the inconvenience.
 - ✅ Have rollback plan ready
 
 ### DON'T:
+
 - ❌ Commit directly to main
 - ❌ Merge untested code
 - ❌ Skip mobile testing
@@ -500,11 +546,13 @@ Your data is safe. Apologies for the inconvenience.
 ### Contact Information
 
 **Lovable Support:**
+
 - Docs: https://docs.lovable.dev
 - Discord: https://discord.gg/lovable-dev
 - Email: Via Lovable dashboard
 
 **Emergency Escalation:**
+
 1. Rollback to last stable version (self-service)
 2. Document the issue in GitHub
 3. Contact Lovable support if platform issue
@@ -517,18 +565,21 @@ Your data is safe. Apologies for the inconvenience.
 **Track These Post-Launch:**
 
 ### Stability Metrics
+
 - Uptime: Target >99.5%
 - Error rate: Target <0.5%
 - Rollbacks per week: Target 0 (max 1)
 - Time to fix critical bugs: <2 hours
 
 ### Development Velocity
+
 - Features shipped per week: Target 2-3
 - Bugs fixed per week: All critical, 80% high
 - Average PR review time: <4 hours
 - Deploy frequency: 1-2x per day
 
 ### Quality Metrics
+
 - Test coverage: >80%
 - Lighthouse score: All >90
 - Accessibility: 100% WCAG 2.2 AA

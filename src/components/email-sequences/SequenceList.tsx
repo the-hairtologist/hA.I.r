@@ -50,7 +50,7 @@ export const SequenceList = () => {
     queryKey: ['email_sequences'],
     queryFn: async () => {
       if (!user?.id) return [];
-      
+
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id')
@@ -119,7 +119,7 @@ export const SequenceList = () => {
   const copyTemplateMutation = useMutation({
     mutationFn: async (sequence: any) => {
       if (!user?.id) throw new Error('Not authenticated');
-      
+
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id')

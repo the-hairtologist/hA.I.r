@@ -24,6 +24,7 @@ This software and associated documentation files (the "Software") are the propri
 ### Legal Action
 
 Unauthorized use, copying, or distribution of this Software will result in:
+
 - Immediate cease and desist notices
 - Civil litigation for damages
 - Criminal prosecution where applicable

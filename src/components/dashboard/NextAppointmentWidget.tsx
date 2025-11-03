@@ -79,7 +79,11 @@ export function NextAppointmentWidget() {
         });
       }
     } catch (error) {
-      logger.error('Error fetching next appointment', 'NextAppointmentWidget', error as Error);
+      logger.error(
+        'Error fetching next appointment',
+        'NextAppointmentWidget',
+        error as Error
+      );
     } finally {
       setLoading(false);
     }

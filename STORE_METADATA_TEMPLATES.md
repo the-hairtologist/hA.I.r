@@ -7,26 +7,31 @@ Ready-to-use copy for App Store Connect and Google Play Console submissions.
 ## 🍎 Apple App Store Connect
 
 ### App Name (30 characters max)
+
 ```
 hA.I.r Pro - Hair Stylist
 ```
 
 ### Subtitle (30 characters max)
+
 ```
 AI Formula & Client Manager
 ```
 
 ### Promotional Text (170 characters)
+
 ```
 Generate perfect hair color formulas in 2 seconds with AI. Manage clients, book appointments, track inventory, and grow your salon business—all in one powerful app.
 ```
 
 ### Keywords (100 characters, comma-separated)
+
 ```
 hair,stylist,salon,color,formula,appointment,booking,client,management,AI,beauty,professional
 ```
 
 ### Description (4000 characters max)
+
 ```
 hA.I.r Pro is the ultimate AI-powered platform for professional hair stylists and salon owners. Transform your business with intelligent tools that save time, impress clients, and maximize your creativity.
 
@@ -89,6 +94,7 @@ Download hA.I.r Pro today and experience the future of professional hair styling
 ```
 
 ### What's New (4000 characters max) - For Updates
+
 ```
 Version 1.0 - Initial Release
 
@@ -135,40 +141,50 @@ We'd love your feedback! Email us at ThehA.I.rtologist@gmail.com
 ```
 
 ### App Privacy Details
+
 **Data Used to Track You:** None
 
 **Data Linked to You:**
+
 - Contact Info (Email, Name, Phone)
 - User Content (Photos, Client Notes)
 - Usage Data (Analytics)
 - Financial Info (Payment via Stripe)
 
 **Data Not Linked to You:**
+
 - Diagnostics (Crash reports)
 
 ### Support URL
+
 ```
 https://your-production-domain.com/support
 ```
-*(Update with your actual domain or use Lovable subdomain)*
+
+_(Update with your actual domain or use Lovable subdomain)_
 
 ### Marketing URL (Optional)
+
 ```
 https://your-production-domain.com
 ```
 
 ### Copyright
+
 ```
 © 2025 hA.I.r™
 ```
 
 ### Age Rating
+
 **4+ (General)**
 
 ### Primary Category
+
 **Business**
 
 ### Secondary Category
+
 **Productivity**
 
 ---
@@ -176,16 +192,19 @@ https://your-production-domain.com
 ## 🤖 Google Play Console
 
 ### App Name (50 characters max)
+
 ```
 hA.I.r Pro - AI Hair Color & Salon Management
 ```
 
 ### Short Description (80 characters max)
+
 ```
 AI hair formulas in 2 sec. Client management, booking & business tools for pros
 ```
 
 ### Full Description (4000 characters max)
+
 ```
 <b>AI-Powered Hair Salon Management for Professionals</b>
 
@@ -316,10 +335,12 @@ Terms: [Your URL]/terms
 ```
 
 ### Category
+
 **Primary:** Business  
 **Type:** Application
 
 ### Tags (5 recommended)
+
 ```
 salon management
 hair stylist
@@ -329,14 +350,17 @@ beauty business
 ```
 
 ### Content Rating
+
 **Everyone** (via IARC questionnaire)
 
 ### Contact Details
+
 **Email:** ThehA.I.rtologist@gmail.com  
 **Phone:** (Optional - add if you have business line)  
 **Website:** https://your-production-domain.com
 
 ### Privacy Policy URL
+
 ```
 https://your-production-domain.com/privacy
 ```
@@ -346,27 +370,35 @@ https://your-production-domain.com/privacy
 ## 📸 Screenshot Captions
 
 ### Screenshot 1: AI Formula Generator
+
 **Caption:** "Generate perfect color formulas in 2 seconds with AI"
 
 ### Screenshot 2: Client Dashboard
+
 **Caption:** "Manage unlimited clients with complete hair history"
 
 ### Screenshot 3: Appointment Calendar
+
 **Caption:** "Smart scheduling with automatic reminders"
 
 ### Screenshot 4: AI Assistant Chat
+
 **Caption:** "24/7 expert guidance from AI assistant"
 
 ### Screenshot 5: Formula Library
+
 **Caption:** "Save and organize all your custom formulas"
 
 ### Screenshot 6: Business Analytics
+
 **Caption:** "Track revenue and grow your business"
 
 ### Screenshot 7: Portfolio
+
 **Caption:** "Showcase your work with a professional portfolio"
 
 ### Screenshot 8: Color Correction
+
 **Caption:** "Fix color disasters with AI-powered guidance"
 
 ---

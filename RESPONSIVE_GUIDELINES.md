@@ -1,11 +1,13 @@
 # Responsive Design System Guidelines
 
 ## 🎯 Purpose
+
 This document ensures **perfect scaling and consistency** across all devices when using AI-generated code or making manual edits.
 
 ## ⚠️ Critical Rules
 
 ### DO NOT Use Fixed Pixels
+
 ```tsx
 // ❌ BAD - Fixed sizing breaks on different devices
 <div className="w-[200px] h-[400px] text-[16px]">
@@ -15,6 +17,7 @@ This document ensures **perfect scaling and consistency** across all devices whe
 ```
 
 ### Always Import Responsive System
+
 ```tsx
 import { responsiveBestPractices as rsp } from '@/lib/responsiveSystem';
 ```
@@ -22,6 +25,7 @@ import { responsiveBestPractices as rsp } from '@/lib/responsiveSystem';
 ## 📐 Responsive Utilities
 
 ### Typography
+
 ```tsx
 // Use fluid text that scales with viewport
 import { fluidText } from '@/lib/responsiveSystem';
@@ -31,6 +35,7 @@ import { fluidText } from '@/lib/responsiveSystem';
 ```
 
 ### Spacing
+
 ```tsx
 import { getResponsivePadding, getResponsiveMargin, getResponsiveGap } from '@/lib/responsiveSystem';
 
@@ -51,6 +56,7 @@ import { getResponsivePadding, getResponsiveMargin, getResponsiveGap } from '@/l
 ```
 
 ### Layout
+
 ```tsx
 import { containerWidths, cardGrid, sidebarLayout } from '@/lib/responsiveSystem';
 
@@ -74,6 +80,7 @@ import { containerWidths, cardGrid, sidebarLayout } from '@/lib/responsiveSystem
 ```
 
 ### Touch Targets (Mobile Accessibility)
+
 ```tsx
 import { touchTargets, buttonSizes } from '@/lib/responsiveSystem';
 
@@ -91,6 +98,7 @@ import { touchTargets, buttonSizes } from '@/lib/responsiveSystem';
 ## 🎨 Tailwind Responsive Classes
 
 ### Breakpoint Prefixes
+
 - `sm:` - 640px and up (large phones, small tablets)
 - `md:` - 768px and up (tablets)
 - `lg:` - 1024px and up (laptops)
@@ -98,6 +106,7 @@ import { touchTargets, buttonSizes } from '@/lib/responsiveSystem';
 - `2xl:` - 1536px and up (large screens)
 
 ### Common Patterns
+
 ```tsx
 // Stack on mobile, row on desktop
 <div className="flex flex-col md:flex-row gap-4">
@@ -118,30 +127,33 @@ import { touchTargets, buttonSizes } from '@/lib/responsiveSystem';
 ## 📱 Device-Specific Optimizations
 
 ### Safe Areas (Notches, etc.)
+
 ```tsx
 import { safeAreaInsets } from '@/lib/responsiveSystem';
 
 // For fixed headers/footers on mobile
 <header className={`fixed top-0 w-full ${safeAreaInsets.top}`}>
   Header respects device notch
-</header>
+</header>;
 ```
 
 ### Images
+
 ```tsx
 import { responsiveImage, aspectRatios } from '@/lib/responsiveSystem';
 
 // Responsive images that maintain aspect ratio
-<img 
-  src="/photo.jpg" 
+<img
+  src="/photo.jpg"
   className={`${responsiveImage} ${aspectRatios.landscape}`}
   alt="Description"
-/>
+/>;
 ```
 
 ## 🔍 Testing Checklist
 
 Before deploying any change, test on:
+
 - [ ] Mobile (320px - 767px)
 - [ ] Tablet (768px - 1023px)
 - [ ] Desktop (1024px+)
@@ -149,6 +161,7 @@ Before deploying any change, test on:
 - [ ] Landscape orientation
 
 ### Quick Test Commands
+
 ```tsx
 // Use the responsive hook to test device detection
 import { useResponsive } from '@/hooks/useResponsive';
@@ -167,6 +180,7 @@ const { isMobile, isTablet, isDesktop } = useResponsive();
 ## 🚫 Common Mistakes to Avoid
 
 ### Fixed Widths
+
 ```tsx
 // ❌ BAD
 <div className="w-[800px]">
@@ -176,6 +190,7 @@ const { isMobile, isTablet, isDesktop } = useResponsive();
 ```
 
 ### Fixed Font Sizes
+
 ```tsx
 // ❌ BAD
 <p className="text-[18px]">
@@ -187,6 +202,7 @@ const { isMobile, isTablet, isDesktop } = useResponsive();
 ```
 
 ### Fixed Heights
+
 ```tsx
 // ❌ BAD
 <div className="h-[500px]">
@@ -198,6 +214,7 @@ const { isMobile, isTablet, isDesktop } = useResponsive();
 ```
 
 ### Pixel-Based Spacing
+
 ```tsx
 // ❌ BAD
 <div className="mt-[32px] mb-[16px]">
@@ -226,34 +243,38 @@ export function ResponsiveCard() {
   const { isMobile } = useResponsive();
 
   return (
-    <div className={`
+    <div
+      className={`
       ${rsp.containers.lg}
       ${rsp.padding('lg')}
       mx-auto
-    `}>
-      <div className={`
+    `}
+    >
+      <div
+        className={`
         ${rsp.cards.responsive}
         ${rsp.gap('lg')}
-      `}>
+      `}
+      >
         <div className="bg-card rounded-lg overflow-hidden">
-          <img 
+          <img
             src="/image.jpg"
             className={`${rsp.image} ${rsp.aspect.video}`}
             alt="Responsive image"
           />
           <div className={rsp.padding('md')}>
-            <h2 className={rsp.typography['2xl']}>
-              Fluid Typography
-            </h2>
+            <h2 className={rsp.typography['2xl']}>Fluid Typography</h2>
             <p className={`${rsp.typography.base} text-muted-foreground`}>
               This text scales perfectly on all devices
             </p>
-            <button className={`
+            <button
+              className={`
               ${rsp.buttons.md}
               bg-primary text-primary-foreground
               rounded-lg
               w-full sm:w-auto
-            `}>
+            `}
+            >
               {isMobile ? 'Tap' : 'Click'} Here
             </button>
           </div>

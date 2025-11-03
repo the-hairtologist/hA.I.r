@@ -209,4 +209,3 @@ export const ServiceCardSkeleton = () => (
 // Export all skeletons from new files
 export * from './skeletons/ListSkeleton';
 export * from './skeletons/PageSkeleton';
-

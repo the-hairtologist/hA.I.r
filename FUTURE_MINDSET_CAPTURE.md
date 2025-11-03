@@ -3,9 +3,11 @@
 ## 🎯 Core Principles Moving Forward
 
 ### 1. Always Think: "How Does This Get More Users?"
+
 Every feature, every design decision, every word → filtered through user acquisition lens.
 
 ### 2. Visual Appeal WITHOUT Overwhelming
+
 - One primary action per screen
 - Clear hierarchy (what's most important?)
 - Generous whitespace
@@ -13,16 +15,20 @@ Every feature, every design decision, every word → filtered through user acqui
 - Minimal cognitive load
 
 ### 3. Ad-Worthy Moments Everywhere
+
 Constantly ask: "Would someone screenshot this and share it?"
+
 - Beautiful success states
 - Satisfying animations
 - Clear value demonstrations
 - Shareable results
 
 ### 4. One-of-a-Kind Features
+
 Never add "me too" features. Every new feature should make competitors think "damn, wish we thought of that."
 
 ### 5. No Redundancy
+
 - One button to do one thing
 - No duplicate information
 - No repeated UI patterns
@@ -33,6 +39,7 @@ Never add "me too" features. Every new feature should make competitors think "da
 ## 🚀 AI Tools to Keep in Toolbelt
 
 ### Content Creation
+
 - **Runway ML** - Video generation
 - **Midjourney** - Marketing visuals
 - **ElevenLabs** - Voice generation
@@ -40,6 +47,7 @@ Never add "me too" features. Every new feature should make competitors think "da
 - **Descript** - Video editing with AI
 
 ### Growth & Marketing
+
 - **Browse AI** - Competitor research
 - **Crystal** - Personality insights for outreach
 - **Phrasee** - Email optimization
@@ -47,6 +55,7 @@ Never add "me too" features. Every new feature should make competitors think "da
 - **Brandwatch** - Social listening
 
 ### Product Development
+
 - **Amplitude** - Product analytics
 - **Hotjar** - User behavior tracking
 - **Maze** - User testing
@@ -54,6 +63,7 @@ Never add "me too" features. Every new feature should make competitors think "da
 - **Mixpanel** - Event tracking
 
 ### Customer Success
+
 - **Intercom AI** - Smart support
 - **Chameleon** - Guided tours
 - **Pendo** - Product adoption
@@ -66,12 +76,14 @@ Never add "me too" features. Every new feature should make competitors think "da
 When building new features, capture these moments:
 
 ### Technical Moments
+
 - [ ] Loading states that feel instant
 - [ ] Success animations that feel rewarding
 - [ ] Error states that feel helpful
 - [ ] Empty states that inspire action
 
 ### Emotional Moments
+
 - [ ] "Aha!" moment when AI works perfectly
 - [ ] Relief when automation saves time
 - [ ] Confidence from accurate predictions
@@ -79,6 +91,7 @@ When building new features, capture these moments:
 - [ ] Excitement from revenue insights
 
 ### Social Proof Moments
+
 - [ ] Milestone achievements (100th formula!)
 - [ ] Revenue increases shown
 - [ ] Time saved calculations
@@ -86,6 +99,7 @@ When building new features, capture these moments:
 - [ ] Before/after comparisons
 
 ### Shareable Moments
+
 - [ ] Beautiful dashboards worth showing
 - [ ] Impressive AI results
 - [ ] Revenue predictions coming true
@@ -139,6 +153,7 @@ When building new features, capture these moments:
 ## 🌟 Vision for the Future
 
 ### Short-term (3 months)
+
 - 10,000 active users
 - Featured in beauty publications
 - 50+ video testimonials
@@ -146,6 +161,7 @@ When building new features, capture these moments:
 - $150K MRR
 
 ### Medium-term (1 year)
+
 - 100,000 active users
 - Industry standard tool
 - Partnerships with beauty brands
@@ -153,6 +169,7 @@ When building new features, capture these moments:
 - International expansion
 
 ### Long-term (3 years)
+
 - #1 tool for independent hair pros globally
 - Acquired by major beauty brand OR
 - IPO as vertical SaaS leader
@@ -184,23 +201,27 @@ When building new features, capture these moments:
 ## 🚨 Red Flags to Avoid
 
 ### Feature Creep
+
 - "Let's add just one more thing..."
 - "Competitors have this so we need it..."
 - "Wouldn't it be cool if..."
 
 ### Complexity Creep
+
 - Too many options
 - Hidden features
 - Multi-step processes
 - Unclear navigation
 
 ### Generic SaaS Trap
+
 - Looking like every other app
 - Boring color schemes
 - Corporate speak
 - One-size-fits-all features
 
 ### Over-Engineering
+
 - Building for edge cases
 - Premature optimization
 - Analysis paralysis
@@ -211,6 +232,7 @@ When building new features, capture these moments:
 ## 🎯 Success Indicators
 
 ### Product Metrics
+
 - Trial to paid: >40%
 - Day 7 retention: >50%
 - NPS score: >50
@@ -218,12 +240,14 @@ When building new features, capture these moments:
 - Time to value: <5 min
 
 ### Growth Metrics
+
 - MRR growth: >20%/mo
 - CAC payback: <3 months
 - Viral coefficient: >1.5
 - Organic %: >60%
 
 ### Brand Metrics
+
 - Social mentions: Growing
 - Press coverage: Increasing
 - Competitor copying: Happening
@@ -234,16 +258,19 @@ When building new features, capture these moments:
 ## 🎬 Content Creation Mindset
 
 ### Every Screen Should Answer:
+
 1. What am I looking at?
 2. Why should I care?
 3. What do I do next?
 
 ### Every Feature Should Answer:
+
 1. How does this make me money?
 2. How does this save me time?
 3. How does this make me look professional?
 
 ### Every Marketing Piece Should Answer:
+
 1. Why you? (unique value)
 2. Why now? (urgency)
 3. Why believe? (proof)
@@ -263,6 +290,7 @@ When building new features, capture these moments:
 7. **Community-First** - Users are stakeholders
 
 ### What to Never Compromise:
+
 - Speed of the app
 - Security of client data
 - Beauty of the interface
@@ -275,6 +303,7 @@ When building new features, capture these moments:
 ## 🚀 Launch Readiness Checklist
 
 ### Product Ready When:
+
 - [ ] Every core feature works flawlessly
 - [ ] Load times under 2 seconds
 - [ ] Mobile experience is perfect
@@ -284,6 +313,7 @@ When building new features, capture these moments:
 - [ ] "Aha moment" happens in first session
 
 ### Marketing Ready When:
+
 - [ ] 30 pieces of content created
 - [ ] 10 video testimonials recorded
 - [ ] Landing page converts >20%
@@ -293,6 +323,7 @@ When building new features, capture these moments:
 - [ ] Launch timeline finalized
 
 ### Community Ready When:
+
 - [ ] Beta users love it (NPS >50)
 - [ ] Feature requests organized
 - [ ] Feedback loop established
@@ -333,6 +364,6 @@ You're building the future of independent hair professionals.
 
 ---
 
-*Mindset captured: 2025-10-16*  
-*Refer to this document whenever making product decisions*  
-*Update as vision evolves, but never lose the core principles*
+_Mindset captured: 2025-10-16_  
+_Refer to this document whenever making product decisions_  
+_Update as vision evolves, but never lose the core principles_

@@ -39,6 +39,7 @@ This guide covers setting up all necessary developer accounts and services for l
    - Accept agreements
 
 #### What You Get:
+
 - ✅ Publish iOS apps to App Store
 - ✅ TestFlight for beta testing
 - ✅ App Analytics
@@ -80,6 +81,7 @@ This guide covers setting up all necessary developer accounts and services for l
    - Verification takes 1-3 days
 
 #### What You Get:
+
 - ✅ Publish Android apps to Play Store
 - ✅ Internal testing tracks
 - ✅ Play Console analytics
@@ -123,6 +125,7 @@ Your app already has Stripe integration! Just need to:
      - **Enterprise** - Custom pricing
 
 #### What You Get:
+
 - ✅ Accept credit card payments
 - ✅ Subscription billing
 - ✅ Invoicing
@@ -143,6 +146,7 @@ Your app already has Stripe integration! Just need to:
 **Why:** Modern, developer-friendly, great deliverability
 
 **Setup:**
+
 1. Go to [resend.com](https://resend.com)
 2. Sign up with email
 3. Add domain for sending (e.g., no-reply@hair-ai.com)
@@ -151,6 +155,7 @@ Your app already has Stripe integration! Just need to:
 6. Add to Lovable secrets: `RESEND_API_KEY`
 
 **Email Types to Set Up:**
+
 - Appointment confirmations
 - Appointment reminders (24h before)
 - Password reset
@@ -165,6 +170,7 @@ Your app already has Stripe integration! Just need to:
 **Why:** Established, reliable, good analytics
 
 **Setup:**
+
 1. Go to [sendgrid.com](https://sendgrid.com)
 2. Create account
 3. Verify email address
@@ -180,6 +186,7 @@ Your app already has Stripe integration! Just need to:
 **Why:** Scalable, reliable, good if you're already on AWS
 
 **Setup:**
+
 1. Create AWS account
 2. Go to Amazon SES console
 3. Verify domain
@@ -199,6 +206,7 @@ Your app already has Stripe integration! Just need to:
 **Use:** Track user behavior, conversions
 
 #### Setup:
+
 1. Go to [analytics.google.com](https://analytics.google.com)
 2. Create account
 3. Create GA4 property
@@ -216,6 +224,7 @@ Your app already has Stripe integration! Just need to:
 **Use:** Real-time error tracking and performance monitoring
 
 #### Setup:
+
 1. Go to [sentry.io](https://sentry.io)
 2. Sign up
 3. Create project (React)
@@ -233,6 +242,7 @@ Your app already has Stripe integration! Just need to:
 **Status:** Automatic - no setup needed!
 
 Your app automatically gets:
+
 - ✅ HTTPS enabled
 - ✅ Auto-renewal every 90 days
 - ✅ A+ SSL rating
@@ -242,6 +252,7 @@ Your app automatically gets:
 ### 8. Data Protection & Privacy
 
 #### Already Implemented! ✅
+
 - Privacy Policy page: `/privacy`
 - Terms of Service: `/terms`
 - Cookie Policy: `/cookie-policy`
@@ -251,6 +262,7 @@ Your app automatically gets:
 #### Recommended Addition: Privacy Policy Generator
 
 Use these to customize your policies:
+
 - [TermsFeed](https://www.termsfeed.com)
 - [Termly](https://termly.io)
 - [PrivacyPolicies.com](https://www.privacypolicies.com)
@@ -278,6 +290,7 @@ Cost: Free-$300/year for comprehensive policies
 **Use:** Speed up global delivery, DDoS protection
 
 **Setup:**
+
 1. Sign up at [cloudflare.com](https://cloudflare.com)
 2. Add your domain
 3. Update nameservers at registrar
@@ -285,6 +298,7 @@ Cost: Free-$300/year for comprehensive policies
 5. Enable Cloudflare proxy (orange cloud)
 
 **Benefits:**
+
 - ✅ Faster load times globally
 - ✅ DDoS protection
 - ✅ Web Application Firewall (WAF)
@@ -297,6 +311,7 @@ Cost: Free-$300/year for comprehensive policies
 ### Current Secrets to Configure:
 
 Your app already uses these (check Settings → Secrets):
+
 - ✅ `VITE_SUPABASE_URL` (auto-configured)
 - ✅ `VITE_SUPABASE_ANON_KEY` (auto-configured)
 - ✅ `STRIPE_SECRET_KEY` (needs your Stripe key)
@@ -304,6 +319,7 @@ Your app already uses these (check Settings → Secrets):
 ### Additional Secrets You May Need:
 
 #### For Email Service:
+
 ```bash
 RESEND_API_KEY=re_xxxxxxxxxx
 # OR
@@ -311,6 +327,7 @@ SENDGRID_API_KEY=SG.xxxxxxxxxx
 ```
 
 #### For OAuth (When Ready):
+
 ```bash
 GOOGLE_CLIENT_ID=xxxxxxxxxx.apps.googleusercontent.com
 GOOGLE_CLIENT_SECRET=xxxxxxxxxx
@@ -319,6 +336,7 @@ APPLE_CLIENT_SECRET=xxxxxxxxxx
 ```
 
 #### For Analytics:
+
 ```bash
 VITE_GA_MEASUREMENT_ID=G-XXXXXXXXXX
 SENTRY_DSN=https://xxxxxxxxxx@sentry.io/xxxxxxx
@@ -387,27 +405,30 @@ SENTRY_DSN=https://xxxxxxxxxx@sentry.io/xxxxxxx
 ## 💰 Cost Summary
 
 ### Required Costs (Year 1):
-| Service | Cost | Frequency |
-|---------|------|-----------|
-| Apple Developer | $99 | Annual |
-| Google Play Console | $25 | One-time |
-| Stripe | 2.9% + 30¢ | Per transaction |
-| Email Service | $0-20 | Monthly |
-| **Total Year 1** | **~$124-364** | - |
+
+| Service             | Cost          | Frequency       |
+| ------------------- | ------------- | --------------- |
+| Apple Developer     | $99           | Annual          |
+| Google Play Console | $25           | One-time        |
+| Stripe              | 2.9% + 30¢    | Per transaction |
+| Email Service       | $0-20         | Monthly         |
+| **Total Year 1**    | **~$124-364** | -               |
 
 ### Optional Costs:
-| Service | Cost | Frequency |
-|---------|------|-----------|
-| Custom Domain | $10-15 | Annual |
-| Google Workspace | $72 | Annual per user |
-| Cloudflare Pro | $20 | Monthly |
-| Privacy Policy Generator | $0-300 | Annual |
+
+| Service                  | Cost   | Frequency       |
+| ------------------------ | ------ | --------------- |
+| Custom Domain            | $10-15 | Annual          |
+| Google Workspace         | $72    | Annual per user |
+| Cloudflare Pro           | $20    | Monthly         |
+| Privacy Policy Generator | $0-300 | Annual          |
 
 ---
 
 ## 📅 Setup Timeline
 
 **Week 1:**
+
 - Day 1: Create Apple Developer account → Wait 24-48h for approval
 - Day 1: Create Google Play Console account → Wait 1-3 days for verification
 - Day 1: Activate Stripe account → Wait 1-2 days for verification
@@ -415,6 +436,7 @@ SENTRY_DSN=https://xxxxxxxxxx@sentry.io/xxxxxxx
 - Day 3: Configure analytics (instant)
 
 **Week 2:**
+
 - Day 1: All accounts approved! ✅
 - Day 1-2: Configure API keys and secrets
 - Day 3-7: Upload apps to stores for review
@@ -426,16 +448,19 @@ SENTRY_DSN=https://xxxxxxxxxx@sentry.io/xxxxxxx
 ## 🆘 Need Help?
 
 ### Apple Developer Support
+
 - **Email:** developer@apple.com
 - **Phone:** 1-800-633-2152 (US)
 - **Portal:** [developer.apple.com/support](https://developer.apple.com/support)
 
 ### Google Play Support
+
 - **Help Center:** [support.google.com/googleplay/android-developer](https://support.google.com/googleplay/android-developer)
 - **Email:** Via Play Console
 - **Community:** [Android Developers Community](https://developer.android.com/community)
 
 ### Stripe Support
+
 - **Email:** support@stripe.com
 - **Chat:** Via dashboard (fastest)
 - **Docs:** [stripe.com/docs](https://stripe.com/docs)
