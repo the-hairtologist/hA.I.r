@@ -1,0 +1,32 @@
+# Ignore GitHub workflows to prevent permission errors
+.github/workflows/
+
+# Ignore build outputs
+dist
+build
+coverage
+*.tsbuildinfo
+
+# Ignore dependencies
+node_modules
+.pnp.*
+
+# Ignore Capacitor build files
+android
+ios
+dev-dist
+
+# Ignore generated files
+.next
+.cache
+.parcel-cache
+.turbo
+
+# Ignore Supabase generated types
+src/integrations/supabase/types.ts
+
+# Ignore config files that don't need linting
+*.config.js
+*.config.ts
+*.config.mjs
+*.config.cjs
