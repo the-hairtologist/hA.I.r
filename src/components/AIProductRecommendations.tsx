@@ -218,7 +218,7 @@ const AIProductRecommendationsComponent = ({
                           {rec.brand}
                         </p>
                       </div>
-                    <Badge variant="outline" className="text-[11px] sm:text-xs">
+                    <Badge variant="outline" className={cn(mobileFirst.text.xs)}>
                       {rec.category}
                     </Badge>
                   </div>
@@ -233,7 +233,7 @@ const AIProductRecommendationsComponent = ({
                           ${rec.price.toFixed(2)}
                         </span>
                       </div>
-                    <div className="text-[11px] sm:text-xs text-success font-medium">
+                    <div className={cn(mobileFirst.text.xs, "text-success font-medium")}>
                       Earn ${commission}
                       <span className="text-muted-foreground ml-1">
                         ({(rec.commissionRate * 100).toFixed(0)}%)
@@ -242,7 +242,7 @@ const AIProductRecommendationsComponent = ({
                   </div>
 
                   {/* Match Reason */}
-                  <div className="mt-2 text-[11px] sm:text-xs text-muted-foreground italic">
+                  <div className={cn(mobileFirst.text.xs, "mt-2 text-muted-foreground italic")}>
                     💡 {rec.matchReason}
                   </div>
                 </div>
@@ -263,7 +263,7 @@ const AIProductRecommendationsComponent = ({
 
         {/* Footer Info */}
         <div className="mt-6 p-4 bg-muted/50 rounded-lg border-2 border-foreground/10">
-          <p className="text-[11px] sm:text-xs text-muted-foreground">
+          <p className={cn(mobileFirst.text.xs, "text-muted-foreground")}>
             💰 <strong>Commissions are automatic:</strong> When your client
             purchases through your link, you earn{' '}
             {affiliateCode ? 'with your code' : 'a commission'}. Track all

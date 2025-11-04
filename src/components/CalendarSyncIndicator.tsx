@@ -16,6 +16,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 import { useNavigate } from 'react-router-dom';
 import { logger } from '@/lib/logging/productionLogger';
 
@@ -131,7 +132,7 @@ export function CalendarSyncIndicator() {
                 <CheckCircle className="h-3 w-3 text-success flex-shrink-0" />
               )}
             </div>
-            <p className="text-[11px] text-muted-foreground truncate">
+            <p className={cn(mobileFirst.text.xs, "text-muted-foreground truncate")}>
               Last sync: {lastSyncText}
             </p>
           </div>

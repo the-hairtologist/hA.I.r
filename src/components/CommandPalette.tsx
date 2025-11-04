@@ -21,6 +21,7 @@ import {
   getAdminNavigationItems,
 } from '@/config/navigationConfig';
 import { cn } from '@/lib/utils';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 
 interface CommandPaletteProps {
   open: boolean;
@@ -110,7 +111,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
           <DialogTitle className="flex items-center gap-2 text-sm sm:text-base lg:text-lg">
             <Command className="h-4 w-4" />
             Quick Navigation
-            <kbd className="ml-auto pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[11px] font-medium text-muted-foreground">
+            <kbd className={cn(mobileFirst.text.xs, "ml-auto pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono font-medium text-muted-foreground")}>
               <span className="text-xs">⌘</span>K
             </kbd>
           </DialogTitle>

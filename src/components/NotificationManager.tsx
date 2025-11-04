@@ -5,6 +5,8 @@ import { format, isToday, startOfDay, endOfDay } from 'date-fns';
 import { Calendar, DollarSign, TrendingUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { logger } from '@/lib/logging/productionLogger';
+import { cn } from '@/lib/utils';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 
 interface NotificationManagerProps {
   userId: string;
@@ -87,7 +89,7 @@ export const NotificationManager = ({
               <p className="font-semibold">
                 You have {count} appointment{count > 1 ? 's' : ''} today
               </p>
-              <p className="text-[11px] sm:text-xs text-muted-foreground">
+              <p className={cn(mobileFirst.text.xs, "text-muted-foreground")}>
                 Next: {nextAppt.client?.full_name} at{' '}
                 {format(new Date(nextAppt.appointment_date), 'h:mm a')}
               </p>
@@ -147,7 +149,7 @@ export const NotificationManager = ({
                   <p className="font-semibold">
                     Don't forget to save {appt.client?.full_name}'s formula! 💅
                   </p>
-                  <p className="text-[11px] sm:text-xs text-muted-foreground">
+                  <p className={cn(mobileFirst.text.xs, "text-muted-foreground")}>
                     Archive the perfect mix while it's fresh in your mind
                   </p>
                 </div>

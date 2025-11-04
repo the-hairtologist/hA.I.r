@@ -93,7 +93,7 @@ export const DataExport = () => {
         </div>
 
         <div className="flex items-center justify-between pt-2">
-          <p className="text-[11px] sm:text-xs text-muted-foreground">
+          <p className={cn(mobileFirst.text.xs, "text-muted-foreground")}>
             Format: JSON • Compliant with GDPR Article 20
           </p>
           <Button onClick={handleExportData} disabled={isExporting}>
