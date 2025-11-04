@@ -14,8 +14,10 @@ import {
   clientNavigationItems,
   getAdminNavigationItems,
   stylistGroupLabels,
+  clientGroupLabels,
   type NavigationItem,
 } from "@/config/navigationConfig";
+import { mobileFirst, touchButton } from "@/lib/responsive/mobile-first-utils";
 
 interface MoreMenuProps {
   open: boolean;
@@ -42,11 +44,16 @@ const CollapsibleGroup = ({ title, items, onNavigate, unreadCount }: Collapsible
           haptic.tap();
           setIsOpen(!isOpen);
         }}
-        className="flex items-center justify-between w-full px-4 py-3 text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors touch-manipulation"
+        className={cn(
+          touchButton.md,
+          "flex items-center justify-between w-full",
+          mobileFirst.text.sm,
+          "font-semibold text-muted-foreground hover:text-foreground transition-colors"
+        )}
         aria-expanded={isOpen}
       >
-        <span className="font-pixel text-xs tracking-wide uppercase">{title}</span>
-        {isOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+        <span className={cn(mobileFirst.text.xs, "font-pixel tracking-wide uppercase break-words")}>{title}</span>
+        {isOpen ? <ChevronUp className="h-4 w-4 flex-shrink-0" /> : <ChevronDown className="h-4 w-4 flex-shrink-0" />}
       </button>
       
       {isOpen && (
@@ -57,9 +64,10 @@ const CollapsibleGroup = ({ title, items, onNavigate, unreadCount }: Collapsible
               onClick={() => onNavigate(item.url)}
               disabled={item.comingSoon}
               className={cn(
-                "relative w-full flex items-center gap-3 px-4 py-3",
-                "min-h-[60px] rounded-lg transition-all duration-200",
-                "hover:bg-accent/50 active:scale-98 touch-manipulation",
+                touchButton.lg,
+                "relative w-full flex items-center gap-3",
+                "rounded-lg transition-all duration-200",
+                "hover:bg-accent/50 active:scale-98",
                 "brutal-border border-muted",
                 item.comingSoon && "opacity-50 cursor-not-allowed"
               )}
@@ -67,26 +75,26 @@ const CollapsibleGroup = ({ title, items, onNavigate, unreadCount }: Collapsible
             >
               <div
                 className={cn(
-                  "flex items-center justify-center w-10 h-10 rounded-lg",
+                  "flex items-center justify-center w-10 h-10 rounded-lg flex-shrink-0",
                   item.gradient
                 )}
               >
                 <item.icon className="h-5 w-5 text-white" />
               </div>
               
-              <div className="flex-1 text-left">
-                <div className="font-medium text-sm">{item.title}</div>
+              <div className="flex-1 text-left min-w-0">
+                <div className={cn(mobileFirst.text.sm, "font-medium break-words")}>{item.title}</div>
                 {item.description && (
-                  <div className="text-xs text-muted-foreground truncate">{item.description}</div>
+                  <div className={cn(mobileFirst.text.xs, "text-muted-foreground truncate")}>{item.description}</div>
                 )}
               </div>
 
               {item.id === 'messages' && unreadCount !== undefined && unreadCount > 0 && (
-                <NotificationDot count={unreadCount} size="sm" />
+                <NotificationDot count={unreadCount} size="sm" className="flex-shrink-0" />
               )}
 
               {item.comingSoon && (
-                <span className="text-xs text-muted-foreground px-2 py-1 rounded bg-muted">
+                <span className={cn(mobileFirst.text.xs, "text-muted-foreground px-2 py-1 rounded bg-muted flex-shrink-0")}>
                   Soon
                 </span>
               )}
@@ -166,6 +174,9 @@ export const MoreMenu = ({ open, onOpenChange, excludePaths }: MoreMenuProps) =>
     return groups;
   }, [filteredItems]);
 
+  // Get group labels based on role
+  const groupLabels = isAdmin ? stylistGroupLabels : isStylist ? stylistGroupLabels : clientGroupLabels;
+
   const handleNavigation = (path: string) => {
     haptic.tap();
     onOpenChange(false);
@@ -185,17 +196,17 @@ export const MoreMenu = ({ open, onOpenChange, excludePaths }: MoreMenuProps) =>
         className="h-[90vh] p-0 flex flex-col bg-background"
         onInteractOutside={handleClose}
       >
-        <SheetHeader className="px-4 pt-6 pb-4 border-b">
-          <div className="flex items-center justify-between">
-            <div>
-              <SheetTitle className="text-2xl font-pixel">More</SheetTitle>
-              <SheetDescription className="text-sm text-muted-foreground">
+        <SheetHeader className={cn(mobileFirst.padding.md, "pt-6 pb-4 border-b")}>
+          <div className="flex items-center justify-between gap-3">
+            <div className="min-w-0 flex-1">
+              <SheetTitle className={cn(mobileFirst.text.xl, "font-pixel break-words")}>More</SheetTitle>
+              <SheetDescription className={cn(mobileFirst.text.sm, "text-muted-foreground break-words")}>
                 All features & settings
               </SheetDescription>
             </div>
             <button
               onClick={handleClose}
-              className="h-10 w-10 rounded-lg hover:bg-accent transition-colors flex items-center justify-center touch-manipulation"
+              className={cn(touchButton.md, "rounded-lg hover:bg-accent transition-colors flex items-center justify-center flex-shrink-0")}
               aria-label="Close menu"
             >
               <X className="h-5 w-5" />
@@ -204,7 +215,7 @@ export const MoreMenu = ({ open, onOpenChange, excludePaths }: MoreMenuProps) =>
         </SheetHeader>
 
         {/* Search Bar */}
-        <div className="px-4 py-3 border-b bg-muted/20">
+        <div className={cn(mobileFirst.padding.md, "py-3 border-b bg-muted/20")}>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
@@ -212,7 +223,7 @@ export const MoreMenu = ({ open, onOpenChange, excludePaths }: MoreMenuProps) =>
               placeholder="Search features..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 h-12 bg-background"
+              className={cn(mobileFirst.text.base, "pl-10 h-12 bg-background")}
               aria-label="Search features"
             />
           </div>
@@ -223,7 +234,7 @@ export const MoreMenu = ({ open, onOpenChange, excludePaths }: MoreMenuProps) =>
           <div className="py-4">
             {filteredItems.length === 0 ? (
               <div className="text-center py-12">
-                <p className="text-muted-foreground">No features found</p>
+                <p className={cn(mobileFirst.text.sm, "text-muted-foreground")}>No features found</p>
               </div>
             ) : (
               <>
@@ -237,7 +248,7 @@ export const MoreMenu = ({ open, onOpenChange, excludePaths }: MoreMenuProps) =>
                 )}
                 {groupedItems.main && (
                   <CollapsibleGroup
-                    title={stylistGroupLabels.main}
+                    title={groupLabels.main || "Main"}
                     items={groupedItems.main}
                     onNavigate={handleNavigation}
                     unreadCount={unreadCount}
@@ -245,7 +256,7 @@ export const MoreMenu = ({ open, onOpenChange, excludePaths }: MoreMenuProps) =>
                 )}
                 {groupedItems.scheduling && (
                   <CollapsibleGroup
-                    title={stylistGroupLabels.scheduling}
+                    title={groupLabels.scheduling || "Scheduling"}
                     items={groupedItems.scheduling}
                     onNavigate={handleNavigation}
                     unreadCount={unreadCount}
@@ -253,7 +264,7 @@ export const MoreMenu = ({ open, onOpenChange, excludePaths }: MoreMenuProps) =>
                 )}
                 {groupedItems.business && (
                   <CollapsibleGroup
-                    title={stylistGroupLabels.business}
+                    title={groupLabels.business || "Business"}
                     items={groupedItems.business}
                     onNavigate={handleNavigation}
                     unreadCount={unreadCount}
@@ -261,7 +272,7 @@ export const MoreMenu = ({ open, onOpenChange, excludePaths }: MoreMenuProps) =>
                 )}
                 {groupedItems.growth && (
                   <CollapsibleGroup
-                    title={stylistGroupLabels.growth}
+                    title={groupLabels.growth || "Growth"}
                     items={groupedItems.growth}
                     onNavigate={handleNavigation}
                     unreadCount={unreadCount}
@@ -269,7 +280,7 @@ export const MoreMenu = ({ open, onOpenChange, excludePaths }: MoreMenuProps) =>
                 )}
                 {groupedItems.tools && (
                   <CollapsibleGroup
-                    title={stylistGroupLabels.tools}
+                    title={groupLabels.tools || "Tools"}
                     items={groupedItems.tools}
                     onNavigate={handleNavigation}
                     unreadCount={unreadCount}
@@ -297,16 +308,19 @@ export const MoreMenu = ({ open, onOpenChange, excludePaths }: MoreMenuProps) =>
         </ScrollArea>
 
         {/* Settings at bottom - Always visible */}
-        <div className="border-t bg-muted/10 p-4">
+        <div className={cn("border-t bg-muted/10", mobileFirst.padding.md)}>
           <button
             onClick={() => handleNavigation("/settings")}
-            className="w-full flex items-center gap-3 px-4 py-4 rounded-lg bg-gradient-to-br from-blue-start to-blue-end text-white font-medium shadow-lg hover:shadow-xl transition-all active:scale-98 touch-manipulation"
+            className={cn(
+              touchButton.lg,
+              "w-full flex items-center gap-3 rounded-lg bg-gradient-to-br from-blue-start to-blue-end text-white font-medium shadow-lg hover:shadow-xl transition-all"
+            )}
             aria-label="Navigate to Settings"
           >
-            <div className="h-10 w-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <div className="h-10 w-10 rounded-lg bg-white/20 flex items-center justify-center flex-shrink-0">
               <Settings className="h-5 w-5" />
             </div>
-            <span className="text-base">Settings</span>
+            <span className={cn(mobileFirst.text.base, "break-words")}>Settings</span>
           </button>
         </div>
       </SheetContent>
