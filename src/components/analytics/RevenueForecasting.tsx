@@ -93,7 +93,7 @@ export function RevenueForecasting({ stylistId }: { stylistId: string }) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           <div className="p-4 border-2 border-border rounded-lg">
             <div className="flex items-center gap-2 mb-2">
               <DollarSign className="h-5 w-5 text-green-600" />

@@ -69,8 +69,8 @@ export const getResponsiveGrid = (cols: {
  */
 export const cardGrid = {
   responsive: 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4',
-  twoColumn: 'grid grid-cols-1 md:grid-cols-2',
-  threeColumn: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
+  twoColumn: 'grid grid-cols-1 sm:grid-cols-2',
+  threeColumn: 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3',
 } as const;
 
 export const stackToRow = {
