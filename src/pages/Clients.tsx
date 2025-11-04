@@ -236,21 +236,22 @@ export default function Clients() {
           return;
         }
 
-        const { data: stylistProfile } = await supabase
-          .from('stylist_profiles')
-          .select('id, user:profiles(full_name)')
-          .eq('user_id', user.id)
-          .maybeSingle();
+      const { data: stylistProfiles } = await supabase
+        .from('stylist_profiles')
+        .select('id, user:profiles(full_name)')
+        .eq('user_id', user.id);
 
-        if (stylistProfile) {
-          setStylistId(stylistProfile.id);
-          setStylistName(stylistProfile.user?.full_name || '');
-        } else {
-          toast.info('This feature is for stylists', {
-            description:
-              'The Client Management page is designed for hair stylists to manage their clients.',
-          });
-        }
+      const stylistProfile = stylistProfiles?.[0];
+
+      if (stylistProfile) {
+        setStylistId(stylistProfile.id);
+        setStylistName(stylistProfile.user?.full_name || '');
+      } else {
+        toast.info('This feature is for stylists', {
+          description:
+            'The Client Management page is designed for hair stylists to manage their clients.',
+        });
+      }
       } catch (error) {
         logger.error('Error loading stylist profile', 'Clients', error as Error);
         toast.error('Failed to load profile');
