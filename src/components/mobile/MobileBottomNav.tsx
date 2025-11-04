@@ -3,11 +3,19 @@
  * Thumb-zone optimized navigation for mobile devices
  */
 
+import { useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { Home, Users, Calendar, Sparkles, User, MoreHorizontal } from 'lucide-react';
+import { Home, Users, Calendar, Sparkles, User, MoreHorizontal, Search, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { haptic } from '@/platform/haptics';
 import { useEnhancedAuth } from '@/contexts/EnhancedAuthContext';
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerDescription,
+} from '@/components/ui/drawer';
 
 interface NavItem {
   icon: any;
@@ -47,6 +55,7 @@ export function MobileBottomNav() {
   const location = useLocation();
   const navigate = useNavigate();
   const { isAdmin, isStylist } = useEnhancedAuth();
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   
   const userRole = isAdmin ? 'admin' : isStylist ? 'stylist' : 'client';
   
@@ -59,12 +68,39 @@ export function MobileBottomNav() {
 
   const handleMoreClick = () => {
     haptic.tap();
-    // Open command palette instead of sidebar (works everywhere)
-    window.dispatchEvent(new CustomEvent('open-command-palette'));
+    setIsDrawerOpen(true);
   };
 
+  const handleQuickAction = (action: string) => {
+    haptic.tap();
+    setIsDrawerOpen(false);
+    
+    switch (action) {
+      case 'search':
+        window.dispatchEvent(new CustomEvent('open-command-palette'));
+        break;
+      case 'ai':
+        navigate('/ai-assistant');
+        break;
+      case 'profile':
+        navigate('/profile');
+        break;
+      case 'settings':
+        navigate('/settings');
+        break;
+    }
+  };
+
+  const quickActions = [
+    { id: 'search', icon: Search, label: 'Search', description: 'Find anything' },
+    { id: 'ai', icon: Sparkles, label: 'AI Assistant', description: 'Smart help' },
+    { id: 'profile', icon: User, label: 'Profile', description: 'Your account' },
+    { id: 'settings', icon: Settings, label: 'Settings', description: 'Preferences' },
+  ];
+
   return (
-    <nav
+    <>
+      <nav
       className={cn(
         // Fixed positioning - always visible at bottom
         'fixed bottom-0 left-0 right-0 z-50',
@@ -173,6 +209,46 @@ export function MobileBottomNav() {
         </span>
       </button>
     </nav>
+
+    {/* Mobile Action Sheet */}
+    <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+      <DrawerContent className="lg:hidden">
+        <DrawerHeader>
+          <DrawerTitle>Quick Actions</DrawerTitle>
+          <DrawerDescription>Access frequently used features</DrawerDescription>
+        </DrawerHeader>
+        
+        <div className="p-4 pb-8">
+          <div className="grid grid-cols-2 gap-3">
+            {quickActions.map((action) => {
+              const Icon = action.icon;
+              return (
+                <button
+                  key={action.id}
+                  onClick={() => handleQuickAction(action.id)}
+                  className={cn(
+                    'flex flex-col items-center justify-center',
+                    'p-6 rounded-lg',
+                    'bg-secondary/50 hover:bg-secondary',
+                    'border-2 border-foreground',
+                    'transition-all duration-200',
+                    'active:scale-95',
+                    'min-h-[120px]',
+                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary'
+                  )}
+                  aria-label={action.label}
+                >
+                  <Icon className="h-8 w-8 mb-2 text-primary" strokeWidth={2} />
+                  <span className="text-sm font-semibold mb-1">{action.label}</span>
+                  <span className="text-xs text-muted-foreground">{action.description}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </DrawerContent>
+    </Drawer>
+    </>
   );
 }
 
