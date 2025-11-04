@@ -7,8 +7,8 @@ import { useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Home, Users, Calendar, Sparkles, User, MoreHorizontal, Search, Settings,
-  Package, Palette, BarChart3, FileText, Folder, CreditCard, Bell, Shield,
-  HelpCircle, LogOut
+  MessageCircle, DollarSign, Beaker, Clock, Plus, BookOpen, Crown,
+  TrendingUp, Activity, Bell, Shield, HelpCircle, MessageSquare
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { haptic } from '@/platform/haptics';
@@ -21,6 +21,12 @@ import {
   DrawerDescription,
 } from '@/components/ui/drawer';
 import { Separator } from '@/components/ui/separator';
+import { 
+  stylistNavigationItems, 
+  clientNavigationItems, 
+  getAdminNavigationItems,
+  type NavigationItem
+} from '@/config/navigationConfig';
 
 interface NavItem {
   icon: any;
@@ -76,23 +82,13 @@ export function MobileBottomNav() {
     setIsDrawerOpen(true);
   };
 
-  const handleQuickAction = (action: string) => {
+  const handleQuickAction = (path: string) => {
     haptic.tap();
     setIsDrawerOpen(false);
-    
-    switch (action) {
-      case 'search':
-        window.dispatchEvent(new CustomEvent('open-command-palette'));
-        break;
-      case 'ai':
-        navigate('/ai-assistant');
-        break;
-      case 'profile':
-        navigate('/profile');
-        break;
-      case 'settings':
-        navigate('/settings');
-        break;
+    if (path === 'search') {
+      window.dispatchEvent(new CustomEvent('open-command-palette'));
+    } else {
+      navigate(path);
     }
   };
 
@@ -102,24 +98,84 @@ export function MobileBottomNav() {
     navigate(path);
   };
 
-  const quickActions = [
-    { id: 'search', icon: Search, label: 'Search', description: 'Find anything' },
-    { id: 'ai', icon: Sparkles, label: 'AI Assistant', description: 'Smart help' },
-    { id: 'profile', icon: User, label: 'Profile', description: 'Your account' },
-    { id: 'settings', icon: Settings, label: 'Settings', description: 'Preferences' },
+  // Get navigation items based on role
+  const allNavItems = userRole === 'admin' 
+    ? [...stylistNavigationItems, ...getAdminNavigationItems(true)]
+    : userRole === 'stylist' 
+    ? stylistNavigationItems
+    : clientNavigationItems;
+
+  // Flatten nested items (expand Business and Growth children)
+  const flattenedItems = allNavItems.reduce<NavigationItem[]>((acc, item) => {
+    if (item.children) {
+      return [...acc, ...item.children];
+    }
+    return [...acc, item];
+  }, []);
+
+  // Filter out coming soon items
+  const availableItems = flattenedItems.filter(item => !item.comingSoon);
+
+  // Role-specific quick actions (6 items)
+  const quickActions = userRole === 'stylist' ? [
+    { path: 'search', icon: Search, label: 'Search', description: 'Find anything' },
+    { path: '/formulas', icon: Beaker, label: 'Quick Formula', description: 'Create formulas' },
+    { path: '/support-chat', icon: MessageCircle, label: 'AI Support', description: '24/7 help' },
+    { path: '/appointments', icon: Calendar, label: "Today's Schedule", description: 'View bookings' },
+    { path: '/ai-assistant', icon: Sparkles, label: 'AI Assistant', description: 'Smart chat' },
+    { path: '/finance', icon: DollarSign, label: 'Finance', description: 'Money overview' },
+  ] : userRole === 'client' ? [
+    { path: 'search', icon: Search, label: 'Search', description: 'Find anything' },
+    { path: '/book-appointment', icon: Plus, label: 'Book Now', description: 'Schedule service' },
+    { path: '/appointments', icon: Calendar, label: 'My Bookings', description: 'View appointments' },
+    { path: '/messages', icon: MessageSquare, label: 'Messages', description: 'Chat with stylist' },
+    { path: '/profile', icon: User, label: 'Profile', description: 'Your account' },
+    { path: '/settings', icon: Settings, label: 'Settings', description: 'Preferences' },
+  ] : [ // admin
+    { path: 'search', icon: Search, label: 'Search', description: 'Find anything' },
+    { path: '/admin/command', icon: Crown, label: 'Command Center', description: 'Full control' },
+    { path: '/admin/users', icon: Users, label: 'Users', description: 'User management' },
+    { path: '/admin/revenue', icon: TrendingUp, label: 'Revenue', description: 'Financial data' },
+    { path: '/system-health', icon: Activity, label: 'System Health', description: 'Monitor platform' },
+    { path: '/settings', icon: Settings, label: 'Settings', description: 'Preferences' },
   ];
 
-  const allFeatures = [
-    { path: '/inventory', icon: Package, label: 'Inventory', roles: ['stylist', 'admin'] },
-    { path: '/formulas', icon: Palette, label: 'Formulas', roles: ['stylist', 'admin'] },
-    { path: '/portfolio', icon: Folder, label: 'Portfolio', roles: ['stylist', 'admin'] },
-    { path: '/analytics', icon: BarChart3, label: 'Analytics', roles: ['admin'] },
-    { path: '/reports', icon: FileText, label: 'Reports', roles: ['admin'] },
-    { path: '/billing', icon: CreditCard, label: 'Billing', roles: ['admin'] },
-    { path: '/notifications', icon: Bell, label: 'Notifications', roles: ['stylist', 'client', 'admin'] },
-    { path: '/privacy', icon: Shield, label: 'Privacy & Security', roles: ['stylist', 'client', 'admin'] },
-    { path: '/help', icon: HelpCircle, label: 'Help & Support', roles: ['stylist', 'client', 'admin'] },
-  ].filter(feature => feature.roles.includes(userRole));
+  // Pinned items (high-priority features)
+  const pinnedItems = userRole === 'stylist' ? [
+    availableItems.find(item => item.id === 'formulas'),
+    availableItems.find(item => item.id === 'support-chat'),
+    availableItems.find(item => item.id === 'calendar'),
+  ].filter(Boolean) as NavigationItem[] : userRole === 'client' ? [
+    availableItems.find(item => item.id === 'book-appointment'),
+    availableItems.find(item => item.id === 'support-chat'),
+  ].filter(Boolean) as NavigationItem[] : [];
+
+  // Group items by category
+  const groupedFeatures = userRole === 'stylist' ? {
+    'scheduling': availableItems.filter(item => item.group === 'scheduling' || item.id === 'calendar'),
+    'business': availableItems.filter(item => item.group === 'business' || item.id === 'clients' || item.id === 'messages' || item.id === 'sales'),
+    'growth': availableItems.filter(item => item.group === 'growth'),
+    'tools': availableItems.filter(item => item.group === 'tools' || item.id === 'dashboard'),
+  } : userRole === 'client' ? {
+    'bookings': availableItems.filter(item => item.id === 'my-appointments' || item.id === 'messages'),
+    'info': availableItems.filter(item => item.group === 'info' || item.id === 'my-formulas'),
+    'account': availableItems.filter(item => item.group === 'account'),
+  } : { // admin
+    'admin': availableItems.filter(item => item.group === 'admin'),
+    'tools': availableItems.filter(item => item.group === 'tools' || item.id === 'dashboard'),
+  };
+
+  // Group labels
+  const groupLabels: Record<string, { title: string; icon: any }> = {
+    'scheduling': { title: 'Scheduling', icon: Calendar },
+    'business': { title: 'Client Management', icon: Users },
+    'growth': { title: 'Growth & Marketing', icon: TrendingUp },
+    'tools': { title: 'Tools', icon: Settings },
+    'bookings': { title: 'My Bookings', icon: Calendar },
+    'info': { title: 'My Hair', icon: Beaker },
+    'account': { title: 'Account', icon: User },
+    'admin': { title: 'Admin Controls', icon: Crown },
+  };
 
   return (
     <>
@@ -235,36 +291,36 @@ export function MobileBottomNav() {
 
     {/* Mobile Action Sheet */}
     <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-      <DrawerContent className="lg:hidden max-h-[85vh]">
-        <DrawerHeader>
+      <DrawerContent className="lg:hidden max-h-[90vh] flex flex-col">
+        <DrawerHeader className="shrink-0">
           <DrawerTitle>Quick Actions</DrawerTitle>
           <DrawerDescription>Access frequently used features</DrawerDescription>
         </DrawerHeader>
         
-        <div className="overflow-y-auto px-4 pb-8">
-          {/* Quick Actions Grid */}
-          <div className="grid grid-cols-2 gap-3 mb-4">
+        <div className="flex-1 overflow-y-auto px-4 pb-8 pb-safe">
+          {/* Quick Actions Grid - 2x3 on mobile, 3x2 on tablet */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
             {quickActions.map((action) => {
               const Icon = action.icon;
               return (
                 <button
-                  key={action.id}
-                  onClick={() => handleQuickAction(action.id)}
+                  key={action.path}
+                  onClick={() => handleQuickAction(action.path)}
                   className={cn(
                     'flex flex-col items-center justify-center',
-                    'p-6 rounded-lg',
+                    'p-4 rounded-lg',
                     'bg-secondary/50 hover:bg-secondary',
                     'border-2 border-foreground',
                     'transition-all duration-200',
                     'active:scale-95',
-                    'min-h-[120px]',
+                    'min-h-[100px]',
                     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary'
                   )}
                   aria-label={action.label}
                 >
-                  <Icon className="h-8 w-8 mb-2 text-primary" strokeWidth={2} />
-                  <span className="text-sm font-semibold mb-1">{action.label}</span>
-                  <span className="text-xs text-muted-foreground">{action.description}</span>
+                  <Icon className="h-7 w-7 mb-2 text-primary" strokeWidth={2} />
+                  <span className="text-sm font-semibold mb-0.5 text-center">{action.label}</span>
+                  <span className="text-xs text-muted-foreground text-center">{action.description}</span>
                 </button>
               );
             })}
@@ -273,54 +329,108 @@ export function MobileBottomNav() {
           {/* Separator */}
           <div className="flex items-center gap-3 my-6">
             <Separator className="flex-1" />
-            <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+            <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
               All Features
             </span>
             <Separator className="flex-1" />
           </div>
 
-          {/* All Features List */}
-          <div className="space-y-2">
-            {allFeatures.map((feature) => {
-              const Icon = feature.icon;
-              const isActive = location.pathname === feature.path;
-              
-              return (
-                <button
-                  key={feature.path}
-                  onClick={() => handleFeatureClick(feature.path)}
-                  className={cn(
-                    'w-full flex items-center gap-4 p-4 rounded-lg',
-                    'transition-all duration-200',
-                    'active:scale-[0.98]',
-                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
-                    isActive 
-                      ? 'bg-primary/10 border-2 border-primary' 
-                      : 'bg-secondary/30 hover:bg-secondary border-2 border-transparent'
-                  )}
-                  aria-label={feature.label}
-                  aria-current={isActive ? 'page' : undefined}
-                >
-                  <Icon 
-                    className={cn(
-                      'h-5 w-5',
-                      isActive ? 'text-primary' : 'text-muted-foreground'
-                    )} 
-                    strokeWidth={2}
-                  />
-                  <span className={cn(
-                    'text-sm font-medium',
-                    isActive ? 'text-primary' : 'text-foreground'
-                  )}>
-                    {feature.label}
+          {/* Pinned Items */}
+          {pinnedItems.length > 0 && (
+            <div className="mb-6">
+              <div className="flex items-center gap-2 px-2 py-2 mb-2">
+                <Sparkles className="h-4 w-4 text-primary" />
+                <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                  Pinned
+                </span>
+              </div>
+              <div className="space-y-2">
+                {pinnedItems.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = location.pathname === item.url;
+                  
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => handleFeatureClick(item.url)}
+                      className={cn(
+                        'w-full flex items-center gap-4 p-4 rounded-lg',
+                        'transition-all duration-200',
+                        'active:scale-[0.98]',
+                        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
+                        isActive 
+                          ? 'bg-primary/10 border-2 border-primary' 
+                          : 'bg-secondary/30 hover:bg-secondary border-2 border-transparent'
+                      )}
+                      aria-label={item.title}
+                    >
+                      <Icon className={cn('h-5 w-5', isActive ? 'text-primary' : 'text-muted-foreground')} />
+                      <div className="flex-1 text-left">
+                        <div className={cn('font-medium', isActive && 'text-primary')}>{item.title}</div>
+                        {item.description && (
+                          <div className="text-xs text-muted-foreground">{item.description}</div>
+                        )}
+                      </div>
+                      <Sparkles className="h-4 w-4 text-primary" aria-label="Pinned" />
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Grouped Features */}
+          {Object.entries(groupedFeatures).map(([groupKey, items]) => {
+            if (items.length === 0) return null;
+            
+            const groupInfo = groupLabels[groupKey];
+            const GroupIcon = groupInfo?.icon;
+            
+            return (
+              <div key={groupKey} className="mb-6">
+                <div className="flex items-center gap-2 px-2 py-2 mb-2">
+                  {GroupIcon && <GroupIcon className="h-4 w-4 text-muted-foreground" />}
+                  <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                    {groupInfo?.title || groupKey}
                   </span>
-                  {isActive && (
-                    <div className="ml-auto h-2 w-2 rounded-full bg-primary" aria-hidden="true" />
-                  )}
-                </button>
-              );
-            })}
-          </div>
+                </div>
+                <div className="space-y-2">
+                  {items.map((item: NavigationItem) => {
+                    // Skip items already shown in pinned
+                    if (pinnedItems.some(pinned => pinned.id === item.id)) return null;
+                    
+                    const Icon = item.icon;
+                    const isActive = location.pathname === item.url;
+                    
+                    return (
+                      <button
+                        key={item.id}
+                        onClick={() => handleFeatureClick(item.url)}
+                        className={cn(
+                          'w-full flex items-center gap-4 p-4 rounded-lg',
+                          'transition-all duration-200',
+                          'active:scale-[0.98]',
+                          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
+                          isActive 
+                            ? 'bg-primary/10 border-2 border-primary' 
+                            : 'bg-secondary/30 hover:bg-secondary border-2 border-transparent'
+                        )}
+                        aria-label={item.title}
+                      >
+                        <Icon className={cn('h-5 w-5', isActive ? 'text-primary' : 'text-muted-foreground')} />
+                        <div className="flex-1 text-left">
+                          <div className={cn('font-medium', isActive && 'text-primary')}>{item.title}</div>
+                          {item.description && (
+                            <div className="text-xs text-muted-foreground">{item.description}</div>
+                          )}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
         </div>
       </DrawerContent>
     </Drawer>
