@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 
 interface NotificationDotProps {
   count?: number;
@@ -22,9 +23,9 @@ export const NotificationDot = ({
   };
 
   const badgeSizeClasses = {
-    sm: 'h-5 min-w-5 text-[11px] px-1',
-    md: 'h-6 min-w-6 text-[11px] px-1.5',
-    lg: 'h-7 min-w-7 text-xs px-2',
+    sm: `h-5 min-w-5 ${mobileFirst.text.xs} px-1`,
+    md: `h-6 min-w-6 ${mobileFirst.text.xs} px-1.5`,
+    lg: `h-7 min-w-7 ${mobileFirst.text.xs} px-2`,
   };
 
   if (count !== undefined && count > 0) {

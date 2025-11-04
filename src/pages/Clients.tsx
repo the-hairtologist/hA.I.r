@@ -587,7 +587,7 @@ export default function Clients() {
             description="Client Management is designed for hair stylists to manage their client profiles, track formulas, and maintain relationships. If you're a stylist, please make sure you've completed your stylist profile setup."
             actionLabel="Go to Dashboard"
             onAction={() => navigate('/dashboard')}
-            gradient="bg-[image:var(--gradient-purple-pink)]"
+            gradient="bg-gradient-purple-pink"
           />
         </main>
       </div>

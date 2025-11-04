@@ -9,6 +9,8 @@ import {
   Target,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
+import { cn } from '@/lib/utils';
 
 interface AIContextPanelProps {
   clientContext: any;
@@ -44,20 +46,20 @@ export const AIContextPanel = ({
               <span className="text-xs sm:text-sm font-semibold">
                 {clientContext.full_name}
               </span>
-              <Badge variant="secondary" className="text-[11px] sm:text-xs">
+              <Badge variant="secondary" className={cn(mobileFirst.text.xs)}>
                 Client
               </Badge>
             </div>
 
             {clientContext.hair_type && (
-              <div className="text-[11px] sm:text-xs">
+              <div className={cn(mobileFirst.text.xs)}>
                 <span className="text-muted-foreground">Hair Type:</span>{' '}
                 <span className="font-medium">{clientContext.hair_type}</span>
               </div>
             )}
 
             {clientContext.hair_goals && (
-              <div className="text-[11px] sm:text-xs">
+              <div className={cn(mobileFirst.text.xs)}>
                 <Target className="h-3 w-3 inline mr-1 text-accent" />
                 <span className="text-muted-foreground">Goals:</span>{' '}
                 <span className="font-medium">{clientContext.hair_goals}</span>
@@ -65,7 +67,7 @@ export const AIContextPanel = ({
             )}
 
             {clientContext.allergies && (
-              <div className="text-[11px] sm:text-xs bg-destructive/10 p-2 rounded-lg border-2 border-destructive/20">
+              <div className={cn(mobileFirst.text.xs, "bg-destructive/10 p-2 rounded-lg border-2 border-destructive/20")}>
                 <AlertTriangle className="h-3 w-3 inline mr-1 text-destructive" />
                 <span className="text-destructive font-semibold">
                   Allergies:
@@ -77,7 +79,7 @@ export const AIContextPanel = ({
             )}
 
             {clientContext.sensitivity_notes && (
-              <div className="text-[11px] sm:text-xs">
+              <div className={cn(mobileFirst.text.xs)}>
                 <span className="text-muted-foreground">Sensitivities:</span>{' '}
                 <span className="font-medium">
                   {clientContext.sensitivity_notes}
@@ -86,7 +88,7 @@ export const AIContextPanel = ({
             )}
 
             {clientContext.recentFormulas?.length > 0 && (
-              <div className="text-[11px] sm:text-xs space-y-1">
+              <div className={cn(mobileFirst.text.xs, "space-y-1")}>
                 <div className="flex items-center gap-1">
                   <History className="h-3 w-3 text-primary" />
                   <span className="font-semibold">
@@ -105,7 +107,7 @@ export const AIContextPanel = ({
             )}
 
             {clientContext.client_since && (
-              <div className="text-[11px] sm:text-xs text-muted-foreground">
+              <div className={cn(mobileFirst.text.xs, "text-muted-foreground")}>
                 Client since{' '}
                 {new Date(clientContext.client_since).toLocaleDateString()}
               </div>
@@ -137,7 +139,7 @@ export const AIContextPanel = ({
             </div>
 
             {stylistContext.business_name && (
-              <div className="text-[11px] sm:text-xs">
+              <div className={cn(mobileFirst.text.xs)}>
                 <span className="text-muted-foreground">Business:</span>{' '}
                 <span className="font-medium">
                   {stylistContext.business_name}
@@ -146,23 +148,23 @@ export const AIContextPanel = ({
             )}
 
             {stylistContext.color_line && (
-              <div className="text-[11px] sm:text-xs">
+              <div className={cn(mobileFirst.text.xs)}>
                 <span className="text-muted-foreground">Preferred Line:</span>{' '}
-                <Badge variant="secondary" className="text-[11px] sm:text-xs">
+                <Badge variant="secondary" className={cn(mobileFirst.text.xs)}>
                   {stylistContext.color_line}
                 </Badge>
               </div>
             )}
 
             {stylistContext.specialty && (
-              <div className="text-[11px] sm:text-xs">
+              <div className={cn(mobileFirst.text.xs)}>
                 <span className="text-muted-foreground">Specialty:</span>{' '}
                 <span className="font-medium">{stylistContext.specialty}</span>
               </div>
             )}
 
             {stylistContext.years_experience && (
-              <div className="text-[11px] sm:text-xs text-muted-foreground">
+              <div className={cn(mobileFirst.text.xs, "text-muted-foreground")}>
                 {stylistContext.years_experience} years of experience
               </div>
             )}
@@ -170,7 +172,7 @@ export const AIContextPanel = ({
         )}
 
         {hasContext && (
-          <div className="text-[11px] sm:text-xs text-muted-foreground pt-2 border-t border-border">
+          <div className={cn(mobileFirst.text.xs, "text-muted-foreground pt-2 border-t border-border")}>
             <Brain className="h-3 w-3 inline mr-1" />
             AI will use this context to personalize all responses
           </div>

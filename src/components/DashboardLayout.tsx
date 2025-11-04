@@ -174,7 +174,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[image:var(--gradient-bg-main)]">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-bg-main">
         <div className="text-center bg-card p-8 rounded-xl brutal-border shadow-brutal-2xl animate-fade-in-fast">
           <div className="relative mb-4">
             <Scissors
@@ -201,7 +201,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         Skip to main content
       </a>
       <OfflineIndicator />
-      <div className="min-h-screen w-full max-w-[100vw] flex overflow-x-hidden bg-[image:var(--gradient-bg-main)]">
+      <div className="min-h-screen w-full max-w-[100vw] flex overflow-x-hidden bg-gradient-bg-main">
         {/* Sidebar hidden on mobile (< lg), visible on desktop */}
         <div className="hidden lg:block">
           <AppSidebar />

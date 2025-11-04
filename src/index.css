@@ -685,6 +685,51 @@
 /* ============================================ */
 
 @layer utilities {
+  /* Gradient background utilities */
+  .bg-gradient-purple-pink {
+    background-image: var(--gradient-purple-pink);
+  }
+
+  .bg-gradient-cyan-blue {
+    background-image: var(--gradient-cyan-blue);
+  }
+
+  .bg-gradient-green-emerald {
+    background-image: var(--gradient-green-emerald);
+  }
+
+  .bg-gradient-pink-rose {
+    background-image: var(--gradient-pink-rose);
+  }
+
+  .bg-gradient-amber-orange {
+    background-image: var(--gradient-amber-orange);
+  }
+
+  .bg-gradient-emerald-teal {
+    background-image: var(--gradient-emerald-teal);
+  }
+
+  .bg-gradient-blue-indigo {
+    background-image: var(--gradient-blue-indigo);
+  }
+
+  .bg-gradient-orange-red {
+    background-image: var(--gradient-orange-red);
+  }
+
+  .bg-gradient-purple-blue {
+    background-image: var(--gradient-violet-purple);
+  }
+
+  .bg-gradient-green-teal {
+    background-image: var(--gradient-emerald-teal);
+  }
+
+  .bg-gradient-bg-main {
+    background-image: var(--gradient-hero);
+  }
+
   /* Gradient text utilities */
   .text-gradient-primary {
     @apply bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent;

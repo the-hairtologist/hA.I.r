@@ -5,6 +5,7 @@
 
 import { memo } from 'react';
 import { cn } from '@/lib/utils';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 
 interface KeyboardShortcutHintProps {
   keys: string[];
@@ -27,7 +28,7 @@ export const KeyboardShortcutHint = memo(
             key={`${key}-${index}`}
             className="inline-flex items-center gap-1"
           >
-            <kbd className="px-2 py-0.5 bg-muted rounded text-[11px] font-mono border border-border min-h-[24px] flex items-center justify-center">
+            <kbd className={cn("px-2 py-0.5 bg-muted rounded font-mono border border-border min-h-[24px] flex items-center justify-center", mobileFirst.text.xs)}>
               {key}
             </kbd>
             {index < keys.length - 1 && (
