@@ -326,19 +326,14 @@ export default function Clients() {
     if (!stylistId) return;
 
     try {
-      console.log('Form data before validation:', formData);
-      
       const validatedData = clientSchema.parse({
         full_name: formData.full_name,
-        email: formData.email || null,
-        phone: formData.phone || null,
-        hair_type: formData.hair_type || null,
-        allergies: formData.allergies || null,
-        notes: formData.notes || null,
-        preferred_stylist_id: stylistId,
+        email: formData.email || '',
+        phone: formData.phone || '',
+        hair_type: formData.hair_type || '',
+        allergies: formData.allergies || '',
+        notes: formData.notes || '',
       });
-
-      console.log('Validated data:', validatedData);
 
       await createClientMutation.mutateAsync({
         preferred_stylist_id: stylistId,
@@ -361,7 +356,6 @@ export default function Clients() {
         notes: '',
       });
     } catch (error: any) {
-      console.error('Form submission error:', error);
       if (error.name === 'ZodError') {
         const firstError = error.errors[0];
         toast.error(firstError.message);
