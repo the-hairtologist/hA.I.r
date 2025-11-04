@@ -12,6 +12,7 @@ import { cn } from '@/lib/utils';
 import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 import { ExternalLink } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { FormErrorBoundary } from '@/components/errors/FormErrorBoundary';
 
 interface ProfileSettingsProps {
   fullName: string;
@@ -89,7 +90,8 @@ export const ProfileSettings = ({
         </CardDescription>
       </CardHeader>
       <CardContent className={cn(mobileFirst.padding.md, 'space-y-4')}>
-        <div>
+        <FormErrorBoundary fallbackMessage="An error occurred while editing your profile. Your changes have been preserved.">
+          <div>
           <Label htmlFor="fullName">Full Name</Label>
           <Input
             id="fullName"
@@ -418,6 +420,7 @@ export const ProfileSettings = ({
             </div>
           </>
         )}
+        </FormErrorBoundary>
       </CardContent>
     </Card>
   );

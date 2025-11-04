@@ -14,6 +14,7 @@ import { FormFieldError } from '@/components/FormFieldError';
 import { validatePhone } from '@/lib/phoneValidation';
 import { cn } from '@/lib/utils';
 import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
+import { FormErrorBoundary } from '@/components/errors/FormErrorBoundary';
 
 interface BusinessSettingsProps {
   businessPhone: string;
@@ -79,8 +80,9 @@ export const BusinessSettings = ({
         </CardDescription>
       </CardHeader>
       <CardContent className={cn(mobileFirst.padding.md, 'space-y-6')}>
-        {/* Business Contact */}
-        <div>
+        <FormErrorBoundary fallbackMessage="An error occurred while editing business settings. Your changes have been preserved.">
+          {/* Business Contact */}
+          <div>
           <h3 className="font-semibold mb-3">Business Contact</h3>
           <p className="text-sm text-muted-foreground mb-3">
             Contact info for client inquiries and booking confirmations
@@ -352,6 +354,7 @@ export const BusinessSettings = ({
             </div>
           </div>
         </div>
+        </FormErrorBoundary>
       </CardContent>
     </Card>
   );

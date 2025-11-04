@@ -42,6 +42,7 @@ import { mobileFirst, touchButton } from '@/lib/responsive/mobile-first-utils';
 import { StandardFormField } from '@/components/forms/StandardFormField';
 import { typography } from '@/lib/design/typography';
 import { DataErrorBoundary } from '@/components/errors/DataErrorBoundary';
+import { FormErrorBoundary } from '@/components/errors/FormErrorBoundary';
 
 const BackgroundRemovalDialog = lazy(() =>
   import('@/components/BackgroundRemovalDialog').then(m => ({
@@ -357,7 +358,8 @@ const Portfolio = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex items-center space-x-2 bg-card/20 p-3 rounded-lg">
+            <FormErrorBoundary fallbackMessage="An error occurred while uploading. Your photo data has been preserved.">
+              <div className="flex items-center space-x-2 bg-card/20 p-3 rounded-lg">
               <Switch
                 checked={isBeforeAfter}
                 onCheckedChange={setIsBeforeAfter}
@@ -491,6 +493,7 @@ const Portfolio = () => {
                 </>
               )}
             </Button>
+            </FormErrorBoundary>
           </CardContent>
         </Card>
 

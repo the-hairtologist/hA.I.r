@@ -78,6 +78,7 @@ import {
   FormulaFiltersComponent,
   FormulaFilters,
 } from '@/components/FormulaFilters';
+import { FormErrorBoundary } from '@/components/errors/FormErrorBoundary';
 import { PrerequisiteCheck } from '@/components/PrerequisiteCheck';
 import {
   EnhancedSearch,
@@ -868,7 +869,8 @@ const Formulas = () => {
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4">
+          <FormErrorBoundary fallbackMessage="An error occurred while editing the formula. Your changes have been preserved.">
+            <div className="space-y-4">
             {/* Client Selection */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
@@ -1206,6 +1208,7 @@ const Formulas = () => {
               {editingFormula ? 'Update Formula' : 'Save Formula'}
             </Button>
           </div>
+          </FormErrorBoundary>
         </DialogContent>
       </Dialog>
 

@@ -214,11 +214,83 @@ Error boundaries are React components that catch JavaScript errors anywhere in t
 </FormErrorBoundary>
 ```
 
+**Real-World Examples:**
+
+**1. Formula Creation Dialog (Formulas.tsx):**
+```tsx
+<Dialog open={dialogOpen} onOpenChange={handleCloseDialog}>
+  <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+    <DialogHeader>
+      <DialogTitle>
+        {editingFormula ? 'Edit Formula' : 'Add New Formula'}
+      </DialogTitle>
+    </DialogHeader>
+
+    <FormErrorBoundary fallbackMessage="An error occurred while editing the formula. Your changes have been preserved.">
+      <div className="space-y-4">
+        {/* Client selection */}
+        <Select value={selectedClient} onValueChange={setSelectedClient}>
+          {/* ... */}
+        </Select>
+        
+        {/* Formula text */}
+        <Textarea value={formulaText} onChange={(e) => setFormulaText(e.target.value)} />
+        
+        {/* Instructions, color line, tags, etc. */}
+        {/* ... all form fields ... */}
+        
+        <Button onClick={handleSaveFormula}>Save Formula</Button>
+      </div>
+    </FormErrorBoundary>
+  </DialogContent>
+</Dialog>
+```
+
+**2. Profile Settings Form (ProfileSettings.tsx):**
+```tsx
+<Card className="border-brutal">
+  <CardHeader>
+    <CardTitle>Profile Information</CardTitle>
+  </CardHeader>
+  <CardContent className="space-y-4">
+    <FormErrorBoundary fallbackMessage="An error occurred while editing your profile. Your changes have been preserved.">
+      <div>
+        <Input value={fullName} onChange={(e) => setFullName(e.target.value)} />
+        <Input value={businessName} onChange={(e) => setBusinessName(e.target.value)} />
+        <Textarea value={bio} onChange={(e) => setBio(e.target.value)} />
+        {/* ... all profile fields ... */}
+      </div>
+    </FormErrorBoundary>
+  </CardContent>
+</Card>
+```
+
+**3. Portfolio Upload Form (Portfolio.tsx):**
+```tsx
+<Card>
+  <CardHeader>
+    <CardTitle>Upload New Photo</CardTitle>
+  </CardHeader>
+  <CardContent>
+    <FormErrorBoundary fallbackMessage="An error occurred while uploading. Your photo data has been preserved.">
+      <div className="space-y-4">
+        <Switch checked={isBeforeAfter} onCheckedChange={setIsBeforeAfter} />
+        <CameraCapture onCapture={handleFileSelect} />
+        <Textarea value={caption} onChange={(e) => setCaption(e.target.value)} />
+        <Button onClick={handleUpload}>Upload Photo</Button>
+      </div>
+    </FormErrorBoundary>
+  </CardContent>
+</Card>
+```
+
 **When to use:**
-- All complex forms
+- All complex forms with multiple fields
 - Multi-step forms
 - Forms with file uploads
 - Forms with async validation
+- Settings and configuration forms
+- Creation/edit dialogs
 
 ---
 
