@@ -32,6 +32,7 @@ import { PasswordStrength } from '@/components/PasswordStrength';
 import { signInWithGoogle } from '@/lib/api/auth';
 import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 import { cn } from '@/lib/utils';
+import { StandardFormField } from '@/components/forms/StandardFormField';
 
 type AuthState = {
   email: string;

@@ -505,19 +505,19 @@ const Dashboard = () => {
       const newIndex = sections.findIndex(section => section.id === over.id);
       const newOrder = arrayMove(sections, oldIndex, newIndex);
       saveDashboardLayout(newOrder);
-      toast.success('Layout updated. Looking good!');
+      toast.success('Layout updated successfully');
     }
   };
 
   const handleReset = async () => {
     await resetDashboardLayout();
     setIsEditMode(false);
-    toast.success('Back to defaults. Fresh start!');
+    toast.success('Layout reset to defaults');
   };
 
   const handleSave = () => {
     setIsEditMode(false);
-    toast.success('Perfect. Your layout is locked in.');
+    toast.success('Layout saved successfully');
   };
 
   const loadPredictiveInsights = async (stylistId: string) => {
@@ -587,7 +587,9 @@ const Dashboard = () => {
         setShowProfileCompletion(true);
       }
     } catch (error: any) {
-      toast.error('Unable to load your dashboard. Please refresh the page.');
+      toast.error('Failed to load dashboard', {
+        description: 'Please refresh the page and try again.',
+      });
       logger.error('Dashboard load failed', error);
     } finally {
       setLoading(false);
@@ -661,7 +663,7 @@ const Dashboard = () => {
       navigate('/auth');
       toast.success('Signed out successfully');
     } catch (error: any) {
-      toast.error('Error signing out');
+      toast.error('Failed to sign out');
     }
   };
 

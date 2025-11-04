@@ -246,12 +246,12 @@ const Appointments = () => {
         setProfilesLoaded(true);
       } catch (error: any) {
         if (!navigator.onLine) {
-          toast.error('You\'re offline. Reconnect to see appointments.', {
+          toast.error('Unable to connect. Please check your internet connection.', {
             description: 'Your changes will sync when you\'re back online.',
           });
         } else {
-          toast.error('Couldn\'t load your profile. Let\'s give that another shot.', {
-            description: 'Try refreshing the page.',
+          toast.error('Failed to load profile', {
+            description: 'Please refresh the page and try again.',
           });
         }
       }
@@ -290,12 +290,12 @@ const Appointments = () => {
       );
     } catch (error: any) {
       if (!navigator.onLine) {
-        toast.error('You\'re offline. Changes saved locally.', {
-          description: 'Will sync when connection returns.',
+        toast.error('Unable to save while offline', {
+          description: 'Changes will sync when connection returns.',
         });
       } else {
-        toast.error('That didn\'t stick. One more time?', {
-          description: 'Try toggling your availability again.',
+        toast.error('Failed to update availability', {
+          description: 'Please try again.',
         });
       }
     }
@@ -784,7 +784,7 @@ const Appointments = () => {
                                       });
 
                                     if (error) throw error;
-                                    toast.success('⏱️ Timer started!');
+                                    toast.success('Timer started successfully');
                                     refetchAppointments();
                                   } catch (error) {
                                     toast.error('Failed to start timer');

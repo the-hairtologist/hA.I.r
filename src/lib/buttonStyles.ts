@@ -4,21 +4,21 @@
  */
 
 export const buttonSizes = {
-  // Icon-only buttons
-  icon: 'h-10 w-10',
-  iconSm: 'h-8 w-8',
-  iconLg: 'h-12 w-12',
+  // Icon-only buttons - Mobile-first with proper touch targets
+  icon: 'min-h-[44px] min-w-[44px] h-11 w-11',
+  iconSm: 'min-h-[44px] min-w-[44px] h-10 w-10 sm:min-h-[40px] sm:min-w-[40px] sm:h-8 sm:w-8',
+  iconLg: 'min-h-[48px] min-w-[48px] h-12 w-12',
 
-  // Text buttons
-  sm: 'h-8 px-3 text-xs',
-  default: 'h-10 px-4 text-sm',
-  lg: 'h-11 px-8 text-base',
-  xl: 'h-12 px-10 text-lg',
+  // Text buttons - Mobile-first with proper touch targets
+  sm: 'min-h-[44px] h-10 px-3 text-xs sm:min-h-[40px] sm:h-8',
+  default: 'min-h-[44px] h-11 px-4 text-sm',
+  lg: 'min-h-[48px] h-12 px-8 text-base',
+  xl: 'min-h-[48px] h-12 px-10 text-lg',
 
-  // Full width variants
-  fullSm: 'h-8 w-full text-xs',
-  full: 'h-10 w-full text-sm',
-  fullLg: 'h-11 w-full text-base',
+  // Full width variants - Mobile-first with proper touch targets
+  fullSm: 'min-h-[44px] h-10 w-full text-xs sm:min-h-[40px] sm:h-8',
+  full: 'min-h-[44px] h-11 w-full text-sm',
+  fullLg: 'min-h-[48px] h-12 w-full text-base',
 } as const;
 
 /**

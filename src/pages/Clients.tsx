@@ -247,14 +247,14 @@ export default function Clients() {
         setStylistId(stylistProfile.id);
         setStylistName(stylistProfile.user?.full_name || '');
       } else {
-        toast.info('This feature is for stylists', {
+        toast.info('This feature is available for stylists only', {
           description:
             'The Client Management page is designed for hair stylists to manage their clients.',
         });
       }
       } catch (error) {
         logger.error('Error loading stylist profile', 'Clients', error as Error);
-        toast.error('Failed to load profile');
+        toast.error('Failed to load stylist profile');
       }
     };
 
@@ -493,7 +493,7 @@ export default function Clients() {
     }));
 
     exportToCSV(exportData, 'clients');
-    toast.success('Clients exported!');
+    toast.success('Clients exported successfully!');
   }, [filteredClients]);
 
   // Pagination
@@ -838,7 +838,7 @@ export default function Clients() {
           data={{ recentFormulas: clientFormulas }}
           onAction={action => {
             if (action === 'organize-formulas') {
-              toast.info('Formula organization feature coming soon!');
+              toast.info('Formula organization feature coming soon');
             }
           }}
         />
@@ -858,7 +858,7 @@ export default function Clients() {
                     ?.last_appointment_date || undefined
                 }
                 onSendMessage={message => {
-                  toast.success('Message ready to send!');
+                  toast.success('Message ready to send');
                 }}
               />
             </AIFeatureErrorBoundary>
@@ -1362,7 +1362,7 @@ export default function Clients() {
                       clientId={selectedClient.id}
                       stylistId={stylistId}
                       onUseRecommendation={rec => {
-                        toast.success('Formula Copied', {
+                        toast.success('Formula copied to clipboard', {
                           description:
                             'You can now create a new formula with this recommendation',
                         });
@@ -1372,7 +1372,7 @@ export default function Clients() {
                       clientId={selectedClient.id}
                       onAnalysisComplete={result => {
                         // Analysis complete
-                        toast.success('Analysis Complete');
+                        toast.success('Analysis complete');
                       }}
                     />
                   </>

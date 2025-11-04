@@ -37,7 +37,7 @@ export const usePerformance = ({
       customMetrics.mark(`${componentName}-mount`);
       measurePerformance(`${componentName}-mount`);
 
-      const loadTime = Date.now() - mountTime.current;
+      const loadTime = performance.now() - mountTime.current;
       if (loadTime > 100 && import.meta.env.DEV) {
         logger.warn('Slow component mount detected', 'performance', {
           component: componentName,

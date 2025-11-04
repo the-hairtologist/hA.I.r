@@ -13,6 +13,7 @@ import { toast } from 'sonner';
 import { useState } from 'react';
 import { useUserRole } from '@/hooks/useUserRole';
 import { PageHeader } from '@/components/PageHeader';
+import { StandardFormField } from '@/components/forms/StandardFormField';
 
 const Profile = () => {
   const { session } = useAuth();
@@ -135,97 +136,65 @@ const Profile = () => {
               <CardTitle>Personal Information</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="full_name">Full Name</Label>
-                <div className="relative">
-                  <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="full_name"
-                    value={formData.full_name}
-                    onChange={e =>
-                      setFormData({ ...formData, full_name: e.target.value })
-                    }
-                    className="pl-9"
-                  />
-                </div>
-              </div>
+              <StandardFormField
+                name="full_name"
+                label="Full Name"
+                type="text"
+                value={formData.full_name}
+                onChange={val => setFormData({ ...formData, full_name: String(val) })}
+                placeholder="Your full name"
+                required
+              />
 
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="email"
-                    type="email"
-                    value={formData.email}
-                    disabled
-                    className="pl-9"
-                  />
-                </div>
-                <p className="text-xs sm:text-sm text-muted-foreground">
-                  Email cannot be changed here
-                </p>
-              </div>
+              <StandardFormField
+                name="email"
+                label="Email"
+                type="email"
+                value={formData.email}
+                onChange={() => {}}
+                disabled
+                description="Email cannot be changed here"
+              />
 
-              <div className="space-y-2">
-                <Label htmlFor="phone">Phone Number</Label>
-                <div className="relative">
-                  <Phone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="phone"
-                    type="tel"
-                    value={formData.phone}
-                    onChange={e =>
-                      setFormData({ ...formData, phone: e.target.value })
-                    }
-                    className="pl-9"
-                  />
-                </div>
-              </div>
+              <StandardFormField
+                name="phone"
+                label="Phone Number"
+                type="tel"
+                value={formData.phone}
+                onChange={val => setFormData({ ...formData, phone: String(val) })}
+                placeholder="(555) 123-4567"
+              />
 
               {userRole === 'stylist' && (
                 <>
-                  <div className="space-y-2">
-                    <Label htmlFor="business_name">Business Name</Label>
-                    <Input
-                      id="business_name"
-                      value={formData.business_name}
-                      onChange={e =>
-                        setFormData({
-                          ...formData,
-                          business_name: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
+                  <StandardFormField
+                    name="business_name"
+                    label="Business Name"
+                    type="text"
+                    value={formData.business_name}
+                    onChange={val => setFormData({ ...formData, business_name: String(val) })}
+                    placeholder="Your salon or business name"
+                  />
 
-                  <div className="space-y-2">
-                    <Label htmlFor="location">Location</Label>
-                    <div className="relative">
-                      <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        id="location"
-                        value={formData.location}
-                        onChange={e =>
-                          setFormData({ ...formData, location: e.target.value })
-                        }
-                        className="pl-9"
-                      />
-                    </div>
-                  </div>
+                  <StandardFormField
+                    name="location"
+                    label="Location"
+                    type="text"
+                    value={formData.location}
+                    onChange={val => setFormData({ ...formData, location: String(val) })}
+                    placeholder="City, State"
+                  />
 
-                  <div className="space-y-2">
-                    <Label htmlFor="bio">Bio</Label>
-                    <Textarea
-                      id="bio"
-                      value={formData.bio}
-                      onChange={e =>
-                        setFormData({ ...formData, bio: e.target.value })
-                      }
-                      rows={4}
-                      placeholder="Tell clients about yourself and your expertise..."
-                    />
-                  </div>
+                  <StandardFormField
+                    name="bio"
+                    label="Bio"
+                    type="textarea"
+                    value={formData.bio}
+                    onChange={val => setFormData({ ...formData, bio: String(val) })}
+                    rows={4}
+                    placeholder="Tell clients about yourself and your expertise..."
+                    maxLength={500}
+                  />
                 </>
               )}
 
