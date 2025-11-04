@@ -14,6 +14,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Gift, CreditCard } from 'lucide-react';
 import { MetaTags } from '@/components/MetaTags';
 import { useToast } from '@/hooks/use-toast';
+import { cn } from '@/lib/utils';
+import { mobileFirst, touchButton } from '@/lib/responsive/mobile-first-utils';
 
 const PRESET_AMOUNTS = [25, 50, 100, 200];
 
@@ -61,14 +63,14 @@ export default function GiftCards() {
         description="Purchase gift cards for your favorite salon"
       />
 
-      <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 p-4 md:p-8">
+      <div className={cn("min-h-screen bg-gradient-to-br from-background via-background to-primary/5", mobileFirst.padding.md)}>
         <div className="max-w-4xl mx-auto space-y-6">
           <div className="text-center space-y-2">
-            <h1 className="text-4xl font-bold flex items-center justify-center gap-3">
-              <Gift className="w-10 h-10 text-primary" />
+            <h1 className={cn(mobileFirst.text['3xl'], "font-bold flex items-center justify-center gap-3 break-words")}>
+              <Gift className="w-10 h-10 text-primary flex-shrink-0" />
               Gift Cards
             </h1>
-            <p className="text-muted-foreground">
+            <p className={cn(mobileFirst.text.base, "text-muted-foreground break-words")}>
               Give the gift of beautiful hair
             </p>
           </div>
@@ -76,13 +78,13 @@ export default function GiftCards() {
           <div className="grid md:grid-cols-2 gap-6">
             {/* Purchase Card */}
             <Card>
-              <CardHeader>
-                <CardTitle>Purchase Gift Card</CardTitle>
-                <CardDescription>
+              <CardHeader className={mobileFirst.padding.md}>
+                <CardTitle className={cn(mobileFirst.text.lg, "break-words")}>Purchase Gift Card</CardTitle>
+                <CardDescription className={cn(mobileFirst.text.sm, "break-words")}>
                   Choose an amount and recipient
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className={cn(mobileFirst.padding.md, "space-y-4")}>
                 <div className="space-y-2">
                   <Label>Select Amount</Label>
                   <div className="grid grid-cols-2 gap-2">
@@ -143,9 +145,9 @@ export default function GiftCards() {
                   />
                 </div>
               </CardContent>
-              <CardFooter>
+              <CardFooter className={mobileFirst.padding.md}>
                 <Button
-                  className="w-full"
+                  className={cn(touchButton.md, "w-full")}
                   onClick={handlePurchase}
                   disabled={
                     loading ||
@@ -161,29 +163,29 @@ export default function GiftCards() {
 
             {/* Redemption Card */}
             <Card>
-              <CardHeader>
-                <CardTitle>Redeem Gift Card</CardTitle>
-                <CardDescription>Enter your gift card code</CardDescription>
+              <CardHeader className={mobileFirst.padding.md}>
+                <CardTitle className={cn(mobileFirst.text.lg, "break-words")}>Redeem Gift Card</CardTitle>
+                <CardDescription className={cn(mobileFirst.text.sm, "break-words")}>Enter your gift card code</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className={cn(mobileFirst.padding.md, "space-y-4")}>
                 <div className="space-y-2">
-                  <Label>Gift Card Code</Label>
-                  <Input placeholder="XXXX-XXXX-XXXX" className="font-mono" />
+                  <Label className={mobileFirst.text.sm}>Gift Card Code</Label>
+                  <Input placeholder="XXXX-XXXX-XXXX" className={cn(mobileFirst.text.base, "font-mono")} />
                 </div>
-                <Button className="w-full">Check Balance</Button>
+                <Button className={cn(touchButton.md, "w-full")}>Check Balance</Button>
               </CardContent>
             </Card>
           </div>
 
           <Card className="bg-primary/5 border-primary/20">
-            <CardContent className="pt-6">
-              <h3 className="font-semibold mb-2">How It Works</h3>
-              <ul className="text-sm text-muted-foreground space-y-1">
-                <li>• Choose any amount from $10 to $500</li>
-                <li>• Recipient receives email with unique code</li>
-                <li>• Can be used for any service or product</li>
-                <li>• Partial redemption allowed</li>
-                <li>• Never expires</li>
+            <CardContent className={cn(mobileFirst.padding.md, "pt-6")}>
+              <h3 className={cn(mobileFirst.text.base, "font-semibold mb-2 break-words")}>How It Works</h3>
+              <ul className={cn(mobileFirst.text.sm, "text-muted-foreground space-y-1")}>
+                <li className="break-words">• Choose any amount from $10 to $500</li>
+                <li className="break-words">• Recipient receives email with unique code</li>
+                <li className="break-words">• Can be used for any service or product</li>
+                <li className="break-words">• Partial redemption allowed</li>
+                <li className="break-words">• Never expires</li>
               </ul>
             </CardContent>
           </Card>

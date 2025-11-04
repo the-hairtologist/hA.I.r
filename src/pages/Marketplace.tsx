@@ -13,6 +13,8 @@ import { ShoppingCart, Package } from 'lucide-react';
 import { MetaTags } from '@/components/MetaTags';
 import { useToast } from '@/hooks/use-toast';
 import { OptimizedImage } from '@/components/OptimizedImage';
+import { cn } from '@/lib/utils';
+import { mobileFirst, touchButton } from '@/lib/responsive/mobile-first-utils';
 
 interface Product {
   id: string;
@@ -70,23 +72,23 @@ export default function Marketplace() {
         description="Shop professional hair care products"
       />
 
-      <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 p-4 md:p-8">
+      <div className={cn("min-h-screen bg-gradient-to-br from-background via-background to-primary/5", mobileFirst.padding.md)}>
         <div className="max-w-7xl mx-auto space-y-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold flex items-center gap-2">
-                <Package className="w-8 h-8" />
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="min-w-0 flex-1">
+              <h1 className={cn(mobileFirst.text['2xl'], "font-bold flex items-center gap-2 break-words")}>
+                <Package className="w-8 h-8 flex-shrink-0" />
                 Marketplace
               </h1>
-              <p className="text-muted-foreground">
+              <p className={cn(mobileFirst.text.sm, "text-muted-foreground break-words")}>
                 Professional hair care products
               </p>
             </div>
 
             {cart.size > 0 && (
-              <Button>
+              <Button className={cn(touchButton.md, "flex-shrink-0")}>
                 <ShoppingCart className="w-4 h-4 mr-2" />
-                Cart ({cart.size}) - ${cartTotal.toFixed(2)}
+                <span className="hidden sm:inline">Cart ({cart.size}) - </span>${cartTotal.toFixed(2)}
               </Button>
             )}
           </div>
@@ -105,10 +107,10 @@ export default function Marketplace() {
             </div>
           ) : products.length === 0 ? (
             <Card>
-              <CardContent className="p-12 text-center">
+              <CardContent className={cn(mobileFirst.padding.lg, "p-12 text-center")}>
                 <Package className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-                <h3 className="text-lg font-semibold mb-2">No Products Yet</h3>
-                <p className="text-muted-foreground">
+                <h3 className={cn(mobileFirst.text.lg, "font-semibold mb-2 break-words")}>No Products Yet</h3>
+                <p className={cn(mobileFirst.text.sm, "text-muted-foreground break-words")}>
                   Products will appear here once your stylist adds them
                 </p>
               </CardContent>
@@ -124,32 +126,32 @@ export default function Marketplace() {
                       className="h-48"
                     />
                   )}
-                  <CardHeader>
-                    <CardTitle className="flex items-center justify-between">
-                      {product.name}
-                      <span className="text-lg font-bold text-primary">
+                  <CardHeader className={mobileFirst.padding.md}>
+                    <CardTitle className={cn(mobileFirst.text.lg, "flex items-center justify-between gap-2")}>
+                      <span className="break-words min-w-0 flex-1">{product.name}</span>
+                      <span className={cn(mobileFirst.text.base, "font-bold text-primary flex-shrink-0")}>
                         ${product.price.toFixed(2)}
                       </span>
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-muted-foreground">
+                  <CardContent className={mobileFirst.padding.md}>
+                    <p className={cn(mobileFirst.text.sm, "text-muted-foreground break-words")}>
                       {product.description || 'No description'}
                     </p>
                     {product.category && (
-                      <Badge variant="outline" className="mt-2">
+                      <Badge variant="outline" className={cn(mobileFirst.text.xs, "mt-2")}>
                         {product.category}
                       </Badge>
                     )}
-                    <p className="text-xs text-muted-foreground mt-2">
+                    <p className={cn(mobileFirst.text.xs, "text-muted-foreground mt-2")}>
                       {product.stock_quantity > 0
                         ? `${product.stock_quantity} in stock`
                         : 'Out of stock'}
                     </p>
                   </CardContent>
-                  <CardFooter>
+                  <CardFooter className={mobileFirst.padding.md}>
                     <Button
-                      className="w-full"
+                      className={cn(touchButton.md, "w-full")}
                       disabled={product.stock_quantity === 0}
                       onClick={() => addToCart(product.id)}
                     >

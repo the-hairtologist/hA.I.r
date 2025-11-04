@@ -11,6 +11,8 @@ import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, DollarSign } from 'lucide-react';
 import { PageHeader } from '@/components/PageHeader';
+import { cn } from '@/lib/utils';
+import { mobileFirst, touchButton } from '@/lib/responsive/mobile-first-utils';
 
 export default function CommissionTracking() {
   const navigate = useNavigate();
@@ -24,28 +26,28 @@ export default function CommissionTracking() {
         backTo="/dashboard"
         loading={loading}
       />
-      <div className="space-y-6 pb-8 px-4 py-6">
+      <div className={cn("space-y-6 pb-8", mobileFirst.padding.md, "py-6")}>
 
         {/* Commission Widget */}
         <CommissionTrackerWidget />
 
         {/* Additional Info */}
         <Card className="border-2 border-muted">
-          <CardHeader>
-            <CardTitle className="text-lg">About Commissions</CardTitle>
+          <CardHeader className={mobileFirst.padding.md}>
+            <CardTitle className={cn(mobileFirst.text.lg, "break-words")}>About Commissions</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-2">
-            <p className="text-sm text-muted-foreground">
+          <CardContent className={cn(mobileFirst.padding.md, "space-y-2")}>
+            <p className={cn(mobileFirst.text.sm, "text-muted-foreground break-words")}>
               Track earnings from product recommendations and referral programs.
             </p>
-            <p className="text-sm text-muted-foreground">
+            <p className={cn(mobileFirst.text.sm, "text-muted-foreground break-words")}>
               Commissions are calculated based on your partnership agreements
               with brands.
             </p>
             <Button
               variant="outline"
               onClick={() => navigate('/referrals')}
-              className="mt-4"
+              className={cn(touchButton.md, "mt-4")}
             >
               View Referral Programs
             </Button>

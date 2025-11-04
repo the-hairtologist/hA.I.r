@@ -5,6 +5,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { RealClientMetrics } from '@/components/analytics/RealClientMetrics';
 import { BarChart3, Users, TrendingUp, Loader2 } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 
 const RealRevenueChart = lazy(() =>
   import('@/components/analytics/RealRevenueChart').then(m => ({
@@ -25,12 +27,12 @@ export default function Analytics() {
         description="Real-time business intelligence, revenue tracking, and client insights"
       />
 
-      <div className="container mx-auto p-4 sm:p-6 max-w-7xl">
-        <div className="mb-6 sm:mb-8">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-pixel mb-2">
+      <div className={cn("container mx-auto max-w-7xl", mobileFirst.padding.md)}>
+        <div className="mb-6 space-y-2">
+          <h1 className={cn(mobileFirst.text['2xl'], "font-pixel break-words")}>
             Business Analytics
           </h1>
-          <p className="font-sans text-muted-foreground text-sm sm:text-base lg:text-lg">
+          <p className={cn(mobileFirst.text.sm, "font-sans text-muted-foreground break-words")}>
             Real-time insights from your appointments and client data
           </p>
         </div>

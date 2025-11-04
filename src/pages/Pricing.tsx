@@ -12,6 +12,8 @@ import { Badge } from '@/components/ui/badge';
 import { Check, Zap } from 'lucide-react';
 import { MetaTags } from '@/components/MetaTags';
 import { useToast } from '@/hooks/use-toast';
+import { cn } from '@/lib/utils';
+import { mobileFirst, touchButton } from '@/lib/responsive/mobile-first-utils';
 
 const tiers = [
   {
@@ -81,13 +83,13 @@ export default function Pricing() {
         description="Simple, transparent pricing for hair salons of all sizes"
       />
 
-      <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 p-4 md:p-8">
+      <div className={cn("min-h-screen bg-gradient-to-br from-background via-background to-primary/5", mobileFirst.padding.md)}>
         <div className="max-w-7xl mx-auto space-y-8">
           <div className="text-center space-y-4">
-            <h1 className="text-4xl md:text-5xl font-bold">
+            <h1 className={cn(mobileFirst.text['3xl'], "font-bold break-words")}>
               Simple, Transparent Pricing
             </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <p className={cn(mobileFirst.text.lg, "text-muted-foreground max-w-2xl mx-auto break-words")}>
               Choose the plan that's right for your business. Upgrade,
               downgrade, or cancel anytime.
             </p>
@@ -110,33 +112,33 @@ export default function Pricing() {
                   </div>
                 )}
 
-                <CardHeader className="text-center pt-8">
-                  <CardTitle className="text-2xl">{tier.name}</CardTitle>
-                  <CardDescription>{tier.description}</CardDescription>
+                <CardHeader className={cn(mobileFirst.padding.md, "text-center pt-8")}>
+                  <CardTitle className={cn(mobileFirst.text.xl, "break-words")}>{tier.name}</CardTitle>
+                  <CardDescription className={cn(mobileFirst.text.sm, "break-words")}>{tier.description}</CardDescription>
                   <div className="pt-4">
-                    <span className="text-4xl font-bold">{tier.price}</span>
+                    <span className={cn(mobileFirst.text['3xl'], "font-bold")}>{tier.price}</span>
                     {tier.period && (
-                      <span className="text-muted-foreground">
+                      <span className={cn(mobileFirst.text.sm, "text-muted-foreground")}>
                         {tier.period}
                       </span>
                     )}
                   </div>
                 </CardHeader>
 
-                <CardContent className="space-y-4">
+                <CardContent className={cn(mobileFirst.padding.md, "space-y-4")}>
                   <ul className="space-y-3">
                     {tier.features.map(feature => (
                       <li key={feature} className="flex items-start gap-2">
                         <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                        <span className="text-sm">{feature}</span>
+                        <span className={cn(mobileFirst.text.sm, "break-words")}>{feature}</span>
                       </li>
                     ))}
                   </ul>
                 </CardContent>
 
-                <CardFooter>
+                <CardFooter className={mobileFirst.padding.md}>
                   <Button
-                    className="w-full"
+                    className={cn(touchButton.md, "w-full")}
                     variant={
                       tier.current
                         ? 'outline'
@@ -154,8 +156,8 @@ export default function Pricing() {
             ))}
           </div>
 
-          <div className="text-center text-sm text-muted-foreground pt-8">
-            <p>All plans include 14-day money-back guarantee</p>
+          <div className={cn(mobileFirst.text.sm, "text-center text-muted-foreground pt-8")}>
+            <p className="break-words">All plans include 14-day money-back guarantee</p>
           </div>
         </div>
       </div>
