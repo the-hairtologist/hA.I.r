@@ -74,7 +74,7 @@ const FormulaCardComponent = ({
               </p>
             </div>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 sm:gap-3">
             <Button variant="ghost" size="sm" onClick={onEdit}>
               <Edit className="h-4 w-4" />
             </Button>
@@ -152,7 +152,7 @@ const FormulaCardComponent = ({
                   </div>
                 )}
                 {formula.what_worked && (
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 sm:gap-3">
                     <ThumbsUp className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
                     <div>
                       <p className="text-sm font-medium">What Worked:</p>
@@ -163,7 +163,7 @@ const FormulaCardComponent = ({
                   </div>
                 )}
                 {formula.what_to_avoid && (
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 sm:gap-3">
                     <AlertTriangle className="h-4 w-4 text-amber-500 mt-0.5 flex-shrink-0" />
                     <div>
                       <p className="text-sm font-medium">What to Avoid:</p>

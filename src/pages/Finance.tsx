@@ -431,7 +431,7 @@ const Finance = () => {
         </Card>
 
         {/* Overview Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mb-8">
           <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm text-muted-foreground">

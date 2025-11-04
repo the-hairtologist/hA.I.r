@@ -506,7 +506,7 @@ const Portfolio = () => {
               gradient="bg-gradient-to-br from-yellow-400 to-orange-400"
             />
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {photos.map((photo, index) => (
                 <Card
                   key={photo.id}

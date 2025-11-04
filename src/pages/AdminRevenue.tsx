@@ -84,7 +84,7 @@ export default function AdminRevenue() {
         <AdminFinancialDashboard />
 
         {/* Additional Revenue Tools */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           <Card className="border-2 border-primary">
             <CardHeader className={mobileFirst.padding.md}>
               <CardTitle className={cn(mobileFirst.text.lg, "break-words")}>Commission Management</CardTitle>

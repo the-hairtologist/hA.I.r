@@ -111,7 +111,7 @@ const ClientCardComponent = ({
               </CardTitle>
 
               {/* Hair type and activity badges */}
-              <div className="flex gap-2 mt-2">
+              <div className="flex gap-2 sm:gap-3 mt-2">
                 {client.hair_type && (
                   <Badge variant="secondary" className="text-xs">
                     {client.hair_type}
@@ -164,7 +164,7 @@ const ClientCardComponent = ({
         </div>
 
         {/* Action buttons section */}
-        <div className="flex gap-2 mt-4">
+        <div className="flex gap-2 sm:gap-3 mt-4">
           <Button
             variant="outline"
             size="sm"
