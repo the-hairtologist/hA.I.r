@@ -39,6 +39,7 @@ import { networkErrors } from '@/lib/errorMessages';
 import { logger } from '@/lib/logger';
 import { cn } from '@/lib/utils';
 import { mobileFirst, touchButton } from '@/lib/responsive/mobile-first-utils';
+import { StandardFormField } from '@/components/forms/StandardFormField';
 
 const BackgroundRemovalDialog = lazy(() =>
   import('@/components/BackgroundRemovalDialog').then(m => ({
@@ -443,13 +444,8 @@ const Portfolio = () => {
             </div>
 
             <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <Label
-                  htmlFor="caption"
-                  className="text-foreground font-medium"
-                >
-                  Caption (Optional)
-                </Label>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium text-foreground">Caption (Optional)</span>
                 <VoiceControl
                   variant="minimal"
                   context="notes"
@@ -458,13 +454,15 @@ const Portfolio = () => {
                   }
                 />
               </div>
-              <Textarea
-                id="caption"
-                placeholder="Describe the style, technique, or products used... (or use voice input)"
+              <StandardFormField
+                name="caption"
+                label=""
+                type="textarea"
                 value={caption}
-                onChange={e => setCaption(e.target.value)}
+                onChange={(val) => setCaption(String(val))}
+                placeholder="Describe the style, technique, or products used... (or use voice input)"
                 rows={3}
-                className="bg-card/20 border-2 border-foreground text-foreground placeholder:text-foreground/60"
+                maxLength={500}
               />
             </div>
 

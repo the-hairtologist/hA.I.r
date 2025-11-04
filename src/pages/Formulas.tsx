@@ -100,6 +100,7 @@ import {
 } from '@/hooks/useFormulas';
 import { useClients } from '@/hooks/useClients';
 import { PageHeader } from '@/components/PageHeader';
+import { StandardFormField } from '@/components/forms/StandardFormField';
 
 const Formulas = () => {
   // Performance tracking
@@ -139,6 +140,7 @@ const Formulas = () => {
   const [validationErrors, setValidationErrors] = useState<
     Record<string, string>
   >({});
+  const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>({});
 
   // Form state
   const [selectedClient, setSelectedClient] = useState('');
@@ -488,6 +490,8 @@ const Formulas = () => {
     setApplicationNotes('');
     setWhatWorked('');
     setWhatToAvoid('');
+    setValidationErrors({});
+    setTouchedFields({});
   };
 
   const handleAddTag = () => {
@@ -949,8 +953,8 @@ const Formulas = () => {
 
             {/* Formula Text */}
             <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="formula">Formula *</Label>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium">Formula *</span>
                 <VoiceInput
                   variant="icon"
                   onTranscription={text =>
@@ -958,22 +962,21 @@ const Formulas = () => {
                   }
                 />
               </div>
-              <Textarea
-                id="formula"
-                placeholder="Enter the complete formula or use voice input..."
+              <StandardFormField
+                name="formula_text"
+                label=""
+                type="textarea"
                 value={formulaText}
-                onChange={e => setFormulaText(e.target.value)}
+                onChange={(val) => setFormulaText(String(val))}
+                onBlur={() => setTouchedFields(prev => ({ ...prev, formula_text: true }))}
+                error={validationErrors.formula_text}
+                touched={touchedFields.formula_text}
+                required
+                placeholder="Enter the complete formula or use voice input..."
                 rows={6}
-                className={cn(
-                  'resize-none',
-                  validationErrors.formula_text && 'border-red-500'
-                )}
+                maxLength={5000}
+                description="Detailed formula instructions and product list"
               />
-              {validationErrors.formula_text && (
-                <p className="text-sm text-red-500">
-                  {validationErrors.formula_text}
-                </p>
-              )}
             </div>
 
             {/* AI Success Prediction */}
@@ -989,41 +992,48 @@ const Formulas = () => {
             )}
 
             {/* Instructions */}
-            <div className="space-y-2">
-              <Label htmlFor="instructions">Application Instructions</Label>
-              <Textarea
-                id="instructions"
-                placeholder="Step-by-step application instructions..."
-                value={instructions}
-                onChange={e => setInstructions(e.target.value)}
-                rows={4}
-                className="resize-none"
-              />
-            </div>
+            <StandardFormField
+              name="instructions"
+              label="Application Instructions"
+              type="textarea"
+              value={instructions}
+              onChange={(val) => setInstructions(String(val))}
+              onBlur={() => setTouchedFields(prev => ({ ...prev, instructions: true }))}
+              error={validationErrors.instructions}
+              touched={touchedFields.instructions}
+              placeholder="Step-by-step application instructions..."
+              rows={4}
+              maxLength={2000}
+            />
 
             {/* Color Line */}
-            <div className="space-y-2">
-              <Label htmlFor="colorline">Color Line</Label>
-              <Input
-                id="colorline"
-                placeholder="e.g., Wella, Redken"
-                value={colorLine}
-                onChange={e => setColorLine(e.target.value)}
-              />
-            </div>
+            <StandardFormField
+              name="color_line"
+              label="Color Line"
+              type="text"
+              value={colorLine}
+              onChange={(val) => setColorLine(String(val))}
+              onBlur={() => setTouchedFields(prev => ({ ...prev, color_line: true }))}
+              error={validationErrors.color_line}
+              touched={touchedFields.color_line}
+              placeholder="e.g., Wella, Redken"
+              maxLength={100}
+            />
 
             {/* Result Notes */}
-            <div className="space-y-2">
-              <Label htmlFor="notes">Result Notes</Label>
-              <Textarea
-                id="notes"
-                placeholder="Notes about the result..."
-                value={resultNotes}
-                onChange={e => setResultNotes(e.target.value)}
-                rows={2}
-                className="resize-none"
-              />
-            </div>
+            <StandardFormField
+              name="result_notes"
+              label="Result Notes"
+              type="textarea"
+              value={resultNotes}
+              onChange={(val) => setResultNotes(String(val))}
+              onBlur={() => setTouchedFields(prev => ({ ...prev, result_notes: true }))}
+              error={validationErrors.result_notes}
+              touched={touchedFields.result_notes}
+              placeholder="Notes about the result..."
+              rows={2}
+              maxLength={1000}
+            />
 
             {/* Tags */}
             <div className="space-y-2">
@@ -1077,33 +1087,31 @@ const Formulas = () => {
                 </AccordionTrigger>
                 <AccordionContent className="space-y-4 pt-4">
                   <div className="grid grid-cols-2 gap-4">
+                    <StandardFormField
+                      name="processing_time_minutes"
+                      label="Processing Time (minutes)"
+                      type="number"
+                      value={processingTime}
+                      onChange={(val) => setProcessingTime(String(val))}
+                      onBlur={() => setTouchedFields(prev => ({ ...prev, processing_time_minutes: true }))}
+                      error={validationErrors.processing_time_minutes}
+                      touched={touchedFields.processing_time_minutes}
+                      placeholder="e.g., 30"
+                      min={1}
+                      max={480}
+                    />
                     <div className="space-y-2">
-                      <Label
-                        htmlFor="processing-time"
-                        className="text-[10px] xs:text-xs"
-                      >
-                        Processing Time (minutes)
-                      </Label>
-                      <Input
-                        id="processing-time"
-                        type="number"
-                        placeholder="e.g., 30"
-                        value={processingTime}
-                        onChange={e => setProcessingTime(e.target.value)}
-                        min="1"
-                        max="180"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="developer-volume" className="text-xs">
-                        Developer Volume
-                      </Label>
-                      <Input
-                        id="developer-volume"
-                        placeholder="e.g., 20 vol"
+                      <StandardFormField
+                        name="developer_volume"
+                        label="Developer Volume"
+                        type="text"
                         value={developerVolume}
-                        onChange={e => setDeveloperVolume(e.target.value)}
-                        list="developer-options"
+                        onChange={(val) => setDeveloperVolume(String(val))}
+                        onBlur={() => setTouchedFields(prev => ({ ...prev, developer_volume: true }))}
+                        error={validationErrors.developer_volume}
+                        touched={touchedFields.developer_volume}
+                        placeholder="e.g., 20 vol"
+                        maxLength={50}
                       />
                       <datalist id="developer-options">
                         <option value="10 vol" />
@@ -1125,19 +1133,19 @@ const Formulas = () => {
                   </div>
                 </AccordionTrigger>
                 <AccordionContent className="space-y-4 pt-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="application-notes" className="text-xs">
-                      How to Apply (optional)
-                    </Label>
-                    <Textarea
-                      id="application-notes"
-                      placeholder="e.g., Apply root to ends, section by section..."
-                      value={applicationNotes}
-                      onChange={e => setApplicationNotes(e.target.value)}
-                      rows={3}
-                      className="resize-none text-sm"
-                    />
-                  </div>
+                  <StandardFormField
+                    name="application_notes"
+                    label="How to Apply (optional)"
+                    type="textarea"
+                    value={applicationNotes}
+                    onChange={(val) => setApplicationNotes(String(val))}
+                    onBlur={() => setTouchedFields(prev => ({ ...prev, application_notes: true }))}
+                    error={validationErrors.application_notes}
+                    touched={touchedFields.application_notes}
+                    placeholder="e.g., Apply root to ends, section by section..."
+                    rows={3}
+                    maxLength={1000}
+                  />
                 </AccordionContent>
               </AccordionItem>
 
@@ -1151,37 +1159,41 @@ const Formulas = () => {
                 </AccordionTrigger>
                 <AccordionContent className="space-y-4 pt-4">
                   <div className="space-y-2">
-                    <Label
-                      htmlFor="what-worked"
-                      className="text-xs flex items-center gap-1"
-                    >
+                    <div className="flex items-center gap-1 mb-1">
                       <ThumbsUp className="h-3 w-3" />
-                      What Worked Well
-                    </Label>
-                    <Textarea
-                      id="what-worked"
-                      placeholder="e.g., Perfect lift, even tone, client loved it..."
+                      <span className="text-xs font-medium">What Worked Well</span>
+                    </div>
+                    <StandardFormField
+                      name="what_worked"
+                      label=""
+                      type="textarea"
                       value={whatWorked}
-                      onChange={e => setWhatWorked(e.target.value)}
+                      onChange={(val) => setWhatWorked(String(val))}
+                      onBlur={() => setTouchedFields(prev => ({ ...prev, what_worked: true }))}
+                      error={validationErrors.what_worked}
+                      touched={touchedFields.what_worked}
+                      placeholder="e.g., Perfect lift, even tone, client loved it..."
                       rows={2}
-                      className="resize-none text-sm"
+                      maxLength={1000}
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label
-                      htmlFor="what-to-avoid"
-                      className="text-xs flex items-center gap-1"
-                    >
+                    <div className="flex items-center gap-1 mb-1">
                       <AlertTriangle className="h-3 w-3" />
-                      What to Avoid Next Time
-                    </Label>
-                    <Textarea
-                      id="what-to-avoid"
-                      placeholder="e.g., Watch timing on roots, less developer needed..."
+                      <span className="text-xs font-medium">What to Avoid Next Time</span>
+                    </div>
+                    <StandardFormField
+                      name="what_to_avoid"
+                      label=""
+                      type="textarea"
                       value={whatToAvoid}
-                      onChange={e => setWhatToAvoid(e.target.value)}
+                      onChange={(val) => setWhatToAvoid(String(val))}
+                      onBlur={() => setTouchedFields(prev => ({ ...prev, what_to_avoid: true }))}
+                      error={validationErrors.what_to_avoid}
+                      touched={touchedFields.what_to_avoid}
+                      placeholder="e.g., Watch timing on roots, less developer needed..."
                       rows={2}
-                      className="resize-none text-sm"
+                      maxLength={1000}
                     />
                   </div>
                 </AccordionContent>
