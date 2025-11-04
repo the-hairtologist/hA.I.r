@@ -210,7 +210,7 @@ export default function AdminCommandCenter() {
         icon={<Crown className="h-6 w-6" />}
         backTo="/dashboard"
         actions={
-          <div className="flex gap-2">
+          <div className="flex gap-2 sm:gap-3">
             <Button onClick={runSystemMaintenance} size="sm" className="gap-2">
               <Zap className="h-4 w-4" />
               <span className="hidden sm:inline">Maintenance</span>

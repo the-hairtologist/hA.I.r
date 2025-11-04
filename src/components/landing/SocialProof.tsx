@@ -46,7 +46,7 @@ export const SocialProof = () => {
             </div>
           </div>
 
-          <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-3">
             {testimonials.map((testimonial, idx) => (
               <Card
                 key={idx}
@@ -77,7 +77,7 @@ export const SocialProof = () => {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-8">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 pt-8">
             {[
               { value: '2,000+', label: 'Active Stylists' },
               { value: '50k+', label: 'Bookings' },

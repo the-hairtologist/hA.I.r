@@ -195,7 +195,7 @@ export default function AdminUsers() {
                 <span className="text-sm font-medium">
                   {selectedUsers.size} user{selectedUsers.size !== 1 ? 's' : ''} selected
                 </span>
-                <div className="flex gap-2">
+                <div className="flex gap-2 sm:gap-3">
                   <Button
                     variant="destructive"
                     size="sm"

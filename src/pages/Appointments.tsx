@@ -606,7 +606,7 @@ const Appointments = () => {
                     {selectedAppointments.size} appointment
                     {selectedAppointments.size !== 1 ? 's' : ''} selected
                   </span>
-                  <div className="flex gap-2 w-full sm:w-auto">
+                  <div className="flex gap-2 sm:gap-3 w-full sm:w-auto">
                     <Button
                       variant="outline"
                       size="sm"

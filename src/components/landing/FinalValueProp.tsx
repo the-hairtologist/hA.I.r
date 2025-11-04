@@ -83,7 +83,7 @@ export const FinalValueProp = () => {
         `}</style>
 
         {/* Animated Counters with rotating colors */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 xxs:gap-4 xs:gap-5 sm:gap-6 max-w-5xl mx-auto mb-10 xs:mb-12">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 xxs:gap-4 xs:gap-5 sm:gap-6 max-w-5xl mx-auto mb-10 xs:mb-12">
           <div
             className={`transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
             style={{ transitionDelay: '0ms' }}

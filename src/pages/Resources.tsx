@@ -260,7 +260,7 @@ const Resources = () => {
         </Card>
 
         {/* Quick Access Cards */}
-        <div className="grid md:grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8">
           <Card
             className="border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:-translate-y-1 transition-all cursor-pointer"
             onClick={() => navigate('/knowledge')}

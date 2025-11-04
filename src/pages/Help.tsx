@@ -570,7 +570,7 @@ const Help = () => {
 
             {/* Quick Resources */}
             <div
-              className="grid grid-cols-1 md:grid-cols-3 gap-4 animate-fade-in"
+              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 animate-fade-in"
               style={{ animationDelay: '300ms' }}
             >
               <Card
