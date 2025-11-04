@@ -15,6 +15,8 @@ import { useNavigate } from 'react-router-dom';
 import { logger } from '@/lib/logging/productionLogger';
 import { userJourney } from '@/lib/logging/userJourneyTracker';
 import { trackSelect } from '@/lib/logging/supabaseTracker';
+import { cn } from '@/lib/utils';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 
 interface SmartNotification {
   id: string;
@@ -158,7 +160,11 @@ export const AISmartNotifications = () => {
         {unreadCount > 0 && (
           <Badge
             variant="destructive"
-            className="absolute -top-1 -right-1 min-h-[20px] min-w-[20px] rounded-full p-0 flex items-center justify-center text-[11px]"
+            className={cn(
+              mobileFirst.touchTarget.min,
+              mobileFirst.text.xs,
+              "absolute -top-1 -right-1 rounded-full p-0 flex items-center justify-center"
+            )}
           >
             {unreadCount}
           </Badge>
@@ -200,7 +206,7 @@ export const AISmartNotifications = () => {
                               ? 'default'
                               : 'secondary'
                         }
-                        className="text-[11px] sm:text-xs"
+                        className={cn(mobileFirst.text.xs)}
                       >
                         {notification.priority}
                       </Badge>

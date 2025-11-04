@@ -13,6 +13,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { formatDistanceToNow } from 'date-fns';
 import { logger } from '@/lib/logging/productionLogger';
 import { userJourney } from '@/lib/logging/userJourneyTracker';
+import { cn } from '@/lib/utils';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 import {
   trackSelect,
   trackInsert,
@@ -181,7 +183,7 @@ export function AppointmentTimerWidget() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-[11px] sm:text-xs text-muted-foreground mb-3">
+          <p className={cn(mobileFirst.text.xs, "text-muted-foreground mb-3")}>
             Start tracking time when you begin an appointment
           </p>
           <Button
@@ -197,7 +199,7 @@ export function AppointmentTimerWidget() {
             <Clock className="mr-2 h-4 w-4" />
             How to Start
           </Button>
-          <p className="text-[11px] sm:text-xs text-muted-foreground mt-2 text-center">
+          <p className={cn(mobileFirst.text.xs, "text-muted-foreground mt-2 text-center")}>
             Timer becomes active during appointments
           </p>
         </CardContent>
@@ -215,7 +217,7 @@ export function AppointmentTimerWidget() {
           </div>
           <Badge
             variant="outline"
-            className="text-[11px] sm:text-xs animate-pulse"
+            className={cn(mobileFirst.text.xs, "animate-pulse")}
           >
             Recording
           </Badge>

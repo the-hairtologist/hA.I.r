@@ -63,6 +63,13 @@ export const mobileFirst = {
     responsive: 'flex flex-col md:flex-row',
     horizontalMobile: 'flex flex-row md:flex-col',
   },
+  
+  /** Touch target sizes - WCAG 2.2 AAA compliant (44x44px minimum) */
+  touchTarget: {
+    min: 'min-h-[44px] min-w-[44px]',
+    comfortable: 'min-h-[48px]',
+    large: 'min-h-[56px]',
+  },
 } as const;
 
 /**

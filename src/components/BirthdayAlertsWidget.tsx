@@ -14,8 +14,8 @@ import { format, isSameDay, addDays } from 'date-fns';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { logger } from '@/lib/logging/productionLogger';
-import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 import { cn } from '@/lib/utils';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 
 interface BirthdayClient {
   id: string;
@@ -165,7 +165,7 @@ export function BirthdayAlertsWidget() {
           <div className="text-center py-8 text-xs sm:text-sm text-muted-foreground space-y-2">
             <Gift className="h-8 w-8 mx-auto mb-2 opacity-50" />
             <p className="font-medium">No upcoming birthdays</p>
-            <p className="text-[11px] sm:text-xs">
+            <p className={cn(mobileFirst.text.xs)}>
               Add birthdays to client profiles to see alerts here
             </p>
             <Button
@@ -188,7 +188,7 @@ export function BirthdayAlertsWidget() {
                   <p className="font-medium text-xs sm:text-sm truncate">
                     {client.full_name}
                   </p>
-                  <p className="text-[11px] sm:text-xs text-muted-foreground">
+                  <p className={cn(mobileFirst.text.xs, "text-muted-foreground")}>
                     {format(new Date(client.birthday), 'MMMM d')}
                   </p>
                 </div>

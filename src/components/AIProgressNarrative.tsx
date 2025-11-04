@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Sparkles, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Progress } from '@/components/ui/progress';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 
 interface AIProgressNarrativeProps {
   stage: 'analyzing' | 'mixing' | 'optimizing' | 'finalizing';
@@ -90,7 +91,7 @@ export const AIProgressNarrative = ({
 
       {/* Confidence Bar */}
       <div className="space-y-2">
-        <div className="flex justify-between text-[11px] sm:text-xs text-muted-foreground">
+        <div className={cn(mobileFirst.text.xs, "flex justify-between text-muted-foreground")}>
           <span>AI Confidence</span>
           <span>{Math.min(progress, stageProgress[stage])}%</span>
         </div>
