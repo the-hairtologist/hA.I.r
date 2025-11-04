@@ -377,7 +377,7 @@ export const getAdminNavigationItems = (isAdmin: boolean): NavigationItem[] => {
     {
       id: 'audit-report',
       title: 'Audit Report',
-      url: '/audit-report',
+      url: '/admin/audit-report',
       icon: ClipboardCheck,
       gradient: 'bg-gradient-green-emerald',
       group: 'admin',
