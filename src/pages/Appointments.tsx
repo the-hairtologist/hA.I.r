@@ -89,6 +89,7 @@ import { triggerAppointmentBooked } from '@/lib/zapierTriggers';
 import { AppointmentPhotoButton } from '@/components/AppointmentPhotoButton';
 import { MobilePageTemplate, MobilePageHeader } from '@/components/layouts/MobilePageTemplate';
 import { useIsMobile } from '@/lib/responsive/hooks';
+import { CreateAppointmentDialog } from '@/components/CreateAppointmentDialog';
 
 const Appointments = () => {
   // Performance tracking
@@ -127,6 +128,7 @@ const Appointments = () => {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [rebookDialogOpen, setRebookDialogOpen] = useState(false);
   const [rebookAppointment, setRebookAppointment] = useState<any>(null);
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [rescheduleDialogOpen, setRescheduleDialogOpen] = useState(false);
   const [rescheduleAppointment, setRescheduleAppointment] = useState<any>(null);
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
@@ -477,16 +479,26 @@ const Appointments = () => {
           <>
             <CalendarIcon className="h-5 w-5 text-primary" />
             {userRole === 'stylist' && (
-              <div className="flex items-center gap-2">
-                <Label htmlFor="availability" className={mobileFirst.text.xs}>
-                  Bookings
-                </Label>
-                <Switch
-                  id="availability"
-                  checked={stylistProfile?.is_available}
-                  onCheckedChange={toggleAvailability}
-                />
-              </div>
+              <>
+                <Button
+                  onClick={() => setCreateDialogOpen(true)}
+                  size="sm"
+                  className="min-h-[44px] gap-2"
+                >
+                  <Plus className="h-4 w-4" />
+                  <span className="hidden sm:inline">New Appointment</span>
+                </Button>
+                <div className="flex items-center gap-2">
+                  <Label htmlFor="availability" className={mobileFirst.text.xs}>
+                    Bookings
+                  </Label>
+                  <Switch
+                    id="availability"
+                    checked={stylistProfile?.is_available}
+                    onCheckedChange={toggleAvailability}
+                  />
+                </div>
+              </>
             )}
           </>
         }
@@ -1162,6 +1174,15 @@ const Appointments = () => {
         appointment={rescheduleAppointment}
         onSuccess={refetchAppointments}
       />
+
+      {/* Create Appointment Dialog (Stylist Only) */}
+      {userRole === 'stylist' && stylistProfile && (
+        <CreateAppointmentDialog
+          open={createDialogOpen}
+          onOpenChange={setCreateDialogOpen}
+          stylistId={stylistProfile.id}
+        />
+      )}
 
       <WaitlistDialog />
 
