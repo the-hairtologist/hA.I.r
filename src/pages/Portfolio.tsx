@@ -41,6 +41,7 @@ import { cn } from '@/lib/utils';
 import { mobileFirst, touchButton } from '@/lib/responsive/mobile-first-utils';
 import { StandardFormField } from '@/components/forms/StandardFormField';
 import { typography } from '@/lib/design/typography';
+import { DataErrorBoundary } from '@/components/errors/DataErrorBoundary';
 
 const BackgroundRemovalDialog = lazy(() =>
   import('@/components/BackgroundRemovalDialog').then(m => ({
@@ -337,9 +338,11 @@ const Portfolio = () => {
 
         {/* AI Portfolio Insights */}
         {photos.length > 0 && (
-          <div className="mb-8">
-            <PortfolioInsights stylistId={stylistProfileId} />
-          </div>
+          <DataErrorBoundary feature="Portfolio Insights">
+            <div className="mb-8">
+              <PortfolioInsights stylistId={stylistProfileId} />
+            </div>
+          </DataErrorBoundary>
         )}
 
         {/* Upload Section */}
@@ -492,127 +495,129 @@ const Portfolio = () => {
         </Card>
 
         {/* Gallery */}
-        <div className="mb-8">
-          <h2 className={cn(typography.title.section, "mb-4")}>
-            Your Gallery ({photos.length} photos)
-          </h2>
-          {photos.length === 0 ? (
-            <EmptyState
-              icon={ImageIcon}
-              title="Start Building Your Portfolio"
-              description="Upload your best work to attract new clients. Showcase transformations, color work, cuts, and special occasion styles."
-              aria-label="No portfolio photos found"
-              gradient="bg-gradient-to-br from-yellow-400 to-orange-400"
-            />
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-              {photos.map((photo, index) => (
-                <Card
-                  key={photo.id}
-                  className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all bg-card"
-                >
-                  <CardContent className="p-4">
-                    <div className="relative">
-                      {photo.is_before_after && photo.before_photo_url ? (
-                        <div className="grid grid-cols-2 gap-2 mb-2">
-                          <div>
-                            <p className="text-xs font-bold mb-1 text-center">
-                              BEFORE
-                            </p>
-                            <OptimizedImage
-                              src={photo.before_photo_url}
-                              alt="Before"
-                              width={200}
-                              height={128}
-                              className="w-full h-32 object-cover rounded-lg border-2 border-foreground"
-                            />
+        <DataErrorBoundary feature="Portfolio Gallery" onReset={() => loadPhotos(stylistProfileId)}>
+          <div className="mb-8">
+            <h2 className={cn(typography.title.section, "mb-4")}>
+              Your Gallery ({photos.length} photos)
+            </h2>
+            {photos.length === 0 ? (
+              <EmptyState
+                icon={ImageIcon}
+                title="Start Building Your Portfolio"
+                description="Upload your best work to attract new clients. Showcase transformations, color work, cuts, and special occasion styles."
+                aria-label="No portfolio photos found"
+                gradient="bg-gradient-to-br from-yellow-400 to-orange-400"
+              />
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                {photos.map((photo, index) => (
+                  <Card
+                    key={photo.id}
+                    className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all bg-card"
+                  >
+                    <CardContent className="p-4">
+                      <div className="relative">
+                        {photo.is_before_after && photo.before_photo_url ? (
+                          <div className="grid grid-cols-2 gap-2 mb-2">
+                            <div>
+                              <p className="text-xs font-bold mb-1 text-center">
+                                BEFORE
+                              </p>
+                              <OptimizedImage
+                                src={photo.before_photo_url}
+                                alt="Before"
+                                width={200}
+                                height={128}
+                                className="w-full h-32 object-cover rounded-lg border-2 border-foreground"
+                              />
+                            </div>
+                            <div>
+                              <p className="text-xs font-bold mb-1 text-center">
+                                AFTER
+                              </p>
+                              <OptimizedImage
+                                src={photo.photo_url}
+                                alt="After"
+                                width={200}
+                                height={128}
+                                className="w-full h-32 object-cover rounded-lg border-2 border-foreground"
+                              />
+                            </div>
                           </div>
-                          <div>
-                            <p className="text-xs font-bold mb-1 text-center">
-                              AFTER
-                            </p>
-                            <OptimizedImage
-                              src={photo.photo_url}
-                              alt="After"
-                              width={200}
-                              height={128}
-                              className="w-full h-32 object-cover rounded-lg border-2 border-foreground"
-                            />
+                        ) : (
+                          <img
+                            src={photo.photo_url}
+                            alt="Portfolio"
+                            loading="lazy"
+                            className="w-full h-48 object-cover rounded-lg mb-2 border-2 border-foreground"
+                          />
+                        )}
+                        {photo.caption && (
+                          <p className="text-sm text-muted-foreground mb-2 line-clamp-2">
+                            {photo.caption}
+                          </p>
+                        )}
+                        {/* Action Buttons - Optimized for mobile */}
+                        <div className="flex flex-col sm:flex-row gap-2 mb-2">
+                          <Button
+                            size="sm"
+                            variant="secondary"
+                            onClick={() =>
+                              setBgRemovalDialog({
+                                open: true,
+                                imageUrl:
+                                  photo.is_before_after && photo.before_photo_url
+                                    ? photo.before_photo_url
+                                    : photo.photo_url,
+                              })
+                            }
+                            className="w-full sm:flex-1 gap-2"
+                            title="Remove background with AI"
+                            aria-label="Remove background with AI"
+                          >
+                            <Sparkles className="h-4 w-4" />
+                            <span className="sm:hidden">Remove Background</span>
+                          </Button>
+                          <div className="flex gap-2">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => movePhoto(photo.id, 'up')}
+                              disabled={index === 0}
+                              className="flex-1"
+                              aria-label="Move photo up"
+                            >
+                              <ArrowUp className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => movePhoto(photo.id, 'down')}
+                              disabled={index === photos.length - 1}
+                              className="flex-1"
+                              aria-label="Move photo down"
+                            >
+                              <ArrowDown className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="destructive"
+                              onClick={() => handleDelete(photo.id)}
+                              className="flex-1"
+                              aria-label="Delete photo"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
                           </div>
-                        </div>
-                      ) : (
-                        <img
-                          src={photo.photo_url}
-                          alt="Portfolio"
-                          loading="lazy"
-                          className="w-full h-48 object-cover rounded-lg mb-2 border-2 border-foreground"
-                        />
-                      )}
-                      {photo.caption && (
-                        <p className="text-sm text-muted-foreground mb-2 line-clamp-2">
-                          {photo.caption}
-                        </p>
-                      )}
-                      {/* Action Buttons - Optimized for mobile */}
-                      <div className="flex flex-col sm:flex-row gap-2 mb-2">
-                        <Button
-                          size="sm"
-                          variant="secondary"
-                          onClick={() =>
-                            setBgRemovalDialog({
-                              open: true,
-                              imageUrl:
-                                photo.is_before_after && photo.before_photo_url
-                                  ? photo.before_photo_url
-                                  : photo.photo_url,
-                            })
-                          }
-                          className="w-full sm:flex-1 gap-2"
-                          title="Remove background with AI"
-                          aria-label="Remove background with AI"
-                        >
-                          <Sparkles className="h-4 w-4" />
-                          <span className="sm:hidden">Remove Background</span>
-                        </Button>
-                        <div className="flex gap-2">
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => movePhoto(photo.id, 'up')}
-                            disabled={index === 0}
-                            className="flex-1"
-                            aria-label="Move photo up"
-                          >
-                            <ArrowUp className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => movePhoto(photo.id, 'down')}
-                            disabled={index === photos.length - 1}
-                            className="flex-1"
-                            aria-label="Move photo down"
-                          >
-                            <ArrowDown className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="destructive"
-                            onClick={() => handleDelete(photo.id)}
-                            className="flex-1"
-                            aria-label="Delete photo"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
                         </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
-        </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </div>
+        </DataErrorBoundary>
 
         <ConfirmDialog
           open={confirmDialog.open}

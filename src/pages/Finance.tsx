@@ -91,6 +91,7 @@ import { logger } from '@/lib/logger';
 import { FinanceSkeleton } from '@/components/skeletons';
 import { typography } from '@/lib/design/typography';
 import { cn } from '@/lib/utils';
+import { DataErrorBoundary } from '@/components/errors/DataErrorBoundary';
 
 const loadCharts = async () => {
   const charts = await import('recharts');
@@ -509,148 +510,150 @@ const Finance = () => {
 
         {/* Revenue Trends Chart */}
         {chartData.length > 0 && (
-          <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] mb-8">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <TrendingUp className="h-5 w-5" />
-                Revenue Trends
-              </CardTitle>
-              <CardDescription>Track your earnings over time</CardDescription>
-            </CardHeader>
-            <CardContent>
-              {!chartsLoaded ? (
-                <div className="h-[300px] w-full flex items-center justify-center">
-                  <Loader2 className="h-8 w-8 animate-spin" />
-                </div>
-              ) : (
-                <>
-                  <div className="h-[300px] w-full overflow-x-auto">
-                    {ResponsiveContainer &&
-                      LineChart &&
-                      Line &&
-                      XAxis &&
-                      YAxis &&
-                      CartesianGrid &&
-                      Tooltip &&
-                      Legend && (
-                        <div style={{ minWidth: '320px', width: '100%', height: '300px' }}>
-                          <ResponsiveContainer width="100%" height="100%">
-                          <LineChart
-                            data={chartData}
-                            margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
-                          >
-                            <CartesianGrid
-                              strokeDasharray="3 3"
-                              className="stroke-muted"
-                            />
-                            <XAxis
-                              dataKey="date"
-                              className="text-xs fill-muted-foreground"
-                            />
-                            <YAxis
-                              className="text-xs fill-muted-foreground"
-                              tickFormatter={value => `$${value}`}
-                            />
-                            <Tooltip
-                              formatter={(value: number) => [
-                                `$${value.toFixed(2)}`,
-                                '',
-                              ]}
-                            />
-                            <Legend />
-                            <Line
-                              type="monotone"
-                              dataKey="payments"
-                              stroke="hsl(var(--primary))"
-                              strokeWidth={2}
-                              name="Service Payments"
-                              dot={{ fill: 'hsl(var(--primary))', r: 4 }}
-                            />
-                            <Line
-                              type="monotone"
-                              dataKey="commissions"
-                              stroke="hsl(var(--chart-3))"
-                              strokeWidth={2}
-                              name="Commissions"
-                              dot={{ fill: 'hsl(var(--chart-3))', r: 4 }}
-                            />
-                            <Line
-                              type="monotone"
-                              dataKey="total"
-                              stroke="hsl(var(--chart-1))"
-                              strokeWidth={3}
-                              name="Total Revenue"
-                              dot={{ fill: 'hsl(var(--chart-1))', r: 5 }}
-                            />
-                          </LineChart>
-                        </ResponsiveContainer>
+          <DataErrorBoundary feature="Revenue Chart" onReset={() => loadData()}>
+            <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] mb-8">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <TrendingUp className="h-5 w-5" />
+                  Revenue Trends
+                </CardTitle>
+                <CardDescription>Track your earnings over time</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {!chartsLoaded ? (
+                  <div className="h-[300px] w-full flex items-center justify-center">
+                    <Loader2 className="h-8 w-8 animate-spin" />
+                  </div>
+                ) : (
+                  <>
+                    <div className="h-[300px] w-full overflow-x-auto">
+                      {ResponsiveContainer &&
+                        LineChart &&
+                        Line &&
+                        XAxis &&
+                        YAxis &&
+                        CartesianGrid &&
+                        Tooltip &&
+                        Legend && (
+                          <div style={{ minWidth: '320px', width: '100%', height: '300px' }}>
+                            <ResponsiveContainer width="100%" height="100%">
+                            <LineChart
+                              data={chartData}
+                              margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
+                            >
+                              <CartesianGrid
+                                strokeDasharray="3 3"
+                                className="stroke-muted"
+                              />
+                              <XAxis
+                                dataKey="date"
+                                className="text-xs fill-muted-foreground"
+                              />
+                              <YAxis
+                                className="text-xs fill-muted-foreground"
+                                tickFormatter={value => `$${value}`}
+                              />
+                              <Tooltip
+                                formatter={(value: number) => [
+                                  `$${value.toFixed(2)}`,
+                                  '',
+                                ]}
+                              />
+                              <Legend />
+                              <Line
+                                type="monotone"
+                                dataKey="payments"
+                                stroke="hsl(var(--primary))"
+                                strokeWidth={2}
+                                name="Service Payments"
+                                dot={{ fill: 'hsl(var(--primary))', r: 4 }}
+                              />
+                              <Line
+                                type="monotone"
+                                dataKey="commissions"
+                                stroke="hsl(var(--chart-3))"
+                                strokeWidth={2}
+                                name="Commissions"
+                                dot={{ fill: 'hsl(var(--chart-3))', r: 4 }}
+                              />
+                              <Line
+                                type="monotone"
+                                dataKey="total"
+                                stroke="hsl(var(--chart-1))"
+                                strokeWidth={3}
+                                name="Total Revenue"
+                                dot={{ fill: 'hsl(var(--chart-1))', r: 5 }}
+                              />
+                            </LineChart>
+                          </ResponsiveContainer>
+                          </div>
+                        )}
+                    </div>
+
+                    {/* Weekly Breakdown Bar Chart */}
+                    {timePeriod !== 'all' &&
+                      timePeriod !== 'year' &&
+                      BarChart &&
+                      Bar && (
+                        <div className="mt-8 h-[250px] w-full">
+                          <h3 className="text-sm font-medium mb-4">
+                            Weekly Breakdown
+                          </h3>
+                          {ResponsiveContainer &&
+                            XAxis &&
+                            YAxis &&
+                            CartesianGrid &&
+                            Tooltip &&
+                            Legend && (
+                              <ResponsiveContainer width="100%" height="100%">
+                                <BarChart
+                                  data={chartData}
+                                  margin={{
+                                    top: 5,
+                                    right: 20,
+                                    bottom: 5,
+                                    left: 0,
+                                  }}
+                                >
+                                  <CartesianGrid
+                                    strokeDasharray="3 3"
+                                    className="stroke-muted"
+                                  />
+                                  <XAxis
+                                    dataKey="date"
+                                    className="text-xs fill-muted-foreground"
+                                  />
+                                  <YAxis
+                                    className="text-xs fill-muted-foreground"
+                                    tickFormatter={value => `$${value}`}
+                                  />
+                                  <Tooltip
+                                    formatter={(value: number) => [
+                                      `$${value.toFixed(2)}`,
+                                      '',
+                                    ]}
+                                  />
+                                  <Legend />
+                                  <Bar
+                                    dataKey="payments"
+                                    fill="hsl(var(--primary))"
+                                    name="Payments"
+                                  />
+                                  <Bar
+                                    dataKey="commissions"
+                                    fill="hsl(var(--chart-3))"
+                                    name="Commissions"
+                                  />
+                                </BarChart>
+                              </ResponsiveContainer>
+                            )}
                         </div>
                       )}
-                  </div>
-
-                  {/* Weekly Breakdown Bar Chart */}
-                  {timePeriod !== 'all' &&
-                    timePeriod !== 'year' &&
-                    BarChart &&
-                    Bar && (
-                      <div className="mt-8 h-[250px] w-full">
-                        <h3 className="text-sm font-medium mb-4">
-                          Weekly Breakdown
-                        </h3>
-                        {ResponsiveContainer &&
-                          XAxis &&
-                          YAxis &&
-                          CartesianGrid &&
-                          Tooltip &&
-                          Legend && (
-                            <ResponsiveContainer width="100%" height="100%">
-                              <BarChart
-                                data={chartData}
-                                margin={{
-                                  top: 5,
-                                  right: 20,
-                                  bottom: 5,
-                                  left: 0,
-                                }}
-                              >
-                                <CartesianGrid
-                                  strokeDasharray="3 3"
-                                  className="stroke-muted"
-                                />
-                                <XAxis
-                                  dataKey="date"
-                                  className="text-xs fill-muted-foreground"
-                                />
-                                <YAxis
-                                  className="text-xs fill-muted-foreground"
-                                  tickFormatter={value => `$${value}`}
-                                />
-                                <Tooltip
-                                  formatter={(value: number) => [
-                                    `$${value.toFixed(2)}`,
-                                    '',
-                                  ]}
-                                />
-                                <Legend />
-                                <Bar
-                                  dataKey="payments"
-                                  fill="hsl(var(--primary))"
-                                  name="Payments"
-                                />
-                                <Bar
-                                  dataKey="commissions"
-                                  fill="hsl(var(--chart-3))"
-                                  name="Commissions"
-                                />
-                              </BarChart>
-                            </ResponsiveContainer>
-                          )}
-                      </div>
-                    )}
-                </>
-              )}
-            </CardContent>
-          </Card>
+                  </>
+                )}
+              </CardContent>
+            </Card>
+          </DataErrorBoundary>
         )}
 
         <Tabs
@@ -666,153 +669,157 @@ const Finance = () => {
 
           {/* Payments Tab */}
           <TabsContent value="payments">
-            <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <CardTitle>Payment History</CardTitle>
-                    <CardDescription>
-                      Track service payments from clients
-                    </CardDescription>
-                  </div>
-                  {filteredPayments.length > 0 && (
-                    <Button
-                      onClick={handleExportPayments}
-                      variant="outline"
-                      size="sm"
-                    >
-                      <Download className="h-4 w-4 mr-2" />
-                      Export CSV
-                    </Button>
-                  )}
-                </div>
-              </CardHeader>
-              <CardContent>
-                {filteredPayments.length === 0 ? (
-                  <div className="text-center py-12">
-                    <DollarSign className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                    <p className="text-muted-foreground">
-                      {payments.length === 0
-                        ? 'No payments recorded yet'
-                        : `No payments in selected time period`}
-                    </p>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    {filteredPayments.map(payment => (
-                      <div
-                        key={payment.id}
-                        className="flex items-center justify-between p-4 border-[2px] border-foreground rounded-lg hover:bg-secondary/5 transition-colors"
+            <DataErrorBoundary feature="Payments Table" onReset={() => loadData()}>
+              <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle>Payment History</CardTitle>
+                      <CardDescription>
+                        Track service payments from clients
+                      </CardDescription>
+                    </div>
+                    {filteredPayments.length > 0 && (
+                      <Button
+                        onClick={handleExportPayments}
+                        variant="outline"
+                        size="sm"
                       >
-                        <div>
-                          <p className="font-semibold">
-                            {payment.client?.user?.full_name ||
-                              'Walk-in Client'}
-                          </p>
-                          <p className="text-sm text-muted-foreground">
-                            {payment.appointment?.service_type ||
-                              'Service Payment'}
-                          </p>
-                          <p className="text-xs text-muted-foreground">
-                            {format(
-                              new Date(payment.created_at),
-                              'MMM d, yyyy'
-                            )}
-                          </p>
-                        </div>
-                        <div className="text-right">
-                          <p className="font-bold text-lg text-green-600">
-                            ${parseFloat(payment.amount).toFixed(2)}
-                          </p>
-                          <Badge variant="outline">
-                            {payment.payment_method}
-                          </Badge>
-                        </div>
-                      </div>
-                    ))}
+                        <Download className="h-4 w-4 mr-2" />
+                        Export CSV
+                      </Button>
+                    )}
                   </div>
-                )}
-              </CardContent>
-            </Card>
+                </CardHeader>
+                <CardContent>
+                  {filteredPayments.length === 0 ? (
+                    <div className="text-center py-12">
+                      <DollarSign className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                      <p className="text-muted-foreground">
+                        {payments.length === 0
+                          ? 'No payments recorded yet'
+                          : `No payments in selected time period`}
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {filteredPayments.map(payment => (
+                        <div
+                          key={payment.id}
+                          className="flex items-center justify-between p-4 border-[2px] border-foreground rounded-lg hover:bg-secondary/5 transition-colors"
+                        >
+                          <div>
+                            <p className="font-semibold">
+                              {payment.client?.user?.full_name ||
+                                'Walk-in Client'}
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              {payment.appointment?.service_type ||
+                                'Service Payment'}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              {format(
+                                new Date(payment.created_at),
+                                'MMM d, yyyy'
+                              )}
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-bold text-lg text-green-600">
+                              ${parseFloat(payment.amount).toFixed(2)}
+                            </p>
+                            <Badge variant="outline">
+                              {payment.payment_method}
+                            </Badge>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </DataErrorBoundary>
           </TabsContent>
 
           {/* Commissions Tab */}
           <TabsContent value="commissions">
-            <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <CardTitle>Commission Earnings</CardTitle>
-                    <CardDescription>
-                      Track product affiliate commissions
-                    </CardDescription>
-                  </div>
-                  {filteredCommissions.length > 0 && (
-                    <Button
-                      onClick={handleExportCommissions}
-                      variant="outline"
-                      size="sm"
-                    >
-                      <Download className="h-4 w-4 mr-2" />
-                      Export CSV
-                    </Button>
-                  )}
-                </div>
-              </CardHeader>
-              <CardContent>
-                {filteredCommissions.length === 0 ? (
-                  <div className="text-center py-12">
-                    <TrendingUp className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                    <p className="text-muted-foreground">
-                      {commissions.length === 0
-                        ? 'No commissions recorded yet'
-                        : `No commissions in selected time period`}
-                    </p>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    {filteredCommissions.map(commission => (
-                      <div
-                        key={commission.id}
-                        className="flex items-center justify-between p-4 border-[2px] border-foreground rounded-lg hover:bg-secondary/5 transition-colors"
+            <DataErrorBoundary feature="Commissions Table" onReset={() => loadData()}>
+              <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle>Commission Earnings</CardTitle>
+                      <CardDescription>
+                        Track product affiliate commissions
+                      </CardDescription>
+                    </div>
+                    {filteredCommissions.length > 0 && (
+                      <Button
+                        onClick={handleExportCommissions}
+                        variant="outline"
+                        size="sm"
                       >
-                        <div>
-                          <p className="font-semibold">
-                            {commission.product_name}
-                          </p>
-                          <p className="text-sm text-muted-foreground">
-                            {commission.brand?.name || 'Unknown Brand'}
-                          </p>
-                          <p className="text-xs text-muted-foreground">
-                            {format(
-                              new Date(commission.created_at),
-                              'MMM d, yyyy'
-                            )}
-                          </p>
-                        </div>
-                        <div className="text-right">
-                          <p className="font-bold text-lg text-purple-600">
-                            $
-                            {parseFloat(commission.commission_amount).toFixed(
-                              2
-                            )}
-                          </p>
-                          <Badge
-                            variant={
-                              commission.status === 'paid'
-                                ? 'default'
-                                : 'secondary'
-                            }
-                          >
-                            {commission.status}
-                          </Badge>
-                        </div>
-                      </div>
-                    ))}
+                        <Download className="h-4 w-4 mr-2" />
+                        Export CSV
+                      </Button>
+                    )}
                   </div>
-                )}
-              </CardContent>
-            </Card>
+                </CardHeader>
+                <CardContent>
+                  {filteredCommissions.length === 0 ? (
+                    <div className="text-center py-12">
+                      <TrendingUp className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                      <p className="text-muted-foreground">
+                        {commissions.length === 0
+                          ? 'No commissions recorded yet'
+                          : `No commissions in selected time period`}
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {filteredCommissions.map(commission => (
+                        <div
+                          key={commission.id}
+                          className="flex items-center justify-between p-4 border-[2px] border-foreground rounded-lg hover:bg-secondary/5 transition-colors"
+                        >
+                          <div>
+                            <p className="font-semibold">
+                              {commission.product_name}
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              {commission.brand?.name || 'Unknown Brand'}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              {format(
+                                new Date(commission.created_at),
+                                'MMM d, yyyy'
+                              )}
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-bold text-lg text-purple-600">
+                              $
+                              {parseFloat(commission.commission_amount).toFixed(
+                                2
+                              )}
+                            </p>
+                            <Badge
+                              variant={
+                                commission.status === 'paid'
+                                  ? 'default'
+                                  : 'secondary'
+                              }
+                            >
+                              {commission.status}
+                            </Badge>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </DataErrorBoundary>
           </TabsContent>
 
           {/* Affiliate Codes Tab */}
