@@ -633,7 +633,7 @@ export default function Clients() {
               Manage your client profiles, formulas, and preferences
             </p>
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 sm:gap-3">
             {/* Re-engagement Campaign Button - Shows when clients selected */}
             {selectedCount > 0 && stylistId && (
               <ReEngagementDialog
@@ -916,7 +916,7 @@ export default function Clients() {
             ref={searchInputRef}
             value={searchQuery}
             onChange={setSearchQuery}
-            placeholder="Search by name, email, or phone number (Press / or Cmd+K)"
+            placeholder="Search clients... (Press / or Cmd+K)"
             className="flex-1 brutal-border min-h-[44px]"
           />
           <Select

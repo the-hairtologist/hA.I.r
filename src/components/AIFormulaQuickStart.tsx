@@ -66,24 +66,31 @@ export const AIFormulaQuickStart = ({
         </div>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
           {templates.map((template, idx) => {
             const Icon = template.icon;
             return (
               <Button
                 key={idx}
                 variant="outline"
-                className="h-auto flex flex-col items-start gap-2 p-4 hover:border-primary/50 transition-all"
+                className={cn(
+                  mobileFirst.touchTarget.comfortable,
+                  "flex flex-col items-start gap-3 p-4 sm:p-6",
+                  "hover:border-primary/50 hover:scale-[1.02] transition-all",
+                  "active:scale-95"
+                )}
                 onClick={() => onSelectTemplate(template.prompt)}
               >
                 <div
-                  className={`p-2 rounded-md bg-gradient-to-br ${template.color} text-primary-foreground`}
+                  className={`p-3 rounded-lg bg-gradient-to-br ${template.color} text-primary-foreground`}
                 >
-                  <Icon className="h-4 w-4" />
+                  <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
                 </div>
-                <div className="text-left">
-                  <div className="font-semibold">{template.title}</div>
-                  <div className="text-xs text-muted-foreground">
+                <div className="text-left space-y-1">
+                  <div className={cn(mobileFirst.text.base, "font-semibold")}>
+                    {template.title}
+                  </div>
+                  <div className={cn(mobileFirst.text.xs, "text-muted-foreground")}>
                     {template.description}
                   </div>
                 </div>
