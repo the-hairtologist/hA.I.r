@@ -613,7 +613,7 @@ const Formulas = () => {
         <EnhancedSearch
           value={searchTerm}
           onChange={setSearchTerm}
-          placeholder="Search formulas by client, formula, tags, or color line..."
+          placeholder="Search formulas..."
           storageKey="formulas_recent_searches"
           showRecentSearches={true}
         />

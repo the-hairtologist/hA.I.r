@@ -332,7 +332,7 @@ const Knowledge = () => {
             <div className="relative">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
               <Input
-                placeholder="Search articles, guides, and resources..."
+                placeholder="Search knowledge base..."
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
                 className={cn(mobileFirst.text.base, "pl-12 h-14 border-2 border-foreground")}

@@ -339,7 +339,7 @@ export default function AdminCommandCenter() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
               <div className="space-y-2">
                 <p className="text-xs sm:text-sm text-muted-foreground">
                   Total Revenue
@@ -385,7 +385,7 @@ export default function AdminCommandCenter() {
             <CardDescription>Common administrative tasks</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
               <Button
                 onClick={() => navigate('/admin/users')}
                 variant="outline"
