@@ -4,10 +4,11 @@
  */
 
 import { NavLink, useLocation } from 'react-router-dom';
-import { Home, Users, Calendar, Sparkles, User } from 'lucide-react';
+import { Home, Users, Calendar, Sparkles, User, MoreHorizontal } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { haptic } from '@/platform/haptics';
 import { useEnhancedAuth } from '@/contexts/EnhancedAuthContext';
+import { useSidebar } from '@/components/ui/sidebar';
 
 interface NavItem {
   icon: any;
@@ -41,17 +42,12 @@ const navItems: NavItem[] = [
     path: '/ai-assistant',
     roles: ['stylist', 'admin'],
   },
-  {
-    icon: User,
-    label: 'Profile',
-    path: '/profile',
-    roles: ['stylist', 'client', 'admin'],
-  },
 ];
 
 export function MobileBottomNav() {
   const location = useLocation();
   const { isAdmin, isStylist } = useEnhancedAuth();
+  const { toggleSidebar } = useSidebar();
   
   const userRole = isAdmin ? 'admin' : isStylist ? 'stylist' : 'client';
   
@@ -60,6 +56,11 @@ export function MobileBottomNav() {
 
   const handleNavClick = () => {
     haptic.tap();
+  };
+
+  const handleMoreClick = () => {
+    haptic.tap();
+    toggleSidebar();
   };
 
   return (
@@ -137,6 +138,40 @@ export function MobileBottomNav() {
           </NavLink>
         );
       })}
+
+      {/* More button - opens sidebar with all features */}
+      <button
+        onClick={handleMoreClick}
+        className={cn(
+          // Touch target - WCAG 2.2 AAA (60x60px)
+          'flex flex-col items-center justify-center',
+          'min-w-[60px] min-h-[60px]',
+          // Spacing
+          'gap-1',
+          // Interactive states
+          'active:scale-95',
+          'transition-all duration-200',
+          // Accessibility
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
+          'relative'
+        )}
+        aria-label="More options"
+      >
+        {/* Icon with pulse indicator */}
+        <div className="relative">
+          <MoreHorizontal
+            className="h-6 w-6 text-muted-foreground transition-colors duration-200"
+            strokeWidth={2}
+          />
+          {/* Pulsing indicator dot */}
+          <div className="absolute -top-1 -right-1 w-2 h-2 bg-primary rounded-full animate-pulse" aria-hidden="true" />
+        </div>
+        
+        {/* Label */}
+        <span className="text-[10px] font-medium text-muted-foreground transition-colors duration-200">
+          More
+        </span>
+      </button>
     </nav>
   );
 }

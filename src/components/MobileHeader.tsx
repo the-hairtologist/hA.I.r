@@ -53,8 +53,21 @@ export const MobileHeader = ({ notificationCount = 0 }: MobileHeaderProps) => {
       }}
     >
       <div className={cn('flex items-center justify-between px-4 h-16')}>
-        {/* Left: Spacer for visual balance (no menu button on mobile) */}
-        <div className="w-12" aria-hidden="true" />
+        {/* Left: Menu button */}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={handleMenuClick}
+          className={cn(
+            'min-w-[44px] min-h-[44px] touch-manipulation relative group',
+            'hover:bg-primary/10 active:scale-95 transition-all'
+          )}
+          aria-label="Open menu"
+        >
+          <Menu className="h-6 w-6 group-hover:text-primary transition-colors" />
+          {/* Indicator dot to show "more menu available" */}
+          <div className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary/60 animate-pulse" />
+        </Button>
 
         {/* Center: Logo */}
         <button
