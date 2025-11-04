@@ -48,7 +48,7 @@ const BookAppointment = () => {
         </div>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-8">
           <Card
             className="brutal-border brutal-shadow-sm hover:brutal-shadow-md transition-all cursor-pointer group"
             onClick={() => navigate('/client-discovery')}

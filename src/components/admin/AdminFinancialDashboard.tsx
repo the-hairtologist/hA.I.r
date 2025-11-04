@@ -209,7 +209,7 @@ export const AdminFinancialDashboard = () => {
       </div>
 
       {/* Primary Metrics - Revenue Focus */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <Card className="border-2 border-emerald-500/50 bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-950 dark:to-emerald-900">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm flex items-center gap-2">
@@ -290,7 +290,7 @@ export const AdminFinancialDashboard = () => {
       </div>
 
       {/* Secondary Metrics - Growth & Performance */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
         <Card className="border-2 border-border">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm flex items-center gap-2">
