@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useNavigate } from 'react-router-dom';
 import { logger } from '@/lib/logger';
+import { cn } from '@/lib/utils';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 
 interface FavoriteStylistsProps {
   clientId: string;
@@ -126,7 +128,7 @@ export function FavoriteStylists({ clientId }: FavoriteStylistsProps) {
                     <h4 className="font-semibold text-xs sm:text-sm truncate">
                       {stylist.business_name || stylist.user?.full_name}
                     </h4>
-                    <p className="text-[11px] sm:text-xs text-muted-foreground">
+                    <p className={cn(mobileFirst.text.xs, "sm:text-xs text-muted-foreground")}>
                       Your go-to stylist
                     </p>
                   </div>
@@ -135,7 +137,7 @@ export function FavoriteStylists({ clientId }: FavoriteStylistsProps) {
                   <Button
                     size="sm"
                     variant="outline"
-                    className="flex-1 gap-1 h-8 text-[11px] sm:text-xs"
+                    className={cn(mobileFirst.touchTarget.min, mobileFirst.text.xs, "flex-1 gap-1 sm:text-xs")}
                     onClick={() => navigate(`/stylist/${stylist.id}`)}
                   >
                     <Calendar className="h-3 w-3" />
@@ -144,7 +146,7 @@ export function FavoriteStylists({ clientId }: FavoriteStylistsProps) {
                   <Button
                     size="sm"
                     variant="outline"
-                    className="flex-1 gap-1 h-8 text-[11px] sm:text-xs"
+                    className={cn(mobileFirst.touchTarget.min, mobileFirst.text.xs, "flex-1 gap-1 sm:text-xs")}
                     onClick={() => navigate('/messages')}
                   >
                     <MessageSquare className="h-3 w-3" />

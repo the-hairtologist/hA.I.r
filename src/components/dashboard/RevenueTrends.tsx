@@ -5,6 +5,8 @@ import { DollarSign, TrendingUp, TrendingDown } from 'lucide-react';
 import { startOfMonth, endOfMonth, format, subMonths } from 'date-fns';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
+import { cn } from '@/lib/utils';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 
 interface RevenueTrendsProps {
   stylistId: string;
@@ -133,7 +135,7 @@ export function RevenueTrends({ stylistId }: RevenueTrendsProps) {
                   >
                     <div className="absolute inset-0 bg-gradient-to-t from-success to-success/60" />
                   </div>
-                  <span className="text-[11px] sm:text-xs font-bold text-muted-foreground">
+                  <span className={cn(mobileFirst.text.xs, "sm:text-xs font-bold text-muted-foreground")}>
                     {month.month}
                   </span>
                 </div>

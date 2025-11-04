@@ -4,6 +4,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { Users, Repeat } from 'lucide-react';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
+import { cn } from '@/lib/utils';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 
 interface ClientRetentionProps {
   stylistId: string;
@@ -87,7 +89,7 @@ export function ClientRetention({ stylistId }: ClientRetentionProps) {
                 <div className="text-xl sm:text-2xl font-display font-bold">
                   {stats.totalClients}
                 </div>
-                <p className="text-[11px] sm:text-xs font-sans text-muted-foreground mt-1">
+                <p className={cn(mobileFirst.text.xs, "sm:text-xs font-sans text-muted-foreground mt-1")}>
                   Total Clients
                 </p>
               </div>
@@ -97,7 +99,7 @@ export function ClientRetention({ stylistId }: ClientRetentionProps) {
                 <div className="text-xl sm:text-2xl font-display font-bold">
                   {stats.returningClients}
                 </div>
-                <p className="text-[11px] sm:text-xs font-sans text-muted-foreground mt-1">
+                <p className={cn(mobileFirst.text.xs, "sm:text-xs font-sans text-muted-foreground mt-1")}>
                   Returning
                 </p>
               </div>

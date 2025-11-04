@@ -14,6 +14,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
 import { logger } from '@/lib/logger';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 
 interface WeeklyScheduleViewProps {
   appointments: any[];
@@ -213,7 +214,7 @@ export const WeeklyScheduleView = ({
                   variant="default"
                   size="sm"
                   onClick={() => setSelectedDay(null)}
-                  className="h-6 text-[11px] px-2 bg-secondary hover:bg-secondary/90 text-secondary-foreground border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:translate-x-0.5 hover:translate-y-0.5 transition-all flex-shrink-0"
+                  className={cn(mobileFirst.touchTarget.min, mobileFirst.text.xs, "px-2 bg-secondary hover:bg-secondary/90 text-secondary-foreground border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:translate-x-0.5 hover:translate-y-0.5 transition-all flex-shrink-0")}
                 >
                   View Week
                 </Button>
@@ -269,7 +270,7 @@ export const WeeklyScheduleView = ({
                     : `70px repeat(${weekDays.length}, minmax(60px, 1fr))`,
                 }}
               >
-                <div className="p-1.5 sm:p-2 border-r-[2px] border-border text-[11px] font-semibold flex items-center min-h-[44px]">
+                <div className={cn(mobileFirst.text.xs, "p-1.5 sm:p-2 border-r-[2px] border-border font-semibold flex items-center", mobileFirst.touchTarget.min)}>
                   Time
                 </div>
                 {weekDays.slice(0, compact ? 3 : 7).map(day => (
@@ -288,10 +289,10 @@ export const WeeklyScheduleView = ({
                       }
                     }}
                   >
-                    <div className="font-semibold text-[11px] sm:text-xs">
+                    <div className={cn(mobileFirst.text.xs, "font-semibold sm:text-xs")}>
                       {format(day, 'EEE')}
                     </div>
-                    <div className="text-[11px] sm:text-xs text-muted-foreground">
+                    <div className={cn(mobileFirst.text.xs, "sm:text-xs text-muted-foreground")}>
                       {format(day, 'M/d')}
                     </div>
                   </div>
@@ -312,7 +313,7 @@ export const WeeklyScheduleView = ({
                     }}
                   >
                     {/* Time label */}
-                    <div className="p-1 border-r-[2px] border-border text-[11px] text-muted-foreground font-medium flex items-center">
+                    <div className={cn(mobileFirst.text.xs, "p-1 border-r-[2px] border-border text-muted-foreground font-medium flex items-center")}>
                       {slot.minute === 0 && (
                         <span className="font-semibold">{slot.label}</span>
                       )}
@@ -354,7 +355,7 @@ export const WeeklyScheduleView = ({
                         >
                           {!isWorking && slot.minute === 0 && (
                             <div className="absolute inset-0 flex items-center justify-center">
-                              <span className="text-[11px] text-muted-foreground/60 font-medium">
+                              <span className={cn(mobileFirst.text.xs, "text-muted-foreground/60 font-medium")}>
                                 OFF
                               </span>
                             </div>
@@ -373,15 +374,15 @@ export const WeeklyScheduleView = ({
                               }}
                               onClick={() => onAppointmentClick?.(apt)}
                             >
-                              <div className="text-[11px] font-bold text-primary-foreground truncate leading-tight">
+                              <div className={cn(mobileFirst.text.xs, "font-bold text-primary-foreground truncate leading-tight")}>
                                 {apt.client?.user?.full_name}
                               </div>
-                              <div className="text-[11px] text-primary-foreground/90 truncate leading-tight">
+                              <div className={cn(mobileFirst.text.xs, "text-primary-foreground/90 truncate leading-tight")}>
                                 {apt.service_type}
                               </div>
                               {apt.duration_minutes &&
                                 apt.duration_minutes >= 60 && (
-                                  <div className="text-[11px] text-primary-foreground/70 leading-tight">
+                                  <div className={cn(mobileFirst.text.xs, "text-primary-foreground/70 leading-tight")}>
                                     {format(
                                       parseISO(apt.appointment_date),
                                       'h:mm a'
@@ -403,7 +404,7 @@ export const WeeklyScheduleView = ({
         {/* Legend - only show if not compact */}
         {!compact && (
           <div className="p-1.5 border-t-[2px] border-border bg-muted/10">
-            <div className="flex flex-wrap gap-1.5 text-[11px]">
+            <div className={cn(mobileFirst.text.xs, "flex flex-wrap gap-1.5")}>
               {Object.entries(serviceColors).length > 0 ? (
                 Object.entries(serviceColors).map(([serviceType, color]) => (
                   <div key={serviceType} className="flex items-center gap-1">

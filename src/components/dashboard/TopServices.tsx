@@ -5,6 +5,8 @@ import { Award, Sparkles } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
+import { cn } from '@/lib/utils';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 
 interface TopServicesProps {
   stylistId: string;
@@ -118,13 +120,13 @@ export function TopServices({ stylistId }: TopServicesProps) {
                     <h4 className="font-semibold text-xs sm:text-sm truncate">
                       {service.service}
                     </h4>
-                    <p className="text-[11px] sm:text-xs text-muted-foreground">
+                    <p className={cn(mobileFirst.text.xs, "sm:text-xs text-muted-foreground")}>
                       ${service.revenue.toFixed(2)} total
                     </p>
                   </div>
                   <Badge
                     variant="secondary"
-                    className="shrink-0 text-[11px] sm:text-xs"
+                    className={cn(mobileFirst.text.xs, "shrink-0 sm:text-xs")}
                   >
                     {service.count}x
                   </Badge>

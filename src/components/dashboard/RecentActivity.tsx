@@ -9,6 +9,8 @@ import {
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
+import { cn } from '@/lib/utils';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 
 interface Activity {
   id: string;
@@ -125,10 +127,10 @@ export const RecentActivity = ({ activities }: RecentActivityProps) => {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1 min-w-0">
-                      <p className="text-[11px] sm:text-xs lg:text-sm font-pixel font-semibold truncate">
+                      <p className={cn(mobileFirst.text.xs, "sm:text-xs lg:text-sm font-pixel font-semibold truncate")}>
                         {activity.title}
                       </p>
-                      <p className="text-[11px] sm:text-xs lg:text-sm font-sans text-foreground/70 truncate">
+                      <p className={cn(mobileFirst.text.xs, "sm:text-xs lg:text-sm font-sans text-foreground/70 truncate")}>
                         {activity.description}
                       </p>
                     </div>
@@ -141,7 +143,7 @@ export const RecentActivity = ({ activities }: RecentActivityProps) => {
                       </Badge>
                     )}
                   </div>
-                  <p className="text-[11px] sm:text-xs lg:text-sm text-foreground/60 mt-1">
+                  <p className={cn(mobileFirst.text.xs, "sm:text-xs lg:text-sm text-foreground/60 mt-1")}>
                     {format(new Date(activity.timestamp), 'MMM d, h:mm a')}
                   </p>
                 </div>

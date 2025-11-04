@@ -3,6 +3,8 @@ import { TrendingUp, Calendar, CheckCircle2 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { startOfWeek, endOfWeek } from 'date-fns';
+import { cn } from '@/lib/utils';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 
 export const WeeklyOverview = () => {
   const { data: weeklyStats } = useQuery({
@@ -85,7 +87,7 @@ export const WeeklyOverview = () => {
                     <p className="text-2xl sm:text-3xl font-bold font-display tracking-tight">
                       {stat.value}
                     </p>
-                    <p className="text-[11px] sm:text-xs font-sans text-muted-foreground font-medium">
+                    <p className={cn(mobileFirst.text.xs, "sm:text-xs font-sans text-muted-foreground font-medium")}>
                       {stat.label}
                     </p>
                   </div>

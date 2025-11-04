@@ -6,6 +6,7 @@ import { format, startOfDay, endOfDay, startOfWeek, endOfWeek } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 
 interface LiveKPICardsProps {
   stylistId: string;
@@ -178,7 +179,7 @@ export const LiveKPICards = ({ stylistId, onCardClick }: LiveKPICardsProps) => {
                 className={cn('h-4 w-4 sm:h-5 sm:w-5', card.iconColor)}
               />
             </div>
-            <p className="text-[10px] xs:text-[11px] sm:text-xs font-sans font-medium text-muted-foreground mb-0.5 truncate">
+            <p className={cn(mobileFirst.text.xs, "xs:text-xs sm:text-xs font-sans font-medium text-muted-foreground mb-0.5 truncate")}>
               {card.label}
             </p>
             <p className="text-base xs:text-lg sm:text-xl lg:text-2xl font-pixel font-bold gradient-text truncate">

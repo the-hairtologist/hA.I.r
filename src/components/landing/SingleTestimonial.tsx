@@ -1,5 +1,7 @@
 import { Quote } from 'lucide-react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
+import { cn } from '@/lib/utils';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 
 const testimonials = [
   {
@@ -102,22 +104,22 @@ export const SingleTestimonial = () => {
               </div>
 
               {/* Quote - more compact */}
-              <p className="text-[11px] xs:text-xs sm:text-sm font-sans text-foreground leading-snug mb-3">
+              <p className={cn(mobileFirst.text.xs, "xs:text-xs sm:text-sm font-sans text-foreground leading-snug mb-3")}>
                 "{testimonial.quote}"
               </p>
 
               {/* Author - ultra compact */}
               <div className="flex items-center gap-2">
                 <div className="w-9 h-9 border-2 border-black bg-accent flex items-center justify-center">
-                  <span className="font-pixel text-accent-foreground text-[10px]">
+                  <span className={cn(mobileFirst.text.xs, "font-pixel text-accent-foreground")}>
                     {testimonial.initials}
                   </span>
                 </div>
                 <div>
-                  <div className="font-pixel text-[10px] xs:text-[11px] sm:text-xs text-foreground">
+                  <div className={cn(mobileFirst.text.xs, "font-pixel xs:text-xs sm:text-xs text-foreground")}>
                     {testimonial.author}
                   </div>
-                  <div className="font-sans text-[10px] xs:text-[11px] text-muted-foreground">
+                  <div className={cn(mobileFirst.text.xs, "font-sans xs:text-xs text-muted-foreground")}>
                     {testimonial.role}
                   </div>
                 </div>

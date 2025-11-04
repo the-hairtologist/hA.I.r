@@ -13,6 +13,8 @@ import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { useEnhancedAuth } from '@/contexts/EnhancedAuthContext';
 import { logger } from '@/lib/logger';
+import { cn } from '@/lib/utils';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 
 interface Milestone {
   id: string;
@@ -119,7 +121,7 @@ export function LoyaltyProgressWidget() {
 
           <Progress value={progressPercent} className="h-3" />
 
-          <p className="text-[11px] sm:text-xs text-muted-foreground">
+          <p className={cn(mobileFirst.text.xs, "sm:text-xs text-muted-foreground")}>
             {nextMilestone - appointmentCount} more{' '}
             {nextMilestone - appointmentCount === 1 ? 'visit' : 'visits'} until
             your next reward!
@@ -149,11 +151,11 @@ export function LoyaltyProgressWidget() {
                         ${reward.discount_amount} Off
                       </span>
                     </div>
-                    <code className="text-[11px] sm:text-xs bg-background/50 px-2 py-1 rounded">
+                    <code className={cn(mobileFirst.text.xs, "sm:text-xs bg-background/50 px-2 py-1 rounded")}>
                       {reward.discount_code}
                     </code>
                   </div>
-                  <p className="text-[11px] sm:text-xs text-muted-foreground mt-1">
+                  <p className={cn(mobileFirst.text.xs, "sm:text-xs text-muted-foreground mt-1")}>
                     {reward.milestone_type === 'appointments'
                       ? `${reward.milestone_value} appointments milestone`
                       : `${reward.milestone_value} year anniversary`}

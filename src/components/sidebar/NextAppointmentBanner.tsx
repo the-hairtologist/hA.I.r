@@ -11,6 +11,7 @@ import { formatDistanceToNow, isPast, format } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 
 interface Appointment {
   id: string;
@@ -147,7 +148,7 @@ export function NextAppointmentBanner() {
               {timeUntil}
             </span>
           </div>
-          <div className="text-[11px] text-muted-foreground truncate">
+          <div className={cn(mobileFirst.text.xs, "text-muted-foreground truncate")}>
             {format(appointmentDate, 'h:mm a')} • {nextAppointment.service_type}
           </div>
         </div>

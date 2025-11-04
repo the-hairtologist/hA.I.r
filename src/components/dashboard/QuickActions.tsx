@@ -24,6 +24,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 
 interface QuickActionsProps {
   userRole: string;
@@ -318,7 +319,7 @@ export const QuickActions = ({
               )}
               {isAdmin ? 'Admin Controls' : 'Your Quick Actions'}
             </CardTitle>
-            <p className="text-[11px] sm:text-xs lg:text-sm font-sans font-medium mt-1 text-muted-foreground">
+            <p className={cn(mobileFirst.text.xs, "sm:text-xs lg:text-sm font-sans font-medium mt-1 text-muted-foreground")}>
               {isAdmin
                 ? 'Platform management at your fingertips'
                 : 'Jump to what matters most'}
@@ -348,10 +349,10 @@ export const QuickActions = ({
         {isCustomizing ? (
           <div className="space-y-4">
             <div className="p-3 sm:p-4 rounded-lg brutal-border bg-gradient-to-r from-primary/10 to-accent/10 brutal-shadow-sm">
-              <p className="text-[11px] sm:text-xs lg:text-sm font-pixel text-foreground">
+              <p className={cn(mobileFirst.text.xs, "sm:text-xs lg:text-sm font-pixel text-foreground")}>
                 Customize Your Actions
               </p>
-              <p className="text-[11px] sm:text-xs lg:text-sm font-sans text-muted-foreground mt-1">
+              <p className={cn(mobileFirst.text.xs, "sm:text-xs lg:text-sm font-sans text-muted-foreground mt-1")}>
                 Click to toggle • Drag selected items to reorder
               </p>
             </div>
@@ -402,7 +403,7 @@ export const QuickActions = ({
                       >
                         {action.label}
                       </p>
-                      <p className="text-[11px] sm:text-xs lg:text-sm font-sans text-muted-foreground truncate">
+                      <p className={cn(mobileFirst.text.xs, "sm:text-xs lg:text-sm font-sans text-muted-foreground truncate")}>
                         {action.description}
                       </p>
                     </div>

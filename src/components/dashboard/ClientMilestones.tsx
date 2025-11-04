@@ -4,6 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 
 interface ClientMilestonesProps {
   clientId: string;
@@ -116,7 +118,7 @@ export const ClientMilestones = ({ clientId }: ClientMilestonesProps) => {
                           ? `${milestone.milestone_value} Year${milestone.milestone_value > 1 ? 's' : ''} Anniversary! 🎂`
                           : `${milestone.milestone_value} Appointments Complete! ⭐`}
                       </p>
-                      <p className="text-[11px] sm:text-xs text-muted-foreground mt-1">
+                      <p className={cn(mobileFirst.text.xs, "sm:text-xs text-muted-foreground mt-1")}>
                         {new Date(milestone.created_at).toLocaleDateString()}
                       </p>
                     </div>
@@ -125,7 +127,7 @@ export const ClientMilestones = ({ clientId }: ClientMilestonesProps) => {
                     <div className="flex flex-col items-end gap-2">
                       <div className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-success/10 border border-success/30">
                         <Gift className="h-3 w-3 text-success" />
-                        <span className="text-[11px] sm:text-xs font-bold text-success">
+                        <span className={cn(mobileFirst.text.xs, "sm:text-xs font-bold text-success")}>
                           ${milestone.discount_amount} OFF
                         </span>
                       </div>
