@@ -18,6 +18,8 @@ import { CheckCircle, ArrowRight, Sparkles, Upload } from 'lucide-react';
 import { OptimizedImage } from '@/components/OptimizedImage';
 import { logger } from '@/lib/logging/productionLogger';
 import { userJourney } from '@/lib/logging/userJourneyTracker';
+import { cn } from '@/lib/utils';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 
 interface ProfileCompletionDialogProps {
   open: boolean;
@@ -324,7 +326,7 @@ export const ProfileCompletionDialog = ({
                   className={!fullName.trim() ? 'border-destructive/50' : ''}
                 />
                 {!fullName.trim() && (
-                  <p className="text-[11px] sm:text-xs text-destructive">
+                  <p className={cn(mobileFirst.text.xs, "text-destructive")}>
                     This field is required
                   </p>
                 )}
@@ -333,7 +335,7 @@ export const ProfileCompletionDialog = ({
               <div className="space-y-2">
                 <Label htmlFor="phone">
                   Phone Number{' '}
-                  <span className="text-muted-foreground text-[11px] sm:text-xs">
+                  <span className={cn(mobileFirst.text.xs, "text-muted-foreground")}>
                     (Optional)
                   </span>
                 </Label>
@@ -351,7 +353,7 @@ export const ProfileCompletionDialog = ({
                   placeholder="5551234567"
                   maxLength={10}
                 />
-                <p className="text-[11px] sm:text-xs text-muted-foreground">
+                <p className={cn(mobileFirst.text.xs, "text-muted-foreground")}>
                   {phone.length}/10 - Clients can reach you at this number
                 </p>
               </div>
@@ -373,7 +375,7 @@ export const ProfileCompletionDialog = ({
                 <div className="space-y-2">
                   <Label htmlFor="businessName">
                     Business/Salon Name{' '}
-                    <span className="text-muted-foreground text-[11px] sm:text-xs">
+                    <span className={cn(mobileFirst.text.xs, "text-muted-foreground")}>
                       (Optional)
                     </span>
                   </Label>
@@ -384,7 +386,7 @@ export const ProfileCompletionDialog = ({
                     placeholder="e.g., Salon Elite"
                     maxLength={100}
                   />
-                  <p className="text-[11px] sm:text-xs text-muted-foreground">
+                  <p className={cn(mobileFirst.text.xs, "text-muted-foreground")}>
                     Helps clients find you
                   </p>
                 </div>
@@ -392,7 +394,7 @@ export const ProfileCompletionDialog = ({
                 <div className="space-y-2">
                   <Label htmlFor="specialty">
                     Specialty{' '}
-                    <span className="text-muted-foreground text-[11px] sm:text-xs">
+                    <span className={cn(mobileFirst.text.xs, "text-muted-foreground")}>
                       (Optional)
                     </span>
                   </Label>
@@ -403,7 +405,7 @@ export const ProfileCompletionDialog = ({
                     placeholder="e.g., Color Correction, Balayage"
                     maxLength={50}
                   />
-                  <p className="text-[11px] sm:text-xs text-muted-foreground">
+                  <p className={cn(mobileFirst.text.xs, "text-muted-foreground")}>
                     Your primary expertise
                   </p>
                 </div>
@@ -413,7 +415,7 @@ export const ProfileCompletionDialog = ({
                 <div className="space-y-2">
                   <Label htmlFor="location">
                     Location{' '}
-                    <span className="text-muted-foreground text-[11px] sm:text-xs">
+                    <span className={cn(mobileFirst.text.xs, "text-muted-foreground")}>
                       (Optional)
                     </span>
                   </Label>
@@ -424,7 +426,7 @@ export const ProfileCompletionDialog = ({
                     placeholder="e.g., Los Angeles, CA"
                     maxLength={100}
                   />
-                  <p className="text-[11px] sm:text-xs text-muted-foreground">
+                  <p className={cn(mobileFirst.text.xs, "text-muted-foreground")}>
                     City and state
                   </p>
                 </div>
@@ -432,7 +434,7 @@ export const ProfileCompletionDialog = ({
                 <div className="space-y-2">
                   <Label htmlFor="yearsExperience">
                     Years Experience{' '}
-                    <span className="text-muted-foreground text-[11px] sm:text-xs">
+                    <span className={cn(mobileFirst.text.xs, "text-muted-foreground")}>
                       (Optional)
                     </span>
                   </Label>
@@ -445,7 +447,7 @@ export const ProfileCompletionDialog = ({
                     onChange={e => setYearsExperience(e.target.value)}
                     placeholder="5"
                   />
-                  <p className="text-[11px] sm:text-xs text-muted-foreground">
+                  <p className={cn(mobileFirst.text.xs, "text-muted-foreground")}>
                     Years of professional experience
                   </p>
                 </div>
@@ -470,12 +472,12 @@ export const ProfileCompletionDialog = ({
                   <p className="text-xs sm:text-sm font-medium text-primary">
                     🎨 Important for Formula Accuracy
                   </p>
-                  <p className="text-[11px] sm:text-xs text-muted-foreground">
+                  <p className={cn(mobileFirst.text.xs, "text-muted-foreground")}>
                     Specifying your color line ensures AI-generated formulas
                     match your exact products and mixing ratios. This
                     dramatically improves formula reliability and consistency.
                   </p>
-                  <p className="text-[11px] sm:text-xs text-muted-foreground font-medium">
+                  <p className={cn(mobileFirst.text.xs, "text-muted-foreground font-medium")}>
                     Popular brands: Redken, Wella, Schwarzkopf, Goldwell,
                     Matrix, Pravana, Pulp Riot, Joico, L'Oréal Professional
                   </p>
@@ -498,7 +500,7 @@ export const ProfileCompletionDialog = ({
               <div className="space-y-2">
                 <Label htmlFor="bio">
                   Professional Bio{' '}
-                  <span className="text-muted-foreground text-[11px] sm:text-xs">
+                  <span className={cn(mobileFirst.text.xs, "text-muted-foreground")}>
                     (Optional)
                   </span>
                 </Label>
@@ -511,7 +513,7 @@ export const ProfileCompletionDialog = ({
                   maxLength={500}
                   className="resize-none"
                 />
-                <div className="flex items-center justify-between text-[11px] sm:text-xs text-muted-foreground">
+                <div className={cn(mobileFirst.text.xs, "flex items-center justify-between text-muted-foreground")}>
                   <span>Visible on your profile and in stylist discovery</span>
                   <span className={bio.length > 450 ? 'text-warning' : ''}>
                     {bio.length}/500

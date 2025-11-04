@@ -18,6 +18,8 @@ import { usePredictiveInsights } from '@/hooks/usePredictiveInsights';
 import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 
 interface PredictiveClientInsightsProps {
   stylistId?: string;
@@ -81,7 +83,12 @@ const PredictiveClientInsightsComponent = ({
                   </p>
                   <Badge
                     variant="outline"
-                    className={`text-[11px] px-1.5 py-0.5 min-h-[20px] flex items-center ${getConfidenceBadge(insight.confidence)}`}
+                    className={cn(
+                      mobileFirst.text.xs,
+                      mobileFirst.touchTarget.min,
+                      "px-1.5 py-0.5 flex items-center",
+                      getConfidenceBadge(insight.confidence)
+                    )}
                   >
                     {insight.confidence}
                   </Badge>

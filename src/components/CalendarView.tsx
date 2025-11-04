@@ -115,7 +115,7 @@ export const CalendarView = ({
                       {dayAppointments.slice(0, 2).map((apt, idx) => (
                         <div
                           key={apt.id}
-                          className="text-[11px] sm:text-xs truncate bg-primary/10 px-0.5 sm:px-1 rounded"
+                          className={cn(mobileFirst.text.xs, "truncate bg-primary/10 px-0.5 sm:px-1 rounded")}
                         >
                           {format(new Date(apt.appointment_date), 'h:mm a')}
                         </div>
@@ -123,7 +123,7 @@ export const CalendarView = ({
                       {dayAppointments.length > 2 && (
                         <Badge
                           variant="secondary"
-                          className="text-[11px] sm:text-xs h-3 sm:h-4 px-0.5 sm:px-1"
+                          className={cn(mobileFirst.text.xs, "h-3 sm:h-4 px-0.5 sm:px-1")}
                         >
                           +{dayAppointments.length - 2}
                         </Badge>

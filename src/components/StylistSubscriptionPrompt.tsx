@@ -20,6 +20,8 @@ import {
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logging/productionLogger';
+import { cn } from '@/lib/utils';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 
 interface StylistSubscriptionPromptProps {
   open: boolean;
@@ -143,7 +145,7 @@ export const StylistSubscriptionPrompt = ({
             >
               {loading ? 'Starting trial...' : 'Start 7-Day Free Trial'}
             </Button>
-            <p className="text-[11px] sm:text-xs text-center text-muted-foreground mt-2">
+            <p className={cn(mobileFirst.text.xs, "text-center text-muted-foreground mt-2")}>
               Cancel anytime during trial • No commitment required
             </p>
           </div>
@@ -183,7 +185,7 @@ export const StylistSubscriptionPrompt = ({
                 <h3 className="font-semibold text-xs sm:text-sm mb-1">
                   What You're Missing Without Pro
                 </h3>
-                <p className="text-[11px] sm:text-xs text-muted-foreground">
+                <p className={cn(mobileFirst.text.xs, "text-muted-foreground")}>
                   Free accounts can't manage clients, book appointments,
                   generate AI formulas, or track revenue. Upgrade now to unlock
                   your full earning potential.

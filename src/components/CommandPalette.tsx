@@ -157,20 +157,20 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                             {item.title}
                           </span>
                           {item.comingSoon && (
-                            <span className="text-[11px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-medium">
+                            <span className={cn(mobileFirst.text.xs, "px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-medium")}>
                               SOON
                             </span>
                           )}
                         </div>
                         {item.description && (
                           <div className="flex-1 min-w-0">
-                            <p className="text-[11px] sm:text-xs text-muted-foreground truncate">
+                            <p className={cn(mobileFirst.text.xs, "text-muted-foreground truncate")}>
                               {item.description}
                             </p>
                           </div>
                         )}
                       </div>
-                      <div className="flex-shrink-0 text-[11px] sm:text-xs text-muted-foreground">
+                      <div className={cn(mobileFirst.text.xs, "flex-shrink-0 text-muted-foreground")}>
                         {item.url}
                       </div>
                     </button>

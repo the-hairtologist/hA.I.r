@@ -13,6 +13,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
+import { cn } from '@/lib/utils';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 
 interface SchedulingSuggestion {
   datetime: string;
@@ -133,7 +135,12 @@ const SmartSchedulingSuggestionsComponent = ({
                     </p>
                   </div>
                   <span
-                    className={`text-[11px] px-2 py-1 min-h-[24px] flex items-center rounded-full border ${getConfidenceColor(suggestion.confidence)}`}
+                    className={cn(
+                      mobileFirst.text.xs,
+                      mobileFirst.touchTarget.comfortable,
+                      "px-2 py-1 flex items-center rounded-full border",
+                      getConfidenceColor(suggestion.confidence)
+                    )}
                   >
                     {suggestion.confidence}
                   </span>
@@ -155,7 +162,7 @@ const SmartSchedulingSuggestionsComponent = ({
             <div className="grid grid-cols-2 gap-2">
               {Object.keys(patterns.dayCount || {}).length > 0 && (
                 <div className="p-2 rounded-md bg-muted/50 border">
-                  <p className="text-[11px] text-muted-foreground mb-1">
+                  <p className={cn(mobileFirst.text.xs, "text-muted-foreground mb-1")}>
                     Busiest Day
                   </p>
                   <p className="text-xs font-medium">
@@ -173,7 +180,7 @@ const SmartSchedulingSuggestionsComponent = ({
               )}
               {Object.keys(patterns.hourCount || {}).length > 0 && (
                 <div className="p-2 rounded-md bg-muted/50 border">
-                  <p className="text-[11px] text-muted-foreground mb-1">
+                  <p className={cn(mobileFirst.text.xs, "text-muted-foreground mb-1")}>
                     Peak Time
                   </p>
                   <p className="text-xs font-medium">

@@ -9,6 +9,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
+import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 import {
   Tooltip,
   TooltipContent,
@@ -98,7 +100,11 @@ export function RoleSwitcher({ onViewChange, currentView }: RoleSwitcherProps) {
                   {currentView === view && (
                     <Badge
                       variant="secondary"
-                      className="ml-auto text-[11px] bg-primary text-primary-foreground min-h-[20px]"
+                      className={cn(
+                        mobileFirst.text.xs,
+                        mobileFirst.touchTarget.min,
+                        "ml-auto bg-primary text-primary-foreground"
+                      )}
                     >
                       Active
                     </Badge>
