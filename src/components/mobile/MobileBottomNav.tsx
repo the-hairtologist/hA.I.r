@@ -5,7 +5,11 @@
 
 import { useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { Home, Users, Calendar, Sparkles, User, MoreHorizontal, Search, Settings } from 'lucide-react';
+import { 
+  Home, Users, Calendar, Sparkles, User, MoreHorizontal, Search, Settings,
+  Package, Palette, BarChart3, FileText, Folder, CreditCard, Bell, Shield,
+  HelpCircle, LogOut
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { haptic } from '@/platform/haptics';
 import { useEnhancedAuth } from '@/contexts/EnhancedAuthContext';
@@ -16,6 +20,7 @@ import {
   DrawerTitle,
   DrawerDescription,
 } from '@/components/ui/drawer';
+import { Separator } from '@/components/ui/separator';
 
 interface NavItem {
   icon: any;
@@ -91,12 +96,30 @@ export function MobileBottomNav() {
     }
   };
 
+  const handleFeatureClick = (path: string) => {
+    haptic.tap();
+    setIsDrawerOpen(false);
+    navigate(path);
+  };
+
   const quickActions = [
     { id: 'search', icon: Search, label: 'Search', description: 'Find anything' },
     { id: 'ai', icon: Sparkles, label: 'AI Assistant', description: 'Smart help' },
     { id: 'profile', icon: User, label: 'Profile', description: 'Your account' },
     { id: 'settings', icon: Settings, label: 'Settings', description: 'Preferences' },
   ];
+
+  const allFeatures = [
+    { path: '/inventory', icon: Package, label: 'Inventory', roles: ['stylist', 'admin'] },
+    { path: '/formulas', icon: Palette, label: 'Formulas', roles: ['stylist', 'admin'] },
+    { path: '/portfolio', icon: Folder, label: 'Portfolio', roles: ['stylist', 'admin'] },
+    { path: '/analytics', icon: BarChart3, label: 'Analytics', roles: ['admin'] },
+    { path: '/reports', icon: FileText, label: 'Reports', roles: ['admin'] },
+    { path: '/billing', icon: CreditCard, label: 'Billing', roles: ['admin'] },
+    { path: '/notifications', icon: Bell, label: 'Notifications', roles: ['stylist', 'client', 'admin'] },
+    { path: '/privacy', icon: Shield, label: 'Privacy & Security', roles: ['stylist', 'client', 'admin'] },
+    { path: '/help', icon: HelpCircle, label: 'Help & Support', roles: ['stylist', 'client', 'admin'] },
+  ].filter(feature => feature.roles.includes(userRole));
 
   return (
     <>
@@ -212,14 +235,15 @@ export function MobileBottomNav() {
 
     {/* Mobile Action Sheet */}
     <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-      <DrawerContent className="lg:hidden">
+      <DrawerContent className="lg:hidden max-h-[85vh]">
         <DrawerHeader>
           <DrawerTitle>Quick Actions</DrawerTitle>
           <DrawerDescription>Access frequently used features</DrawerDescription>
         </DrawerHeader>
         
-        <div className="p-4 pb-8">
-          <div className="grid grid-cols-2 gap-3">
+        <div className="overflow-y-auto px-4 pb-8">
+          {/* Quick Actions Grid */}
+          <div className="grid grid-cols-2 gap-3 mb-4">
             {quickActions.map((action) => {
               const Icon = action.icon;
               return (
@@ -241,6 +265,58 @@ export function MobileBottomNav() {
                   <Icon className="h-8 w-8 mb-2 text-primary" strokeWidth={2} />
                   <span className="text-sm font-semibold mb-1">{action.label}</span>
                   <span className="text-xs text-muted-foreground">{action.description}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Separator */}
+          <div className="flex items-center gap-3 my-6">
+            <Separator className="flex-1" />
+            <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+              All Features
+            </span>
+            <Separator className="flex-1" />
+          </div>
+
+          {/* All Features List */}
+          <div className="space-y-2">
+            {allFeatures.map((feature) => {
+              const Icon = feature.icon;
+              const isActive = location.pathname === feature.path;
+              
+              return (
+                <button
+                  key={feature.path}
+                  onClick={() => handleFeatureClick(feature.path)}
+                  className={cn(
+                    'w-full flex items-center gap-4 p-4 rounded-lg',
+                    'transition-all duration-200',
+                    'active:scale-[0.98]',
+                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
+                    isActive 
+                      ? 'bg-primary/10 border-2 border-primary' 
+                      : 'bg-secondary/30 hover:bg-secondary border-2 border-transparent'
+                  )}
+                  aria-label={feature.label}
+                  aria-current={isActive ? 'page' : undefined}
+                >
+                  <Icon 
+                    className={cn(
+                      'h-5 w-5',
+                      isActive ? 'text-primary' : 'text-muted-foreground'
+                    )} 
+                    strokeWidth={2}
+                  />
+                  <span className={cn(
+                    'text-sm font-medium',
+                    isActive ? 'text-primary' : 'text-foreground'
+                  )}>
+                    {feature.label}
+                  </span>
+                  {isActive && (
+                    <div className="ml-auto h-2 w-2 rounded-full bg-primary" aria-hidden="true" />
+                  )}
                 </button>
               );
             })}
