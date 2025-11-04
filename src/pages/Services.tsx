@@ -173,9 +173,9 @@ const Services = () => {
       setServices(servicesData);
     } catch (error: unknown) {
       logger.error('Error loading data', 'Services', error as Error);
-      toast.error(
-        'Unable to load your services. Please refresh or check your connection.'
-      );
+      toast.error('Failed to load services', {
+        description: 'Check connection and try again',
+      });
     } finally {
       setLoading(false);
     }

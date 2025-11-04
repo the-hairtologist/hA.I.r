@@ -362,8 +362,8 @@ const Settings = () => {
         }
       },
       {
-        successMessage: 'Locked in. Your profile is updated.',
-        errorMessage: 'That didn\'t save. One more time?',
+        successMessage: 'Profile saved successfully',
+        errorMessage: 'Failed to save profile',
       }
     );
 
@@ -483,8 +483,8 @@ const Settings = () => {
       }
     },
     {
-      successMessage: 'Perfect. Your password is updated.',
-      errorMessage: 'That didn\'t work. Let\'s try that again.',
+      successMessage: 'Password changed successfully',
+      errorMessage: 'Failed to change password',
     }
   );
 
@@ -1708,8 +1708,8 @@ const Settings = () => {
                       setAiEnabled(checked);
                       toast.success(
                         checked
-                          ? 'AI systems activated!'
-                          : 'AI systems deactivated'
+                          ? 'AI features enabled'
+                          : 'AI features disabled'
                       );
                     }}
                     disabled={aiLoading}
@@ -1938,7 +1938,7 @@ const Settings = () => {
                       </Button>
                       <Button
                         variant="outline"
-                        onClick={() => toast.info('AI analytics coming soon!')}
+                        onClick={() => toast.info('AI analytics feature coming soon')}
                         className="flex-1"
                       >
                         <Brain className="mr-2 h-4 w-4" />

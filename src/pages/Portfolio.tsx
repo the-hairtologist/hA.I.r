@@ -101,7 +101,7 @@ const Portfolio = () => {
 
       if (error) {
         logger.error('Error fetching stylist profile', 'Portfolio', error as Error);
-        toast.error('Error loading portfolio');
+        toast.error('Failed to load portfolio');
         navigate('/dashboard');
         return;
       }
@@ -116,7 +116,7 @@ const Portfolio = () => {
       await loadPhotos(profile.id);
     } catch (error) {
       logger.error('Error loading portfolio', 'Portfolio', error as Error);
-      toast.error('Error loading portfolio');
+      toast.error('Failed to load portfolio');
     } finally {
       setLoading(false);
     }
@@ -212,21 +212,21 @@ const Portfolio = () => {
           userId: (await supabase.auth.getSession()).data.session!.user.id,
         });
 
-        toast.success('Photo queued for upload!', {
-          description: "Will sync when you're back online",
+        toast.success('Photo queued for upload', {
+          description: 'Will sync when connection is restored',
         });
       } else {
         const { error } = await supabase.from('portfolio_photos').insert({
           stylist_id: stylistProfileId,
           photo_url: afterUrl,
-          caption: caption || null,
+          caption,
           is_before_after: isBeforeAfter,
           before_photo_url: beforeUrl,
           display_order: photos.length,
         });
 
         if (error) throw error;
-        toast.success('Photo uploaded successfully!');
+        toast.success('Photo uploaded successfully');
       }
 
       setNewPhoto(null);
@@ -239,12 +239,12 @@ const Portfolio = () => {
     } catch (error: any) {
       logger.error('Upload error', 'Portfolio', error as Error);
       if (!navigator.onLine) {
-        toast.error('You\'re offline. Photo will upload when you reconnect.', {
-          description: 'Keep creating - we\'ll save it locally.',
+        toast.error('Connection unavailable', {
+          description: 'Photo will upload when connection is restored',
         });
       } else {
-        toast.error('Couldn\'t upload that photo. Mind trying again?', {
-          description: 'Make sure your connection is stable.',
+        toast.error('Failed to upload photo', {
+          description: 'Check connection and try again',
         });
       }
     } finally {

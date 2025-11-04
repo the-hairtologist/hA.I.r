@@ -185,12 +185,12 @@ const Messages = () => {
     } catch (error: any) {
       log.error('Error loading data', 'Messages', error as Error);
       if (!navigator.onLine) {
-        toast.error('You\'re offline. Reconnect to see messages.', {
-          description: 'Your messages will sync when you\'re back online.',
+        toast.error('Connection unavailable', {
+          description: 'Messages will sync when connection is restored',
         });
       } else {
-        toast.error('Couldn\'t load messages. Let\'s try that again.', {
-          description: 'Check your connection and refresh.',
+        toast.error('Failed to load messages', {
+          description: 'Check connection and try again',
         });
       }
     } finally {
@@ -307,14 +307,18 @@ const Messages = () => {
 
     // Validate file type
     if (!file.type.startsWith('video/')) {
-      toast.error('Please upload a video file');
+      toast.error('Invalid file type', {
+        description: 'Please select a video file',
+      });
       return;
     }
 
     // Validate file size (50MB limit)
     const MAX_SIZE = 50 * 1024 * 1024;
     if (file.size > MAX_SIZE) {
-      toast.error('Video must be less than 50MB');
+      toast.error('File too large', {
+        description: 'Video must be less than 50MB',
+      });
       return;
     }
 
@@ -347,12 +351,12 @@ const Messages = () => {
 
       if (error) throw error;
 
-      toast.success('Video sent successfully!');
+      toast.success('Video sent successfully');
       await loadMessages(selectedConversation.id);
       await loadConversations(session.user.id);
     } catch (error: any) {
       log.error('Error uploading video', 'Messages', error as Error);
-      toast.error('Error uploading video');
+      toast.error('Failed to upload video');
     } finally {
       setUploading(false);
     }

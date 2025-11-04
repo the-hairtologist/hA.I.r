@@ -170,9 +170,9 @@ const Finance = () => {
 
       if (!stylist) {
         logger.warn('No stylist profile found for user', 'Finance', { userId: session.user.id });
-        toast.error(
-          'Stylist profile not found. Please complete your profile first.'
-        );
+        toast.error('Stylist profile not found', {
+          description: 'Please complete your profile first',
+        });
         navigate('/settings');
         return;
       }
@@ -346,7 +346,7 @@ const Finance = () => {
   const copyToClipboard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
-      toast.success('Code copied!', {
+      toast.success('Code copied to clipboard', {
         icon: '✓',
         duration: 2000,
       });
@@ -355,7 +355,7 @@ const Finance = () => {
         navigator.vibrate(50);
       }
     } catch (error) {
-      toast.error('Failed to copy');
+      toast.error('Failed to copy code');
     }
   };
 
@@ -363,7 +363,7 @@ const Finance = () => {
     try {
       const exportData = formatDataForExport(filteredPayments);
       exportToCSV(exportData, 'payments');
-      toast.success('Payments exported successfully!');
+      toast.success('Payments exported successfully');
     } catch (error) {
       toast.error('Failed to export payments');
     }
@@ -373,7 +373,7 @@ const Finance = () => {
     try {
       const exportData = formatDataForExport(filteredCommissions);
       exportToCSV(exportData, 'commissions');
-      toast.success('Commissions exported successfully!');
+      toast.success('Commissions exported successfully');
     } catch (error) {
       toast.error('Failed to export commissions');
     }

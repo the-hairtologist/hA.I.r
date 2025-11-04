@@ -322,16 +322,15 @@ const Formulas = () => {
     const exportData = filteredFormulas.map(f => ({
       client_name: f.client?.full_name || '',
       formula: f.formula_text || '',
-      color_line: f.color_line || '',
-      processing_time: f.processing_time_minutes || '',
       instructions: f.instructions || '',
+      color_line: f.color_line || '',
       result_notes: f.result_notes || '',
       tags: f.tags?.join(', ') || '',
       created_at: new Date(f.created_at).toLocaleDateString(),
     }));
 
     exportToCSV(exportData, 'formulas');
-    toast.success('Formulas exported!');
+    toast.success('Formulas exported successfully');
   }, [filteredFormulas]);
 
   // Global keyboard shortcuts
@@ -459,7 +458,7 @@ const Formulas = () => {
     setWhatWorked(formula.what_worked || '');
     setWhatToAvoid(formula.what_to_avoid || '');
     setDialogOpen(true);
-    toast.success('Formula duplicated! Make any changes and save.');
+    toast.success('Formula duplicated successfully');
   };
 
   const handleDeleteFormula = useCallback(
@@ -547,7 +546,7 @@ const Formulas = () => {
                   setFormulaText(lastFormula.formula_text || '');
                   setInstructions(lastFormula.instructions || '');
                   setColorLine(lastFormula.color_line || '');
-                  toast.success('Last formula loaded!');
+                  toast.success('Last formula loaded successfully');
                 }
               }
             }}
@@ -728,7 +727,7 @@ const Formulas = () => {
                   selectedFormulas.has(f.id)
                 )}
                 onAnalysisComplete={results => {
-                  toast.success('Formula analysis complete!');
+                  toast.success('Formula analysis completed successfully');
                 }}
               />
             </AIFeatureErrorBoundary>
@@ -1204,7 +1203,7 @@ const Formulas = () => {
         stylistId={stylistId || ''}
         onClientAdded={() => {
           setAddClientDialogOpen(false);
-          toast.success('Client added successfully!');
+          toast.success('Client added successfully');
         }}
       />
     </DashboardLayout>
