@@ -79,7 +79,7 @@ const CollapsibleGroup = ({ title, items, onNavigate, unreadCount }: Collapsible
                   item.gradient
                 )}
               >
-                <item.icon className="h-5 w-5 text-white" />
+                <item.icon className="h-5 w-5 text-on-surface-primary" />
               </div>
               
               <div className="flex-1 text-left min-w-0">

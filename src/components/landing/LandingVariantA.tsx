@@ -58,7 +58,7 @@ export const LandingVariantA = ({ onCTAClick }: LandingVariantAProps) => {
               <div className="flex justify-center gap-4 sm:gap-5 mb-3 sm:mb-4 animate-fade-in">
                 <div className="w-11 h-11 xs:w-12 xs:h-12 sm:w-14 sm:h-14 brutal-border-4 border-white bg-primary flex items-center justify-center animate-bounce brutal-shadow-md">
                   <Sparkles
-                    className="h-5 w-5 xs:h-6 xs:w-6 sm:h-7 sm:w-7 text-white"
+                    className="h-5 w-5 xs:h-6 xs:w-6 sm:h-7 sm:w-7 text-on-surface-primary"
                     strokeWidth={2.5}
                   />
                 </div>
@@ -67,9 +67,9 @@ export const LandingVariantA = ({ onCTAClick }: LandingVariantAProps) => {
                   style={{ animationDelay: '0.1s' }}
                 >
                   <Zap
-                    className="h-5 w-5 xs:h-6 xs:w-6 sm:h-7 sm:w-7 text-black"
+                    className="h-5 w-5 xs:h-6 xs:w-6 sm:h-7 sm:w-7 text-foreground"
                     strokeWidth={2.5}
-                    fill="black"
+                    fill="currentColor"
                   />
                 </div>
                 <div
@@ -77,21 +77,21 @@ export const LandingVariantA = ({ onCTAClick }: LandingVariantAProps) => {
                   style={{ animationDelay: '0.2s' }}
                 >
                   <Heart
-                    className="h-5 w-5 xs:h-6 xs:w-6 sm:h-7 sm:w-7 text-white"
+                    className="h-5 w-5 xs:h-6 xs:w-6 sm:h-7 sm:w-7 text-on-surface-primary"
                     strokeWidth={2.5}
-                    fill="white"
+                    fill="currentColor"
                   />
                 </div>
               </div>
 
-              <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-pixel uppercase text-white leading-[1.3] xxs:leading-[1.4] xs:leading-relaxed tracking-wide xs:tracking-wider drop-shadow-[2px_3px_0px_rgba(0,0,0,1)] animate-fade-in px-2 xs:px-4 break-words">
+              <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-pixel uppercase text-on-surface-primary leading-[1.3] xxs:leading-[1.4] xs:leading-relaxed tracking-wide xs:tracking-wider drop-shadow-[2px_3px_0px_rgba(0,0,0,1)] animate-fade-in px-2 xs:px-4 break-words">
                 STOP LOSING CLIENTS
                 <br className="hidden xxs:block" />
                 <span className="xxs:hidden"> </span>TO MISSED TEXTS
               </h1>
 
               <p
-                className="text-xs xs:text-sm sm:text-base md:text-lg font-sans text-black max-w-3xl mx-auto leading-relaxed animate-fade-in px-3 xs:px-4 break-words"
+                className="text-xs xs:text-sm sm:text-base md:text-lg font-sans text-foreground max-w-3xl mx-auto leading-relaxed animate-fade-in px-3 xs:px-4 break-words"
                 style={{ animationDelay: '100ms' }}
               >
                 Automated reminders, instant booking, zero chaos—stylists save

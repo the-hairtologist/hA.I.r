@@ -183,12 +183,12 @@ const FeatureCard = ({
     'bg-secondary',
   ];
   const iconTextColors = [
-    'text-white',
-    'text-white',
-    'text-black',
-    'text-white',
-    'text-white',
-    'text-black',
+    'text-on-surface-primary',
+    'text-on-surface-primary',
+    'text-foreground',
+    'text-on-surface-primary',
+    'text-on-surface-primary',
+    'text-foreground',
   ];
 
   return (

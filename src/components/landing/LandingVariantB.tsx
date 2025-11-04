@@ -58,7 +58,7 @@ export const LandingVariantB = ({ onCTAClick }: LandingVariantBProps) => {
               <div className="flex justify-center gap-4 sm:gap-5 mb-3 sm:mb-4 animate-fade-in">
                 <div className="w-11 h-11 xs:w-12 xs:h-12 sm:w-14 sm:h-14 brutal-border-4 border-white bg-accent flex items-center justify-center animate-bounce brutal-shadow-md">
                   <Users
-                    className="h-5 w-5 xs:h-6 xs:w-6 sm:h-7 sm:w-7 text-white"
+                    className="h-5 w-5 xs:h-6 xs:w-6 sm:h-7 sm:w-7 text-on-surface-primary"
                     strokeWidth={2.5}
                   />
                 </div>
@@ -67,7 +67,7 @@ export const LandingVariantB = ({ onCTAClick }: LandingVariantBProps) => {
                   style={{ animationDelay: '0.1s' }}
                 >
                   <TrendingUp
-                    className="h-5 w-5 xs:h-6 xs:w-6 sm:h-7 sm:w-7 text-black"
+                    className="h-5 w-5 xs:h-6 xs:w-6 sm:h-7 sm:w-7 text-foreground"
                     strokeWidth={2.5}
                   />
                 </div>
@@ -76,21 +76,21 @@ export const LandingVariantB = ({ onCTAClick }: LandingVariantBProps) => {
                   style={{ animationDelay: '0.2s' }}
                 >
                   <Star
-                    className="h-5 w-5 xs:h-6 xs:w-6 sm:h-7 sm:w-7 text-white"
+                    className="h-5 w-5 xs:h-6 xs:w-6 sm:h-7 sm:w-7 text-on-surface-primary"
                     strokeWidth={2.5}
-                    fill="white"
+                    fill="currentColor"
                   />
                 </div>
               </div>
 
-              <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-pixel uppercase text-white leading-[1.3] xxs:leading-[1.4] xs:leading-relaxed tracking-wide xs:tracking-wider drop-shadow-[2px_3px_0px_rgba(0,0,0,1)] animate-fade-in px-2 xs:px-4 break-words">
+              <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-pixel uppercase text-on-surface-primary leading-[1.3] xxs:leading-[1.4] xs:leading-relaxed tracking-wide xs:tracking-wider drop-shadow-[2px_3px_0px_rgba(0,0,0,1)] animate-fade-in px-2 xs:px-4 break-words">
                 JOIN 5,000+ STYLISTS
                 <br className="hidden xxs:block" />
                 <span className="xxs:hidden"> </span>WHO NEVER MISS A BOOKING
               </h1>
 
               <p
-                className="text-xs xs:text-sm sm:text-base md:text-lg font-sans text-white max-w-3xl mx-auto leading-relaxed animate-fade-in px-3 xs:px-4 break-words"
+                className="text-xs xs:text-sm sm:text-base md:text-lg font-sans text-on-surface-primary max-w-3xl mx-auto leading-relaxed animate-fade-in px-3 xs:px-4 break-words"
                 style={{ animationDelay: '100ms' }}
               >
                 Trusted by top professionals to automate scheduling, reminders,
@@ -104,7 +104,7 @@ export const LandingVariantB = ({ onCTAClick }: LandingVariantBProps) => {
                 <Button
                   size="lg"
                   onClick={onCTAClick}
-                  className="text-xs xxs:text-sm xs:text-base sm:text-lg md:text-xl px-6 xxs:px-7 xs:px-8 sm:px-10 md:px-14 py-3.5 xxs:py-4 xs:py-5 sm:py-6 md:py-8 font-pixel uppercase bg-primary text-white hover:bg-primary/90 brutal-border border-black animate-pulse-subtle min-h-[52px] xxs:min-h-[56px] xs:min-h-[60px] w-full max-w-[90vw] xs:w-auto"
+                  className="text-xs xxs:text-sm xs:text-base sm:text-lg md:text-xl px-6 xxs:px-7 xs:px-8 sm:px-10 md:px-14 py-3.5 xxs:py-4 xs:py-5 sm:py-6 md:py-8 font-pixel uppercase bg-primary text-primary-foreground hover:bg-primary/90 brutal-border border-black animate-pulse-subtle min-h-[52px] xxs:min-h-[56px] xs:min-h-[60px] w-full max-w-[90vw] xs:w-auto"
                   style={{
                     boxShadow:
                       '6px 6px 0px rgba(0,0,0,0.8), 10px 10px 0px rgba(0,0,0,0.4)',
@@ -115,7 +115,7 @@ export const LandingVariantB = ({ onCTAClick }: LandingVariantBProps) => {
               </div>
 
               <p
-                className="text-[8px] xxs:text-[9px] xs:text-[10px] font-sans text-white/90 animate-fade-in px-3 break-words"
+                className="text-[8px] xxs:text-[9px] xs:text-[10px] font-sans text-on-surface-primary/90 animate-fade-in px-3 break-words"
                 style={{ animationDelay: '300ms' }}
               >
                 ✓ No Credit Card Required • ✓ 14-Day Free Trial • ✓ Cancel

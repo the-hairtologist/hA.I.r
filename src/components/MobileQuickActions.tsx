@@ -146,7 +146,7 @@ export const MobileQuickActions = () => {
                     'border-2 border-foreground/20'
                   )}
                 >
-                  <Icon className="h-6 w-6 text-white" strokeWidth={2.5} />
+                  <Icon className="h-6 w-6 text-on-surface-primary" strokeWidth={2.5} />
                 </div>
                 <h3 className="font-pixel text-sm mb-1 group-hover:text-primary transition-colors">
                   {action.label}

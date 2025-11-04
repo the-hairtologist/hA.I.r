@@ -62,10 +62,10 @@ export const HeroPhoneMockup = () => {
           {/* App Header with Live Badge */}
           <div className="mb-4 flex items-center justify-between">
             <div>
-              <h3 className="font-pixel text-white text-xs uppercase mb-1">
+              <h3 className="font-pixel text-on-surface-primary text-xs uppercase mb-1">
                 TODAY'S SCHEDULE
               </h3>
-              <p className="font-sans text-white/80 text-[10px]">
+              <p className="font-sans text-on-surface-primary/80 text-[10px]">
                 Thursday, Oct 20
               </p>
             </div>
@@ -178,7 +178,7 @@ export const HeroPhoneMockup = () => {
           >
             <div className="border-[2px] border-black bg-white/10 backdrop-blur-sm p-2 text-center group hover:bg-white/20 transition-colors duration-200">
               <p
-                className="font-pixel text-white text-xs mb-1"
+                className="font-pixel text-on-surface-primary text-xs mb-1"
                 role="status"
                 aria-live="polite"
                 aria-atomic="true"
@@ -191,11 +191,11 @@ export const HeroPhoneMockup = () => {
                   style={{ width: '90%', animationDelay: '0ms' }}
                 ></div>
               </div>
-              <p className="font-sans text-white/70 text-[8px]">BOOKED</p>
+              <p className="font-sans text-on-surface-primary/70 text-[8px]">BOOKED</p>
             </div>
             <div className="border-[2px] border-black bg-white/10 backdrop-blur-sm p-2 text-center group hover:bg-white/20 transition-colors duration-200">
               <p
-                className="font-pixel text-white text-xs mb-1"
+                className="font-pixel text-on-surface-primary text-xs mb-1"
                 role="status"
                 aria-live="polite"
                 aria-atomic="true"
@@ -208,11 +208,11 @@ export const HeroPhoneMockup = () => {
                   style={{ width: '98%', animationDelay: '400ms' }}
                 ></div>
               </div>
-              <p className="font-sans text-white/70 text-[8px]">SHOWED</p>
+              <p className="font-sans text-on-surface-primary/70 text-[8px]">SHOWED</p>
             </div>
             <div className="border-[2px] border-black bg-white/10 backdrop-blur-sm p-2 text-center group hover:bg-white/20 transition-colors duration-200">
               <p
-                className="font-pixel text-white text-xs mb-1"
+                className="font-pixel text-on-surface-primary text-xs mb-1"
                 role="status"
                 aria-live="polite"
                 aria-atomic="true"
@@ -225,7 +225,7 @@ export const HeroPhoneMockup = () => {
                   style={{ width: '80%', animationDelay: '800ms' }}
                 ></div>
               </div>
-              <p className="font-sans text-white/70 text-[8px]">TODAY</p>
+              <p className="font-sans text-on-surface-primary/70 text-[8px]">TODAY</p>
             </div>
           </div>
         </div>

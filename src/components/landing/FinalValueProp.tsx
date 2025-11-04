@@ -161,10 +161,10 @@ export const FinalValueProp = () => {
               'bg-primary',
             ];
             const iconTextColors = [
-              'text-white',
-              'text-white',
-              'text-black',
-              'text-white',
+              'text-on-surface-primary',
+              'text-on-surface-primary',
+              'text-foreground',
+              'text-on-surface-primary',
             ];
             const statColors = [
               'text-secondary',

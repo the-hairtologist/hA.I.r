@@ -81,7 +81,7 @@ const Index = () => {
             <div className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 brutal-border border-white bg-primary flex items-center justify-center flex-shrink-0">
               <Scissors className="h-3 w-3 xs:h-3.5 xs:w-3.5 sm:h-4 sm:w-4 text-primary-foreground" />
             </div>
-            <span className="text-xs xs:text-sm sm:text-base font-pixel text-white uppercase truncate">
+            <span className="text-xs xs:text-sm sm:text-base font-pixel text-on-surface-primary uppercase truncate">
               hA.I.r
             </span>
           </button>
