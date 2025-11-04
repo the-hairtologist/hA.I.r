@@ -783,6 +783,61 @@
   .elevation-3 {
     box-shadow: var(--elevation-3);
   }
+
+  /* ============================================ */
+  /* MICRO-INTERACTION UTILITIES */
+  /* ============================================ */
+
+  /* Hover scale effect */
+  .hover-scale {
+    @apply transition-transform duration-200 hover:scale-105 active:scale-95;
+  }
+
+  /* Smooth transitions */
+  .smooth-transition {
+    @apply transition-all duration-300 ease-out;
+  }
+
+  /* Button feedback animation */
+  @keyframes button-press {
+    0% { transform: scale(1); }
+    50% { transform: scale(0.95); }
+    100% { transform: scale(1); }
+  }
+
+  .animate-button-press {
+    animation: button-press 0.2s ease-out;
+  }
+
+  /* Success check animation */
+  @keyframes check-bounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+  }
+
+  .animate-check-bounce {
+    animation: check-bounce 0.5s ease-out;
+  }
+
+  /* Shimmer effect for loading */
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s infinite;
+  }
+
+  /* Pulse subtle animation */
+  @keyframes pulse-subtle {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+  }
+
+  .animate-pulse-subtle {
+    animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
 }
 
 /* ============================================ */
