@@ -38,6 +38,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           aria-invalid={error ? 'true' : 'false'}
           aria-describedby={error ? `${props.id}-error` : undefined}
+          aria-required={props.required}
           {...props}
         />
         {showValidationIcon && validationState !== 'neutral' && (

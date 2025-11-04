@@ -30,6 +30,7 @@ const TabsTrigger = React.forwardRef<
       'inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-2 text-sm font-bold font-display transition-all w-full min-h-[44px] data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/50 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
       className
     )}
+    role="tab"
     {...props}
   />
 ));

@@ -5,7 +5,6 @@
 
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { LiveRegion } from './ScreenReaderOnly';
-import { SkipLink } from './ScreenReaderOnly';
 
 interface AccessibilityContextValue {
   announceToScreenReader: (message: string, politeness?: 'polite' | 'assertive') => void;
@@ -60,10 +59,6 @@ export const AccessibilityProvider: React.FC<AccessibilityProviderProps> = ({
 
   return (
     <AccessibilityContext.Provider value={value}>
-      {/* Skip Links */}
-      <SkipLink href="#main-content">Skip to main content</SkipLink>
-      <SkipLink href="#navigation">Skip to navigation</SkipLink>
-
       {/* Live Region for Announcements */}
       <LiveRegion politeness={politeness}>
         {announcement}

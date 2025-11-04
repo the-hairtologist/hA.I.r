@@ -1,70 +1,133 @@
 /**
  * Global Keyboard Shortcuts Hook
- * Manages app-wide keyboard shortcuts
+ * Manages app-wide keyboard shortcuts for navigation and actions
  */
 
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAnnouncer } from '@/hooks/useAnnouncer';
+import { useToast } from '@/hooks/use-toast';
 
-export function useGlobalKeyboardShortcuts() {
+interface ShortcutHandler {
+  keys: string[];
+  handler: () => void;
+  description: string;
+  preventDefault?: boolean;
+}
+
+export const useGlobalKeyboardShortcuts = (userRole?: string) => {
   const navigate = useNavigate();
-  const { announce } = useAnnouncer();
+  const { toast } = useToast();
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const target = e.target as HTMLElement;
+  const shortcuts: ShortcutHandler[] = [
+    // Navigation shortcuts (G + key)
+    {
+      keys: ['g', 'd'],
+      handler: () => navigate('/dashboard'),
+      description: 'Go to Dashboard',
+    },
+    {
+      keys: ['g', 'c'],
+      handler: () => navigate('/clients'),
+      description: 'Go to Clients',
+    },
+    {
+      keys: ['g', 'a'],
+      handler: () => navigate('/appointments'),
+      description: 'Go to Appointments',
+    },
+    {
+      keys: ['g', 'm'],
+      handler: () => navigate('/messages'),
+      description: 'Go to Messages',
+    },
+    {
+      keys: ['g', 'p'],
+      handler: () => navigate('/portfolio'),
+      description: 'Go to Portfolio',
+    },
+    {
+      keys: ['g', 'f'],
+      handler: () => navigate('/finance'),
+      description: 'Go to Finance',
+    },
+    {
+      keys: ['g', 's'],
+      handler: () => navigate('/settings'),
+      description: 'Go to Settings',
+    },
+  ];
+
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      // Don't trigger shortcuts when typing in input fields
       if (
-        target.tagName === 'INPUT' ||
-        target.tagName === 'TEXTAREA' ||
-        target.isContentEditable
+        event.target instanceof HTMLInputElement ||
+        event.target instanceof HTMLTextAreaElement ||
+        (event.target as HTMLElement).isContentEditable
       ) {
         return;
       }
 
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault();
-        const searchInput =
-          document.querySelector<HTMLInputElement>('[role="searchbox"]');
-        if (searchInput) {
-          searchInput.focus();
-          announce('Search focused');
+      // Track key sequence
+      const key = event.key.toLowerCase();
+      const isModified = event.ctrlKey || event.metaKey || event.altKey;
+
+      // Handle '?' for help
+      if (key === '?' && !isModified) {
+        event.preventDefault();
+        toast({
+          title: 'Keyboard Shortcuts',
+          description: 'Press G+D for Dashboard, G+C for Clients, G+A for Appointments',
+        });
+        return;
+      }
+
+      // Handle command/ctrl + K for search
+      if (key === 'k' && (event.ctrlKey || event.metaKey)) {
+        event.preventDefault();
+        // Trigger search (can be expanded with actual search functionality)
+        toast({
+          title: 'Search',
+          description: 'Search functionality triggered',
+        });
+        return;
+      }
+
+      // Store previous key for sequences
+      const prevKey = (window as any).__lastShortcutKey;
+      (window as any).__lastShortcutKey = key;
+      (window as any).__lastShortcutTime = Date.now();
+
+      // Clear after 1 second
+      setTimeout(() => {
+        if (Date.now() - (window as any).__lastShortcutTime >= 1000) {
+          (window as any).__lastShortcutKey = null;
+        }
+      }, 1000);
+
+      // Check for sequence shortcuts
+      for (const shortcut of shortcuts) {
+        if (shortcut.keys.length === 2) {
+          if (prevKey === shortcut.keys[0] && key === shortcut.keys[1]) {
+            if (Date.now() - (window as any).__lastShortcutTime < 1000) {
+              event.preventDefault();
+              shortcut.handler();
+              (window as any).__lastShortcutKey = null;
+              break;
+            }
+          }
         }
       }
+    },
+    [navigate, toast, shortcuts]
+  );
 
-      if ((e.metaKey || e.ctrlKey) && e.key === '/') {
-        e.preventDefault();
-        announce(
-          'Keyboard shortcuts: Press Alt+D for Dashboard, Alt+A for Appointments, Alt+C for Clients, Alt+M for Messages'
-        );
-      }
-
-      if (e.altKey && e.key === 'd') {
-        e.preventDefault();
-        navigate('/dashboard');
-        announce('Navigated to Dashboard');
-      }
-
-      if (e.altKey && e.key === 'a') {
-        e.preventDefault();
-        navigate('/appointments');
-        announce('Navigated to Appointments');
-      }
-
-      if (e.altKey && e.key === 'c') {
-        e.preventDefault();
-        navigate('/clients');
-        announce('Navigated to Clients');
-      }
-
-      if (e.altKey && e.key === 'm') {
-        e.preventDefault();
-        navigate('/messages');
-        announce('Navigated to Messages');
-      }
-    };
-
+  useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [navigate, announce]);
-}
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [handleKeyDown]);
+
+  return { shortcuts };
+};

@@ -38,6 +38,10 @@ import { useGlobalLoading } from '@/hooks/useGlobalLoading';
 // Import advanced accessibility features
 import { GlobalAnnouncer } from '@/components/AccessibilityAnnouncer';
 import { MobileBottomNav } from '@/components/mobile/MobileBottomNav';
+import { AccessibilityProvider } from '@/components/accessibility/AccessibilityProvider';
+import { SkipLink } from '@/components/SkipLink';
+import { KeyboardShortcutsOverlay } from '@/components/accessibility/KeyboardShortcutsOverlay';
+import { useGlobalKeyboardShortcuts } from '@/hooks/useGlobalKeyboardShortcuts';
 
 // Simplified - no problematic lazy loading
 
@@ -104,6 +108,11 @@ const GlobalLoadingWrapper = () => {
   return <GlobalLoadingIndicator isLoading={isLoading} message={message} />;
 };
 
+const KeyboardShortcutsWrapper = () => {
+  useGlobalKeyboardShortcuts();
+  return null;
+};
+
 const App = () => {
   return (
     <GlobalErrorBoundary>
@@ -114,27 +123,32 @@ const App = () => {
               <SubscriptionProvider>
                 <DemoModeProvider>
                   <TooltipProvider>
-                    <GlobalLoadingWrapper />
-                    <OfflineIndicator />
-                    <Toaster />
-                    <Sonner />
-                    <CookieConsent />
-                    <GlobalAnnouncer />
-                    <BrowserRouter>
-                      <EnhancedAuthProvider>
-                        <AnalyticsInitializer />
-                        <TourProvider>
-                          <Suspense
-                            fallback={
-                              <LoadingSpinner message="Getting things ready..." />
-                            }
-                          >
-                            <Routes>{AppRoutes()}</Routes>
-                            <MobileBottomNav />
-                          </Suspense>
-                        </TourProvider>
-                      </EnhancedAuthProvider>
-                    </BrowserRouter>
+                    <AccessibilityProvider>
+                      <SkipLink targetId="main-content" label="Skip to main content" />
+                      <GlobalLoadingWrapper />
+                      <OfflineIndicator />
+                      <Toaster />
+                      <Sonner />
+                      <CookieConsent />
+                      <GlobalAnnouncer />
+                      <BrowserRouter>
+                        <EnhancedAuthProvider>
+                          <AnalyticsInitializer />
+                          <KeyboardShortcutsWrapper />
+                          <KeyboardShortcutsOverlay />
+                          <TourProvider>
+                            <Suspense
+                              fallback={
+                                <LoadingSpinner message="Getting things ready..." />
+                              }
+                            >
+                              <Routes>{AppRoutes()}</Routes>
+                              <MobileBottomNav />
+                            </Suspense>
+                          </TourProvider>
+                        </EnhancedAuthProvider>
+                      </BrowserRouter>
+                    </AccessibilityProvider>
                   </TooltipProvider>
                 </DemoModeProvider>
               </SubscriptionProvider>
