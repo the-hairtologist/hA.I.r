@@ -40,6 +40,7 @@ import { logger } from '@/lib/logger';
 import { cn } from '@/lib/utils';
 import { mobileFirst, touchButton } from '@/lib/responsive/mobile-first-utils';
 import { StandardFormField } from '@/components/forms/StandardFormField';
+import { typography } from '@/lib/design/typography';
 
 const BackgroundRemovalDialog = lazy(() =>
   import('@/components/BackgroundRemovalDialog').then(m => ({
@@ -312,12 +313,12 @@ const Portfolio = () => {
     return (
       <DashboardLayout>
         <div className={cn("container mx-auto max-w-6xl", mobileFirst.padding.md)}>
-          <div className="mb-8">
-            <h1 className={cn(mobileFirst.text['3xl'], "font-pixel mb-2 break-words")}>My Portfolio</h1>
-            <p className={cn(mobileFirst.text.sm, "text-muted-foreground font-sans break-words")}>
-              Showcase your best work to attract more clients
-            </p>
-          </div>
+        <div className="mb-8">
+          <h1 className={cn(typography.title.page, "mb-2 break-words")}>My Portfolio</h1>
+          <p className={cn(typography.description.default, "break-words")}>
+            Showcase your best work to attract more clients
+          </p>
+        </div>
           <PortfolioGridSkeleton />
         </div>
       </DashboardLayout>
@@ -328,8 +329,8 @@ const Portfolio = () => {
     <DashboardLayout>
       <div className={cn("container mx-auto max-w-6xl animate-fade-in", mobileFirst.padding.md)}>
         <div className="mb-8">
-          <h1 className={cn(mobileFirst.text['3xl'], "font-pixel mb-2 break-words")}>My Portfolio</h1>
-          <p className="text-muted-foreground font-sans">
+          <h1 className={cn(typography.title.page, "mb-2 break-words")}>My Portfolio</h1>
+          <p className={typography.description.default}>
             Showcase your best work to attract more clients
           </p>
         </div>
@@ -492,7 +493,7 @@ const Portfolio = () => {
 
         {/* Gallery */}
         <div className="mb-8">
-          <h2 className="text-2xl font-pixel mb-4">
+          <h2 className={cn(typography.title.section, "mb-4")}>
             Your Gallery ({photos.length} photos)
           </h2>
           {photos.length === 0 ? (

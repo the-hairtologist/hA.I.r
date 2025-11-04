@@ -40,6 +40,7 @@ import { EmptyState } from '@/components/EmptyState';
 import { networkErrors } from '@/lib/errorMessages';
 import { logger as log } from '@/lib/logger';
 import { MessagesSkeleton } from '@/components/skeletons';
+import { typography } from '@/lib/design/typography';
 
 const Messages = () => {
   const navigate = useNavigate();

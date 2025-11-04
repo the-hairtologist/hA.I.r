@@ -86,6 +86,7 @@ import { MobilePageTemplate } from '@/components/layouts/MobilePageTemplate';
 import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
 import { useIsMobile } from '@/lib/responsive/hooks';
 import { cn } from '@/lib/utils';
+import { typography } from '@/lib/design/typography';
 
 const Dashboard = () => {
   // Performance tracking for this heavy page

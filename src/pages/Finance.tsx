@@ -89,6 +89,8 @@ let Legend: typeof LegendType | undefined;
 
 import { logger } from '@/lib/logger';
 import { FinanceSkeleton } from '@/components/skeletons';
+import { typography } from '@/lib/design/typography';
+import { cn } from '@/lib/utils';
 
 const loadCharts = async () => {
   const charts = await import('recharts');
@@ -435,16 +437,16 @@ const Finance = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mb-8">
           <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-muted-foreground">
+              <CardTitle className={typography.label.default}>
                 Total Revenue
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-pixel text-primary">
+              <div className={cn(typography.stat.secondary, "text-primary")}>
                 ${totalRevenue.toFixed(2)}
               </div>
               <div className="flex items-center gap-2 mt-2">
-                <p className="text-xs font-sans text-muted-foreground">
+                <p className={typography.description.small}>
                   {timePeriod === '30d'
                     ? 'Last 30 days'
                     : timePeriod === '90d'
@@ -474,15 +476,15 @@ const Finance = () => {
 
           <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-muted-foreground">
+              <CardTitle className={typography.label.default}>
                 Service Payments
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-pixel text-primary">
+              <div className={cn(typography.stat.secondary, "text-primary")}>
                 ${totalPayments.toFixed(2)}
               </div>
-              <p className="text-xs font-sans text-muted-foreground mt-1">
+              <p className={cn(typography.description.small, "mt-1")}>
                 Client payments
               </p>
             </CardContent>
@@ -490,15 +492,15 @@ const Finance = () => {
 
           <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-muted-foreground">
+              <CardTitle className={typography.label.default}>
                 Commissions
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-pixel text-chart-3">
+              <div className={cn(typography.stat.secondary, "text-chart-3")}>
                 ${totalCommissions.toFixed(2)}
               </div>
-              <p className="text-xs font-sans text-muted-foreground mt-1">
+              <p className={cn(typography.description.small, "mt-1")}>
                 ${pendingCommissions.toFixed(2)} pending
               </p>
             </CardContent>

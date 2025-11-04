@@ -101,6 +101,7 @@ import {
 import { useClients } from '@/hooks/useClients';
 import { PageHeader } from '@/components/PageHeader';
 import { StandardFormField } from '@/components/forms/StandardFormField';
+import { typography } from '@/lib/design/typography';
 
 const Formulas = () => {
   // Performance tracking
@@ -559,10 +560,10 @@ const Formulas = () => {
 
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-pixel">
+            <h1 className={typography.title.page}>
               Client Formulas
             </h1>
-            <p className="text-muted-foreground font-sans">
+            <p className={typography.description.default}>
               View and manage your client formulas
             </p>
           </div>
