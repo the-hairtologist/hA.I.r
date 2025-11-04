@@ -53,11 +53,14 @@ export const MobileHeader = ({ notificationCount = 0 }: MobileHeaderProps) => {
       }}
     >
       <div className={cn('flex items-center justify-between px-4 h-16')}>
-        {/* Left: Menu button */}
+        {/* Left: Menu button - opens command palette */}
         <Button
           variant="ghost"
           size="icon"
-          onClick={handleMenuClick}
+          onClick={() => {
+            haptic.tap();
+            window.dispatchEvent(new CustomEvent('open-command-palette'));
+          }}
           className={cn(
             'min-w-[44px] min-h-[44px] touch-manipulation relative group',
             'hover:bg-primary/10 active:scale-95 transition-all'

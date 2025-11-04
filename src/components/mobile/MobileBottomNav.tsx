@@ -3,12 +3,11 @@
  * Thumb-zone optimized navigation for mobile devices
  */
 
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Home, Users, Calendar, Sparkles, User, MoreHorizontal } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { haptic } from '@/platform/haptics';
 import { useEnhancedAuth } from '@/contexts/EnhancedAuthContext';
-import { useSidebar } from '@/components/ui/sidebar';
 
 interface NavItem {
   icon: any;
@@ -46,8 +45,8 @@ const navItems: NavItem[] = [
 
 export function MobileBottomNav() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { isAdmin, isStylist } = useEnhancedAuth();
-  const { toggleSidebar } = useSidebar();
   
   const userRole = isAdmin ? 'admin' : isStylist ? 'stylist' : 'client';
   
@@ -60,7 +59,8 @@ export function MobileBottomNav() {
 
   const handleMoreClick = () => {
     haptic.tap();
-    toggleSidebar();
+    // Open command palette instead of sidebar (works everywhere)
+    window.dispatchEvent(new CustomEvent('open-command-palette'));
   };
 
   return (
