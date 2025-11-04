@@ -33,7 +33,7 @@ export const SingleTestimonial = () => {
           {[...Array(5)].map((_, i) => (
             <div
               key={i}
-              className="w-9 h-9 sm:w-10 sm:h-10 border-[2px] border-black bg-secondary flex items-center justify-center"
+              className="w-9 h-9 sm:w-10 sm:h-10 brutal-border-subtle bg-secondary flex items-center justify-center"
               style={{
                 transitionDelay: `${i * 50}ms`,
               }}

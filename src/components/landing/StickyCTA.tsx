@@ -69,7 +69,7 @@ export const StickyCTA = ({ ctaText }: StickyCTAProps) => {
         isVisible ? 'translate-y-0' : 'translate-y-full'
       }`}
     >
-      <div className="bg-secondary border-[3px] border-black rounded-full shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] pl-4 pr-2 py-2">
+      <div className="bg-secondary brutal-border rounded-full shadow-brutal-lg pl-4 pr-2 py-2">
         <div className="flex items-center gap-2">
           <Button
             onClick={handleClick}

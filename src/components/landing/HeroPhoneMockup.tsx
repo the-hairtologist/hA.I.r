@@ -69,7 +69,7 @@ export const HeroPhoneMockup = () => {
                 Thursday, Oct 20
               </p>
             </div>
-            <div className="px-2 py-1 bg-accent border-[2px] border-black animate-pulse">
+            <div className="px-2 py-1 bg-accent brutal-border-subtle animate-pulse">
               <span className="font-pixel text-accent-foreground text-[8px]">
                 LIVE
               </span>
@@ -86,9 +86,9 @@ export const HeroPhoneMockup = () => {
               aria-label="New booking notification: Sarah Chen - Color & Cut"
             >
               <div className="flex items-start gap-2">
-                <div className="w-8 h-8 border-[2px] border-black bg-accent flex items-center justify-center flex-shrink-0 relative">
+                <div className="w-8 h-8 brutal-border-subtle bg-accent flex items-center justify-center flex-shrink-0 relative">
                   <Calendar className="h-4 w-4 text-accent-foreground" />
-                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-accent border-[2px] border-black rounded-full animate-ping"></div>
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-accent brutal-border-subtle rounded-full animate-ping"></div>
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-pixel text-[9px] text-secondary-foreground uppercase mb-1 flex items-center gap-1">
@@ -116,7 +116,7 @@ export const HeroPhoneMockup = () => {
               aria-label="Client message from recent contact"
             >
               <div className="flex items-start gap-2">
-                <div className="w-8 h-8 border-[2px] border-black bg-primary flex items-center justify-center flex-shrink-0">
+                <div className="w-8 h-8 brutal-border-subtle bg-primary flex items-center justify-center flex-shrink-0">
                   <MessageSquare className="h-4 w-4 text-primary-foreground" />
                 </div>
                 <div className="flex-1 min-w-0">
@@ -153,7 +153,7 @@ export const HeroPhoneMockup = () => {
               style={{ animationDelay: '600ms' }}
             >
               <div className="flex items-start gap-2">
-                <div className="w-8 h-8 border-[2px] border-black bg-secondary flex items-center justify-center flex-shrink-0">
+                <div className="w-8 h-8 brutal-border-subtle bg-secondary flex items-center justify-center flex-shrink-0">
                   <Clock className="h-4 w-4 text-secondary-foreground" />
                 </div>
                 <div className="flex-1 min-w-0">
@@ -176,7 +176,7 @@ export const HeroPhoneMockup = () => {
             className="grid grid-cols-3 gap-2 mt-4 animate-fade-in"
             style={{ animationDelay: '1000ms' }}
           >
-            <div className="border-[2px] border-black bg-white/10 backdrop-blur-sm p-2 text-center group hover:bg-white/20 transition-colors duration-200">
+            <div className="brutal-border-subtle bg-white/10 backdrop-blur-sm p-2 text-center group hover:bg-white/20 transition-colors duration-200">
               <p
                 className="font-pixel text-on-surface-primary text-xs mb-1"
                 role="status"
@@ -193,7 +193,7 @@ export const HeroPhoneMockup = () => {
               </div>
               <p className="font-sans text-on-surface-primary/70 text-[8px]">BOOKED</p>
             </div>
-            <div className="border-[2px] border-black bg-white/10 backdrop-blur-sm p-2 text-center group hover:bg-white/20 transition-colors duration-200">
+            <div className="brutal-border-subtle bg-white/10 backdrop-blur-sm p-2 text-center group hover:bg-white/20 transition-colors duration-200">
               <p
                 className="font-pixel text-on-surface-primary text-xs mb-1"
                 role="status"
@@ -210,7 +210,7 @@ export const HeroPhoneMockup = () => {
               </div>
               <p className="font-sans text-on-surface-primary/70 text-[8px]">SHOWED</p>
             </div>
-            <div className="border-[2px] border-black bg-white/10 backdrop-blur-sm p-2 text-center group hover:bg-white/20 transition-colors duration-200">
+            <div className="brutal-border-subtle bg-white/10 backdrop-blur-sm p-2 text-center group hover:bg-white/20 transition-colors duration-200">
               <p
                 className="font-pixel text-on-surface-primary text-xs mb-1"
                 role="status"
@@ -236,7 +236,7 @@ export const HeroPhoneMockup = () => {
         className="absolute -right-4 top-12 animate-bounce"
         style={{ animationDuration: '3s', animationDelay: '500ms' }}
       >
-        <div className="w-12 h-12 border-[3px] border-black bg-accent shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center rotate-12">
+        <div className="w-12 h-12 brutal-border bg-accent shadow-brutal-lg flex items-center justify-center rotate-12">
           <CheckCircle2 className="h-6 w-6 text-accent-foreground" />
         </div>
       </div>
@@ -245,7 +245,7 @@ export const HeroPhoneMockup = () => {
         className="absolute -left-4 top-32 animate-bounce"
         style={{ animationDuration: '2.5s', animationDelay: '700ms' }}
       >
-        <div className="w-10 h-10 border-[3px] border-black bg-secondary shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center -rotate-12">
+        <div className="w-10 h-10 brutal-border bg-secondary shadow-brutal-lg flex items-center justify-center -rotate-12">
           <MessageSquare className="h-5 w-5 text-secondary-foreground" />
         </div>
       </div>
@@ -254,7 +254,7 @@ export const HeroPhoneMockup = () => {
         className="absolute -right-6 bottom-12 animate-bounce"
         style={{ animationDuration: '3.5s', animationDelay: '900ms' }}
       >
-        <div className="w-11 h-11 border-[3px] border-black bg-primary shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center rotate-6">
+        <div className="w-11 h-11 brutal-border bg-primary shadow-brutal-lg flex items-center justify-center rotate-6">
           <span className="font-pixel text-primary-foreground text-base">
             $
           </span>

@@ -222,7 +222,7 @@ const FeatureCard = ({
     >
       {/* Compact animated icon */}
       <div
-        className={`relative w-11 h-11 xs:w-12 xs:h-12 sm:w-14 sm:h-14 border-[3px] border-black ${iconBgColors[index]} flex items-center justify-center mb-3 xs:mb-4 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-transform duration-500`}
+        className={`relative w-11 h-11 xs:w-12 xs:h-12 sm:w-14 sm:h-14 brutal-border ${iconBgColors[index]} flex items-center justify-center mb-3 xs:mb-4 shadow-brutal-md transition-transform duration-500`}
       >
         <Icon
           className={`h-6 w-6 xs:h-7 xs:w-7 ${iconTextColors[index]}`}
@@ -230,7 +230,7 @@ const FeatureCard = ({
         />
 
         {/* Floating number badge */}
-        <div className="absolute -top-2 -right-2 w-8 h-8 xs:w-9 xs:h-9 border-[2px] border-black bg-white flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+        <div className="absolute -top-2 -right-2 w-8 h-8 xs:w-9 xs:h-9 brutal-border-subtle bg-white flex items-center justify-center shadow-brutal-sm">
           <span className="font-pixel text-foreground text-sm xs:text-base">
             {feature.number}
           </span>
@@ -274,7 +274,7 @@ export const MinimalFeatures = () => {
       <div className="container mx-auto px-3 xs:px-4 sm:px-6">
         {/* Section Header with dramatic styling */}
         <div className="text-center mb-4 xs:mb-6 sm:mb-8">
-          <div className="inline-block border-[3px] border-black px-3 py-2 mb-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] animate-pulse-subtle bg-success">
+          <div className="inline-block brutal-border px-3 py-2 mb-4 shadow-brutal-lg animate-pulse-subtle bg-success">
             <h2 className="font-pixel text-[10px] xs:text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-secondary uppercase tracking-wider leading-tight">
               {header.title}
             </h2>

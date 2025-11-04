@@ -176,7 +176,7 @@ export const FinalValueProp = () => {
             return (
               <div
                 key={index}
-                className={`border-[3px] ${borderColors[index]} bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 p-6 text-center min-h-[180px] ${
+                className={`brutal-border ${borderColors[index]} bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 p-6 text-center min-h-[180px] ${
                   isVisible
                     ? 'opacity-100 translate-y-0'
                     : 'opacity-0 translate-y-8'
@@ -186,7 +186,7 @@ export const FinalValueProp = () => {
                 }}
               >
                 <div
-                  className={`w-14 h-14 border-[3px] border-black ${iconBgColors[index]} flex items-center justify-center mx-auto mb-4`}
+                  className={`w-14 h-14 brutal-border ${iconBgColors[index]} flex items-center justify-center mx-auto mb-4`}
                 >
                   <Icon
                     className={`h-7 w-7 ${iconTextColors[index]}`}

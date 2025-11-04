@@ -401,7 +401,7 @@ const Finance = () => {
 
       <main className="container mx-auto px-4 py-8 max-w-6xl">
         {/* Time Period Selector */}
-        <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] mb-6">
+        <Card className="brutal-border shadow-brutal-lg mb-6">
           <CardContent className="p-4">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div className="flex items-center gap-2">
@@ -424,7 +424,7 @@ const Finance = () => {
                     onClick={() =>
                       setTimePeriod(option.value as typeof timePeriod)
                     }
-                    className="border-[2px] border-foreground"
+                    className="brutal-border-subtle"
                   >
                     {option.label}
                   </Button>
@@ -436,7 +436,7 @@ const Finance = () => {
 
         {/* Overview Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mb-8">
-          <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+          <Card className="brutal-border shadow-brutal-lg">
             <CardHeader className="pb-2">
               <CardTitle className={typography.label.default}>
                 Total Revenue
@@ -475,7 +475,7 @@ const Finance = () => {
             </CardContent>
           </Card>
 
-          <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+          <Card className="brutal-border shadow-brutal-lg">
             <CardHeader className="pb-2">
               <CardTitle className={typography.label.default}>
                 Service Payments
@@ -491,7 +491,7 @@ const Finance = () => {
             </CardContent>
           </Card>
 
-          <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+          <Card className="brutal-border shadow-brutal-lg">
             <CardHeader className="pb-2">
               <CardTitle className={typography.label.default}>
                 Commissions

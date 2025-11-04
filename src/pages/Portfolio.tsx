@@ -347,7 +347,7 @@ const Portfolio = () => {
         )}
 
         {/* Upload Section */}
-        <Card className="mb-8 border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-purple-400 to-pink-400">
+        <Card className="mb-8 brutal-border shadow-brutal-lg bg-gradient-to-br from-purple-400 to-pink-400">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-foreground">
               <Upload className="h-5 w-5" />
