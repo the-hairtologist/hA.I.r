@@ -90,6 +90,7 @@ import { AppointmentPhotoButton } from '@/components/AppointmentPhotoButton';
 import { MobilePageTemplate, MobilePageHeader } from '@/components/layouts/MobilePageTemplate';
 import { useIsMobile } from '@/lib/responsive/hooks';
 import { CreateAppointmentDialog } from '@/components/CreateAppointmentDialog';
+import { typography } from '@/lib/design/typography';
 
 const Appointments = () => {
   // Performance tracking
@@ -441,7 +442,7 @@ const Appointments = () => {
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center gap-2">
               <CalendarIcon className="h-6 w-6 text-primary" />
-              <h1 className={cn(mobileFirst.text['2xl'], "font-pixel")}>
+              <h1 className={cn(typography.title.page, "gradient-text")}>
                 My Appointments
               </h1>
             </div>
@@ -659,7 +660,7 @@ const Appointments = () => {
             <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
               <CardHeader className={cn(mobileFirst.padding.md, "border-b-[2px] border-border py-3")}>
                 <div className="flex items-center justify-between gap-2">
-                  <CardTitle className={cn(mobileFirst.text.base, "font-pixel break-words min-w-0 flex-1")}>
+                  <CardTitle className={cn(typography.title.section, "break-words min-w-0 flex-1")}>
                     Today's Schedule - {format(new Date(), 'EEEE, MMMM d')}
                   </CardTitle>
                   {todayAppointments.length > 0 && (

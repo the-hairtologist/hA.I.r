@@ -95,6 +95,7 @@ import { ClientActivityIndicator } from '@/components/ClientActivityIndicator';
 import { VirtualList } from '@/components/VirtualList';
 import { ClientCard } from '@/components/ClientCard';
 import { usePerformance } from '@/hooks/usePerformance';
+import { typography } from '@/lib/design/typography';
 
 interface ClientProfile {
   id: string;
@@ -628,10 +629,10 @@ export default function Clients() {
 
         <div className="flex flex-col gap-4 mb-6 sm:mb-8">
           <div>
-            <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-pixel mb-2 gradient-text break-words">
+            <h1 className={cn(typography.title.page, "gradient-text break-words")}>
               Clients & Formulas
             </h1>
-            <p className="text-sm sm:text-base text-muted-foreground font-sans">
+            <p className={typography.body.large}>
               Manage your client profiles, formulas, and preferences
             </p>
           </div>
@@ -679,7 +680,7 @@ export default function Clients() {
               </DialogTrigger>
               <DialogContent className={cn("w-[calc(100vw-2rem)] sm:max-w-md max-h-[90vh] overflow-y-auto", mobileFirst.padding.md)}>
                 <DialogHeader>
-                  <DialogTitle className={cn(mobileFirst.text.xl, "font-pixel gradient-text break-words")}>
+                  <DialogTitle className={cn(typography.heading.h2, "break-words")}>
                     Add a New Client
                   </DialogTitle>
                 </DialogHeader>
@@ -973,10 +974,10 @@ export default function Clients() {
                 {riskFilter !== 'all' ? (
                   <>
                     <User className="h-12 w-12 mx-auto mb-4 text-green-500" />
-                    <h3 className="text-base sm:text-lg md:text-xl font-pixel mb-2">
+                    <h3 className={typography.heading.h3}>
                       Great News! 🎉
                     </h3>
-                    <p className="text-muted-foreground font-sans mb-4">
+                    <p className={cn(typography.body.default, "text-muted-foreground mb-4")}>
                       No at-risk clients found - you're doing an amazing job
                       keeping your clients engaged!
                     </p>
@@ -984,10 +985,10 @@ export default function Clients() {
                 ) : (
                   <>
                     <User className="h-12 w-12 mx-auto mb-4 text-secondary" />
-                    <h3 className="text-base sm:text-lg md:text-xl font-pixel mb-2">
+                    <h3 className={typography.heading.h3}>
                       No matches found
                     </h3>
-                    <p className="text-muted-foreground font-sans mb-4">
+                    <p className={cn(typography.body.default, "text-muted-foreground mb-4")}>
                       Try adjusting your search criteria or clear the filters
                     </p>
                   </>
@@ -1030,10 +1031,10 @@ export default function Clients() {
                   </span>
                 </div>
               </div>
-              <h3 className="text-xl sm:text-2xl md:text-3xl font-pixel mb-2 gradient-text">
+              <h3 className={typography.heading.h2}>
                 Your Client Roster Awaits!
               </h3>
-              <p className="text-muted-foreground font-sans mb-6 max-w-md mx-auto">
+              <p className={cn(typography.body.default, "text-muted-foreground mb-6 max-w-md mx-auto")}>
                 Build your dream client list! Track hair profiles, preferences,
                 and formula history all in one beautiful place
               </p>
@@ -1160,7 +1161,7 @@ export default function Clients() {
         <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen} modal={true}>
           <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto border-[3px] border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground))]">
             <DialogHeader>
-              <DialogTitle className="text-xl sm:text-2xl md:text-3xl font-pixel gradient-text">
+              <DialogTitle className={typography.heading.h2}>
                 Client Profile
               </DialogTitle>
             </DialogHeader>
@@ -1185,7 +1186,7 @@ export default function Clients() {
                 <div className="grid md:grid-cols-2 gap-6">
                   {/* Client Info Form */}
                   <div>
-                    <h3 className="text-base sm:text-lg md:text-xl font-pixel mb-4 text-secondary">
+                    <h3 className={cn(typography.heading.h3, "mb-4 text-secondary")}>
                       Client Information
                     </h3>
                     <form onSubmit={handleEditClient} className="space-y-4">
@@ -1303,7 +1304,7 @@ export default function Clients() {
 
                   {/* Formulas List */}
                   <div>
-                    <h3 className="text-base sm:text-lg md:text-xl font-pixel mb-4 text-primary flex items-center gap-2">
+                    <h3 className={cn(typography.heading.h3, "mb-4 text-primary flex items-center gap-2")}>
                       <FileText className="h-5 w-5" />
                       Formula History ({clientFormulas.length})
                     </h3>

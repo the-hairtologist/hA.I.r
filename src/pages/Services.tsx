@@ -51,6 +51,7 @@ import type { StylistProfile } from '@/types/common';
 import { logger } from '@/lib/logger';
 import { cn } from '@/lib/utils';
 import { mobileFirst, touchButton } from '@/lib/responsive/mobile-first-utils';
+import { typography } from '@/lib/design/typography';
 
 const Services = () => {
   const navigate = useNavigate();
@@ -652,15 +653,15 @@ const Services = () => {
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div>
-                      <CardTitle className="flex items-center gap-2 text-foreground font-pixel">
+                      <CardTitle className={cn(typography.title.card, "flex items-center gap-2 text-foreground")}>
                         {service.service_name}
                         {!service.is_active && (
-                          <span className="text-xs text-foreground/70 font-normal">
+                          <span className={cn(typography.body.tiny, "text-foreground/70 font-normal")}>
                             (Inactive)
                           </span>
                         )}
                       </CardTitle>
-                      <CardDescription className="mt-1 text-foreground/80 font-sans font-medium space-y-1">
+                      <CardDescription className={cn(typography.description.default, "mt-1 text-foreground/80 font-medium space-y-1")}>
                         <div>
                           ⏱️ {service.duration_minutes} min service
                           {service.buffer_time_minutes !== null && (
@@ -742,9 +743,9 @@ const Services = () => {
           <div className="mt-8">
             <div className="flex items-center gap-3 mb-4">
               <Palette className="h-6 w-6 text-primary" />
-              <h2 className="text-xl font-pixel">Service Colors</h2>
+              <h2 className={typography.title.section}>Service Colors</h2>
             </div>
-            <p className="text-sm font-sans text-muted-foreground mb-4">
+            <p className={cn(typography.description.default, "mb-4")}>
               Customize the colors that appear in your weekly schedule for each
               service type.
             </p>
