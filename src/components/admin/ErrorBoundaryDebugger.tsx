@@ -73,7 +73,7 @@ export const ErrorBoundaryDebugger = () => {
   };
 
   return (
-    <Card className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))]">
+    <Card className="brutal-border shadow-brutal-lg">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>

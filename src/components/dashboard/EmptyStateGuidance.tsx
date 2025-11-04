@@ -51,10 +51,10 @@ export const EmptyStateGuidance = ({ type }: EmptyStateGuidanceProps) => {
 
   return (
     <Card
-      className={`border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br ${config.gradient}`}
+      className={`brutal-border shadow-brutal-lg bg-gradient-to-br ${config.gradient}`}
     >
       <CardContent className="py-12 text-center">
-        <div className="mx-auto w-16 h-16 rounded-full bg-background border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] flex items-center justify-center mb-4">
+        <div className="mx-auto w-16 h-16 rounded-full bg-background brutal-border shadow-brutal flex items-center justify-center mb-4">
           <Icon className="h-8 w-8 text-primary" />
         </div>
         <h3 className="text-xl font-pixel font-bold text-foreground mb-2">

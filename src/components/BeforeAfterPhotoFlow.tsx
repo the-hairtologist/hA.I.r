@@ -236,7 +236,7 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
           <div className="grid grid-cols-2 gap-4 mb-4">
             {/* Before Photo */}
             <div
-              className={`relative aspect-square rounded-lg overflow-hidden border-[3px] ${
+              className={`relative aspect-square rounded-lg overflow-hidden brutal-border ${
                 beforePhoto
                   ? 'border-info shadow-[3px_3px_0px_0px_hsl(var(--info))]'
                   : 'border-dashed border-muted'
@@ -252,7 +252,7 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute top-2 left-2">
-                    <Badge className="bg-info text-info-foreground border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
+                    <Badge className="bg-info text-info-foreground brutal-border-subtle shadow-brutal-sm">
                       <Check className="h-3 w-3 mr-1" />
                       Before
                     </Badge>
@@ -268,7 +268,7 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
 
             {/* After Photo */}
             <div
-              className={`relative aspect-square rounded-lg overflow-hidden border-[3px] ${
+              className={`relative aspect-square rounded-lg overflow-hidden brutal-border ${
                 afterPhoto
                   ? 'border-success shadow-[3px_3px_0px_0px_hsl(var(--success))]'
                   : 'border-dashed border-muted'
@@ -284,13 +284,13 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute top-2 left-2">
-                    <Badge className="bg-secondary text-secondary-foreground border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
+                    <Badge className="bg-secondary text-secondary-foreground brutal-border-subtle shadow-brutal-sm">
                       <Check className="h-3 w-3 mr-1" />
                       After
                     </Badge>
                   </div>
                   <div className="absolute top-2 right-2">
-                    <Badge className="bg-success text-success-foreground border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
+                    <Badge className="bg-success text-success-foreground brutal-border-subtle shadow-brutal-sm">
                       <Sparkles className="h-3 w-3 mr-1" />
                       AI Enhanced
                     </Badge>
@@ -403,7 +403,7 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
           {beforePhoto && afterPhoto && (
             <div className="grid md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Badge className="bg-info text-info-foreground border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
+                <Badge className="bg-info text-info-foreground brutal-border-subtle shadow-brutal-sm">
                   Before
                 </Badge>
                 <OptimizedImage
@@ -411,11 +411,11 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
                   alt="Before"
                   width={600}
                   height={600}
-                  className="w-full rounded-lg border-[3px] border-info shadow-[4px_4px_0px_0px_hsl(var(--info))]"
+                  className="w-full rounded-lg brutal-border border-info shadow-[4px_4px_0px_0px_hsl(var(--info))]"
                 />
               </div>
               <div className="space-y-2">
-                <Badge className="bg-secondary text-secondary-foreground border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
+                <Badge className="bg-secondary text-secondary-foreground brutal-border-subtle shadow-brutal-sm">
                   After
                 </Badge>
                 <OptimizedImage
@@ -423,7 +423,7 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
                   alt="After"
                   width={600}
                   height={600}
-                  className="w-full rounded-lg border-[3px] border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary))]"
+                  className="w-full rounded-lg brutal-border border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary))]"
                 />
               </div>
             </div>

@@ -200,7 +200,7 @@ export const HelpButton = () => {
 
             <TabsContent value="contact" className="space-y-4">
               <div className="space-y-6 py-4">
-                <Card className="border-[2px] border-primary/30">
+                <Card className="brutal-border-subtle border-primary/30">
                   <CardContent className="p-6 space-y-4">
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
@@ -217,7 +217,7 @@ export const HelpButton = () => {
                           // Chat widget integration point
                           haptic.tap();
                         }}
-                        className="border-[2px] border-foreground"
+                        className="brutal-border-subtle"
                       >
                         Start Chat
                       </Button>
@@ -225,7 +225,7 @@ export const HelpButton = () => {
                   </CardContent>
                 </Card>
 
-                <Card className="border-[2px] border-border">
+                <Card className="brutal-border-subtle border-border">
                   <CardContent className="p-6">
                     <h4 className="font-semibold mb-2">Email Support</h4>
                     <p className="text-sm text-muted-foreground mb-4">
@@ -236,7 +236,7 @@ export const HelpButton = () => {
                       onClick={() => {
                         window.location.href = 'mailto:support@hair.app';
                       }}
-                      className="border-[2px] border-foreground"
+                      className="brutal-border-subtle"
                     >
                       support@hair.app
                     </Button>

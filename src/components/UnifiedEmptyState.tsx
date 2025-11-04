@@ -44,10 +44,10 @@ export const UnifiedEmptyState: React.FC<UnifiedEmptyStateProps> = ({
 }) => {
   return (
     <Card
-      className={`border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] ${variantClasses[variant]}`}
+      className={`brutal-border shadow-brutal-lg ${variantClasses[variant]}`}
     >
       <CardContent className="pt-8 pb-8 text-center">
-        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-card border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] flex items-center justify-center">
+        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-card brutal-border-subtle shadow-brutal-sm flex items-center justify-center">
           <Icon className="h-8 w-8 text-foreground" />
         </div>
         <h3 className="text-lg font-bold text-foreground mb-2 font-pixel">
@@ -60,7 +60,7 @@ export const UnifiedEmptyState: React.FC<UnifiedEmptyStateProps> = ({
           <Button
             variant="outline"
             onClick={onAction}
-            className="border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:-translate-y-0.5 transition-all"
+            className="brutal-border-subtle shadow-brutal-sm hover:shadow-brutal hover:-translate-y-0.5 transition-all"
           >
             {actionLabel}
           </Button>

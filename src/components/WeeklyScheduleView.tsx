@@ -214,7 +214,7 @@ export const WeeklyScheduleView = ({
                   variant="default"
                   size="sm"
                   onClick={() => setSelectedDay(null)}
-                  className={cn(mobileFirst.touchTarget.min, mobileFirst.text.xs, "px-2 bg-secondary hover:bg-secondary/90 text-secondary-foreground border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:translate-x-0.5 hover:translate-y-0.5 transition-all flex-shrink-0")}
+                  className={cn(mobileFirst.touchTarget.min, mobileFirst.text.xs, "px-2 bg-secondary hover:bg-secondary/90 text-secondary-foreground brutal-border-subtle shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 transition-all flex-shrink-0")}
                 >
                   View Week
                 </Button>
@@ -225,7 +225,7 @@ export const WeeklyScheduleView = ({
                 variant="outline"
                 size="sm"
                 onClick={previousWeek}
-                className="border-[2px] h-6 w-6 p-0"
+                className="brutal-border-subtle h-6 w-6 p-0"
                 aria-label="Previous week"
               >
                 <ChevronLeft className="h-3 w-3" />
@@ -234,7 +234,7 @@ export const WeeklyScheduleView = ({
                 variant="outline"
                 size="sm"
                 onClick={nextWeek}
-                className="border-[2px] h-6 w-6 p-0"
+                className="brutal-border-subtle h-6 w-6 p-0"
                 aria-label="Next week"
               >
                 <ChevronRight className="h-3 w-3" />

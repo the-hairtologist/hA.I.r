@@ -193,6 +193,20 @@ export default {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
+      borderWidth: {
+        'brutal-subtle': 'var(--brutal-border-subtle)',
+        'brutal': 'var(--brutal-border-standard)',
+        'brutal-bold': 'var(--brutal-border-bold)',
+      },
+      boxShadow: {
+        'brutal-xs': 'var(--brutal-shadow-xs)',
+        'brutal-sm': 'var(--brutal-shadow-sm)',
+        'brutal': 'var(--brutal-shadow-md)',
+        'brutal-md': 'var(--brutal-shadow-md)',
+        'brutal-lg': 'var(--brutal-shadow-lg)',
+        'brutal-xl': 'var(--brutal-shadow-xl)',
+        'brutal-2xl': 'var(--brutal-shadow-2xl)',
+      },
       keyframes: {
         'accordion-down': {
           from: { height: '0', opacity: '0' },

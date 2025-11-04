@@ -97,7 +97,7 @@ export const WeeklySummaryCard = ({
     return (
       <Card
         className={cn(
-          'border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] animate-pulse',
+          'brutal-border shadow-brutal-lg animate-pulse',
           className
         )}
       >
@@ -111,12 +111,12 @@ export const WeeklySummaryCard = ({
   return (
     <Card
       className={cn(
-        'border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]',
+        'brutal-border shadow-brutal-lg',
         'bg-gradient-to-br from-primary/5 to-accent/5',
         className
       )}
     >
-      <CardHeader className="border-b-[2px] border-border">
+      <CardHeader className="brutal-border-subtle border-b border-border">
         <div className="flex items-center gap-2">
           <Sparkles className="h-5 w-5 text-primary" />
           <CardTitle className="text-lg">This Week's Results</CardTitle>

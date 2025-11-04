@@ -269,7 +269,7 @@ export const ProactiveInsightsPanel: React.FC<ProactiveInsightsPanelProps> = ({
                     <div className="flex items-center justify-between mb-2">
                       <h4 className="font-semibold">{insight.title}</h4>
                       {insight.potentialRevenue && (
-                        <Badge className="bg-success text-success-foreground border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
+                        <Badge className="bg-success text-success-foreground brutal-border-subtle shadow-brutal-sm">
                           +${insight.potentialRevenue.toFixed(0)}
                         </Badge>
                       )}

@@ -845,9 +845,22 @@
 /* ============================================ */
 
 @layer components {
+  /* Brutal border utilities */
+  .brutal-border {
+    @apply border-brutal border-foreground;
+  }
+
+  .brutal-border-subtle {
+    @apply border-brutal-subtle border-foreground;
+  }
+
+  .brutal-border-bold {
+    @apply border-brutal-bold border-foreground;
+  }
+
   /* Button hover states */
   .btn-brutal {
-    @apply border-[3px] border-foreground shadow-brutal transition-all duration-200;
+    @apply brutal-border shadow-brutal transition-all duration-200;
   }
 
   .btn-brutal:hover {
@@ -860,11 +873,11 @@
 
   /* Card styles */
   .card-brutal {
-    @apply border-[3px] border-foreground bg-card shadow-brutal;
+    @apply brutal-border bg-card shadow-brutal;
   }
 
   /* Input styles */
   .input-brutal {
-    @apply border-[3px] border-foreground bg-input focus:shadow-brutal;
+    @apply brutal-border bg-input focus:shadow-brutal;
   }
 }

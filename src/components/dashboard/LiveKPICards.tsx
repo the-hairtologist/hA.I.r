@@ -146,7 +146,7 @@ export const LiveKPICards = ({ stylistId, onCardClick }: LiveKPICardsProps) => {
         {[...Array(4)].map((_, i) => (
           <div
             key={i}
-            className="h-24 sm:h-28 bg-secondary/20 rounded-lg border-[2px] border-foreground"
+            className="h-24 sm:h-28 bg-secondary/20 rounded-lg brutal-border-subtle"
           />
         ))}
       </div>
@@ -159,8 +159,8 @@ export const LiveKPICards = ({ stylistId, onCardClick }: LiveKPICardsProps) => {
         <Card
           key={card.label}
           className={cn(
-            'cursor-pointer border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]',
-            'hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))]',
+            'cursor-pointer brutal-border shadow-brutal-lg',
+            'hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-brutal-sm',
             'active:translate-x-[4px] active:translate-y-[4px] active:shadow-none',
             'transition-all duration-300 animate-fade-in',
             card.borderColor
