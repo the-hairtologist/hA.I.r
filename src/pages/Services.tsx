@@ -49,6 +49,8 @@ import { ServiceTypeColorManager } from '@/components/ServiceTypeColorManager';
 import { ServiceTemplatesDialog } from '@/components/ServiceTemplatesDialog';
 import type { StylistProfile } from '@/types/common';
 import { logger } from '@/lib/logger';
+import { cn } from '@/lib/utils';
+import { mobileFirst, touchButton } from '@/lib/responsive/mobile-first-utils';
 
 const Services = () => {
   const navigate = useNavigate();
@@ -279,10 +281,11 @@ const Services = () => {
             <ServiceTemplatesDialog />
             <Button
               onClick={() => setDialogOpen(true)}
-              className="border-2 border-foreground min-h-[44px] flex-shrink-0"
+              className={cn(touchButton.md, "border-2 border-foreground flex-shrink-0")}
             >
               <Plus className="h-4 w-4 mr-2" />
-              Add Service
+              <span className="hidden sm:inline">Add Service</span>
+              <span className="sm:hidden">Add</span>
             </Button>
           </div>
         }
@@ -296,16 +299,16 @@ const Services = () => {
           if (!open) resetForm();
         }}
       >
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader className={mobileFirst.padding.sm}>
+            <DialogTitle className={cn(mobileFirst.text.lg, "break-words")}>
               {editingService ? 'Edit Service' : 'Add New Service'}
             </DialogTitle>
-            <DialogDescription>
+            <DialogDescription className={cn(mobileFirst.text.sm, "break-words")}>
               Define your service offerings and pricing
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={submitForm} className="space-y-4">
+          <form onSubmit={submitForm} className={cn(mobileFirst.padding.sm, "space-y-4")}>
             <StandardFormField
               name="service_name"
               label="Service Name"
@@ -588,7 +591,7 @@ const Services = () => {
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="w-full border-2 border-foreground min-h-[44px]"
+              className={cn(touchButton.md, "w-full border-2 border-foreground")}
             >
               {isSubmitting ? (
                 <>
@@ -596,7 +599,7 @@ const Services = () => {
                   Saving...
                 </>
               ) : (
-                <>{editingService ? 'Update Service' : 'Add Service'}</>
+                <>{editingService ? 'Update' : 'Add'} Service</>
               )}
             </Button>
           </form>
@@ -624,7 +627,7 @@ const Services = () => {
               </p>
               <Button
                 onClick={() => setDialogOpen(true)}
-                className="border-2 border-foreground min-h-[44px]"
+                className={cn(touchButton.md, "border-2 border-foreground")}
               >
                 <Plus className="h-4 w-4 mr-2" />
                 Add Your First Service

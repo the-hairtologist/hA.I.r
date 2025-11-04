@@ -89,6 +89,7 @@ import { AIFeatureErrorBoundary } from '@/components/AIFeatureErrorBoundary';
 import { AIFormulaAnalyzer } from '@/components/AIFormulaAnalyzer';
 import { formulaSchema } from '@/lib/validation/formulaSchemas';
 import { cn } from '@/lib/utils';
+import { mobileFirst, touchButton } from '@/lib/responsive/mobile-first-utils';
 import { VirtualList } from '@/components/VirtualList';
 import { FormulaCard } from '@/components/FormulaCard';
 import {
@@ -743,17 +744,18 @@ const Formulas = () => {
               filters.colorLine ||
               filters.tags.length > 0 ? (
                 <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] bg-secondary/5">
-                  <CardContent className="py-12">
+                  <CardContent className={cn(mobileFirst.padding.lg, "py-12")}>
                     <Palette className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                    <h3 className="text-base sm:text-lg md:text-xl font-pixel mb-2">
+                    <h3 className={cn(mobileFirst.text.lg, "font-pixel mb-2 break-words")}>
                       No formulas match your filters
                     </h3>
-                    <p className="text-muted-foreground font-sans mb-4">
+                    <p className={cn(mobileFirst.text.sm, "text-muted-foreground font-sans mb-4 break-words")}>
                       Try adjusting your search or filters to find what you're
                       looking for
                     </p>
                     <Button
                       variant="outline"
+                      className={touchButton.md}
                       onClick={() => {
                         setSearchTerm('');
                         setFilters({
@@ -786,10 +788,10 @@ const Formulas = () => {
                       </span>
                     </div>
                   </div>
-                  <h2 className="text-xl sm:text-2xl md:text-3xl font-pixel mb-2 gradient-text">
+                  <h2 className={cn(mobileFirst.text.xl, "font-pixel mb-2 gradient-text break-words")}>
                     Your Formula Library Awaits!
                   </h2>
-                  <p className="text-muted-foreground font-sans mb-6 max-w-md mx-auto">
+                  <p className={cn(mobileFirst.text.sm, "text-muted-foreground font-sans mb-6 max-w-md mx-auto break-words")}>
                     {searchTerm
                       ? 'No formulas match your search. Try different keywords or create a new formula!'
                       : clients.length === 0
@@ -798,8 +800,8 @@ const Formulas = () => {
                   </p>
                   <Button
                     onClick={() => setDialogOpen(true)}
+                    className={cn(touchButton.lg, "gap-2 hover-scale")}
                     size="lg"
-                    className="gap-2 hover-scale"
                     disabled={clients.length === 0}
                   >
                     <Plus className="h-5 w-5" />

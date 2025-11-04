@@ -55,7 +55,7 @@ import {
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
-import { mobileFirst } from '@/lib/responsive/mobile-first-utils';
+import { mobileFirst, touchButton } from '@/lib/responsive/mobile-first-utils';
 import { CalendarView } from '@/components/CalendarView';
 import { WeeklyScheduleView } from '@/components/WeeklyScheduleView';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -601,16 +601,17 @@ const Appointments = () => {
             {/* Bulk Actions Bar (stylist only) */}
             {userRole === 'stylist' && selectedAppointments.size > 0 && (
               <Card className="border-[3px] border-primary shadow-[4px_4px_0px_0px_hsl(var(--primary))] mb-4 bg-primary/5">
-                <CardContent className="p-4 flex items-center justify-between gap-4">
-                  <span className="font-medium">
+                <CardContent className={cn(mobileFirst.padding.md, "flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4")}>
+                  <span className={cn(mobileFirst.text.sm, "font-medium break-words")}>
                     {selectedAppointments.size} appointment
                     {selectedAppointments.size !== 1 ? 's' : ''} selected
                   </span>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 w-full sm:w-auto">
                     <Button
                       variant="outline"
                       size="sm"
                       disabled={bulkUpdating}
+                      className={cn(touchButton.sm, "flex-1 sm:flex-none")}
                       onClick={async () => {
                         const confirmed = window.confirm(
                           `Mark ${selectedAppointments.size} appointment${selectedAppointments.size !== 1 ? 's' : ''} as completed?\n\nThis will update all selected appointments to completed status.`
@@ -623,18 +624,19 @@ const Appointments = () => {
                       {bulkUpdating ? (
                         <>
                           <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                          Updating...
+                          <span className="hidden sm:inline">Updating...</span>
                         </>
                       ) : (
-                        'Mark as Completed'
+                        <span className={cn(mobileFirst.text.xs, "sm:text-sm")}>Mark Complete</span>
                       )}
                     </Button>
                     <Button
                       variant="ghost"
                       size="sm"
+                      className={touchButton.sm}
                       onClick={() => setSelectedAppointments(new Set())}
                     >
-                      Clear Selection
+                      Clear
                     </Button>
                   </div>
                 </CardContent>
@@ -643,29 +645,28 @@ const Appointments = () => {
 
             {/* Today's Appointments */}
             <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-              <CardHeader className="border-b-[2px] border-border py-3">
-                <div className="flex items-center justify-between">
-                  <CardTitle className={cn(mobileFirst.text.lg, "font-pixel")}>
+              <CardHeader className={cn(mobileFirst.padding.md, "border-b-[2px] border-border py-3")}>
+                <div className="flex items-center justify-between gap-2">
+                  <CardTitle className={cn(mobileFirst.text.base, "font-pixel break-words min-w-0 flex-1")}>
                     Today's Schedule - {format(new Date(), 'EEEE, MMMM d')}
                   </CardTitle>
                   {todayAppointments.length > 0 && (
-                    <Badge variant="default">
-                      {todayAppointments.length} appointment
-                      {todayAppointments.length !== 1 ? 's' : ''}
+                    <Badge variant="default" className={cn(mobileFirst.text.xs, "flex-shrink-0")}>
+                      {todayAppointments.length}
                     </Badge>
                   )}
                 </div>
               </CardHeader>
-              <CardContent className="p-4">
+              <CardContent className={mobileFirst.padding.md}>
                 {filteredAppointments(todayAppointments).length === 0 ? (
                   <div className="py-8 text-center">
                     <Clock className="h-12 w-12 mx-auto mb-3 text-muted-foreground opacity-50" />
-                    <p className="text-muted-foreground font-medium">
+                    <p className={cn(mobileFirst.text.sm, "text-muted-foreground font-medium break-words")}>
                       {searchQuery || statusFilter !== 'all'
                         ? 'No appointments match your filters'
                         : 'Your schedule is clear today! ☕'}
                     </p>
-                    <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+                    <p className={cn(mobileFirst.text.xs, "text-muted-foreground mt-1 break-words")}>
                       {searchQuery || statusFilter !== 'all'
                         ? 'Try adjusting your search or filters'
                         : 'Time to relax or catch up on other tasks'}
@@ -700,23 +701,23 @@ const Appointments = () => {
                           onClick={e => e.stopPropagation()}
                         />
                         <div
-                          className="flex items-center gap-3 flex-1 cursor-pointer"
+                          className="flex items-center gap-3 flex-1 cursor-pointer min-w-0"
                           onClick={() => {
                             setSelectedAppointment(apt);
                             setDetailsOpen(true);
                           }}
                         >
-                          <div className="bg-primary/10 p-2.5 rounded-lg">
+                          <div className="bg-primary/10 p-2.5 rounded-lg flex-shrink-0">
                             <Clock className="h-5 w-5 text-primary" />
                           </div>
-                          <div className="flex-1">
-                            <p className="font-semibold">
+                          <div className="flex-1 min-w-0">
+                            <p className={cn(mobileFirst.text.sm, "font-semibold truncate")}>
                               {userRole === 'client'
                                 ? apt.stylist?.business_name ||
                                   apt.stylist?.user?.full_name
                                 : apt.client?.user?.full_name}
                             </p>
-                            <p className="text-xs sm:text-sm text-muted-foreground">
+                            <p className={cn(mobileFirst.text.xs, "text-muted-foreground truncate")}>
                               {format(new Date(apt.appointment_date), 'h:mm a')}{' '}
                               • {apt.service_type} • {apt.duration_minutes}min
                             </p>
@@ -856,9 +857,9 @@ const Appointments = () => {
       {/* Appointment Details Dialog */}
       <Dialog open={detailsOpen} onOpenChange={setDetailsOpen} modal={true}>
         <DialogContent className="max-w-lg">
-          <DialogHeader>
-            <DialogTitle>Appointment Details</DialogTitle>
-            <DialogDescription>
+          <DialogHeader className={mobileFirst.padding.sm}>
+            <DialogTitle className={cn(mobileFirst.text.lg, "break-words")}>Appointment Details</DialogTitle>
+            <DialogDescription className={cn(mobileFirst.text.sm, "break-words")}>
               {selectedAppointment &&
                 format(
                   new Date(selectedAppointment.appointment_date),
@@ -867,16 +868,16 @@ const Appointments = () => {
             </DialogDescription>
           </DialogHeader>
           {selectedAppointment && (
-            <div className="space-y-4">
+            <div className={cn(mobileFirst.padding.sm, "space-y-4")}>
               <div>
-                <Label>{userRole === 'client' ? 'Stylist' : 'Client'}</Label>
-                <p className="text-xs sm:text-sm font-medium">
+                <Label className={mobileFirst.text.sm}>{userRole === 'client' ? 'Stylist' : 'Client'}</Label>
+                <p className={cn(mobileFirst.text.sm, "font-medium break-words")}>
                   {userRole === 'client'
                     ? selectedAppointment.stylist?.business_name ||
                       selectedAppointment.stylist?.user?.full_name
                     : selectedAppointment.client?.user?.full_name}
                 </p>
-                <p className="text-xs sm:text-sm text-muted-foreground">
+                <p className={cn(mobileFirst.text.xs, "text-muted-foreground break-words")}>
                   {userRole === 'client'
                     ? selectedAppointment.stylist?.user?.email
                     : selectedAppointment.client?.user?.email}
@@ -885,7 +886,7 @@ const Appointments = () => {
                   selectedAppointment.stylist?.user?.phone) ||
                   (userRole === 'stylist' &&
                     selectedAppointment.client?.user?.phone)) && (
-                  <p className="text-xs sm:text-sm text-muted-foreground">
+                  <p className={cn(mobileFirst.text.xs, "text-muted-foreground break-words")}>
                     {userRole === 'client'
                       ? selectedAppointment.stylist?.user?.phone
                       : selectedAppointment.client?.user?.phone}
@@ -893,8 +894,8 @@ const Appointments = () => {
                 )}
               </div>
               <div>
-                <Label>Service</Label>
-                <p className="text-xs sm:text-sm">
+                <Label className={mobileFirst.text.sm}>Service</Label>
+                <p className={cn(mobileFirst.text.sm, "break-words")}>
                   {selectedAppointment.service_type}
                 </p>
               </div>
@@ -1082,7 +1083,7 @@ const Appointments = () => {
               {selectedAppointment.status === 'completed' && (
                 <div className="pt-4 space-y-2">
                   <Button
-                    className="w-full"
+                    className={cn(touchButton.md, "w-full")}
                     onClick={() => {
                       setRebookAppointment(selectedAppointment);
                       setRebookDialogOpen(true);
