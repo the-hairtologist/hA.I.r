@@ -9,6 +9,8 @@ import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { SubscriptionGate } from '@/components/SubscriptionGate';
 import { DashboardErrorBoundary } from '@/components/DashboardErrorBoundary';
 import { lazyWithRetry } from '@/lib/performance/ReactOptimizations';
+import { AsyncErrorBoundary } from '@/components/errors/AsyncErrorBoundary';
+import { FeatureErrorBoundary } from '@/components/errors/FeatureErrorBoundary';
 
 // Lazy load pages with retry logic for failed chunks
 const Index = lazyWithRetry(() => import('@/pages/Index'));
@@ -163,7 +165,11 @@ export const AppRoutes = () => (
       path="/settings"
       element={
         <ProtectedRoute>
-          <Settings />
+          <AsyncErrorBoundary>
+            <FeatureErrorBoundary featureName="Settings">
+              <Settings />
+            </FeatureErrorBoundary>
+          </AsyncErrorBoundary>
         </ProtectedRoute>
       }
     />
@@ -195,7 +201,11 @@ export const AppRoutes = () => (
       path="/messages"
       element={
         <ProtectedRoute>
-          <Messages />
+          <AsyncErrorBoundary>
+            <FeatureErrorBoundary featureName="Messages">
+              <Messages />
+            </FeatureErrorBoundary>
+          </AsyncErrorBoundary>
         </ProtectedRoute>
       }
     />
@@ -203,7 +213,11 @@ export const AppRoutes = () => (
       path="/appointments"
       element={
         <ProtectedRoute>
-          <Appointments />
+          <AsyncErrorBoundary>
+            <FeatureErrorBoundary featureName="Appointments">
+              <Appointments />
+            </FeatureErrorBoundary>
+          </AsyncErrorBoundary>
         </ProtectedRoute>
       }
     />
@@ -231,7 +245,11 @@ export const AppRoutes = () => (
       path="/analytics"
       element={
         <ProtectedRoute allowedRoles={['stylist', 'admin']}>
-          <Analytics />
+          <AsyncErrorBoundary>
+            <FeatureErrorBoundary featureName="Analytics">
+              <Analytics />
+            </FeatureErrorBoundary>
+          </AsyncErrorBoundary>
         </ProtectedRoute>
       }
     />
@@ -345,7 +363,11 @@ export const AppRoutes = () => (
       path="/formulas"
       element={
         <ProtectedRoute allowedRoles={['stylist', 'admin']}>
-          <Formulas />
+          <AsyncErrorBoundary>
+            <FeatureErrorBoundary featureName="Formulas">
+              <Formulas />
+            </FeatureErrorBoundary>
+          </AsyncErrorBoundary>
         </ProtectedRoute>
       }
     />
@@ -372,7 +394,11 @@ export const AppRoutes = () => (
       element={
         <ProtectedRoute allowedRoles={['stylist', 'admin']}>
           <SubscriptionGate feature="payments">
-            <Finance />
+            <AsyncErrorBoundary>
+              <FeatureErrorBoundary featureName="Finance">
+                <Finance />
+              </FeatureErrorBoundary>
+            </AsyncErrorBoundary>
           </SubscriptionGate>
         </ProtectedRoute>
       }
@@ -381,7 +407,11 @@ export const AppRoutes = () => (
       path="/products"
       element={
         <ProtectedRoute allowedRoles={['stylist', 'admin']}>
-          <Products />
+          <AsyncErrorBoundary>
+            <FeatureErrorBoundary featureName="Products">
+              <Products />
+            </FeatureErrorBoundary>
+          </AsyncErrorBoundary>
         </ProtectedRoute>
       }
     />
@@ -390,7 +420,11 @@ export const AppRoutes = () => (
       element={
         <ProtectedRoute allowedRoles={['stylist', 'admin']}>
           <SubscriptionGate feature="portfolio">
-            <Portfolio />
+            <AsyncErrorBoundary>
+              <FeatureErrorBoundary featureName="Portfolio">
+                <Portfolio />
+              </FeatureErrorBoundary>
+            </AsyncErrorBoundary>
           </SubscriptionGate>
         </ProtectedRoute>
       }
@@ -400,7 +434,11 @@ export const AppRoutes = () => (
       element={
         <ProtectedRoute allowedRoles={['stylist', 'admin']}>
           <SubscriptionGate feature="clients">
-            <Clients />
+            <AsyncErrorBoundary>
+              <FeatureErrorBoundary featureName="Clients">
+                <Clients />
+              </FeatureErrorBoundary>
+            </AsyncErrorBoundary>
           </SubscriptionGate>
         </ProtectedRoute>
       }
@@ -410,7 +448,11 @@ export const AppRoutes = () => (
       element={
         <ProtectedRoute allowedRoles={['stylist', 'admin']}>
           <SubscriptionGate feature="services">
-            <Services />
+            <AsyncErrorBoundary>
+              <FeatureErrorBoundary featureName="Services">
+                <Services />
+              </FeatureErrorBoundary>
+            </AsyncErrorBoundary>
           </SubscriptionGate>
         </ProtectedRoute>
       }

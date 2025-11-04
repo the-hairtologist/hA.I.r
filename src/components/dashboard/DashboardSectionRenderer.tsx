@@ -97,7 +97,11 @@ export const DashboardSectionRenderer = memo(
         ) : null;
 
       case 'QuickActions':
-        return <QuickActions userRole={userRole || ''} isAdmin={isAdmin} />;
+        return (
+          <FeatureErrorBoundary featureName="Quick Actions">
+            <QuickActions userRole={userRole || ''} isAdmin={isAdmin} />
+          </FeatureErrorBoundary>
+        );
 
       case 'WeeklyOverview':
         return userRole === 'stylist' || isAdmin ? (
@@ -135,7 +139,11 @@ export const DashboardSectionRenderer = memo(
         ) : null;
 
       case 'QuickNotes':
-        return userRole === 'stylist' || isAdmin ? <QuickNotes /> : null;
+        return userRole === 'stylist' || isAdmin ? (
+          <FeatureErrorBoundary featureName="Quick Notes">
+            <QuickNotes />
+          </FeatureErrorBoundary>
+        ) : null;
 
       case 'ChurnRisk':
         return (userRole === 'stylist' || isAdmin) && profile?.id ? (
@@ -167,26 +175,39 @@ export const DashboardSectionRenderer = memo(
         ) : null;
 
       case 'RecentActivity':
-        return (userRole === 'stylist' || userRole === 'client' || isAdmin) &&
-          recentActivities.length > 0 ? (
-          <RecentActivity activities={recentActivities} />
+        return recentActivities.length > 0 ? (
+          <FeatureErrorBoundary featureName="Recent Activity">
+            <RecentActivity activities={recentActivities} />
+          </FeatureErrorBoundary>
         ) : null;
 
       case 'QuickTasks':
-        return userRole === 'stylist' || isAdmin ? <QuickTasks /> : null;
+        return userRole === 'stylist' || isAdmin ? (
+          <FeatureErrorBoundary featureName="Quick Tasks">
+            <QuickTasks />
+          </FeatureErrorBoundary>
+        ) : null;
 
       case 'FavoriteStylists':
         return (userRole === 'client' || isAdmin) && profile?.id ? (
-          <FavoriteStylists clientId={profile.id} />
+          <FeatureErrorBoundary featureName="Favorite Stylists">
+            <FavoriteStylists clientId={profile.id} />
+          </FeatureErrorBoundary>
         ) : null;
 
       case 'ClientMilestones':
         return (userRole === 'client' || isAdmin) && profile?.id ? (
-          <ClientMilestones clientId={profile.id} />
+          <FeatureErrorBoundary featureName="Client Milestones">
+            <ClientMilestones clientId={profile.id} />
+          </FeatureErrorBoundary>
         ) : null;
 
       case 'SupportChatWidget':
-        return <SupportChatWidget />;
+        return (
+          <FeatureErrorBoundary featureName="Support Chat">
+            <SupportChatWidget />
+          </FeatureErrorBoundary>
+        );
 
       case 'UpcomingAppointments':
         return (userRole === 'client' || isAdmin) && stats ? (
