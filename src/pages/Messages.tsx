@@ -39,6 +39,7 @@ import { logger } from '@/lib/logging/productionLogger';
 import { EmptyState } from '@/components/EmptyState';
 import { networkErrors } from '@/lib/errorMessages';
 import { logger as log } from '@/lib/logger';
+import { MessagesSkeleton } from '@/components/skeletons';
 
 const Messages = () => {
   const navigate = useNavigate();
@@ -371,11 +372,8 @@ const Messages = () => {
           backTo="/dashboard"
           loading={true}
         />
-        <div className="flex-1 flex items-center justify-center">
-          <div className="text-center">
-            <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-2" />
-            <p className="text-sm text-muted-foreground">Loading messages...</p>
-          </div>
+        <div className="flex-1 flex items-center justify-center p-6">
+          <MessagesSkeleton />
         </div>
       </div>
     );

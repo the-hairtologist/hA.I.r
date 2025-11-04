@@ -61,6 +61,7 @@ import { FormFieldError } from '@/components/FormFieldError';
 import { useDevMode } from '@/hooks/useDevMode';
 import { SaveIndicator } from '@/components/SaveIndicator';
 import { logger } from '@/lib/logger';
+import { SettingsSkeleton } from '@/components/skeletons';
 
 const Settings = () => {
   // Performance tracking
@@ -499,8 +500,8 @@ const Settings = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <div className="min-h-screen flex items-center justify-center p-6">
+        <SettingsSkeleton />
       </div>
     );
   }

@@ -88,6 +88,7 @@ let ResponsiveContainer: typeof ResponsiveContainerType | undefined;
 let Legend: typeof LegendType | undefined;
 
 import { logger } from '@/lib/logger';
+import { FinanceSkeleton } from '@/components/skeletons';
 
 const loadCharts = async () => {
   const charts = await import('recharts');
@@ -381,8 +382,8 @@ const Finance = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <div className="min-h-screen flex items-center justify-center p-6">
+        <FinanceSkeleton />
       </div>
     );
   }
