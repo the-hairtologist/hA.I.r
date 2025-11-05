@@ -613,7 +613,7 @@ const Appointments = () => {
 
             {/* Bulk Actions Bar (stylist only) */}
             {userRole === 'stylist' && selectedAppointments.size > 0 && (
-              <Card className="border-[3px] border-primary shadow-[4px_4px_0px_0px_hsl(var(--primary))] mb-4 bg-primary/5">
+              <Card className="brutal-border border-primary shadow-brutal-md mb-4 bg-primary/5">
                 <CardContent className={cn(mobileFirst.padding.md, "flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4")}>
                   <span className={cn(mobileFirst.text.sm, "font-medium break-words")}>
                     {selectedAppointments.size} appointment
@@ -657,8 +657,8 @@ const Appointments = () => {
             )}
 
             {/* Today's Appointments */}
-            <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-              <CardHeader className={cn(mobileFirst.padding.md, "border-b-[2px] border-border py-3")}>
+            <Card className="brutal-border shadow-brutal-md">
+              <CardHeader className={cn(mobileFirst.padding.md, "brutal-border-bottom border-border py-3")}>
                 <div className="flex items-center justify-between gap-2">
                   <CardTitle className={cn(typography.title.section, "break-words min-w-0 flex-1")}>
                     Today's Schedule - {format(new Date(), 'EEEE, MMMM d')}
@@ -691,7 +691,7 @@ const Appointments = () => {
                       <div
                         key={apt.id}
                         className={cn(
-                          'flex items-center justify-between p-3 border-[2px] rounded-lg hover:bg-secondary/5 hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_hsl(var(--foreground))] transition-all group',
+                          'flex items-center justify-between p-3 brutal-border-subtle rounded-lg hover:bg-secondary/5 hover:-translate-y-1 hover:shadow-brutal-md transition-all group',
                           selectedAppointments.has(apt.id)
                             ? 'border-primary ring-2 ring-primary'
                             : 'border-foreground'

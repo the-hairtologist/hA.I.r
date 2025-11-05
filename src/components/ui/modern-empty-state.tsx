@@ -54,7 +54,7 @@ export const ModernEmptyState = React.forwardRef<
             <div
               className={cn(
                 'relative p-6 rounded-2xl transition-all duration-500',
-                'border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]',
+                'brutal-border shadow-brutal-md',
                 illustration === 'float' && 'float',
                 illustration === 'glow' && 'glow-pulse',
                 'bg-gradient-to-br from-primary/10 to-accent/10'

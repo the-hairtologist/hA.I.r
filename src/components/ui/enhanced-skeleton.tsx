@@ -42,7 +42,7 @@ export function SkeletonCard({
       className={cn(
         'rounded-xl overflow-hidden',
         variant === 'brutal' &&
-          'border-[3px] border-foreground/20 shadow-[4px_4px_0px_0px_hsl(var(--foreground)/0.1)]',
+          'brutal-border border-foreground/20 shadow-brutal-md',
         variant === 'glass' && 'glass-brutal',
         variant === 'elevated' && 'elevation-2'
       )}
@@ -84,7 +84,7 @@ export function SkeletonStat({ variant = 'brutal' }: SkeletonStatProps) {
       className={cn(
         'rounded-xl overflow-hidden',
         variant === 'brutal' &&
-          'border-[3px] border-foreground/20 shadow-[4px_4px_0px_0px_hsl(var(--foreground)/0.1)]',
+          'brutal-border border-foreground/20 shadow-brutal-md',
         variant === 'glass' && 'glass-brutal',
         variant === 'elevated' && 'elevation-2'
       )}
@@ -122,7 +122,7 @@ export function SkeletonTable({
     <div
       className={cn(
         'rounded-xl overflow-hidden',
-        variant === 'brutal' && 'border-[3px] border-foreground/20',
+        variant === 'brutal' && 'brutal-border border-foreground/20',
         variant === 'glass' && 'glass-brutal',
         variant === 'elevated' && 'elevation-2'
       )}

@@ -17,12 +17,12 @@ const buttonVariants = cva(
         outline:
           'brutal-border-subtle bg-background hover:bg-accent hover:text-accent-foreground shadow-brutal-sm hover:shadow-brutal-xs hover:translate-x-[1px] hover:translate-y-[1px] focus-visible:ring-4 focus-visible:ring-accent/50 focus-visible:ring-offset-2 active:scale-[0.99]',
         secondary:
-          'bg-secondary text-secondary-foreground hover:bg-secondary/80 border-2 border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] active:scale-[0.99]',
+          'bg-secondary text-secondary-foreground hover:bg-secondary/80 brutal-border-subtle shadow-brutal-sm hover:shadow-brutal-xs hover:translate-x-[1px] hover:translate-y-[1px] active:scale-[0.99]',
         ghost:
           'hover:bg-accent hover:text-accent-foreground hover:scale-[1.02] active:scale-[0.98]',
         link: 'text-primary underline-offset-4 hover:underline',
         success:
-          'bg-success text-success-foreground hover:bg-success/90 border-2 border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] active:scale-[0.99]',
+          'bg-success text-success-foreground hover:bg-success/90 brutal-border-subtle shadow-brutal-sm hover:shadow-brutal-xs hover:translate-x-[1px] hover:translate-y-[1px] active:scale-[0.99]',
         glass:
           'glass-brutal backdrop-blur-xl text-foreground hover:bg-background/80 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98]',
       },

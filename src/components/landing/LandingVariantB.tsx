@@ -128,7 +128,7 @@ export const LandingVariantB = ({ onCTAClick }: LandingVariantBProps) => {
               >
                 <Suspense
                   fallback={
-                    <div className="relative w-full max-w-[180px] xs:max-w-[220px] sm:max-w-[280px] md:max-w-[320px] mx-auto h-[400px] xs:h-[450px] sm:h-[500px] border-[4px] border-black bg-white/10 backdrop-blur-sm rounded-[32px] animate-pulse" />
+                    <div className="relative w-full max-w-[180px] xs:max-w-[220px] sm:max-w-[280px] md:max-w-[320px] mx-auto h-[400px] xs:h-[450px] sm:h-[500px] brutal-border-bold border-black bg-white/10 backdrop-blur-sm rounded-[32px] animate-pulse" />
                   }
                 >
                   <HeroPhoneMockup />

@@ -351,7 +351,7 @@ const Auth = () => {
     >
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-secondary focus:text-secondary-foreground focus:rounded-none focus:border-[3px] focus:border-black focus:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] focus:font-pixel focus:uppercase"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-secondary focus:text-secondary-foreground focus:rounded-none brutal-border focus:border-black focus:shadow-brutal-sm focus:font-pixel focus:uppercase"
       >
         Skip to main content
       </a>
@@ -361,10 +361,10 @@ const Auth = () => {
         aria-label="Authentication"
         className="w-full max-w-md relative z-10 px-4"
       >
-        <Card className="w-full border-[3px] sm:border-[4px] border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] bg-background max-w-md mx-auto rounded-none">
-          <CardHeader className="text-center space-y-2 sm:space-y-3 px-4 sm:px-6 pt-5 sm:pt-6 border-b-[3px] border-black">
+        <Card className="w-full brutal-border sm:brutal-border-bold border-black shadow-brutal-xl sm:shadow-brutal-2xl bg-background max-w-md mx-auto rounded-none">
+          <CardHeader className="text-center space-y-2 sm:space-y-3 px-4 sm:px-6 pt-5 sm:pt-6 brutal-border-bottom border-black">
             <div className="flex items-center justify-center gap-2 mb-1 sm:mb-2">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 border-[3px] border-black bg-primary shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 brutal-border border-black bg-primary shadow-brutal-sm flex items-center justify-center">
                 <Scissors className="h-5 w-5 sm:h-6 sm:w-6 text-primary-foreground" />
               </div>
               <CardTitle className={cn(mobileFirst.text['3xl'], "font-pixel text-foreground uppercase")}>
@@ -401,7 +401,7 @@ const Auth = () => {
                     required
                     minLength={6}
                     placeholder="Enter new password"
-                    className="border-[2px] border-foreground rounded-none h-11 focus-visible:ring-2 focus-visible:ring-primary"
+                    className="brutal-border-subtle border-foreground rounded-none h-11 focus-visible:ring-2 focus-visible:ring-primary"
                     aria-invalid={state.errors.newPassword ? true : undefined}
                   />
                   <PasswordStrength password={state.newPassword} />
@@ -430,7 +430,7 @@ const Auth = () => {
                     required
                     minLength={6}
                     placeholder="Confirm new password"
-                    className="border-[2px] border-foreground rounded-none h-11 focus-visible:ring-2 focus-visible:ring-primary"
+                    className="brutal-border-subtle border-foreground rounded-none h-11 focus-visible:ring-2 focus-visible:ring-primary"
                     aria-invalid={
                       state.errors.confirmPassword ? true : undefined
                     }
@@ -441,7 +441,7 @@ const Auth = () => {
                 </div>
                 <Button
                   type="submit"
-                  className="w-full font-pixel uppercase tracking-wide bg-accent text-accent-foreground hover:bg-accent/90 border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-0.5 rounded-none h-12"
+                  className="w-full font-pixel uppercase tracking-wide bg-accent text-accent-foreground hover:bg-accent/90 brutal-border border-black shadow-brutal-md hover:shadow-brutal-lg transition-all duration-300 hover:-translate-y-0.5 rounded-none h-12"
                   disabled={loading}
                 >
                   {loading ? 'Updating...' : 'Update Password'}
@@ -449,16 +449,16 @@ const Auth = () => {
               </form>
             ) : (
               <Tabs defaultValue="signin" className="w-full">
-                <TabsList className="w-full grid grid-cols-2 h-12 bg-muted/30 border-[3px] border-black rounded-none p-1">
+                <TabsList className="w-full grid grid-cols-2 h-12 bg-muted/30 brutal-border border-black rounded-none p-1">
                   <TabsTrigger
                     value="signin"
-                    className="font-pixel text-xs sm:text-sm uppercase data-[state=active]:bg-secondary data-[state=active]:text-secondary-foreground data-[state=active]:border-[2px] data-[state=active]:border-black data-[state=active]:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-none"
+                    className="font-pixel text-xs sm:text-sm uppercase data-[state=active]:bg-secondary data-[state=active]:text-secondary-foreground data-[state=active]:brutal-border-subtle data-[state=active]:border-black data-[state=active]:shadow-brutal-xs rounded-none"
                   >
                     Sign In
                   </TabsTrigger>
                   <TabsTrigger
                     value="signup"
-                    className="font-pixel text-xs sm:text-sm uppercase data-[state=active]:bg-secondary data-[state=active]:text-secondary-foreground data-[state=active]:border-[2px] data-[state=active]:border-black data-[state=active]:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-none"
+                    className="font-pixel text-xs sm:text-sm uppercase data-[state=active]:bg-secondary data-[state=active]:text-secondary-foreground data-[state=active]:brutal-border-subtle data-[state=active]:border-black data-[state=active]:shadow-brutal-xs rounded-none"
                   >
                     Sign Up
                   </TabsTrigger>
@@ -473,7 +473,7 @@ const Auth = () => {
                         variant="outline"
                         onClick={() => handleSocialSignIn('google')}
                         disabled={loading}
-                        className="w-full border-[2px] border-foreground rounded-none flex items-center justify-center gap-2 h-12 sm:h-11 hover:bg-accent/5 transition-colors touch-manipulation"
+                        className="w-full brutal-border-subtle border-foreground rounded-none flex items-center justify-center gap-2 h-12 sm:h-11 hover:bg-accent/5 transition-colors touch-manipulation"
                       >
                         <svg className="h-5 w-5" viewBox="0 0 24 24">
                           <path
@@ -530,7 +530,7 @@ const Auth = () => {
                           })
                         }
                         required
-                        className="border-[2px] border-foreground rounded-none h-11 focus-visible:ring-2 focus-visible:ring-primary"
+                        className="brutal-border-subtle border-foreground rounded-none h-11 focus-visible:ring-2 focus-visible:ring-primary"
                         aria-invalid={state.errors.email ? true : undefined}
                       />
                       {state.errors.email && (
@@ -556,7 +556,7 @@ const Auth = () => {
                           })
                         }
                         required
-                        className="border-[2px] border-foreground rounded-none h-11 focus-visible:ring-2 focus-visible:ring-primary"
+                        className="brutal-border-subtle border-foreground rounded-none h-11 focus-visible:ring-2 focus-visible:ring-primary"
                         aria-invalid={state.errors.password ? true : undefined}
                       />
                       {state.errors.password && (
@@ -565,7 +565,7 @@ const Auth = () => {
                     </div>
                     <Button
                       type="submit"
-                      className="w-full font-pixel uppercase tracking-wide bg-accent text-accent-foreground hover:bg-accent/90 border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-0.5 rounded-none h-12"
+                      className="w-full font-pixel uppercase tracking-wide bg-accent text-accent-foreground hover:bg-accent/90 brutal-border border-black shadow-brutal-md hover:shadow-brutal-lg transition-all duration-300 hover:-translate-y-0.5 rounded-none h-12"
                       disabled={loading}
                     >
                       {loading ? 'Signing in...' : 'Sign In'}
@@ -590,7 +590,7 @@ const Auth = () => {
                           variant="outline"
                           onClick={() => handleSocialSignIn('google')}
                           disabled={loading}
-                          className="border-[2px] border-foreground rounded-none flex flex-col gap-1 sm:gap-1.5 h-auto py-2.5 sm:py-3 hover:bg-accent/5 transition-colors touch-manipulation"
+                          className="brutal-border-subtle border-foreground rounded-none flex flex-col gap-1 sm:gap-1.5 h-auto py-2.5 sm:py-3 hover:bg-accent/5 transition-colors touch-manipulation"
                         >
                           <svg className="h-5 w-5" viewBox="0 0 24 24">
                             <path
@@ -618,7 +618,7 @@ const Auth = () => {
                         <Button
                           type="button"
                           variant="outline"
-                          className="border-[2px] border-foreground rounded-none flex flex-col gap-1 sm:gap-1.5 h-auto py-2.5 sm:py-3 opacity-40 cursor-not-allowed"
+                          className="brutal-border-subtle border-foreground rounded-none flex flex-col gap-1 sm:gap-1.5 h-auto py-2.5 sm:py-3 opacity-40 cursor-not-allowed"
                           disabled={true}
                         >
                           <svg
@@ -666,7 +666,7 @@ const Auth = () => {
                           })
                         }
                         required
-                        className="border-[2px] border-foreground rounded-none h-11 focus-visible:ring-2 focus-visible:ring-primary"
+                        className="brutal-border-subtle border-foreground rounded-none h-11 focus-visible:ring-2 focus-visible:ring-primary"
                         aria-invalid={state.errors.fullName ? true : undefined}
                       />
                       {state.errors.fullName && (
@@ -693,7 +693,7 @@ const Auth = () => {
                           })
                         }
                         required
-                        className="border-[2px] border-foreground rounded-none h-11 focus-visible:ring-2 focus-visible:ring-primary"
+                        className="brutal-border-subtle border-foreground rounded-none h-11 focus-visible:ring-2 focus-visible:ring-primary"
                         aria-invalid={state.errors.email ? true : undefined}
                       />
                       {state.errors.email && (
@@ -721,7 +721,7 @@ const Auth = () => {
                         }
                         required
                         minLength={6}
-                        className="border-[2px] border-foreground rounded-none h-11 focus-visible:ring-2 focus-visible:ring-primary"
+                        className="brutal-border-subtle border-foreground rounded-none h-11 focus-visible:ring-2 focus-visible:ring-primary"
                         aria-invalid={state.errors.password ? true : undefined}
                       />
                       <PasswordStrength password={state.password} />
@@ -730,7 +730,7 @@ const Auth = () => {
                       )}
                     </div>
 
-                    <div className="p-4 rounded-none border-[3px] border-black bg-secondary shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+                    <div className="p-4 rounded-none brutal-border border-black bg-secondary shadow-brutal-sm">
                       <p className="text-sm font-pixel text-secondary-foreground mb-1 uppercase">
                         💼 Professional Account
                       </p>
@@ -740,7 +740,7 @@ const Auth = () => {
                     </div>
                     <Button
                       type="submit"
-                      className="w-full font-pixel uppercase tracking-wide bg-accent text-accent-foreground hover:bg-accent/90 border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-0.5 rounded-none h-12"
+                      className="w-full font-pixel uppercase tracking-wide bg-accent text-accent-foreground hover:bg-accent/90 brutal-border border-black shadow-brutal-md hover:shadow-brutal-lg transition-all duration-300 hover:-translate-y-0.5 rounded-none h-12"
                       disabled={loading}
                     >
                       {loading ? 'Creating account...' : 'Create Account'}
@@ -757,7 +757,7 @@ const Auth = () => {
           <Button
             variant="ghost"
             onClick={() => navigate('/')}
-            className="font-pixel text-xs uppercase text-primary-foreground hover:text-secondary hover:bg-primary-foreground/10 border-[2px] border-transparent hover:border-black rounded-none px-4"
+            className="font-pixel text-xs uppercase text-primary-foreground hover:text-secondary hover:bg-primary-foreground/10 brutal-border-subtle border-transparent hover:border-black rounded-none px-4"
           >
             ← Back to Home
           </Button>
@@ -768,7 +768,7 @@ const Auth = () => {
           open={state.showResetDialog}
           onOpenChange={() => dispatch({ type: 'TOGGLE_RESET_DIALOG' })}
         >
-          <DialogContent className="border-[4px] border-black rounded-none shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] bg-background">
+          <DialogContent className="brutal-border-bold border-black rounded-none shadow-brutal-2xl bg-background">
             <DialogHeader>
               <DialogTitle className={cn(mobileFirst.text.xl, "font-pixel uppercase")}>
                 Reset Password
@@ -797,7 +797,7 @@ const Auth = () => {
                       value: e.target.value,
                     })
                   }
-                  className="border-[2px] border-foreground rounded-none h-11 focus-visible:ring-2 focus-visible:ring-primary"
+                  className="brutal-border-subtle border-foreground rounded-none h-11 focus-visible:ring-2 focus-visible:ring-primary"
                   aria-invalid={state.errors.resetEmail ? true : undefined}
                 />
                 {state.errors.resetEmail && (
@@ -807,7 +807,7 @@ const Auth = () => {
               <Button
                 onClick={handlePasswordReset}
                 disabled={state.resetLoading}
-                className="w-full font-pixel uppercase tracking-wide bg-accent text-accent-foreground hover:bg-accent/90 border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-0.5 rounded-none h-12"
+                className="w-full font-pixel uppercase tracking-wide bg-accent text-accent-foreground hover:bg-accent/90 brutal-border border-black shadow-brutal-md hover:shadow-brutal-lg transition-all duration-300 hover:-translate-y-0.5 rounded-none h-12"
               >
                 {state.resetLoading ? 'Sending...' : 'Send Reset Link'}
               </Button>

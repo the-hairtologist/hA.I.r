@@ -30,7 +30,7 @@ export const buttonPatterns = {
 
   // Primary action buttons
   primaryAction:
-    'border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all',
+    'brutal-border shadow-brutal-md hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-brutal-xs transition-all',
 
   // Secondary/outline buttons
   secondaryAction: 'hover:bg-secondary/5 hover:-translate-y-0.5 transition-all',

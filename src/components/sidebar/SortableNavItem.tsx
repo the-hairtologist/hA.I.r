@@ -103,7 +103,7 @@ export function SortableNavItem({
             )}
             <div className="relative flex-shrink-0">
               <div
-                className={`w-11 h-11 rounded-lg flex items-center justify-center transition-all duration-200 border-[2px] border-foreground/20 shadow-[2px_2px_0px_0px_hsl(var(--foreground)/0.15)] hover:shadow-[3px_3px_0px_0px_hsl(var(--foreground)/0.25)] hover:border-foreground/30 hover:-translate-y-0.5 active:shadow-none active:translate-y-0 ${item.gradient}`}
+                className={`w-11 h-11 rounded-lg flex items-center justify-center transition-all duration-200 brutal-border-subtle border-foreground/20 shadow-brutal-xs hover:shadow-brutal-sm hover:border-foreground/30 hover:-translate-y-0.5 active:shadow-none active:translate-y-0 ${item.gradient}`}
               >
                 <item.icon className="h-5 w-5 text-on-surface-primary" />
               </div>
@@ -160,7 +160,7 @@ export function SortableNavItem({
             )}
             <div className="relative flex-shrink-0">
               <div
-                className={`w-11 h-11 rounded-lg flex items-center justify-center transition-all duration-200 border-[2px] border-foreground/20 shadow-[2px_2px_0px_0px_hsl(var(--foreground)/0.15)] hover:shadow-[3px_3px_0px_0px_hsl(var(--foreground)/0.25)] hover:border-foreground/30 hover:-translate-y-0.5 active:shadow-none active:translate-y-0 ${item.gradient}`}
+                className={`w-11 h-11 rounded-lg flex items-center justify-center transition-all duration-200 brutal-border-subtle border-foreground/20 shadow-brutal-xs hover:shadow-brutal-sm hover:border-foreground/30 hover:-translate-y-0.5 active:shadow-none active:translate-y-0 ${item.gradient}`}
               >
                 <item.icon className="h-5 w-5 text-on-surface-primary" />
               </div>
@@ -213,7 +213,7 @@ export function SortableNavItem({
                     >
                       <div className="relative flex-shrink-0">
                         <div
-                          className={`w-7 h-7 rounded-md flex items-center justify-center transition-all duration-200 border-[2px] border-foreground/15 shadow-[1px_1px_0px_0px_hsl(var(--foreground)/0.1)] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground)/0.2)] hover:border-foreground/25 ${child.gradient} ${
+                          className={`w-7 h-7 rounded-md flex items-center justify-center transition-all duration-200 brutal-border-subtle border-foreground/15 shadow-[1px_1px_0px_0px_hsl(var(--foreground)/0.1)] hover:shadow-brutal-xs hover:border-foreground/25 ${child.gradient} ${
                             isChildActive
                               ? 'opacity-100'
                               : 'opacity-70 group-hover:opacity-100'

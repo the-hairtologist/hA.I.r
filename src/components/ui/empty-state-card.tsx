@@ -42,12 +42,12 @@ export function EmptyStateCard({
 
   return (
     <Card
-      className={`border-[3px] ${variantStyles[variant]} shadow-brutal-lg transition-all duration-300 max-w-2xl mx-auto`}
+      className={`brutal-border ${variantStyles[variant]} shadow-brutal-lg transition-all duration-300 max-w-2xl mx-auto`}
     >
       <CardHeader className="text-center pb-4">
         <div className="flex justify-center mb-6">
           <div
-            className={`w-20 h-20 rounded-2xl ${gradient} flex items-center justify-center border-[3px] border-foreground shadow-brutal-md`}
+            className={`w-20 h-20 rounded-2xl ${gradient} flex items-center justify-center brutal-border shadow-brutal-md`}
           >
             <Icon className="h-10 w-10 text-on-surface-primary" />
           </div>
