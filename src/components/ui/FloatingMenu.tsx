@@ -55,7 +55,7 @@ export function FloatingMenu({ className }: FloatingMenuProps) {
             className={cn(
               'h-12 w-12 rounded-full shadow-brutal-md',
               'hover:scale-110 transition-transform duration-200',
-              'border-2 border-foreground'
+              'brutal-border-subtle'
             )}
             aria-label="Quick search"
           >
@@ -70,7 +70,7 @@ export function FloatingMenu({ className }: FloatingMenuProps) {
             className={cn(
               'h-12 w-12 rounded-full shadow-brutal-md',
               'hover:scale-110 transition-transform duration-200',
-              'border-2 border-foreground',
+              'brutal-border-subtle',
               'bg-gradient-to-br from-primary to-primary/60'
             )}
             aria-label="AI Assistant"
@@ -86,7 +86,7 @@ export function FloatingMenu({ className }: FloatingMenuProps) {
             className={cn(
               'h-12 w-12 rounded-full shadow-brutal-md',
               'hover:scale-110 transition-transform duration-200',
-              'border-2 border-foreground'
+              'brutal-border-subtle'
             )}
             aria-label="All features"
           >
@@ -103,7 +103,7 @@ export function FloatingMenu({ className }: FloatingMenuProps) {
           'h-14 w-14 rounded-full shadow-brutal-lg',
           'hover:scale-105 active:scale-95',
           'transition-all duration-200',
-          'border-[3px] border-foreground',
+          'brutal-border',
           'bg-gradient-to-br from-accent to-accent/80',
           'relative overflow-hidden group'
         )}

@@ -14,7 +14,7 @@ export const FinanceSkeleton = () => {
         {Array.from({ length: 4 }).map((_, i) => (
           <Card
             key={`stat-${i}`}
-            className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] animate-fade-in"
+            className="brutal-border shadow-brutal-sm animate-fade-in"
             style={{ animationDelay: `${i * 50}ms` }}
           >
             <CardHeader className="space-y-2">
@@ -26,7 +26,7 @@ export const FinanceSkeleton = () => {
       </div>
 
       {/* Chart Skeleton */}
-      <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+      <Card className="brutal-border shadow-brutal-sm">
         <CardHeader>
           <Skeleton className="h-6 w-48" />
         </CardHeader>
@@ -36,7 +36,7 @@ export const FinanceSkeleton = () => {
       </Card>
 
       {/* Transaction List Skeleton */}
-      <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+      <Card className="brutal-border shadow-brutal-sm">
         <CardHeader>
           <Skeleton className="h-6 w-40" />
         </CardHeader>

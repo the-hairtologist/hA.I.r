@@ -16,7 +16,7 @@ export const FormSkeleton = ({
   showSubmit = true,
 }: FormSkeletonProps) => {
   return (
-    <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+    <Card className="brutal-border shadow-brutal-sm">
       <CardHeader>
         <Skeleton className="h-6 w-48" />
         <Skeleton className="h-4 w-64" />

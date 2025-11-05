@@ -10,7 +10,7 @@ export const MessagesSkeleton = () => {
   return (
     <div className="flex h-full gap-4">
       {/* Conversation List Skeleton */}
-      <Card className="w-80 border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+      <Card className="w-80 brutal-border shadow-brutal-sm">
         <CardContent className="p-4 space-y-3">
           {Array.from({ length: 6 }).map((_, i) => (
             <div
@@ -29,7 +29,7 @@ export const MessagesSkeleton = () => {
       </Card>
 
       {/* Chat Area Skeleton */}
-      <Card className="flex-1 border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+      <Card className="flex-1 brutal-border shadow-brutal-sm">
         <CardContent className="p-6 space-y-4">
           {Array.from({ length: 5 }).map((_, i) => (
             <div

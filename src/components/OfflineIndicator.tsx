@@ -43,7 +43,7 @@ export const OfflineIndicator = () => {
         className="fixed bottom-20 lg:bottom-4 left-1/2 -translate-x-1/2 z-[200] 
                    bg-success/90 backdrop-blur-sm text-success-foreground 
                    px-4 sm:px-6 py-3 rounded-full 
-                   shadow-[4px_4px_0px_0px_rgba(0,0,0,0.25)] 
+                   shadow-brutal-sm
                    border-2 border-white/20
                    animate-fade-in
                    min-h-[44px] flex items-center gap-2
@@ -67,7 +67,7 @@ export const OfflineIndicator = () => {
           'fixed bottom-20 lg:bottom-4 left-1/2 -translate-x-1/2 z-[200]',
           'bg-warning/95 backdrop-blur-sm text-warning-foreground',
           'px-4 sm:px-6 py-3 rounded-full',
-          'shadow-[4px_4px_0px_0px_rgba(0,0,0,0.25)]',
+          'shadow-brutal-sm',
           'border-2 border-amber-600',
           'animate-bounce',
           'min-h-[44px] flex items-center gap-2',

@@ -22,11 +22,11 @@ export const CardSkeleton = ({
       {Array.from({ length: count }).map((_, i) => (
         <Card
           key={`card-skeleton-${i}`}
-          className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] animate-fade-in"
+          className="brutal-border shadow-brutal-sm animate-fade-in"
           style={{ animationDelay: `${i * 50}ms` }}
         >
           {showImage && (
-            <Skeleton className="h-48 w-full rounded-t-none border-b-[3px] border-foreground" />
+            <Skeleton className="h-48 w-full rounded-t-none brutal-border border-b" />
           )}
           <CardHeader className="space-y-2">
             <Skeleton className="h-5 w-3/4" />

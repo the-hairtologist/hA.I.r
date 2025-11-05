@@ -30,7 +30,7 @@ export const PageHeader = ({
   return (
     <header
       role="banner"
-      className={`border-b-[3px] border-foreground bg-card/50 backdrop-blur-sm sticky top-0 z-10 shadow-[4px_4px_0px_0px_hsl(var(--foreground)_/_0.1)] ${className}`}
+      className={`brutal-border border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10 shadow-brutal-sm ${className}`}
     >
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between gap-4">

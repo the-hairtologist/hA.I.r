@@ -21,13 +21,13 @@ export const TourTooltip = ({
   return (
     <div
       {...tooltipProps}
-      className="bg-background border-[3px] border-foreground shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] rounded-none max-w-[min(calc(100vw-2rem),400px)] sm:max-w-sm w-full relative z-[10001]"
+      className="bg-background brutal-border shadow-brutal-md rounded-none max-w-[min(calc(100vw-2rem),400px)] sm:max-w-sm w-full relative z-[10001]"
       style={{ pointerEvents: 'auto' }}
     >
       {/* Header */}
-      <div className="flex items-center justify-between p-3 sm:p-4 border-b-[2px] border-foreground">
+      <div className="flex items-center justify-between p-3 sm:p-4 brutal-border-subtle border-b">
         <div className="flex items-center gap-2 min-w-0 flex-1">
-          <div className="w-7 h-7 sm:w-8 sm:h-8 bg-primary border-[2px] border-foreground flex items-center justify-center flex-shrink-0">
+          <div className="w-7 h-7 sm:w-8 sm:h-8 bg-primary brutal-border-subtle flex items-center justify-center flex-shrink-0">
             <span className="text-primary-foreground font-bold text-xs sm:text-sm">
               {index + 1}
             </span>
@@ -55,13 +55,13 @@ export const TourTooltip = ({
       </div>
 
       {/* Footer */}
-      <div className="flex items-center justify-end gap-3 p-3 sm:p-4 border-t-[2px] border-foreground bg-muted/20 flex-wrap relative z-[10001]">
+      <div className="flex items-center justify-end gap-3 p-3 sm:p-4 brutal-border-subtle border-t bg-muted/20 flex-wrap relative z-[10001]">
         {index > 0 ? (
           <Button
             {...backProps}
             variant="outline"
             size="sm"
-            className="font-semibold text-xs sm:text-xs uppercase border-[2px] border-foreground shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all px-2.5 sm:px-3 h-8 sm:h-9 min-w-[64px] pointer-events-auto cursor-pointer touch-manipulation"
+            className="font-semibold text-xs sm:text-xs uppercase brutal-border-subtle shadow-brutal-xs hover:shadow-brutal-sm transition-all px-2.5 sm:px-3 h-8 sm:h-9 min-w-[64px] pointer-events-auto cursor-pointer touch-manipulation"
             aria-label="Go back to previous step"
           >
             <span className="hidden xs:inline">Back</span>
@@ -81,7 +81,7 @@ export const TourTooltip = ({
         <Button
           {...primaryProps}
           size="sm"
-          className="font-semibold text-xs uppercase bg-primary text-primary-foreground border-[2px] border-foreground shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all px-3 sm:px-4 h-8 sm:h-9 min-w-[64px] pointer-events-auto cursor-pointer touch-manipulation"
+          className="font-semibold text-xs uppercase bg-primary text-primary-foreground brutal-border-subtle shadow-brutal-xs hover:shadow-brutal-sm transition-all px-3 sm:px-4 h-8 sm:h-9 min-w-[64px] pointer-events-auto cursor-pointer touch-manipulation"
         >
           {index === size - 1 ? (
             <>
