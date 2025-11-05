@@ -614,7 +614,7 @@ const Services = () => {
         className="container mx-auto px-4 py-8 max-w-4xl"
       >
         {services.length === 0 ? (
-          <Card className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-yellow-400 to-amber-400">
+          <Card className="brutal-border shadow-brutal-lg bg-gradient-to-br from-yellow-400 to-amber-400">
             <CardContent className="flex flex-col items-center justify-center py-12">
               <DollarSign className="h-16 w-16 text-foreground mb-4" />
               <p className="text-xl font-sans font-semibold mb-2 text-foreground">
@@ -640,7 +640,7 @@ const Services = () => {
             {services.map((service, idx) => (
               <Card
                 key={service.id}
-                className={`border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all ${
+                className={`brutal-border shadow-brutal-lg hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all ${
                   idx % 4 === 0
                     ? 'bg-blue-400'
                     : idx % 4 === 1

@@ -344,12 +344,12 @@ const Knowledge = () => {
         {/* Quick Access Card - AI Assistant for Stylists Only */}
         {(isStylist || !isClient) && (
           <Card
-            className="border-brutal hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all cursor-pointer bg-gradient-to-br from-purple-400 to-pink-400 mb-8"
+            className="brutal-border shadow-brutal-lg hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all cursor-pointer bg-gradient-to-br from-purple-400 to-pink-400 mb-8"
             onClick={() => navigate('/ai-assistant')}
           >
             <CardContent className={mobileFirst.padding.md}>
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-2xl bg-background border-2 border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] flex items-center justify-center">
+                <div className="w-16 h-16 rounded-2xl bg-background brutal-border-subtle shadow-brutal-sm flex items-center justify-center">
                   <Lightbulb className="h-8 w-8 text-primary" />
                 </div>
                 <div className="flex-1">

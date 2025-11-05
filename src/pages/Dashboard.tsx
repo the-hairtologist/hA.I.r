@@ -758,7 +758,7 @@ const Dashboard = () => {
                     Your schedule at a glance 📅
                   </p>
                   <div
-                    className="bg-card rounded-lg border-2 border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary)_/_0.6)] animate-fade-in overflow-hidden"
+                    className="bg-card rounded-lg brutal-border-subtle border-secondary shadow-brutal-md animate-fade-in overflow-hidden"
                     style={{ animationDelay: '250ms' }}
                   >
                     <WeeklyScheduleView

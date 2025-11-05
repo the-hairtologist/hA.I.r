@@ -202,7 +202,7 @@ const PublicStylistDirectory = () => {
                 >
                   <CardHeader>
                     <div className="flex items-start gap-4">
-                      <div className="w-16 h-16 rounded-full bg-card border-2 border-foreground flex items-center justify-center text-2xl font-bold overflow-hidden shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
+                      <div className="w-16 h-16 rounded-full bg-card brutal-border-subtle flex items-center justify-center text-2xl font-bold overflow-hidden shadow-brutal-xs">
                         {stylist.business_name?.charAt(0).toUpperCase() || (
                           <User className="h-8 w-8" />
                         )}
@@ -240,7 +240,7 @@ const PublicStylistDirectory = () => {
                     {stylist.specialty && (
                       <Badge
                         variant="secondary"
-                        className="bg-card border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]"
+                        className="bg-card brutal-border-subtle shadow-brutal-xs"
                       >
                         {stylist.specialty}
                       </Badge>

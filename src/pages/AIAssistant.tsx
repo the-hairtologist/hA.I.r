@@ -675,7 +675,7 @@ const Knowledge = () => {
       <main className="container mx-auto px-4 py-6 max-w-6xl">
         {/* AI Assistant Header */}
         <div className="mb-6">
-          <div className="max-w-2xl mx-auto text-center p-5 bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 rounded-2xl border-4 border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground)_/_0.2)]">
+          <div className="max-w-2xl mx-auto text-center p-5 bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 rounded-2xl brutal-border-bold shadow-brutal-xl">
             <div className="flex items-center justify-center gap-3 mb-2">
               <Sparkles className="h-7 w-7 text-primary animate-pulse" />
               <h2 className={cn(mobileFirst.text['2xl'], "font-pixel bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent")}>
@@ -851,7 +851,7 @@ const Knowledge = () => {
                 ) : aiMessages.length === 0 ? (
                   <div className="h-full flex flex-col items-center justify-center space-y-6 px-4">
                     <div className="relative animate-bounce-gentle">
-                      <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-primary via-secondary to-accent flex items-center justify-center shadow-[6px_6px_0px_0px_hsl(var(--foreground)_/_0.2)] border-4 border-foreground">
+                      <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-primary via-secondary to-accent flex items-center justify-center shadow-brutal-xl brutal-border-bold">
                         <Sparkles className="h-12 w-12 text-primary-foreground" />
                       </div>
                       <div className="absolute -top-2 -right-2 w-8 h-8 bg-accent rounded-full flex items-center justify-center animate-pulse border-3 border-foreground">
@@ -912,7 +912,7 @@ const Knowledge = () => {
                                 .toString()
                                 .includes('"application_steps"') && (
                                 <div
-                                  className="bg-background border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground)_/_0.1)] max-w-[80%] rounded-2xl px-5 py-4 border-3"
+                                  className="bg-background brutal-border shadow-brutal-md max-w-[80%] rounded-2xl px-5 py-4"
                                   style={{ border: '3px solid' }}
                                 >
                                   <p className="text-sm whitespace-pre-wrap leading-relaxed font-medium">
@@ -948,7 +948,7 @@ const Knowledge = () => {
                           </div>
                         ) : (
                           <div
-                            className="max-w-[80%] rounded-2xl px-5 py-4 border-3 bg-gradient-to-r from-primary to-secondary text-primary-foreground border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground)_/_0.2)]"
+                            className="max-w-[80%] rounded-2xl px-5 py-4 brutal-border bg-gradient-to-r from-primary to-secondary text-primary-foreground shadow-brutal-md"
                             style={{ border: '3px solid' }}
                           >
                             <p className="text-sm whitespace-pre-wrap leading-relaxed font-medium">
@@ -962,7 +962,7 @@ const Knowledge = () => {
                     {aiLoading && (
                       <div className="flex justify-start animate-fade-in">
                         <div
-                          className="bg-muted/80 backdrop-blur-sm rounded-2xl px-5 py-3 flex items-center gap-3 border-3 border-accent shadow-[3px_3px_0px_0px_hsl(var(--foreground)_/_0.1)]"
+                          className="bg-muted/80 backdrop-blur-sm rounded-2xl px-5 py-3 flex items-center gap-3 brutal-border border-accent shadow-brutal-sm"
                           style={{ border: '3px solid' }}
                         >
                           <Loader2 className="h-5 w-5 animate-spin text-accent" />
@@ -1002,7 +1002,7 @@ const Knowledge = () => {
                     onChange={e => setAiInput(e.target.value)}
                     placeholder="Ask me anything: formulas, techniques, corrections..."
                     disabled={aiLoading}
-                    className="flex-1 border-3 border-foreground rounded-xl font-medium focus-visible:ring-primary/50 shadow-[2px_2px_0px_0px_hsl(var(--foreground)_/_0.1)] text-sm md:text-base"
+                    className="flex-1 brutal-border rounded-xl font-medium focus-visible:ring-primary/50 shadow-brutal-xs text-sm md:text-base"
                     style={{ border: '3px solid' }}
                   />
                   <button

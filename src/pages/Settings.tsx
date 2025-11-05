@@ -669,7 +669,7 @@ const Settings = () => {
               />
             )}
 
-            <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+            <Card className="brutal-border shadow-brutal-md">
               <CardHeader>
                 <CardTitle>App Preferences</CardTitle>
                 <CardDescription>Customize your experience</CardDescription>
@@ -698,7 +698,7 @@ const Settings = () => {
 
             {/* Debug Tools - Only visible in dev mode */}
             {isDevMode && (
-              <Card className="border-[3px] border-yellow-500 shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+              <Card className="brutal-border shadow-brutal-md border-yellow-500">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Code className="h-5 w-5" />
@@ -791,7 +791,7 @@ const Settings = () => {
         </Tabs>
 
         {hasChanges && (
-          <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-card border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] rounded-lg p-4 sm:p-5 flex flex-col sm:flex-row items-center gap-3 sm:gap-4 z-50 max-w-[90vw] sm:max-w-none min-h-[56px]">
+          <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-card brutal-border shadow-brutal-md rounded-lg p-4 sm:p-5 flex flex-col sm:flex-row items-center gap-3 sm:gap-4 z-50 max-w-[90vw] sm:max-w-none min-h-[56px]">
             <p className="text-xs sm:text-sm font-medium text-center sm:text-left">
               You have unsaved changes
             </p>

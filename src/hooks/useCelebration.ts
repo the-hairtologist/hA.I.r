@@ -37,7 +37,7 @@ export const useCelebration = () => {
         description: customMessage,
         duration: options?.duration || config.duration,
         className:
-          'border-2 border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]',
+          'brutal-border-subtle shadow-brutal-md',
       });
     },
     []
