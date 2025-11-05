@@ -723,52 +723,52 @@ const ScheduleManagement = () => {
         />
 
         <Tabs defaultValue="availability" className="space-y-6">
-          <TabsList className="grid w-full max-w-5xl mx-auto grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2 p-1 bg-muted/50 border-[3px] border-foreground rounded-xl">
+          <TabsList className="grid w-full max-w-5xl mx-auto grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2 p-1 bg-muted/50 brutal-border rounded-xl">
             <TabsTrigger
               value="availability"
-              className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border-[2px] data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm"
+              className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground brutal-border-subtle data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm"
             >
               <Clock className="h-4 w-4" />
               Weekly
             </TabsTrigger>
             <TabsTrigger
               value="overrides"
-              className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border-[2px] data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm"
+              className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground brutal-border-subtle data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm"
             >
               <CalendarIcon className="h-4 w-4" />
               Overrides
             </TabsTrigger>
             <TabsTrigger
               value="blocked"
-              className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border-[2px] data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm"
+              className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground brutal-border-subtle data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm"
             >
               <X className="h-4 w-4" />
               Blocked
             </TabsTrigger>
             <TabsTrigger
               value="month"
-              className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border-[2px] data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm"
+              className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground brutal-border-subtle data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm"
             >
               <CalendarDays className="h-4 w-4" />
               Month
             </TabsTrigger>
             <TabsTrigger
               value="year"
-              className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border-[2px] data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm"
+              className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground brutal-border-subtle data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm"
             >
               <CalendarRange className="h-4 w-4" />
               Year
             </TabsTrigger>
             <TabsTrigger
               value="calendar-sync"
-              className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border-[2px] data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm"
+              className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground brutal-border-subtle data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm"
             >
               <CalendarIcon className="h-4 w-4" />
               Sync
             </TabsTrigger>
             <TabsTrigger
               value="service-colors"
-              className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border-[2px] data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm"
+              className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground brutal-border-subtle data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm"
             >
               <Sparkles className="h-4 w-4" />
               Colors
@@ -776,9 +776,9 @@ const ScheduleManagement = () => {
           </TabsList>
 
           <TabsContent value="availability" className="space-y-6">
-            <Card className="border-[3px] border-foreground shadow-brutal overflow-hidden">
-              <CardHeader className="bg-muted/30 border-b-[3px] border-foreground">
-                <div className="flex items-center justify-between">
+            <Card className="brutal-border shadow-brutal overflow-hidden">
+              <CardHeader className="bg-muted/30 brutal-border-b">
+                  <div className="flex items-center justify-between">
                   <div>
                     <CardTitle>Weekly Availability</CardTitle>
                     <CardDescription>
@@ -788,7 +788,7 @@ const ScheduleManagement = () => {
                   <Button
                     onClick={handleSave}
                     disabled={saving}
-                    className="border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
+                    className="brutal-border shadow-brutal-sm hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-brutal-xs transition-all"
                   >
                     {saving ? (
                       <>
@@ -810,7 +810,7 @@ const ScheduleManagement = () => {
             </Card>
 
             {/* General Availability Toggle */}
-            <Card className="border-[3px] border-foreground shadow-brutal overflow-hidden">
+            <Card className="brutal-border shadow-brutal overflow-hidden">
               <CardHeader className="bg-muted/30">
                 <CardTitle className="flex items-center gap-2">
                   <CalendarDays className="h-5 w-5 text-primary" />
@@ -838,7 +838,7 @@ const ScheduleManagement = () => {
                       variant={
                         stylistProfile?.is_available ? 'default' : 'secondary'
                       }
-                      className="border-[2px] border-foreground"
+                      className="brutal-border-subtle"
                     >
                       {stylistProfile?.is_available
                         ? 'Available'
@@ -856,7 +856,7 @@ const ScheduleManagement = () => {
             </Card>
 
             {/* Buffer Time Configuration */}
-            <Card className="border-[3px] border-primary/30 shadow-brutal overflow-hidden">
+            <Card className="brutal-border border-primary/30 shadow-brutal overflow-hidden">
               <CardHeader className="bg-primary/5">
                 <div className="flex items-center gap-2">
                   <Clock className="h-5 w-5 text-primary" />
@@ -883,7 +883,7 @@ const ScheduleManagement = () => {
                   >
                     <SelectTrigger
                       id="bufferTime"
-                      className="border-[2px] border-foreground"
+                      className="brutal-border-subtle"
                     >
                       <SelectValue />
                     </SelectTrigger>
@@ -977,7 +977,7 @@ const ScheduleManagement = () => {
               {days.map(({ key, label }) => (
                 <Card
                   key={key}
-                  className="border-[3px] border-foreground shadow-brutal overflow-hidden"
+                  className="brutal-border shadow-brutal overflow-hidden"
                 >
                   <CardContent className="p-4">
                     <div className="flex items-center gap-4 flex-wrap sm:flex-nowrap">
@@ -1012,7 +1012,7 @@ const ScheduleManagement = () => {
                               handleTimeChange(key, 'startTime', e.target.value)
                             }
                             disabled={!schedule[key].enabled}
-                            className="border-[2px] border-foreground"
+                            className="brutal-border-subtle"
                           />
                         </div>
                         <div className="flex-1">
@@ -1026,7 +1026,7 @@ const ScheduleManagement = () => {
                               handleTimeChange(key, 'endTime', e.target.value)
                             }
                             disabled={!schedule[key].enabled}
-                            className="border-[2px] border-foreground"
+                            className="brutal-border-subtle"
                           />
                         </div>
                       </div>
@@ -1037,7 +1037,7 @@ const ScheduleManagement = () => {
             </div>
 
             {/* Quick Actions */}
-            <Card className="border-[3px] border-foreground shadow-brutal">
+            <Card className="brutal-border shadow-brutal">
               <CardHeader className="bg-muted/30">
                 <CardTitle>Quick Actions</CardTitle>
                 <CardDescription>

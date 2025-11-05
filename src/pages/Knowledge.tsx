@@ -386,7 +386,7 @@ const Knowledge = () => {
                   <Card className="brutal-border shadow-brutal-lg hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all cursor-pointer bg-gradient-to-br from-yellow-300 to-orange-400 h-full">
                     <CardHeader>
                       <div className="flex items-start justify-between mb-2">
-                        <Badge className="bg-background border-[3px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] text-foreground font-bold hover:bg-background">
+                        <Badge className="bg-background brutal-border shadow-brutal-xs text-foreground font-bold hover:bg-background">
                           {article.category}
                         </Badge>
                         <ExternalLink className="h-4 w-4 text-foreground" />
@@ -405,7 +405,7 @@ const Knowledge = () => {
                         </span>
                         <Button
                           size="sm"
-                          className="bg-background text-foreground border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] font-bold hover:bg-background pointer-events-none"
+                          className="bg-background text-foreground brutal-border shadow-brutal-sm font-bold hover:bg-background pointer-events-none"
                         >
                           Read →
                         </Button>
@@ -420,14 +420,14 @@ const Knowledge = () => {
 
         {/* Category Filter Buttons - Brutalist Style */}
         <div className="mb-8">
-          <div className="flex gap-0 border-[3px] border-foreground rounded-2xl overflow-hidden shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-background">
+          <div className="flex gap-0 brutal-border rounded-2xl overflow-hidden shadow-brutal-lg bg-background">
             {categories.map(cat => {
               const Icon = cat.icon;
               return (
                 <button
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`flex-1 flex items-center justify-center gap-2 py-4 px-4 font-bold uppercase tracking-wide text-sm md:text-base transition-all border-r-[3px] last:border-r-0 border-foreground ${
+                  className={`flex-1 flex items-center justify-center gap-2 py-4 px-4 font-bold uppercase tracking-wide text-sm md:text-base transition-all brutal-border-r last:border-r-0 ${
                     selectedCategory === cat.id
                       ? 'bg-primary text-primary-foreground'
                       : 'bg-background text-foreground hover:bg-muted'
@@ -443,7 +443,7 @@ const Knowledge = () => {
 
         {/* All Articles */}
         {filteredArticles.length === 0 ? (
-          <Card className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-yellow-300 to-orange-400">
+          <Card className="brutal-border shadow-brutal-lg bg-gradient-to-br from-yellow-300 to-orange-400">
             <CardContent className="py-16 text-center">
               <Search className="h-16 w-16 mx-auto mb-4 text-foreground/60" />
               <h3 className="text-2xl font-bold mb-2 text-foreground">
@@ -475,16 +475,16 @@ const Knowledge = () => {
                   className="block"
                 >
                   <Card
-                    className={`border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all cursor-pointer bg-gradient-to-br ${gradientClass} h-full`}
+                    className={`brutal-border shadow-brutal-lg hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all cursor-pointer bg-gradient-to-br ${gradientClass} h-full`}
                   >
                     <CardHeader>
                       <div className="flex items-start justify-between mb-2">
-                        <Badge className="bg-background border-[3px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] text-foreground font-bold hover:bg-background">
+                        <Badge className="bg-background brutal-border shadow-brutal-xs text-foreground font-bold hover:bg-background">
                           {article.category}
                         </Badge>
                         <div className="flex items-center gap-2">
                           {article.featured && (
-                            <Badge className="bg-cyan-400 text-foreground border-[3px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] font-bold hover:bg-cyan-400">
+                            <Badge className="bg-cyan-400 text-foreground brutal-border shadow-brutal-xs font-bold hover:bg-cyan-400">
                               Featured
                             </Badge>
                           )}
@@ -505,7 +505,7 @@ const Knowledge = () => {
                         </span>
                         <Button
                           size="sm"
-                          className="bg-background text-foreground border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] font-bold hover:bg-background pointer-events-none"
+                          className="bg-background text-foreground brutal-border shadow-brutal-sm font-bold hover:bg-background pointer-events-none"
                         >
                           Read Article →
                         </Button>
