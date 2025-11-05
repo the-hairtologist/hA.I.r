@@ -237,14 +237,14 @@ const Sidebar = React.forwardRef<
             // Adjust the padding for floating and inset variants.
             variant === 'floating' || variant === 'inset'
               ? 'p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)_+_theme(spacing.4)_+2px)]'
-              : 'group-data-[collapsible=icon]:w-[--sidebar-width-icon] group-data-[side=left]:border-r-[3px] group-data-[side=right]:border-l-[3px]',
+              : 'group-data-[collapsible=icon]:w-[--sidebar-width-icon] group-data-[side=left]:brutal-border-right group-data-[side=right]:brutal-border-left',
             className
           )}
           {...props}
         >
           <div
             data-sidebar="sidebar"
-            className="flex h-full w-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border-[3px] group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow-[var(--brutal-shadow-lg)]"
+            className="flex h-full w-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:brutal-border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow-[var(--brutal-shadow-lg)]"
           >
             {children}
           </div>
@@ -523,7 +523,7 @@ const sidebarMenuButtonVariants = cva(
       variant: {
         default: 'hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
         outline:
-          'bg-background border-[2px] border-sidebar-border shadow-[var(--brutal-shadow-sm)] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[var(--brutal-shadow-md)] hover:-translate-y-0.5',
+          'bg-background brutal-border-subtle border-sidebar-border shadow-[var(--brutal-shadow-sm)] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[var(--brutal-shadow-md)] hover:-translate-y-0.5',
       },
       size: {
         default: 'h-8 text-sm',

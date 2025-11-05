@@ -8,7 +8,7 @@ const cardVariants = cva(
     variants: {
       variant: {
         brutal:
-          'border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1',
+          'brutal-border shadow-brutal-lg hover:shadow-brutal-xl hover:-translate-y-1',
         glass: 'brutal-glass-card shadow-lg hover:shadow-xl',
         elevated:
           'border border-border shadow-lg hover:shadow-2xl hover:-translate-y-0.5',

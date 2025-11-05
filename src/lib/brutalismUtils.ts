@@ -36,36 +36,36 @@ export const typography = {
  */
 export const brutalist = {
   // Cards
-  card: 'border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] rounded-xl bg-card',
+  card: 'brutal-border shadow-brutal-lg rounded-xl bg-card',
   cardHover:
-    'hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all',
+    'hover:shadow-brutal-xl hover:-translate-y-1 transition-all',
   cardInteractive:
-    'border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] rounded-xl bg-card hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all cursor-pointer',
+    'brutal-border shadow-brutal-lg rounded-xl bg-card hover:shadow-brutal-xl hover:-translate-y-1 transition-all cursor-pointer',
 
   // Buttons
   button:
-    'border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]',
+    'brutal-border shadow-brutal-md',
   buttonHover:
-    'hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] active:shadow-none active:translate-x-[4px] active:translate-y-[4px]',
+    'hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-brutal-xs active:shadow-none active:translate-x-[4px] active:translate-y-[4px]',
   buttonFull:
-    'border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))]',
+    'brutal-border shadow-brutal-md hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-brutal-xs',
 
   // Borders
-  borderStandard: 'border-[3px] border-foreground',
-  borderBold: 'border-[4px] border-foreground',
+  borderStandard: 'brutal-border',
+  borderBold: 'brutal-border-bold',
 
   // Shadows
-  shadowSM: 'shadow-[2px_2px_0px_0px_hsl(var(--foreground))]',
-  shadowMD: 'shadow-[3px_3px_0px_0px_hsl(var(--foreground))]',
-  shadowLG: 'shadow-[5px_5px_0px_0px_hsl(var(--foreground))]',
-  shadowXL: 'shadow-[8px_8px_0px_0px_hsl(var(--foreground))]',
+  shadowSM: 'shadow-brutal-xs',
+  shadowMD: 'shadow-brutal-sm',
+  shadowLG: 'shadow-brutal-lg',
+  shadowXL: 'shadow-brutal-xl',
 
   // Gradients
   gradientBg: 'bg-gradient-to-br from-primary/5 to-secondary/5',
   gradientBgAccent: 'bg-gradient-to-br from-accent/5 to-primary/5',
 
   // Glass Brutal (modern fusion)
-  glass: 'backdrop-blur-xl bg-background/80 border-[3px] border-foreground/20',
+  glass: 'backdrop-blur-xl bg-background/80 brutal-border-subtle border-foreground/20',
 } as const;
 
 /**
