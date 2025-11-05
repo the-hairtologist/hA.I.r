@@ -26,7 +26,7 @@ const NotFound = () => {
         description="The page you're looking for doesn't exist."
       />
       <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10 p-4">
-        <div className="text-center max-w-md mx-auto p-8 bg-card border-[3px] border-foreground rounded-xl shadow-[8px_8px_0px_0px_hsl(var(--foreground))] animate-fade-in">
+        <div className="text-center max-w-md mx-auto p-8 bg-card brutal-border rounded-xl shadow-brutal-2xl animate-fade-in">
           <div className="mb-6 flex justify-center">
             <div className="relative">
               <Scissors className="h-24 w-24 text-primary animate-wiggle" />

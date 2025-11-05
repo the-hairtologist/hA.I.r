@@ -244,7 +244,7 @@ const Resources = () => {
 
       <main className="container mx-auto px-4 py-8 max-w-5xl">
         {/* Search Bar */}
-        <Card className="mb-8 border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+        <Card className="mb-8 brutal-border shadow-brutal-md">
           <CardContent className="pt-6">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
@@ -253,7 +253,7 @@ const Resources = () => {
                 placeholder="Search for help, solutions, or questions..."
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                className="pl-10 h-12 text-base border-[2px] border-foreground"
+                className="pl-10 h-12 text-base brutal-border-subtle"
               />
             </div>
           </CardContent>
@@ -262,7 +262,7 @@ const Resources = () => {
         {/* Quick Access Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8">
           <Card
-            className="border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:-translate-y-1 transition-all cursor-pointer"
+            className="brutal-border-subtle shadow-brutal-xs hover:shadow-brutal-md hover:-translate-y-1 transition-all cursor-pointer"
             onClick={() => navigate('/knowledge')}
           >
             <CardContent className="pt-6">
@@ -280,7 +280,7 @@ const Resources = () => {
             </CardContent>
           </Card>
 
-          <Card className="border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:-translate-y-1 transition-all cursor-pointer">
+          <Card className="brutal-border-subtle shadow-brutal-xs hover:shadow-brutal-md hover:-translate-y-1 transition-all cursor-pointer">
             <CardContent className="pt-6">
               <div className="flex flex-col items-center text-center gap-3">
                 <div className="p-3 rounded-lg bg-purple-500/10">
@@ -296,7 +296,7 @@ const Resources = () => {
             </CardContent>
           </Card>
 
-          <Card className="border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:-translate-y-1 transition-all cursor-pointer">
+          <Card className="brutal-border-subtle shadow-brutal-xs hover:shadow-brutal-md hover:-translate-y-1 transition-all cursor-pointer">
             <CardContent className="pt-6">
               <div className="flex flex-col items-center text-center gap-3">
                 <div className="p-3 rounded-lg bg-green-500/10">
@@ -326,7 +326,7 @@ const Resources = () => {
           </div>
 
           {filteredFAQs.length === 0 ? (
-            <Card className="border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
+            <Card className="brutal-border-subtle shadow-brutal-xs">
               <CardContent className="pt-8 pb-8 text-center">
                 <Search className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
                 <p className="text-lg font-medium mb-2">No results found</p>
@@ -339,7 +339,7 @@ const Resources = () => {
             filteredFAQs.map(category => (
               <Card
                 key={category.id}
-                className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]"
+                className="brutal-border shadow-brutal-md"
               >
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
@@ -367,7 +367,7 @@ const Resources = () => {
         </div>
 
         {/* Contact Support Card */}
-        <Card className="mt-8 border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-primary/5 to-secondary/5">
+        <Card className="mt-8 brutal-border shadow-brutal-md bg-gradient-to-br from-primary/5 to-secondary/5">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <MessageCircle className="h-5 w-5" />

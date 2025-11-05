@@ -78,7 +78,7 @@ const DialogContent = React.forwardRef<
         >
           <div ref={contentRef}>{children}</div>
           <DialogPrimitive.Close
-            className="absolute right-4 top-4 rounded-lg opacity-70 min-h-[44px] min-w-[44px] flex items-center justify-center ring-offset-background transition-opacity data-[state=open]:bg-accent data-[state=open]:text-muted-foreground hover:opacity-100 focus:outline-none focus-visible:ring-4 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none border-2 border-foreground hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))]"
+            className="absolute right-4 top-4 rounded-lg opacity-70 min-h-[44px] min-w-[44px] flex items-center justify-center ring-offset-background transition-opacity data-[state=open]:bg-accent data-[state=open]:text-muted-foreground hover:opacity-100 focus:outline-none focus-visible:ring-4 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none brutal-border-subtle hover:shadow-brutal-xs"
             aria-label="Close dialog"
           >
             <X className="h-5 w-5" />

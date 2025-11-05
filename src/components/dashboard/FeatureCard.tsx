@@ -35,7 +35,7 @@ export const FeatureCard = ({
 
   return (
     <Card
-      className="group relative transition-all animate-fade-in brutal-border bg-card overflow-hidden brutal-shadow-xs hover:shadow-[8px_8px_0px_0px_hsl(var(--primary))] hover:-translate-y-2 hover:scale-[1.02] active:brutal-shadow-sm active:translate-y-0 active:scale-100"
+      className="group relative transition-all animate-fade-in brutal-border bg-card overflow-hidden brutal-shadow-xs hover:shadow-brutal-2xl hover:-translate-y-2 hover:scale-[1.02] active:brutal-shadow-sm active:translate-y-0 active:scale-100"
       style={{ animationDelay: `${index * 50}ms` }}
     >
       <div

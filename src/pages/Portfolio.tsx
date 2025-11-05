@@ -516,7 +516,7 @@ const Portfolio = () => {
                 {photos.map((photo, index) => (
                   <Card
                     key={photo.id}
-                    className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all bg-card"
+                    className="brutal-border shadow-brutal-lg hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all bg-card"
                   >
                     <CardContent className="p-4">
                       <div className="relative">

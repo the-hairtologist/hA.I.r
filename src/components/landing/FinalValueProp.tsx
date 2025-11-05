@@ -62,7 +62,7 @@ export const FinalValueProp = () => {
             STYLISTS USING hA.I.r CUT ADMIN TIME BY 40%
           </h2>
 
-          <div className="inline-block border-2 border-black/50 bg-accent/80 backdrop-blur-sm px-2.5 py-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,0.4)] animate-[glow-pop_2s_ease-in-out_infinite]">
+          <div className="inline-block brutal-border-subtle border-black/50 bg-accent/80 backdrop-blur-sm px-2.5 py-1 shadow-brutal-xs animate-[glow-pop_2s_ease-in-out_infinite]">
             <span className="font-pixel text-[9px] xs:text-[10px] text-secondary uppercase">
               BY THE NUMBERS
             </span>
@@ -176,7 +176,7 @@ export const FinalValueProp = () => {
             return (
               <div
                 key={index}
-                className={`brutal-border ${borderColors[index]} bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 p-6 text-center min-h-[180px] ${
+                className={`brutal-border ${borderColors[index]} bg-white shadow-brutal-xl hover:shadow-brutal-2xl transition-all duration-300 hover:-translate-y-1 p-6 text-center min-h-[180px] ${
                   isVisible
                     ? 'opacity-100 translate-y-0'
                     : 'opacity-0 translate-y-8'

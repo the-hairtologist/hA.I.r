@@ -511,7 +511,7 @@ const Finance = () => {
         {/* Revenue Trends Chart */}
         {chartData.length > 0 && (
           <DataErrorBoundary feature="Revenue Chart" onReset={() => loadData()}>
-            <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] mb-8">
+            <Card className="brutal-border shadow-brutal-md mb-8">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <TrendingUp className="h-5 w-5" />
@@ -670,7 +670,7 @@ const Finance = () => {
           {/* Payments Tab */}
           <TabsContent value="payments">
             <DataErrorBoundary feature="Payments Table" onReset={() => loadData()}>
-              <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+              <Card className="brutal-border shadow-brutal-md">
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <div>
@@ -706,7 +706,7 @@ const Finance = () => {
                       {filteredPayments.map(payment => (
                         <div
                           key={payment.id}
-                          className="flex items-center justify-between p-4 border-[2px] border-foreground rounded-lg hover:bg-secondary/5 transition-colors"
+                          className="flex items-center justify-between p-4 brutal-border-subtle rounded-lg hover:bg-secondary/5 transition-colors"
                         >
                           <div>
                             <p className="font-semibold">
@@ -744,7 +744,7 @@ const Finance = () => {
           {/* Commissions Tab */}
           <TabsContent value="commissions">
             <DataErrorBoundary feature="Commissions Table" onReset={() => loadData()}>
-              <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+              <Card className="brutal-border shadow-brutal-md">
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <div>
@@ -780,7 +780,7 @@ const Finance = () => {
                       {filteredCommissions.map(commission => (
                         <div
                           key={commission.id}
-                          className="flex items-center justify-between p-4 border-[2px] border-foreground rounded-lg hover:bg-secondary/5 transition-colors"
+                          className="flex items-center justify-between p-4 brutal-border-subtle rounded-lg hover:bg-secondary/5 transition-colors"
                         >
                           <div>
                             <p className="font-semibold">
@@ -836,7 +836,7 @@ const Finance = () => {
                 return (
                   <Card
                     key={brand.id}
-                    className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]"
+                    className="brutal-border shadow-brutal-md"
                   >
                     <CardHeader>
                       <div className="flex items-start justify-between">

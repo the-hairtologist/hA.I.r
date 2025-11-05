@@ -213,7 +213,7 @@ export function SortableNavItem({
                     >
                       <div className="relative flex-shrink-0">
                         <div
-                          className={`w-7 h-7 rounded-md flex items-center justify-center transition-all duration-200 brutal-border-subtle border-foreground/15 shadow-[1px_1px_0px_0px_hsl(var(--foreground)/0.1)] hover:shadow-brutal-xs hover:border-foreground/25 ${child.gradient} ${
+                          className={`w-7 h-7 rounded-md flex items-center justify-center transition-all duration-200 brutal-border-subtle border-foreground/15 brutal-shadow-xs hover:shadow-brutal-xs hover:border-foreground/25 ${child.gradient} ${
                             isChildActive
                               ? 'opacity-100'
                               : 'opacity-70 group-hover:opacity-100'

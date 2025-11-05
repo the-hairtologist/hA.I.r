@@ -61,7 +61,7 @@ export const HelpTooltip = ({
       <AlertDialogTrigger asChild>
         <button
           type="button"
-          className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary hover:bg-primary/90 transition-all brutal-border brutal-shadow-xs hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_hsl(var(--foreground))]"
+          className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary hover:bg-primary/90 transition-all brutal-border brutal-shadow-xs hover:-translate-y-0.5 hover:shadow-brutal-sm"
           aria-label="Help"
         >
           <HelpCircle className="h-4 w-4 text-primary-foreground" />

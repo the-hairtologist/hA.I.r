@@ -19,11 +19,11 @@ const Products = () => {
         <Breadcrumbs />
 
         <div className="min-h-[60vh] flex items-center justify-center p-4">
-          <Card className="border-[3px] border-foreground shadow-brutal-2xl max-w-3xl mx-auto hover:shadow-[10px_10px_0px_0px_hsl(var(--primary))] transition-all duration-300">
+          <Card className="brutal-border shadow-brutal-2xl max-w-3xl mx-auto hover:shadow-[10px_10px_0px_0px_hsl(var(--primary))] transition-all duration-300">
             <CardHeader className="text-center pb-4">
               <div className="flex justify-center mb-6">
                 <div className="relative">
-                  <div className="w-28 h-28 rounded-2xl bg-gradient-emerald-teal flex items-center justify-center border-[3px] border-foreground shadow-brutal-lg">
+                  <div className="w-28 h-28 rounded-2xl bg-gradient-emerald-teal flex items-center justify-center brutal-border shadow-brutal-lg">
                     <Package className="h-16 w-16 text-on-surface-primary" />
                   </div>
                   <div className="absolute -top-3 -right-3">

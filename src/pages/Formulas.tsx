@@ -660,7 +660,7 @@ const Formulas = () => {
 
         {/* Bulk Actions Bar */}
         {selectedFormulas.size > 0 && (
-          <Card className="border-[3px] border-primary shadow-[4px_4px_0px_0px_hsl(var(--primary))] mb-4 bg-primary/5">
+          <Card className="brutal-border border-primary shadow-brutal-md mb-4 bg-primary/5">
             <CardContent className="p-4 flex items-center justify-between gap-4">
               <div className="flex items-center gap-4">
                 <input
@@ -748,7 +748,7 @@ const Formulas = () => {
               filters.clientId ||
               filters.colorLine ||
               filters.tags.length > 0 ? (
-                <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] bg-secondary/5">
+                <Card className="brutal-border shadow-brutal-md bg-secondary/5">
                   <CardContent className={cn(mobileFirst.padding.lg, "py-12")}>
                     <Palette className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                     <h3 className={cn(mobileFirst.text.lg, "font-pixel mb-2 break-words")}>
@@ -780,7 +780,7 @@ const Formulas = () => {
               ) : (
                 <>
                   <div className="relative mb-6 inline-block">
-                    <div className="bg-gradient-to-br from-primary/10 to-accent/10 p-8 rounded-full border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+                    <div className="bg-gradient-to-br from-primary/10 to-accent/10 p-8 rounded-full brutal-border shadow-brutal-md">
                       <Palette className="h-16 w-16 text-primary" />
                     </div>
                     <div className="absolute -bottom-2 -right-2 bg-secondary p-2 rounded-full border-2 border-foreground">

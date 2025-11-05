@@ -32,12 +32,12 @@ export function EmptyStateCard({
 }: EmptyStateCardProps) {
   const variantStyles = {
     default:
-      'border-foreground hover:shadow-[8px_8px_0px_0px_hsl(var(--primary))]',
+      'border-foreground hover:shadow-brutal-2xl',
     success:
-      'border-success hover:shadow-[8px_8px_0px_0px_hsl(var(--success))]',
-    info: 'border-info hover:shadow-[8px_8px_0px_0px_hsl(var(--info))]',
+      'border-success hover:shadow-brutal-2xl',
+    info: 'border-info hover:shadow-brutal-2xl',
     warning:
-      'border-warning hover:shadow-[8px_8px_0px_0px_hsl(var(--warning))]',
+      'border-warning hover:shadow-brutal-2xl',
   };
 
   return (

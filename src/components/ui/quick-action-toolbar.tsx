@@ -28,7 +28,7 @@ export const QuickActionToolbar = ({
   return (
     <Card
       className={cn(
-        'border-2 border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]',
+        'brutal-border-subtle shadow-brutal-sm',
         className
       )}
     >

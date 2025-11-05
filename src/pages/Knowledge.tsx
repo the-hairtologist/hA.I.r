@@ -383,7 +383,7 @@ const Knowledge = () => {
                   rel="noopener noreferrer"
                   className="block"
                 >
-                  <Card className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all cursor-pointer bg-gradient-to-br from-yellow-300 to-orange-400 h-full">
+                  <Card className="brutal-border shadow-brutal-lg hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all cursor-pointer bg-gradient-to-br from-yellow-300 to-orange-400 h-full">
                     <CardHeader>
                       <div className="flex items-start justify-between mb-2">
                         <Badge className="bg-background border-[3px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] text-foreground font-bold hover:bg-background">

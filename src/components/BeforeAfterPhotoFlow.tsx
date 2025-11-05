@@ -238,7 +238,7 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
             <div
               className={`relative aspect-square rounded-lg overflow-hidden brutal-border ${
                 beforePhoto
-                  ? 'border-info shadow-[3px_3px_0px_0px_hsl(var(--info))]'
+                  ? 'border-info shadow-brutal-sm'
                   : 'border-dashed border-muted'
               }`}
             >
@@ -270,7 +270,7 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
             <div
               className={`relative aspect-square rounded-lg overflow-hidden brutal-border ${
                 afterPhoto
-                  ? 'border-success shadow-[3px_3px_0px_0px_hsl(var(--success))]'
+                  ? 'border-success shadow-brutal-sm'
                   : 'border-dashed border-muted'
               }`}
             >
@@ -411,7 +411,7 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
                   alt="Before"
                   width={600}
                   height={600}
-                  className="w-full rounded-lg brutal-border border-info shadow-[4px_4px_0px_0px_hsl(var(--info))]"
+                  className="w-full rounded-lg brutal-border border-info shadow-brutal-md"
                 />
               </div>
               <div className="space-y-2">
@@ -423,7 +423,7 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
                   alt="After"
                   width={600}
                   height={600}
-                  className="w-full rounded-lg brutal-border border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary))]"
+                  className="w-full rounded-lg brutal-border border-secondary shadow-brutal-md"
                 />
               </div>
             </div>

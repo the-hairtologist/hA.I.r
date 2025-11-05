@@ -401,7 +401,7 @@ const Messages = () => {
       <div className="flex-1 overflow-hidden">
         <div className="container mx-auto px-4 h-full flex gap-4 py-4">
           {/* Conversations List */}
-          <Card className="w-80 flex flex-col border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-yellow-300">
+          <Card className="w-80 flex flex-col brutal-border shadow-brutal-lg bg-yellow-300">
             <CardHeader>
               <CardTitle className="font-pixel text-foreground">
                 Conversations
@@ -464,7 +464,7 @@ const Messages = () => {
           </Card>
 
           {/* Chat Area */}
-          <Card className="flex-1 flex flex-col border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-blue-400 to-cyan-400">
+          <Card className="flex-1 flex flex-col brutal-border shadow-brutal-lg bg-gradient-to-br from-blue-400 to-cyan-400">
             {!selectedConversation ? (
               <div className="flex-1 flex items-center justify-center">
                 <div className="text-center max-w-sm">

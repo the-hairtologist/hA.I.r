@@ -37,9 +37,9 @@ const ClientDiscovery = () => {
       />
 
       <main className="container mx-auto px-4 py-6 max-w-4xl">
-        <Card className="border-[3px] border-primary shadow-[8px_8px_0px_0px_hsl(var(--primary))] bg-gradient-to-br from-purple-400 to-pink-400">
+        <Card className="brutal-border border-primary shadow-brutal-2xl bg-gradient-to-br from-purple-400 to-pink-400">
           <CardHeader className="text-center pb-4">
-            <div className="mx-auto w-20 h-20 rounded-full bg-background border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] flex items-center justify-center mb-4">
+            <div className="mx-auto w-20 h-20 rounded-full bg-background brutal-border shadow-brutal-md flex items-center justify-center mb-4">
               <Sparkles className="h-10 w-10 text-primary" />
             </div>
             <CardTitle className="text-3xl font-pixel text-foreground">
@@ -51,7 +51,7 @@ const ClientDiscovery = () => {
           </CardHeader>
 
           <CardContent className="space-y-6">
-            <div className="bg-background/90 rounded-xl p-6 border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+            <div className="bg-background/90 rounded-xl p-6 brutal-border shadow-brutal-md">
               <h3 className="text-xl font-pixel mb-4 flex items-center gap-2">
                 <TrendingUp className="h-5 w-5 text-primary" />
                 What's Coming
@@ -174,7 +174,7 @@ const ClientDiscovery = () => {
                 <Button
                   onClick={() => navigate('/portfolio')}
                   variant="outline"
-                  className="gap-2 border-[3px] border-foreground"
+                  className="gap-2 brutal-border"
                 >
                   Build Portfolio
                 </Button>

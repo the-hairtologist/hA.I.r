@@ -47,7 +47,7 @@ export const InteractiveCard = ({
         'brutal-border brutal-shadow-sm transition-all duration-300',
         interactive &&
           onClick &&
-          'cursor-pointer hover:-translate-y-2 hover:shadow-[8px_8px_0px_0px_hsl(var(--primary))] active:translate-y-0 active:brutal-shadow-sm',
+          'cursor-pointer hover:-translate-y-2 hover:shadow-brutal-2xl active:translate-y-0 active:brutal-shadow-sm',
         `bg-gradient-to-br ${gradient}`,
         className
       )}

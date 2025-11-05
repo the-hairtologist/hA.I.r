@@ -969,7 +969,7 @@ export default function Clients() {
 
         {filteredClients.length === 0 ? (
           searchQuery || sortBy !== 'recent' || riskFilter !== 'all' ? (
-            <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] bg-secondary/5">
+            <Card className="brutal-border shadow-brutal-md bg-secondary/5">
               <CardContent className="py-12 text-center">
                 {riskFilter !== 'all' ? (
                   <>
@@ -1001,7 +1001,7 @@ export default function Clients() {
                       setSortBy('recent');
                       setRiskFilter('all');
                     }}
-                    className="border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
+                    className="brutal-border-subtle shadow-brutal-sm hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-brutal-xs transition-all"
                   >
                     Clear All Filters
                   </Button>
@@ -1018,7 +1018,7 @@ export default function Clients() {
           ) : (
             <div className="py-16 px-4">
               <div className="relative mb-6 inline-block">
-                <div className="bg-gradient-to-br from-primary/10 to-accent/10 p-8 rounded-full border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+                <div className="bg-gradient-to-br from-primary/10 to-accent/10 p-8 rounded-full brutal-border shadow-brutal-md">
                   <User className="h-16 w-16 text-primary" />
                 </div>
                 <div className="absolute -bottom-2 -right-2 bg-secondary p-2 rounded-full border-2 border-foreground">
@@ -1041,7 +1041,7 @@ export default function Clients() {
               <Button
                 onClick={() => setIsDialogOpen(true)}
                 size="lg"
-                className="gap-2 hover-scale border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
+                className="gap-2 hover-scale brutal-border shadow-brutal-md hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-brutal-xs transition-all"
               >
                 <UserPlus className="h-5 w-5" />
                 Add Your First Client
@@ -1058,7 +1058,7 @@ export default function Clients() {
                 value={pageSize.toString()}
                 onValueChange={value => setPageSize(Number(value))}
               >
-                <SelectTrigger className="w-32 border-[2px] border-foreground">
+                <SelectTrigger className="w-32 brutal-border-subtle">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -1098,7 +1098,7 @@ export default function Clients() {
                       <PaginationPrevious
                         onClick={previousPage}
                         className={cn(
-                          'cursor-pointer border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]',
+                          'cursor-pointer brutal-border-subtle shadow-brutal-xs',
                           !canGoPrevious && 'opacity-50 cursor-not-allowed'
                         )}
                         aria-disabled={!canGoPrevious}
@@ -1122,7 +1122,7 @@ export default function Clients() {
                           <PaginationLink
                             onClick={() => goToPage(pageNum)}
                             isActive={currentPage === pageNum}
-                            className="cursor-pointer border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]"
+                            className="cursor-pointer brutal-border-subtle shadow-brutal-xs"
                           >
                             {pageNum}
                           </PaginationLink>
@@ -1134,7 +1134,7 @@ export default function Clients() {
                       <PaginationNext
                         onClick={nextPage}
                         className={cn(
-                          'cursor-pointer border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]',
+                          'cursor-pointer brutal-border-subtle shadow-brutal-xs',
                           !canGoNext && 'opacity-50 cursor-not-allowed'
                         )}
                         aria-disabled={!canGoNext}
@@ -1159,7 +1159,7 @@ export default function Clients() {
 
         {/* Edit Client Dialog */}
         <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen} modal={true}>
-          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto border-[3px] border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground))]">
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto brutal-border shadow-brutal-xl">
             <DialogHeader>
               <DialogTitle className={typography.heading.h2}>
                 Client Profile
@@ -1203,7 +1203,7 @@ export default function Clients() {
                             })
                           }
                           placeholder="Enter client's name"
-                          className="border-[2px] border-foreground"
+                          className="brutal-border-subtle"
                         />
                       </div>
                       <div className="space-y-2">
@@ -1219,7 +1219,7 @@ export default function Clients() {
                             })
                           }
                           placeholder="client@example.com"
-                          className="border-[2px] border-foreground"
+                          className="brutal-border-subtle"
                         />
                       </div>
                       <div className="space-y-2">
@@ -1235,7 +1235,7 @@ export default function Clients() {
                             })
                           }
                           placeholder="(555) 123-4567"
-                          className="border-[2px] border-foreground"
+                          className="brutal-border-subtle"
                         />
                       </div>
                       <div className="space-y-2">
@@ -1250,7 +1250,7 @@ export default function Clients() {
                             })
                           }
                           placeholder="e.g., 3C Curly, Fine Straight"
-                          className="border-[2px] border-foreground"
+                          className="brutal-border-subtle"
                         />
                       </div>
                       <div className="space-y-2">
@@ -1267,7 +1267,7 @@ export default function Clients() {
                             })
                           }
                           placeholder="PPD, ammonia, or other known sensitivities"
-                          className="border-[2px] border-foreground"
+                          className="brutal-border-subtle"
                         />
                       </div>
                       <div className="space-y-2">
@@ -1282,13 +1282,13 @@ export default function Clients() {
                             })
                           }
                           placeholder="Preferences, goals, or important details to remember"
-                          className="border-[2px] border-foreground"
+                          className="brutal-border-subtle"
                         />
                       </div>
                       <Button
                         type="submit"
                         disabled={updateClientMutation.isPending}
-                        className="w-full border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all min-h-[44px]"
+                        className="w-full brutal-border shadow-brutal-md hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-brutal-xs transition-all min-h-[44px]"
                       >
                         {updateClientMutation.isPending ? (
                           <>
@@ -1310,7 +1310,7 @@ export default function Clients() {
                     </h3>
 
                     {clientFormulas.length === 0 ? (
-                      <div className="text-center py-8 border-[3px] border-dashed border-muted rounded-lg bg-muted/5">
+                      <div className="text-center py-8 brutal-border border-dashed border-muted rounded-lg bg-muted/5">
                         <FileText className="h-12 w-12 mx-auto mb-3 text-muted-foreground" />
                         <p className="text-xs sm:text-sm text-muted-foreground">
                           No formulas created yet
@@ -1321,7 +1321,7 @@ export default function Clients() {
                         {clientFormulas.map(formula => (
                           <Card
                             key={formula.id}
-                            className="border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-card to-primary/5"
+                            className="brutal-border-subtle shadow-brutal-sm bg-gradient-to-br from-card to-primary/5"
                           >
                             <CardContent className="p-4 space-y-2">
                               <div className="flex items-start justify-between gap-2">

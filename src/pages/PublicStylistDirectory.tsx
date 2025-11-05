@@ -168,7 +168,7 @@ const PublicStylistDirectory = () => {
 
           {/* Stylists Grid */}
           {!loading && filteredStylists.length === 0 && (
-            <Card className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-yellow-300">
+            <Card className="brutal-border shadow-brutal-lg bg-yellow-300">
               <CardContent className="py-16 text-center">
                 <Search className="h-16 w-16 mx-auto mb-4 text-foreground/60" />
                 <h3 className="text-2xl font-bold mb-2">No stylists found</h3>
@@ -189,7 +189,7 @@ const PublicStylistDirectory = () => {
               {filteredStylists.map((stylist, idx) => (
                 <Card
                   key={stylist.id}
-                  className={`border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all cursor-pointer ${
+                  className={`brutal-border shadow-brutal-lg hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all cursor-pointer ${
                     idx % 4 === 0
                       ? 'bg-blue-400'
                       : idx % 4 === 1
@@ -299,7 +299,7 @@ const PublicStylistDirectory = () => {
 
           {/* CTA Section */}
           {!loading && (
-            <Card className="mt-12 border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-primary/20 to-accent/20">
+            <Card className="mt-12 brutal-border shadow-brutal-lg bg-gradient-to-br from-primary/20 to-accent/20">
               <CardContent className="py-12 text-center">
                 <Sparkles className="h-16 w-16 mx-auto mb-4 text-primary" />
                 <h2 className="text-3xl font-bold mb-2">Are You a Stylist?</h2>

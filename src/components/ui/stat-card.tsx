@@ -34,7 +34,7 @@ export const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
         variant={variant === 'gradient' ? 'brutal' : variant}
         className={cn(
           'group relative overflow-hidden transition-all duration-300',
-          'hover:-translate-y-2 hover:shadow-[8px_8px_0px_0px_hsl(var(--primary))]',
+          'hover:-translate-y-2 hover:shadow-brutal-2xl',
           variant === 'glass' && 'hover:bg-background/90',
           gradient && `bg-gradient-to-br ${gradient}`
         )}
@@ -49,8 +49,8 @@ export const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
             <div
               className={cn(
                 'p-3 rounded-xl transition-all duration-300',
-                'border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]',
-                'group-hover:shadow-[3px_3px_0px_0px_hsl(var(--foreground))]',
+                'brutal-border-subtle shadow-brutal-xs',
+                'group-hover:shadow-brutal-sm',
                 'group-hover:-translate-y-0.5',
                 variant === 'glass' ? 'bg-background/80' : 'bg-card'
               )}
