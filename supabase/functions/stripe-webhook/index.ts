@@ -84,18 +84,21 @@ serve(async request => {
 
       console.log('[STRIPE-WEBHOOK] Appointment created:', appointment.id);
 
-      // Create payment record with deposit tracking
-      const { error: paymentError } = await supabase.from('payments').insert({
-        stylist_id: appointmentData.stylist_id,
-        client_id: appointmentData.client_id,
-        appointment_id: appointment.id,
-        amount: amountPaid,
-        payment_method: 'card',
-        status: 'completed',
-        is_deposit: isDeposit,
-        remaining_balance: remainingBalance,
-        payment_type: isDeposit ? 'deposit' : 'full',
-      });
+      // Create payment record using secure function
+      const { data: paymentId, error: paymentError } = await supabase.rpc(
+        'create_payment',
+        {
+          p_stylist_id: appointmentData.stylist_id,
+          p_client_id: appointmentData.client_id,
+          p_appointment_id: appointment.id,
+          p_amount: amountPaid,
+          p_payment_method: 'card',
+          p_status: 'completed',
+          p_is_deposit: isDeposit,
+          p_remaining_balance: remainingBalance,
+          p_payment_type: isDeposit ? 'deposit' : 'full',
+        }
+      );
 
       if (paymentError) {
         console.error(
@@ -105,7 +108,7 @@ serve(async request => {
         throw paymentError;
       }
 
-      console.log('[STRIPE-WEBHOOK] Payment record created');
+      console.log('[STRIPE-WEBHOOK] Payment record created:', paymentId);
 
       // Trigger Zapier webhook for payment received
       try {

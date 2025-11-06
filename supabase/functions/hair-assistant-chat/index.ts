@@ -5,6 +5,7 @@ import {
   compressedErrorResponse,
   corsHeaders,
 } from '../_shared/compression.ts';
+import { authenticateRequest } from '../_shared/auth.ts';
 
 /**
  * Copyright © 2025 hA.I.r. All Rights Reserved.
@@ -23,6 +24,15 @@ serve(async req => {
   }
 
   try {
+    // Require authentication
+    const authContext = await authenticateRequest(req);
+    if (authContext instanceof Response) {
+      return authContext;
+    }
+
+    const { user, supabase } = authContext;
+    const userId = user.id;
+
     const {
       message,
       mode,
@@ -30,20 +40,6 @@ serve(async req => {
       clientContext,
       stylistContext,
     } = await req.json();
-
-    // Get authorization header to extract user ID
-    const authHeader = req.headers.get('authorization');
-    let userId: string | undefined;
-
-    if (authHeader) {
-      try {
-        const token = authHeader.replace('Bearer ', '');
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        userId = payload.sub;
-      } catch (e) {
-        console.log('Could not extract user ID from token');
-      }
-    }
 
     // Input validation
     if (!message || typeof message !== 'string') {
@@ -310,14 +306,8 @@ TONE: Professional, personalized, supportive. You know their history - use it to
     );
 
     // Track model performance for optimization
-    if (userId) {
-      try {
-        const supabase = createClient(
-          Deno.env.get('SUPABASE_URL') ?? '',
-          Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-        );
-
-        await supabase.from('ai_model_performance').insert({
+    try {
+      await supabase.from('ai_model_performance').insert({
           user_id: userId,
           query_text: message.substring(0, 500),
           query_type: message.toLowerCase().includes('formula')
@@ -327,9 +317,8 @@ TONE: Professional, personalized, supportive. You know their history - use it to
           response_time_ms: responseTime,
           tokens_used: data.usage?.total_tokens || 0,
         });
-      } catch (err) {
-        console.log('Could not log performance metrics:', err);
-      }
+    } catch (err) {
+      console.log('Could not log performance metrics:', err);
     }
 
     const assistantMessage = addWatermark(

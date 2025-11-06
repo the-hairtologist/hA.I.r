@@ -5,6 +5,7 @@ import {
   compressedErrorResponse,
   corsHeaders,
 } from '../_shared/compression.ts';
+import { authenticateRequest } from '../_shared/auth.ts';
 
 // Input validation schema
 const requestSchema = z.object({
@@ -19,6 +20,11 @@ serve(async req => {
   }
 
   try {
+    // Require authentication
+    const authContext = await authenticateRequest(req);
+    if (authContext instanceof Response) {
+      return authContext;
+    }
     const body = await req.json();
 
     // Validate input
