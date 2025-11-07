@@ -3,6 +3,14 @@
 ## Overview
 This document provides a comprehensive reference for all Lovable Cloud edge functions in the hA.I.r application.
 
+**📱 Flutter Developers**: See [FLUTTER_API_GUIDE.md](./FLUTTER_API_GUIDE.md) for complete Flutter integration examples with code samples, error handling, and best practices.
+
+## Quick Links
+- [Flutter API Guide](./FLUTTER_API_GUIDE.md) - Complete Flutter integration
+- [All Edge Functions](#complete-function-list) - Full list of 55+ functions
+- [Authentication](#authentication) - Auth patterns
+- [Error Handling](#error-handling) - Error codes and responses
+
 ## AI & Automation Functions
 
 ### `ai-chat`
