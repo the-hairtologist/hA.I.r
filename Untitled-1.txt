@@ -1,2 +1,3 @@
-"flutterflow.apiToken": "YOUR_API_TOKEN_HERE""flutterflow.apiToken": "aa0b0a18-675d-4c1b-b6e9-66f8de554d0c
-"
+{
+  "flutterflow.apiToken": "aa0b0a18-675d-4c1b-b6e9-66f8de554d0c"
+}
