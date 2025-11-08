@@ -1,52 +1,62 @@
 {
-    "chat.agent.maxRequests": 100,
-    "editor.formatOnSave": true,
-    "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": "explicit"
-    },
-    "typescript.preferences.importModuleSpecifier": "relative",
-    "typescript.suggest.autoImports": true,
-    "emmet.includeLanguages": {
-        "typescript": "html",
-        "typescriptreact": "html"
-    },
-    "tailwindCSS.experimental.classRegex": [
-        [
-            "cva\\(([^)]*)\\)",
-            "[\"\u0027`]([^\"\u0027`]*).*?[\"\u0027`]"
-        ],
-        [
-            "cx\\(([^)]*)\\)",
-            "(?:\u0027|\"|`)([^\u0027]*)(?:\u0027|\"|`)"
-        ]
+  "chat.agent.maxRequests": 100,
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "typescript.suggest.autoImports": true,
+  "emmet.includeLanguages": {
+    "typescript": "html",
+    "typescriptreact": "html"
+  },
+  "tailwindCSS.experimental.classRegex": [
+    [
+      "cva\\(([^)]*)\\)",
+      "[\"'`]([^\"'`]*).*?[\"'`]"
     ],
-    "files.exclude": {
-        "**/node_modules": true,
-        "**/dist": true,
-        "**/.git": true
-    },
-    "search.exclude": {
-        "**/node_modules": true,
-        "**/dist": true
-    },
-    "terminal.integrated.defaultProfile.windows": "PowerShell",
-    "powershell.integratedConsole.showOnStartup": false,
-    "playwright.showTrace": true,
-    "github.copilot.enable": {
-        "markdown": true,
-        "*": true,
-        "yaml": true,
-        "plaintext": true,
-        "typescript": true,
-        "typescriptreact": true
-    },
-    "github.copilot.chat.experimental.codeActions": true,
-    "github.copilot.editor.enableAutoCompletions": true,
-    "github.copilot.advanced": {
-        "debug.enableLanguageServer": true
-    },
-    "workbench.colorTheme": "Kimbie Dark",
-    "workbench.productIconTheme": "bongocat",
-    "workbench.preferredDarkColorTheme": "Kimbie Dark",
-    "workbench.preferredHighContrastColorTheme": "Default High Contrast"
+    [
+      "cx\\(([^)]*)\\)",
+      "(?:'|\"|`)([^']*)(?:'|\"|`)"
+    ]
+  ],
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/.git": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist": true
+  },
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
+  "powershell.integratedConsole.showOnStartup": false,
+  "playwright.showTrace": true,
+  "github.copilot.enable": {
+    "markdown": true,
+    "*": true,
+    "yaml": true,
+    "plaintext": true,
+    "typescript": true,
+    "typescriptreact": true
+  },
+  "github.copilot.chat.experimental.codeActions": true,
+  "github.copilot.editor.enableAutoCompletions": true,
+  "github.copilot.advanced": {
+    "debug.enableLanguageServer": true
+  },
+  "workbench.colorTheme": "Kimbie Dark",
+  "workbench.productIconTheme": "bongocat",
+  "workbench.preferredDarkColorTheme": "Kimbie Dark",
+  "workbench.preferredHighContrastColorTheme": "Default High Contrast",
+  "files.readonlyInclude": {
+    "**": true
+  },
+  "files.readonlyExclude": {
+    "lib/custom_code/**": true,
+    "lib/flutter_flow/custom_functions.dart": true,
+    "pubspec.yaml": true,
+    "lib/flutter_flow/function_changes.json": true,
+    ".vscode/settings.json": true
+  }
 }
