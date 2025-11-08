@@ -142,20 +142,20 @@ class LightModeTheme extends FlutterFlowTheme {
   @Deprecated('Use tertiary instead')
   Color get tertiaryColor => tertiary;
 
-  late Color primary = const Color(0xFF19DB8A);
-  late Color secondary = const Color(0xFF36B4FF);
-  late Color tertiary = const Color(0xFFFFA130);
+  late Color primary = const Color(0xFF4B39EF);
+  late Color secondary = const Color(0xFF39D2C0);
+  late Color tertiary = const Color(0xFFEE8B60);
   late Color alternate = const Color(0xFFE0E3E7);
   late Color primaryText = const Color(0xFF14181B);
   late Color secondaryText = const Color(0xFF57636C);
   late Color primaryBackground = const Color(0xFFF1F4F8);
   late Color secondaryBackground = const Color(0xFFFFFFFF);
-  late Color accent1 = const Color(0x4C19DB8A);
-  late Color accent2 = const Color(0x4D36B4FF);
-  late Color accent3 = const Color(0x4DFFA130);
-  late Color accent4 = const Color(0xABFFFFFF);
-  late Color success = const Color(0xFF16B070);
-  late Color warning = const Color(0xFFCC8E30);
+  late Color accent1 = const Color(0x4C4B39EF);
+  late Color accent2 = const Color(0x4D39D2C0);
+  late Color accent3 = const Color(0x4DEE8B60);
+  late Color accent4 = const Color(0xCCFFFFFF);
+  late Color success = const Color(0xFF249689);
+  late Color warning = const Color(0xFFF9CF58);
   late Color error = const Color(0xFFFF5963);
   late Color info = const Color(0xFFFFFFFF);
 }
@@ -213,106 +213,107 @@ class ThemeTypography extends Typography {
 
   final FlutterFlowTheme theme;
 
-  String get displayLargeFamily => 'Inter';
+  String get displayLargeFamily => 'Inter Tight';
   bool get displayLargeIsCustom => false;
-  TextStyle get displayLarge => GoogleFonts.inter(
+  TextStyle get displayLarge => GoogleFonts.interTight(
         color: theme.primaryText,
-        fontWeight: FontWeight.normal,
-        fontSize: 57.0,
+        fontWeight: FontWeight.w600,
+        fontSize: 64.0,
       );
-  String get displayMediumFamily => 'Inter';
+  String get displayMediumFamily => 'Inter Tight';
   bool get displayMediumIsCustom => false;
-  TextStyle get displayMedium => GoogleFonts.inter(
+  TextStyle get displayMedium => GoogleFonts.interTight(
         color: theme.primaryText,
-        fontWeight: FontWeight.normal,
-        fontSize: 45.0,
+        fontWeight: FontWeight.w600,
+        fontSize: 44.0,
       );
-  String get displaySmallFamily => 'Inter';
+  String get displaySmallFamily => 'Inter Tight';
   bool get displaySmallIsCustom => false;
-  TextStyle get displaySmall => GoogleFonts.inter(
+  TextStyle get displaySmall => GoogleFonts.interTight(
         color: theme.primaryText,
-        fontWeight: FontWeight.bold,
-        fontSize: 30.0,
+        fontWeight: FontWeight.w600,
+        fontSize: 36.0,
       );
-  String get headlineLargeFamily => 'Inter';
+  String get headlineLargeFamily => 'Inter Tight';
   bool get headlineLargeIsCustom => false;
-  TextStyle get headlineLarge => GoogleFonts.inter(
+  TextStyle get headlineLarge => GoogleFonts.interTight(
         color: theme.primaryText,
-        fontWeight: FontWeight.normal,
+        fontWeight: FontWeight.w600,
         fontSize: 32.0,
       );
-  String get headlineMediumFamily => 'Inter';
+  String get headlineMediumFamily => 'Inter Tight';
   bool get headlineMediumIsCustom => false;
-  TextStyle get headlineMedium => GoogleFonts.inter(
+  TextStyle get headlineMedium => GoogleFonts.interTight(
         color: theme.primaryText,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w600,
+        fontSize: 28.0,
+      );
+  String get headlineSmallFamily => 'Inter Tight';
+  bool get headlineSmallIsCustom => false;
+  TextStyle get headlineSmall => GoogleFonts.interTight(
+        color: theme.primaryText,
+        fontWeight: FontWeight.w600,
         fontSize: 24.0,
       );
-  String get headlineSmallFamily => 'Inter';
-  bool get headlineSmallIsCustom => false;
-  TextStyle get headlineSmall => GoogleFonts.inter(
+  String get titleLargeFamily => 'Inter Tight';
+  bool get titleLargeIsCustom => false;
+  TextStyle get titleLarge => GoogleFonts.interTight(
         color: theme.primaryText,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w600,
         fontSize: 20.0,
       );
-  String get titleLargeFamily => 'Readex Pro';
-  bool get titleLargeIsCustom => false;
-  TextStyle get titleLarge => GoogleFonts.readexPro(
-        color: theme.primaryText,
-        fontWeight: FontWeight.w500,
-        fontSize: 22.0,
-      );
-  String get titleMediumFamily => 'Readex Pro';
+  String get titleMediumFamily => 'Inter Tight';
   bool get titleMediumIsCustom => false;
-  TextStyle get titleMedium => GoogleFonts.readexPro(
-        color: theme.info,
-        fontWeight: FontWeight.w500,
-        fontSize: 16.0,
+  TextStyle get titleMedium => GoogleFonts.interTight(
+        color: theme.primaryText,
+        fontWeight: FontWeight.w600,
+        fontSize: 18.0,
       );
-  String get titleSmallFamily => 'Readex Pro';
+  String get titleSmallFamily => 'Inter Tight';
   bool get titleSmallIsCustom => false;
-  TextStyle get titleSmall => GoogleFonts.readexPro(
-        color: theme.info,
-        fontWeight: FontWeight.w500,
-        fontSize: 14.0,
-      );
-  String get labelLargeFamily => 'Readex Pro';
-  bool get labelLargeIsCustom => false;
-  TextStyle get labelLarge => GoogleFonts.readexPro(
-        color: theme.secondaryText,
-        fontWeight: FontWeight.w500,
+  TextStyle get titleSmall => GoogleFonts.interTight(
+        color: theme.primaryText,
+        fontWeight: FontWeight.w600,
         fontSize: 16.0,
       );
-  String get labelMediumFamily => 'Readex Pro';
-  bool get labelMediumIsCustom => false;
-  TextStyle get labelMedium => GoogleFonts.readexPro(
+  String get labelLargeFamily => 'Inter';
+  bool get labelLargeIsCustom => false;
+  TextStyle get labelLarge => GoogleFonts.inter(
         color: theme.secondaryText,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.normal,
+        fontSize: 16.0,
+      );
+  String get labelMediumFamily => 'Inter';
+  bool get labelMediumIsCustom => false;
+  TextStyle get labelMedium => GoogleFonts.inter(
+        color: theme.secondaryText,
+        fontWeight: FontWeight.normal,
         fontSize: 14.0,
       );
-  String get labelSmallFamily => 'Readex Pro';
+  String get labelSmallFamily => 'Inter';
   bool get labelSmallIsCustom => false;
-  TextStyle get labelSmall => GoogleFonts.readexPro(
+  TextStyle get labelSmall => GoogleFonts.inter(
         color: theme.secondaryText,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.normal,
         fontSize: 12.0,
       );
-  String get bodyLargeFamily => 'Readex Pro';
+  String get bodyLargeFamily => 'Inter';
   bool get bodyLargeIsCustom => false;
-  TextStyle get bodyLarge => GoogleFonts.readexPro(
+  TextStyle get bodyLarge => GoogleFonts.inter(
         color: theme.primaryText,
+        fontWeight: FontWeight.normal,
         fontSize: 16.0,
       );
-  String get bodyMediumFamily => 'Readex Pro';
+  String get bodyMediumFamily => 'Inter';
   bool get bodyMediumIsCustom => false;
-  TextStyle get bodyMedium => GoogleFonts.readexPro(
+  TextStyle get bodyMedium => GoogleFonts.inter(
         color: theme.primaryText,
         fontWeight: FontWeight.normal,
         fontSize: 14.0,
       );
-  String get bodySmallFamily => 'Readex Pro';
+  String get bodySmallFamily => 'Inter';
   bool get bodySmallIsCustom => false;
-  TextStyle get bodySmall => GoogleFonts.readexPro(
+  TextStyle get bodySmall => GoogleFonts.inter(
         color: theme.primaryText,
         fontWeight: FontWeight.normal,
         fontSize: 12.0,
@@ -327,20 +328,20 @@ class DarkModeTheme extends FlutterFlowTheme {
   @Deprecated('Use tertiary instead')
   Color get tertiaryColor => tertiary;
 
-  late Color primary = const Color(0xFF19DB8A);
-  late Color secondary = const Color(0xFF36B4FF);
-  late Color tertiary = const Color(0xFFFFA130);
-  late Color alternate = const Color(0xFF2B323B);
+  late Color primary = const Color(0xFF4B39EF);
+  late Color secondary = const Color(0xFF39D2C0);
+  late Color tertiary = const Color(0xFFEE8B60);
+  late Color alternate = const Color(0xFF262D34);
   late Color primaryText = const Color(0xFFFFFFFF);
   late Color secondaryText = const Color(0xFF95A1AC);
-  late Color primaryBackground = const Color(0xFF14181B);
-  late Color secondaryBackground = const Color(0xFF1D2429);
-  late Color accent1 = const Color(0x4C19DB8A);
-  late Color accent2 = const Color(0x4D36B4FF);
-  late Color accent3 = const Color(0x4CFFA130);
-  late Color accent4 = const Color(0xB214181B);
-  late Color success = const Color(0xFF16B070);
-  late Color warning = const Color(0xFFCC8E30);
+  late Color primaryBackground = const Color(0xFF1D2428);
+  late Color secondaryBackground = const Color(0xFF14181B);
+  late Color accent1 = const Color(0x4C4B39EF);
+  late Color accent2 = const Color(0x4D39D2C0);
+  late Color accent3 = const Color(0x4DEE8B60);
+  late Color accent4 = const Color(0xB2262D34);
+  late Color success = const Color(0xFF249689);
+  late Color warning = const Color(0xFFF9CF58);
   late Color error = const Color(0xFFFF5963);
   late Color info = const Color(0xFFFFFFFF);
 }
