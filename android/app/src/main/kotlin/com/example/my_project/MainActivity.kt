@@ -1,4 +1,4 @@
-package com.mycompany.hair
+package hA.I.r
 
 import io.flutter.embedding.android.FlutterActivity
 
