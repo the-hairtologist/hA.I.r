@@ -37,7 +37,7 @@ jobs:
           npx wait-on http://localhost:4173 --timeout 60000
       
       - name: Run Lighthouse CI (Mobile)
-        uses: treosh/lighthouse-ci-action@v11
+        uses: treosh/lighthouse-ci-action@v12
         with:
           urls: |
             http://localhost:4173/
@@ -80,7 +80,7 @@ jobs:
           npx wait-on http://localhost:4173 --timeout 60000
       
       - name: Run Lighthouse CI (Desktop)
-        uses: treosh/lighthouse-ci-action@v11
+        uses: treosh/lighthouse-ci-action@v12
         with:
           urls: |
             http://localhost:4173/
