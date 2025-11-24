@@ -11,8 +11,19 @@ import { useState } from 'react';
 // Safe Error Screen component
 const ErrorScreen = ({ error }: { error: Error | unknown }) => {
   const [showDetails, setShowDetails] = useState(false);
-  const errorMessage = error instanceof Error ? error.message : String(error);
-  const errorStack = error instanceof Error ? error.stack : undefined;
+  
+  // Sanitize error message - remove file paths and sensitive info
+  const sanitizeError = (err: Error | unknown): string => {
+    const message = err instanceof Error ? err.message : String(err);
+    // Remove file paths and URLs that might expose internal structure
+    return message
+      .replace(/file:\/\/\/[^\s]+/g, '[path]')
+      .replace(/https?:\/\/[^\s]+/g, '[url]')
+      .replace(/\/[^\s]+\.tsx?/g, '[file]')
+      .replace(/at [^\n]+\n/g, '');
+  };
+
+  const errorMessage = sanitizeError(error);
 
   return (
     <div style={{ 
@@ -41,34 +52,35 @@ const ErrorScreen = ({ error }: { error: Error | unknown }) => {
         >
           Refresh Page
         </button>
-        <div style={{ marginTop: '24px' }}>
-          <button
-            onClick={() => setShowDetails(!showDetails)}
-            style={{
-              cursor: 'pointer',
-              color: '#6b7280',
-              background: 'transparent',
-              border: 'none',
-              textDecoration: 'underline'
-            }}
-          >
-            {showDetails ? 'Hide' : 'Show'} Technical Details
-          </button>
-          {showDetails && (
-            <pre style={{
-              marginTop: '12px',
-              padding: '12px',
-              background: '#f3f4f6',
-              borderRadius: '6px',
-              overflow: 'auto',
-              fontSize: '12px',
-              textAlign: 'left'
-            }}>
-              {errorMessage}
-              {errorStack && `\n\n${errorStack}`}
-            </pre>
-          )}
-        </div>
+        {process.env.NODE_ENV === 'development' && (
+          <div style={{ marginTop: '24px' }}>
+            <button
+              onClick={() => setShowDetails(!showDetails)}
+              style={{
+                cursor: 'pointer',
+                color: '#6b7280',
+                background: 'transparent',
+                border: 'none',
+                textDecoration: 'underline'
+              }}
+            >
+              {showDetails ? 'Hide' : 'Show'} Technical Details
+            </button>
+            {showDetails && (
+              <pre style={{
+                marginTop: '12px',
+                padding: '12px',
+                background: '#f3f4f6',
+                borderRadius: '6px',
+                overflow: 'auto',
+                fontSize: '12px',
+                textAlign: 'left'
+              }}>
+                {errorMessage}
+              </pre>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -45,7 +45,7 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 5 * 60 * 1000, // 5 minutes (increased from 60s)
-      cacheTime: 10 * 60 * 1000, // 10 minutes cache time (correct option name)
+      gcTime: 10 * 60 * 1000, // 10 minutes garbage collection time (renamed from cacheTime in v5)
       retry: 3,
       retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
       refetchOnWindowFocus: false,

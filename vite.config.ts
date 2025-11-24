@@ -28,7 +28,7 @@ export default defineConfig(({ mode }) => {
       console.error('❌', message);
       process.exit(1);
     }
-  } else {
+  } else if (mode === 'development') {
     console.log('✅ All required environment variables present');
   }
 
