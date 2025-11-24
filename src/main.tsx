@@ -49,6 +49,7 @@ export const ErrorScreen: React.FC<{ error: unknown }> = ({ error }) => {
           Refresh Page
         </button>
         <details style={{ marginTop: '24px', textAlign: 'left' }}>
+          <summary style={{ cursor: 'pointer', color: '#6b7280', fontSize: '14px' }}>
           <summary style={{ 
             cursor: 'pointer', 
             color: '#6b7280',
@@ -101,11 +102,14 @@ const initializeApp = () => {
     createRoot(rootElement).render(<App />);
   } catch (error) {
     console.error('[Main] Critical initialization error:', error);
+    // Show error to user with React component instead of innerHTML
     // Show error to user with React component
     const rootElement = document.getElementById('root');
     if (rootElement) {
       createRoot(rootElement).render(<ErrorScreen error={error} />);
     } else {
+      // Fallback if root element doesn't exist - render to body
+      createRoot(document.body).render(<ErrorScreen error={error} />);
       // Fallback if root element is missing
       document.body.innerHTML = '<h1>Critical Error: Root element not found</h1>';
     }
