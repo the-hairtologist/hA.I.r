@@ -7,76 +7,11 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 import React from 'react';
-      .replace(/at [^\n]+\n/g, '');
-  };
 
-  const errorMessage = sanitizeError(error);
-
-  return (
-    <div style={{ 
-      display: 'flex', 
-      alignItems: 'center', 
-      justifyContent: 'center', 
-      minHeight: '100vh', 
-      padding: '20px', 
-      background: '#fff' 
-    }}>
-      <div style={{ maxWidth: '600px', textAlign: 'center' }}>
-        <h1 style={{ color: '#ef4444', marginBottom: '16px' }}>Application Error</h1>
-        <p style={{ color: '#374151', marginBottom: '24px' }}>
-          Failed to initialize application. Please refresh the page.
-        </p>
-        <button 
-          onClick={() => window.location.reload()}
-          style={{
-            background: '#3b82f6',
-            color: '#fff',
-            padding: '12px 24px',
-            border: 'none',
-            borderRadius: '6px',
-            cursor: 'pointer'
-          }}
-        >
-          Refresh Page
-        </button>
-        {process.env.NODE_ENV === 'development' && (
-          <div style={{ marginTop: '24px' }}>
-            <button
-              onClick={() => setShowDetails(!showDetails)}
-              style={{
-                cursor: 'pointer',
-                color: '#6b7280',
-                background: 'transparent',
-                border: 'none',
-                textDecoration: 'underline'
-              }}
-            >
-              {showDetails ? 'Hide' : 'Show'} Technical Details
-            </button>
-            {showDetails && (
-              <pre style={{
-                marginTop: '12px',
-                padding: '12px',
-                background: '#f3f4f6',
-                borderRadius: '6px',
-                overflow: 'auto',
-                fontSize: '12px',
-                textAlign: 'left'
-              }}>
-                {errorMessage}
-              </pre>
-            )}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-
-// Error Screen Component - safe alternative to innerHTML
-const ErrorScreen = ({ error }: { error: unknown }) => {
+// Safe error display component - exported for fast refresh
+export const ErrorScreen: React.FC<{ error: unknown }> = ({ error }) => {
   const errorMessage = error instanceof Error ? error.message : String(error);
-  const errorStack = error instanceof Error ? error.stack : undefined;
+  const errorStack = error instanceof Error ? error.stack : '';
 
   return (
     <div style={{ 
@@ -89,14 +24,18 @@ const ErrorScreen = ({ error }: { error: unknown }) => {
       fontFamily: 'system-ui, -apple-system, sans-serif'
     }}>
       <div style={{ maxWidth: '600px', textAlign: 'center' }}>
-        <h1 style={{ color: '#ef4444', marginBottom: '16px', fontSize: '24px' }}>
+        <h1 style={{ 
+          color: '#ef4444', 
+          marginBottom: '16px',
+          fontSize: '24px'
+        }}>
           Application Error
         </h1>
         <p style={{ color: '#374151', marginBottom: '24px' }}>
           Failed to initialize application. Please refresh the page.
         </p>
         <button 
-          onClick={() => window.location.reload()}
+          onClick={() => window.location.reload()} 
           style={{ 
             background: '#3b82f6', 
             color: '#fff', 
@@ -111,6 +50,11 @@ const ErrorScreen = ({ error }: { error: unknown }) => {
         </button>
         <details style={{ marginTop: '24px', textAlign: 'left' }}>
           <summary style={{ cursor: 'pointer', color: '#6b7280', fontSize: '14px' }}>
+          <summary style={{ 
+            cursor: 'pointer', 
+            color: '#6b7280',
+            fontSize: '14px'
+          }}>
             Technical Details
           </summary>
           <pre style={{ 
@@ -120,18 +64,18 @@ const ErrorScreen = ({ error }: { error: unknown }) => {
             borderRadius: '6px', 
             overflow: 'auto', 
             fontSize: '12px',
-            textAlign: 'left'
+            color: '#1f2937',
+            whiteSpace: 'pre-wrap',
+            wordBreak: 'break-word'
           }}>
             {errorMessage}
-            {errorStack && `\n\n${errorStack}`}
+            {errorStack && `\n\nStack trace:\n${errorStack}`}
           </pre>
         </details>
       </div>
     </div>
   );
 };
-
-// Error screen component for initialization failures
 
 // Safe initialization wrapper
 const initializeApp = () => {
@@ -159,12 +103,15 @@ const initializeApp = () => {
   } catch (error) {
     console.error('[Main] Critical initialization error:', error);
     // Show error to user with React component instead of innerHTML
+    // Show error to user with React component
     const rootElement = document.getElementById('root');
     if (rootElement) {
       createRoot(rootElement).render(<ErrorScreen error={error} />);
     } else {
       // Fallback if root element doesn't exist - render to body
       createRoot(document.body).render(<ErrorScreen error={error} />);
+      // Fallback if root element is missing
+      document.body.innerHTML = '<h1>Critical Error: Root element not found</h1>';
     }
   }
 };
