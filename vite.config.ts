@@ -10,9 +10,6 @@ import compression from 'vite-plugin-compression';
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   // Load and validate environment variables - restrict to VITE_ prefix
-  // Load environment variables with VITE_ prefix only
-  // Load and validate environment variables (only VITE_ prefixed vars)
-  // Load and validate environment variables (restrict to VITE_ prefix only)
   const env = loadEnv(mode, process.cwd(), 'VITE_');
 
   // Validate critical env vars
