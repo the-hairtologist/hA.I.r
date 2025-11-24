@@ -7,6 +7,64 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 
+// Error Screen Component - safe alternative to innerHTML
+const ErrorScreen = ({ error }: { error: unknown }) => {
+  const errorMessage = error instanceof Error ? error.message : String(error);
+  const errorStack = error instanceof Error ? error.stack : undefined;
+
+  return (
+    <div style={{ 
+      display: 'flex', 
+      alignItems: 'center', 
+      justifyContent: 'center', 
+      minHeight: '100vh', 
+      padding: '20px', 
+      background: '#fff',
+      fontFamily: 'system-ui, -apple-system, sans-serif'
+    }}>
+      <div style={{ maxWidth: '600px', textAlign: 'center' }}>
+        <h1 style={{ color: '#ef4444', marginBottom: '16px', fontSize: '24px' }}>
+          Application Error
+        </h1>
+        <p style={{ color: '#374151', marginBottom: '24px' }}>
+          Failed to initialize application. Please refresh the page.
+        </p>
+        <button 
+          onClick={() => window.location.reload()}
+          style={{ 
+            background: '#3b82f6', 
+            color: '#fff', 
+            padding: '12px 24px', 
+            border: 'none', 
+            borderRadius: '6px', 
+            cursor: 'pointer',
+            fontSize: '14px'
+          }}
+        >
+          Refresh Page
+        </button>
+        <details style={{ marginTop: '24px', textAlign: 'left' }}>
+          <summary style={{ cursor: 'pointer', color: '#6b7280', fontSize: '14px' }}>
+            Technical Details
+          </summary>
+          <pre style={{ 
+            marginTop: '12px', 
+            padding: '12px', 
+            background: '#f3f4f6', 
+            borderRadius: '6px', 
+            overflow: 'auto', 
+            fontSize: '12px',
+            textAlign: 'left'
+          }}>
+            {errorMessage}
+            {errorStack && `\n\n${errorStack}`}
+          </pre>
+        </details>
+      </div>
+    </div>
+  );
+};
+
 // Safe initialization wrapper
 const initializeApp = () => {
   try {
@@ -32,22 +90,10 @@ const initializeApp = () => {
     createRoot(rootElement).render(<App />);
   } catch (error) {
     console.error('[Main] Critical initialization error:', error);
-    // Show error to user
-    document.body.innerHTML = `
-      <div style="display: flex; align-items: center; justify-center: min-height: 100vh; padding: 20px; background: #fff;">
-        <div style="max-width: 600px; text-align: center;">
-          <h1 style="color: #ef4444; margin-bottom: 16px;">Application Error</h1>
-          <p style="color: #374151; margin-bottom: 24px;">Failed to initialize application. Please refresh the page.</p>
-          <button onclick="window.location.reload()" style="background: #3b82f6; color: #fff; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer;">
-            Refresh Page
-          </button>
-          <details style="margin-top: 24px; text-align: left;">
-            <summary style="cursor: pointer; color: #6b7280;">Technical Details</summary>
-            <pre style="margin-top: 12px; padding: 12px; background: #f3f4f6; border-radius: 6px; overflow: auto; font-size: 12px;">${error}</pre>
-          </details>
-        </div>
-      </div>
-    `;
+    
+    // Safely render error screen using React instead of innerHTML
+    const rootElement = document.getElementById('root') || document.body;
+    createRoot(rootElement).render(<ErrorScreen error={error} />);
   }
 };
 
