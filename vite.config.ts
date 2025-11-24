@@ -10,6 +10,8 @@ import compression from 'vite-plugin-compression';
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   // Load environment variables with VITE_ prefix only
+  // Load and validate environment variables (only VITE_ prefixed vars)
+  // Load and validate environment variables (restrict to VITE_ prefix only)
   const env = loadEnv(mode, process.cwd(), 'VITE_');
 
   // Validate critical env vars
@@ -30,6 +32,19 @@ export default defineConfig(({ mode }) => {
       console.error('❌', errorMsg);
       process.exit(1);
     }
+    const message = `Missing required environment variables: ${missingVars.join(', ')}`;
+    if (mode === 'development') {
+      console.warn('⚠️', message);
+    
+    // Warn in development, fail in production/other modes
+    if (mode === 'development') {
+      console.warn('⚠️', message);
+      console.warn('⚠️ Continuing in development mode, but app may not function correctly');
+    } else {
+      console.error('❌', message);
+      process.exit(1);
+    }
+  } else if (mode === 'development') {
   } else {
     console.log('✅ All required environment variables present');
   }
@@ -44,6 +59,8 @@ export default defineConfig(({ mode }) => {
       mode === 'development' && componentTagger(),
       visualizer({
         open: mode !== 'production', // Open in dev, not in production
+        open: mode !== 'production', // Auto-open in dev, available in production
+        open: mode !== 'production', // Open in dev/test, not in production
         filename: 'dist/stats.html',
         gzipSize: true,
         brotliSize: true,
