@@ -24,28 +24,9 @@ export default defineConfig(({ mode }) => {
 
   const missingVars = requiredEnvVars.filter(key => !env[key]);
   
-  // In development mode, warn; in production/other modes, fail
+  // Warn in development, fail in production/other modes
   if (missingVars.length > 0) {
-    console.error(
-      '❌ Missing required environment variables:',
-      missingVars.join(', ')
-    );
-    // Only exit in non-development modes to avoid blocking local dev
-    if (mode !== 'development') {
-      process.exit(1);
-    }
-    const errorMsg = `Missing required environment variables: ${missingVars.join(', ')}`;
-    if (mode === 'development') {
-      console.warn('⚠️', errorMsg);
-    } else {
-      console.error('❌', errorMsg);
-      process.exit(1);
-    }
     const message = `Missing required environment variables: ${missingVars.join(', ')}`;
-    if (mode === 'development') {
-      console.warn('⚠️', message);
-    
-    // Warn in development, fail in production/other modes
     if (mode === 'development') {
       console.warn('⚠️', message);
       console.warn('⚠️ Continuing in development mode, but app may not function correctly');
@@ -53,7 +34,6 @@ export default defineConfig(({ mode }) => {
       console.error('❌', message);
       process.exit(1);
     }
-  } else if (mode === 'development') {
   } else {
     console.log('✅ All required environment variables present');
   }
@@ -67,10 +47,7 @@ export default defineConfig(({ mode }) => {
       react(),
       mode === 'development' && componentTagger(),
       visualizer({
-        open: false, // Never auto-open to avoid browser pop-ups in CI
         open: mode !== 'production', // Open in dev, not in production
-        open: mode !== 'production', // Auto-open in dev, available in production
-        open: mode !== 'production', // Open in dev/test, not in production
         filename: 'dist/stats.html',
         gzipSize: true,
         brotliSize: true,
