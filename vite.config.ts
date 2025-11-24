@@ -1,4 +1,4 @@
-﻿import { defineConfig, loadEnv } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import path from 'path';
 import { componentTagger } from 'lovable-tagger';
@@ -9,8 +9,8 @@ import compression from 'vite-plugin-compression';
 // Vite configuration - Tailwind CSS v3 with PostCSS
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  // Load and validate environment variables
-  const env = loadEnv(mode, process.cwd(), '');
+  // Load and validate environment variables (only VITE_ prefixed vars)
+  const env = loadEnv(mode, process.cwd(), 'VITE_');
 
   // Validate critical env vars for Lovable Cloud
   const requiredEnvVars = [
@@ -21,19 +21,16 @@ export default defineConfig(({ mode }) => {
 
   const missingVars = requiredEnvVars.filter(key => !env[key]);
   if (missingVars.length > 0) {
-    console.error(
-      'âŒ Missing required environment variables:',
-      missingVars.join(', ')
-    );
-    process.exit(1);
+    const message = `Missing required environment variables: ${missingVars.join(', ')}`;
+    if (mode === 'development') {
+      console.warn('⚠️', message);
+    } else {
+      console.error('❌', message);
+      process.exit(1);
+    }
+  } else {
+    console.log('✅ All required environment variables present');
   }
-
-  console.log('âœ… All required environment variables present');
-  console.log('ðŸ“ Supabase URL:', env.VITE_SUPABASE_URL);
-  console.log(
-    'ðŸ”‘ Supabase Key:',
-    env.VITE_SUPABASE_PUBLISHABLE_KEY ? 'âœ“ Set' : 'âœ— Missing'
-  );
 
   return {
     server: {
@@ -44,7 +41,7 @@ export default defineConfig(({ mode }) => {
       react(),
       mode === 'development' && componentTagger(),
       visualizer({
-        open: mode === 'production', // Auto-open in production, available in dev
+        open: mode !== 'production', // Auto-open in dev, available in production
         filename: 'dist/stats.html',
         gzipSize: true,
         brotliSize: true,
