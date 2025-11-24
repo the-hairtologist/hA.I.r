@@ -110,10 +110,6 @@ const ErrorScreen = ({ error }: { error: unknown }) => {
           Refresh Page
         </button>
         <details style={{ marginTop: '24px', textAlign: 'left' }}>
-          <summary style={{ cursor: 'pointer', color: '#6b7280' }}>Technical Details</summary>
-          <pre style={{ marginTop: '12px', padding: '12px', background: '#f3f4f6', borderRadius: '6px', overflow: 'auto', fontSize: '12px' }}>
-            {errorMessage}
-            {errorStack && '\n\nStack trace:\n' + errorStack}
           <summary style={{ cursor: 'pointer', color: '#6b7280', fontSize: '14px' }}>
             Technical Details
           </summary>
@@ -162,35 +158,14 @@ const initializeApp = () => {
     createRoot(rootElement).render(<App />);
   } catch (error) {
     console.error('[Main] Critical initialization error:', error);
-    // Show error to user using React component
     // Show error to user with React component instead of innerHTML
     const rootElement = document.getElementById('root');
     if (rootElement) {
       createRoot(rootElement).render(<ErrorScreen error={error} />);
-    }
-    // Show safe error screen using React
-    const rootElement = document.getElementById('root');
-    if (rootElement) {
-      createRoot(rootElement).render(<ErrorScreen error={error} />);
     } else {
-      // Fallback if root element doesn't exist
-      document.body.innerHTML = `
-        <div style="display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px;">
-          <div style="text-align: center;">
-            <h1 style="color: #ef4444;">Critical Error</h1>
-            <p>Unable to initialize application.</p>
-            <button onclick="window.location.reload()" style="margin-top: 16px; padding: 12px 24px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer;">Reload</button>
-          </div>
-        </div>
-      `;
+      // Fallback if root element doesn't exist - render to body
+      createRoot(document.body).render(<ErrorScreen error={error} />);
     }
-      // Fallback if root element is missing
-      document.body.innerHTML = '<h1>Critical Error: Root element not found</h1>';
-    }
-    
-    // Safely render error screen using React instead of innerHTML
-    const rootElement = document.getElementById('root') || document.body;
-    createRoot(rootElement).render(<ErrorScreen error={error} />);
   }
 };
 
