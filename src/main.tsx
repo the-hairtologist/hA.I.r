@@ -3,13 +3,10 @@
  * Copyright © 2025 hA.I.r. All Rights Reserved.
  */
 
+import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
-
-// Error Screen Component - safe alternative to innerHTML
-const ErrorScreen = ({ error }: { error: unknown }) => {
-import React from 'react';
 
 // Safe error display component - exported for fast refresh
 export const ErrorScreen: React.FC<{ error: unknown }> = ({ error }) => {
@@ -52,7 +49,6 @@ export const ErrorScreen: React.FC<{ error: unknown }> = ({ error }) => {
           Refresh Page
         </button>
         <details style={{ marginTop: '24px', textAlign: 'left' }}>
-          <summary style={{ cursor: 'pointer', color: '#6b7280', fontSize: '14px' }}>
           <summary style={{ 
             cursor: 'pointer', 
             color: '#6b7280',
@@ -107,18 +103,12 @@ const initializeApp = () => {
     console.error('[Main] Critical initialization error:', error);
     
     // Safely render error screen using React instead of innerHTML
-    const rootElement = document.getElementById('root') || document.body;
-    createRoot(rootElement).render(<ErrorScreen error={error} />);
-    // Show error to user with React component instead of innerHTML
-    // Show error to user with React component
     const rootElement = document.getElementById('root');
     if (rootElement) {
       createRoot(rootElement).render(<ErrorScreen error={error} />);
     } else {
       // Fallback if root element doesn't exist - render to body
       createRoot(document.body).render(<ErrorScreen error={error} />);
-      // Fallback if root element is missing
-      document.body.innerHTML = '<h1>Critical Error: Root element not found</h1>';
     }
   }
 };
