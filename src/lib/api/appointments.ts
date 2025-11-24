@@ -1,0 +1,228 @@
+/**
+ * Appointment API Layer
+ * Centralized appointment data operations
+ */
+
+import { supabase } from '@/integrations/supabase/client';
+import {
+  trackSelect,
+  trackInsert,
+  trackUpdate,
+  trackDelete,
+} from '@/lib/logging/supabaseTracker';
+import { logger } from '@/lib/logging/productionLogger';
+import {
+  getAppointmentsByStylist,
+  getAppointmentsByClient,
+} from '@/lib/queries/appointmentQueries';
+
+export interface Appointment {
+  id: string;
+  client_id: string;
+  stylist_id: string;
+  appointment_date: string;
+  duration_minutes?: number;
+  service_type: string;
+  service_id?: string | null;
+  status: string;
+  notes?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CreateAppointmentData {
+  client_id: string;
+  stylist_id: string;
+  appointment_date: string;
+  duration_minutes?: number;
+  service_type: string;
+  service_id?: string;
+  notes?: string;
+  status?: string;
+}
+
+export interface UpdateAppointmentData extends Partial<CreateAppointmentData> {
+  id: string;
+}
+
+/**
+ * Fetch appointments for a stylist (paginated)
+ * Now uses optimized query with request deduplication
+ */
+export const fetchAppointmentsByStylist = async (
+  stylistId: string,
+  page: number = 1,
+  limit: number = 100
+): Promise<{ appointments: Appointment[]; total: number }> => {
+  return trackSelect(
+    async () => {
+      // Use optimized query with deduplication
+      const data = await getAppointmentsByStylist(stylistId);
+
+      // Apply pagination in-memory for now
+      const from = (page - 1) * limit;
+      const to = from + limit;
+      const paginatedData = data.slice(from, to);
+
+      return { appointments: paginatedData || [], total: data.length || 0 };
+    },
+    'appointments',
+    'AppointmentAPI.fetchByStylist'
+  );
+};
+
+/**
+ * Fetch appointments for a client
+ * Now uses optimized query with request deduplication
+ */
+export const fetchAppointmentsByClient = async (
+  clientId: string
+): Promise<Appointment[]> => {
+  return trackSelect(
+    async () => {
+      // Use optimized query with deduplication
+      const data = await getAppointmentsByClient(clientId);
+      return data || [];
+    },
+    'appointments',
+    'AppointmentAPI.fetchByClient'
+  );
+};
+
+/**
+ * Fetch a single appointment
+ */
+export const fetchAppointmentById = async (
+  appointmentId: string
+): Promise<Appointment | null> => {
+  return trackSelect(
+    async () => {
+      const { data, error } = await supabase
+        .from('appointments')
+        .select('*')
+        .eq('id', appointmentId)
+        .maybeSingle();
+
+      if (error) throw error;
+      return data;
+    },
+    'appointments',
+    'AppointmentAPI.fetchById'
+  );
+};
+
+/**
+ * Create a new appointment
+ */
+export const createAppointment = async (
+  appointmentData: CreateAppointmentData
+): Promise<Appointment> => {
+  return trackInsert(
+    async () => {
+      const { data, error } = await supabase
+        .from('appointments')
+        .insert([appointmentData])
+        .select()
+        .maybeSingle();
+
+      if (error) throw error;
+      if (!data) throw new Error('Failed to create appointment');
+
+      logger.info('Appointment created', {
+        context: 'AppointmentAPI.create',
+        appointmentId: data.id,
+      });
+
+      return data;
+    },
+    'appointments',
+    'AppointmentAPI.create'
+  );
+};
+
+/**
+ * Update an appointment
+ */
+export const updateAppointment = async (
+  updateData: UpdateAppointmentData
+): Promise<Appointment> => {
+  const { id, ...updates } = updateData;
+
+  return trackUpdate(
+    async () => {
+      const { data, error } = await supabase
+        .from('appointments')
+        .update(updates)
+        .eq('id', id)
+        .select()
+        .maybeSingle();
+
+      if (error) throw error;
+
+      logger.info('Appointment updated', {
+        context: 'AppointmentAPI.update',
+        appointmentId: id,
+      });
+
+      return data;
+    },
+    'appointments',
+    'AppointmentAPI.update'
+  );
+};
+
+/**
+ * Delete an appointment
+ */
+export const deleteAppointment = async (
+  appointmentId: string
+): Promise<void> => {
+  return trackDelete(
+    async () => {
+      const { error } = await supabase
+        .from('appointments')
+        .delete()
+        .eq('id', appointmentId);
+
+      if (error) throw error;
+
+      logger.info('Appointment deleted', {
+        context: 'AppointmentAPI.delete',
+        appointmentId,
+      });
+    },
+    'appointments',
+    'AppointmentAPI.delete'
+  );
+};
+
+/**
+ * Update appointment status
+ */
+export const updateAppointmentStatus = async (
+  appointmentId: string,
+  status: string
+): Promise<Appointment> => {
+  return trackUpdate(
+    async () => {
+      const { data, error } = await supabase
+        .from('appointments')
+        .update({ status })
+        .eq('id', appointmentId)
+        .select()
+        .maybeSingle();
+
+      if (error) throw error;
+
+      logger.info('Appointment status updated', {
+        context: 'AppointmentAPI.updateStatus',
+        appointmentId,
+        status,
+      });
+
+      return data;
+    },
+    'appointments',
+    'AppointmentAPI.updateStatus'
+  );
+};
