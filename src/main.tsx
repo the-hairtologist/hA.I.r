@@ -6,6 +6,9 @@
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
+
+// Error Screen Component - safe alternative to innerHTML
+const ErrorScreen = ({ error }: { error: unknown }) => {
 import React from 'react';
 
 // Safe error display component - exported for fast refresh
@@ -80,7 +83,7 @@ export const ErrorScreen: React.FC<{ error: unknown }> = ({ error }) => {
 // Safe initialization wrapper
 const initializeApp = () => {
   try {
-    // Initialize Sentry with error handling (non-blocking)
+    // Initialize Sentry with error handling
     import('@/lib/monitoring')
       .then(({ initSentry }) => {
         try {
@@ -102,6 +105,10 @@ const initializeApp = () => {
     createRoot(rootElement).render(<App />);
   } catch (error) {
     console.error('[Main] Critical initialization error:', error);
+    
+    // Safely render error screen using React instead of innerHTML
+    const rootElement = document.getElementById('root') || document.body;
+    createRoot(rootElement).render(<ErrorScreen error={error} />);
     // Show error to user with React component instead of innerHTML
     // Show error to user with React component
     const rootElement = document.getElementById('root');
