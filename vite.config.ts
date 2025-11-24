@@ -40,7 +40,7 @@ export default defineConfig(({ mode }) => {
       react(),
       mode === 'development' && componentTagger(),
       visualizer({
-        open: mode !== 'production', // Don't auto-open in production (avoids browser pop-up in CI)
+        open: false, // Never auto-open to avoid browser pop-ups in CI
         filename: 'dist/stats.html',
         gzipSize: true,
         brotliSize: true,
