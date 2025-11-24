@@ -1,0 +1,135 @@
+name: Code Coverage
+
+on:
+  push:
+    branches: [main, hA.I.r, develop]
+  pull_request:
+    branches: [main, hA.I.r, develop]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+  VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+  VITE_SUPABASE_PROJECT_ID: ${{ secrets.VITE_SUPABASE_PROJECT_ID }}
+
+jobs:
+  coverage:
+    name: 📊 Code Coverage Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for accurate coverage diff
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Run tests with coverage
+        run: npm run test -- --coverage --reporter=verbose
+
+      - name: Generate coverage reports
+        run: |
+          # Generate LCOV format for Codecov
+          if [ -d "coverage" ]; then
+            echo "✅ Coverage data generated"
+            ls -la coverage/
+          else
+            echo "❌ No coverage data found"
+            exit 1
+          fi
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false # Don't fail CI if Codecov upload fails
+          verbose: true
+
+      - name: Upload coverage artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 30
+
+      - name: Check coverage thresholds
+        run: |
+          # Check if coverage meets minimum thresholds
+          node -e "
+          const fs = require('fs');
+          if (!fs.existsSync('coverage/coverage-summary.json')) {
+            console.log('⚠️ No coverage summary found');
+            process.exit(0);
+          }
+          const coverage = JSON.parse(fs.readFileSync('coverage/coverage-summary.json', 'utf8'));
+          const total = coverage.total;
+          const thresholds = {
+            lines: 70,
+            statements: 70,
+            functions: 60,
+            branches: 60
+          };
+          let failed = false;
+          Object.keys(thresholds).forEach(key => {
+            const pct = total[key].pct;
+            const threshold = thresholds[key];
+            if (pct < threshold) {
+              console.log(\`❌ \${key} coverage (\${pct}%) is below threshold (\${threshold}%)\`);
+              failed = true;
+            } else {
+              console.log(\`✅ \${key} coverage: \${pct}%\`);
+            }
+          });
+          if (failed) {
+            console.log('⚠️ Some coverage thresholds not met, but not failing CI');
+          }
+          "
+
+      - name: Comment coverage on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            if (!fs.existsSync('coverage/coverage-summary.json')) {
+              return;
+            }
+            
+            const coverage = JSON.parse(fs.readFileSync('coverage/coverage-summary.json', 'utf8'));
+            const total = coverage.total;
+            
+            const body = `## 📊 Code Coverage Report
+
+            | Metric | Coverage | Status |
+            |--------|----------|--------|
+            | Lines | ${total.lines.pct}% | ${total.lines.pct >= 70 ? '✅' : '⚠️'} |
+            | Statements | ${total.statements.pct}% | ${total.statements.pct >= 70 ? '✅' : '⚠️'} |
+            | Functions | ${total.functions.pct}% | ${total.functions.pct >= 60 ? '✅' : '⚠️'} |
+            | Branches | ${total.branches.pct}% | ${total.branches.pct >= 60 ? '✅' : '⚠️'} |
+
+            **Coverage thresholds:** Lines/Statements: 70%, Functions/Branches: 60%
+
+            [View detailed report in Codecov](https://codecov.io/gh/${{ github.repository }})
+            `;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });

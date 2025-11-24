@@ -1,0 +1,151 @@
+name: Semantic Release
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false # Don't cancel release workflow
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+env:
+  VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+  VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+  VITE_SUPABASE_PROJECT_ID: ${{ secrets.VITE_SUPABASE_PROJECT_ID }}
+
+jobs:
+  release:
+    name: 🚀 Semantic Release
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for semantic-release
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Verify build
+        run: npm run build
+
+      - name: Run tests
+        run: npm run test
+
+      - name: Setup semantic-release
+        run: |
+          npm install -g semantic-release@23 \
+            @semantic-release/commit-analyzer@11 \
+            @semantic-release/release-notes-generator@12 \
+            @semantic-release/changelog@6 \
+            @semantic-release/npm@11 \
+            @semantic-release/github@9 \
+            @semantic-release/git@10 \
+            conventional-changelog-conventionalcommits@7
+
+      - name: Create semantic-release config
+        run: |
+          cat > .releaserc.json << 'EOF'
+          {
+            "branches": ["main"],
+            "plugins": [
+              [
+                "@semantic-release/commit-analyzer",
+                {
+                  "preset": "conventionalcommits",
+                  "releaseRules": [
+                    { "type": "feat", "release": "minor" },
+                    { "type": "fix", "release": "patch" },
+                    { "type": "perf", "release": "patch" },
+                    { "type": "revert", "release": "patch" },
+                    { "type": "docs", "release": "patch" },
+                    { "type": "chore", "release": false },
+                    { "type": "refactor", "release": "patch" },
+                    { "type": "test", "release": false },
+                    { "type": "build", "release": "patch" },
+                    { "type": "ci", "release": false },
+                    { "breaking": true, "release": "major" }
+                  ]
+                }
+              ],
+              [
+                "@semantic-release/release-notes-generator",
+                {
+                  "preset": "conventionalcommits",
+                  "presetConfig": {
+                    "types": [
+                      { "type": "feat", "section": "✨ Features" },
+                      { "type": "fix", "section": "🐛 Bug Fixes" },
+                      { "type": "perf", "section": "⚡ Performance" },
+                      { "type": "revert", "section": "⏪ Reverts" },
+                      { "type": "docs", "section": "📚 Documentation" },
+                      { "type": "refactor", "section": "♻️ Refactoring" },
+                      { "type": "build", "section": "📦 Build System" }
+                    ]
+                  }
+                }
+              ],
+              [
+                "@semantic-release/changelog",
+                {
+                  "changelogFile": "CHANGELOG.md"
+                }
+              ],
+              [
+                "@semantic-release/npm",
+                {
+                  "npmPublish": false
+                }
+              ],
+              [
+                "@semantic-release/github",
+                {
+                  "assets": [
+                    { "path": "dist/**/*", "label": "Distribution" }
+                  ]
+                }
+              ],
+              [
+                "@semantic-release/git",
+                {
+                  "assets": ["CHANGELOG.md", "package.json", "package-lock.json"],
+                  "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+                }
+              ]
+            ]
+          }
+          EOF
+
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GIT_AUTHOR_NAME: github-actions[bot]
+          GIT_AUTHOR_EMAIL: github-actions[bot]@users.noreply.github.com
+          GIT_COMMITTER_NAME: github-actions[bot]
+          GIT_COMMITTER_EMAIL: github-actions[bot]@users.noreply.github.com
+        run: npx semantic-release
+
+      - name: Upload release artifacts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-artifacts
+          path: |
+            CHANGELOG.md
+            dist/
+          retention-days: 90
