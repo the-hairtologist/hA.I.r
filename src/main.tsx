@@ -6,7 +6,6 @@
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
-import { StrictMode } from 'react';
 
 // Error screen component for initialization failures
 const ErrorScreen = ({ error }: { error: unknown }) => {
