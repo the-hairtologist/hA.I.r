@@ -9,11 +9,12 @@ import compression from 'vite-plugin-compression';
 // Vite configuration - Tailwind CSS v3 with PostCSS
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
+  // Load environment variables with VITE_ prefix only
   // Load and validate environment variables (only VITE_ prefixed vars)
   // Load and validate environment variables (restrict to VITE_ prefix only)
   const env = loadEnv(mode, process.cwd(), 'VITE_');
 
-  // Validate critical env vars for Lovable Cloud
+  // Validate critical env vars
   const requiredEnvVars = [
     'VITE_SUPABASE_URL',
     'VITE_SUPABASE_PUBLISHABLE_KEY',
@@ -21,7 +22,16 @@ export default defineConfig(({ mode }) => {
   ];
 
   const missingVars = requiredEnvVars.filter(key => !env[key]);
+  
+  // In development mode, warn; in production/other modes, fail
   if (missingVars.length > 0) {
+    const errorMsg = `Missing required environment variables: ${missingVars.join(', ')}`;
+    if (mode === 'development') {
+      console.warn('⚠️', errorMsg);
+    } else {
+      console.error('❌', errorMsg);
+      process.exit(1);
+    }
     const message = `Missing required environment variables: ${missingVars.join(', ')}`;
     if (mode === 'development') {
       console.warn('⚠️', message);
@@ -48,6 +58,7 @@ export default defineConfig(({ mode }) => {
       react(),
       mode === 'development' && componentTagger(),
       visualizer({
+        open: mode !== 'production', // Open in dev, not in production
         open: mode !== 'production', // Auto-open in dev, available in production
         open: mode !== 'production', // Open in dev/test, not in production
         filename: 'dist/stats.html',

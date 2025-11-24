@@ -6,6 +6,21 @@
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
+import React from 'react';
+
+// Safe error display component - exported for fast refresh
+export const ErrorScreen: React.FC<{ error: unknown }> = ({ error }) => {
+  const errorMessage = error instanceof Error ? error.message : String(error);
+  const errorStack = error instanceof Error ? error.stack : '';
+
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', padding: '20px', background: '#fff' }}>
+      <div style={{ maxWidth: '600px', textAlign: 'center' }}>
+        <h1 style={{ color: '#ef4444', marginBottom: '16px' }}>Application Error</h1>
+        <p style={{ color: '#374151', marginBottom: '24px' }}>Failed to initialize application. Please refresh the page.</p>
+        <button 
+          onClick={() => window.location.reload()} 
+          style={{ background: '#3b82f6', color: '#fff', padding: '12px 24px', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
 import { useState } from 'react';
 
 // Safe Error Screen component
@@ -123,6 +138,10 @@ const ErrorScreen = ({ error }: { error: unknown }) => {
           Refresh Page
         </button>
         <details style={{ marginTop: '24px', textAlign: 'left' }}>
+          <summary style={{ cursor: 'pointer', color: '#6b7280' }}>Technical Details</summary>
+          <pre style={{ marginTop: '12px', padding: '12px', background: '#f3f4f6', borderRadius: '6px', overflow: 'auto', fontSize: '12px' }}>
+            {errorMessage}
+            {errorStack && '\n\nStack trace:\n' + errorStack}
           <summary style={{ cursor: 'pointer', color: '#6b7280', fontSize: '14px' }}>
             Technical Details
           </summary>
@@ -147,7 +166,7 @@ const ErrorScreen = ({ error }: { error: unknown }) => {
 // Safe initialization wrapper
 const initializeApp = () => {
   try {
-    // Initialize Sentry with error handling
+    // Initialize Sentry with error handling (non-blocking)
     import('@/lib/monitoring')
       .then(({ initSentry }) => {
         try {
@@ -169,6 +188,11 @@ const initializeApp = () => {
     createRoot(rootElement).render(<App />);
   } catch (error) {
     console.error('[Main] Critical initialization error:', error);
+    // Show error to user with React component instead of innerHTML
+    const rootElement = document.getElementById('root');
+    if (rootElement) {
+      createRoot(rootElement).render(<ErrorScreen error={error} />);
+    }
     // Show safe error screen using React
     const rootElement = document.getElementById('root');
     if (rootElement) {
