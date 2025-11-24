@@ -9,6 +9,7 @@ import compression from 'vite-plugin-compression';
 // Vite configuration - Tailwind CSS v3 with PostCSS
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
+  // Load and validate environment variables - restrict to VITE_ prefix
   // Load environment variables with VITE_ prefix only
   // Load and validate environment variables (only VITE_ prefixed vars)
   // Load and validate environment variables (restrict to VITE_ prefix only)
@@ -25,6 +26,14 @@ export default defineConfig(({ mode }) => {
   
   // In development mode, warn; in production/other modes, fail
   if (missingVars.length > 0) {
+    console.error(
+      '❌ Missing required environment variables:',
+      missingVars.join(', ')
+    );
+    // Only exit in non-development modes to avoid blocking local dev
+    if (mode !== 'development') {
+      process.exit(1);
+    }
     const errorMsg = `Missing required environment variables: ${missingVars.join(', ')}`;
     if (mode === 'development') {
       console.warn('⚠️', errorMsg);
@@ -58,6 +67,7 @@ export default defineConfig(({ mode }) => {
       react(),
       mode === 'development' && componentTagger(),
       visualizer({
+        open: false, // Never auto-open to avoid browser pop-ups in CI
         open: mode !== 'production', // Open in dev, not in production
         open: mode !== 'production', // Auto-open in dev, available in production
         open: mode !== 'production', // Open in dev/test, not in production
