@@ -1,0 +1,137 @@
+name: Security Audit
+
+on:
+  push:
+    branches: [main, hA.I.r, develop]
+  pull_request:
+    branches: [main, hA.I.r, develop]
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  npm-audit:
+    name: 🔒 NPM Security Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Run npm audit (production dependencies)
+        run: |
+          echo "Running npm audit for production dependencies..."
+          npm audit --omit=dev --audit-level=moderate || true
+          
+      - name: Run npm audit (all dependencies)
+        id: audit
+        run: |
+          echo "Running comprehensive npm audit..."
+          npm audit --audit-level=moderate > audit-report.txt 2>&1 || echo "vulnerabilities_found=true" >> $GITHUB_OUTPUT
+          cat audit-report.txt
+        continue-on-error: true
+
+      - name: Generate detailed audit report
+        if: always()
+        run: |
+          echo "# NPM Audit Report" > audit-summary.md
+          echo "" >> audit-summary.md
+          echo "## Summary" >> audit-summary.md
+          npm audit --json > audit.json 2>&1 || true
+          
+          # Parse and format the audit results
+          if [ -f audit.json ]; then
+            node -e "
+            const fs = require('fs');
+            try {
+              const audit = JSON.parse(fs.readFileSync('audit.json', 'utf8'));
+              if (audit.metadata) {
+                const meta = audit.metadata.vulnerabilities;
+                console.log('| Severity | Count |');
+                console.log('|----------|-------|');
+                console.log('| Critical | ' + (meta.critical || 0) + ' |');
+                console.log('| High | ' + (meta.high || 0) + ' |');
+                console.log('| Moderate | ' + (meta.moderate || 0) + ' |');
+                console.log('| Low | ' + (meta.low || 0) + ' |');
+              }
+            } catch (e) {
+              console.log('Could not parse audit results');
+            }
+            " >> audit-summary.md
+          fi
+
+      - name: Check for critical/high vulnerabilities
+        run: |
+          if npm audit --audit-level=high --json | grep -q '"critical":[1-9]'; then
+            echo "❌ Critical vulnerabilities found!"
+            npm audit --audit-level=high
+            echo "::warning::Critical security vulnerabilities detected. Please review and fix."
+          elif npm audit --audit-level=high --json | grep -q '"high":[1-9]'; then
+            echo "⚠️ High severity vulnerabilities found"
+            npm audit --audit-level=high
+            echo "::warning::High severity vulnerabilities detected. Please review."
+          else
+            echo "✅ No critical or high severity vulnerabilities found"
+          fi
+        continue-on-error: true
+
+      - name: Upload audit results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-audit-report
+          path: |
+            audit-report.txt
+            audit.json
+            audit-summary.md
+          retention-days: 30
+
+      - name: Comment audit results on PR
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let body = '## 🔒 NPM Security Audit\n\n';
+            
+            if (fs.existsSync('audit-summary.md')) {
+              body += fs.readFileSync('audit-summary.md', 'utf8');
+            } else {
+              body += '✅ No security vulnerabilities detected\n';
+            }
+            
+            body += '\n\n---\n*This audit checks for known security vulnerabilities in dependencies.*';
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+
+  dependency-review:
+    name: 📦 Dependency Review
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: moderate
+          allow-licenses: MIT, Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, 0BSD
