@@ -135,7 +135,7 @@ export function IntegrationTester() {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            {getStatusIcon(results.email)}
+            {getStatusIcon(results.email ?? null)}
             <Button
               size="sm"
               variant="outline"
@@ -164,7 +164,7 @@ export function IntegrationTester() {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            {getStatusIcon(results.calendar)}
+            {getStatusIcon(results.calendar ?? null)}
             <Button
               size="sm"
               variant="outline"
@@ -193,7 +193,7 @@ export function IntegrationTester() {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            {getStatusIcon(results.stripe)}
+            {getStatusIcon(results.stripe ?? null)}
             <Button
               size="sm"
               variant="outline"

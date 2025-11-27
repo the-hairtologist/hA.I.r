@@ -294,22 +294,32 @@ function levenshteinDistance(a: string, b: string): number {
   }
 
   for (let j = 0; j <= a.length; j++) {
-    matrix[0][j] = j;
+    if (matrix[0]) {
+      matrix[0][j] = j;
+    }
   }
 
   for (let i = 1; i <= b.length; i++) {
     for (let j = 1; j <= a.length; j++) {
+      const prevDiag = matrix[i - 1]?.[j - 1];
+      const above = matrix[i - 1]?.[j];
+      const left = matrix[i]?.[j - 1];
+      
       if (b.charAt(i - 1) === a.charAt(j - 1)) {
-        matrix[i][j] = matrix[i - 1][j - 1];
+        if (matrix[i] && prevDiag !== undefined) {
+          matrix[i][j] = prevDiag;
+        }
       } else {
-        matrix[i][j] = Math.min(
-          matrix[i - 1][j - 1] + 1,
-          matrix[i][j - 1] + 1,
-          matrix[i - 1][j] + 1
-        );
+        if (matrix[i] && prevDiag !== undefined && left !== undefined && above !== undefined) {
+          matrix[i][j] = Math.min(
+            prevDiag + 1,
+            left + 1,
+            above + 1
+          );
+        }
       }
     }
   }
 
-  return matrix[b.length][a.length];
+  return matrix[b.length]?.[a.length] ?? 0;
 }

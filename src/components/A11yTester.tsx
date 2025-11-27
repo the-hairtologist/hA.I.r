@@ -122,7 +122,7 @@ export const A11yTester = () => {
     );
     let lastLevel = 0;
     headings.forEach((heading, index) => {
-      const level = parseInt(heading.tagName[1]);
+      const level = parseInt(heading.tagName[1] || '0', 10);
       if (lastLevel && level > lastLevel + 1) {
         foundIssues.push({
           id: `heading-${index}`,

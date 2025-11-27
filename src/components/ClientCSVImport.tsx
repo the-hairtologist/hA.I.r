@@ -67,7 +67,7 @@ export function ClientCSVImport({
         return;
       }
 
-      const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+      const headers = lines[0]?.split(',').map(h => h.trim().toLowerCase()) || [];
       const requiredHeaders = ['full_name'];
 
       if (!requiredHeaders.every(h => headers.includes(h))) {
@@ -79,7 +79,7 @@ export function ClientCSVImport({
       const errors: string[] = [];
 
       for (let i = 1; i < lines.length; i++) {
-        const values = lines[i].split(',').map(v => v.trim());
+        const values = lines[i]?.split(',').map(v => v.trim()) || [];
         const client: any = {};
 
         headers.forEach((header, index) => {

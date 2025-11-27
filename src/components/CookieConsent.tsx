@@ -34,6 +34,7 @@ export const CookieConsent = () => {
       }, 3000); // 3 second delay
       return () => clearTimeout(timer);
     }
+    return undefined;
   }, []);
 
   const saveConsent = (prefs: ConsentPreferences) => {
