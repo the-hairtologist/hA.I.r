@@ -88,8 +88,8 @@ export const NotificationManager = ({
                 You have {count} appointment{count > 1 ? 's' : ''} today
               </p>
               <p className="text-[11px] sm:text-xs text-muted-foreground">
-                Next: {nextAppt.client?.full_name} at{' '}
-                {format(new Date(nextAppt.appointment_date), 'h:mm a')}
+                Next: {nextAppt?.client?.full_name || 'Client'} at{' '}
+                {nextAppt?.appointment_date ? format(new Date(nextAppt.appointment_date), 'h:mm a') : 'TBD'}
               </p>
             </div>
           </div>,
