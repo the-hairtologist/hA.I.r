@@ -237,7 +237,7 @@ export const MoreMenu = ({ open, onOpenChange, excludePaths }: MoreMenuProps) =>
                 )}
                 {groupedItems.main && (
                   <CollapsibleGroup
-                    title={stylistGroupLabels.main}
+                    title={stylistGroupLabels.main ?? 'Main'}
                     items={groupedItems.main}
                     onNavigate={handleNavigation}
                     unreadCount={unreadCount}
@@ -245,7 +245,7 @@ export const MoreMenu = ({ open, onOpenChange, excludePaths }: MoreMenuProps) =>
                 )}
                 {groupedItems.scheduling && (
                   <CollapsibleGroup
-                    title={stylistGroupLabels.scheduling}
+                    title={stylistGroupLabels.scheduling ?? 'Scheduling'}
                     items={groupedItems.scheduling}
                     onNavigate={handleNavigation}
                     unreadCount={unreadCount}
@@ -253,7 +253,7 @@ export const MoreMenu = ({ open, onOpenChange, excludePaths }: MoreMenuProps) =>
                 )}
                 {groupedItems.business && (
                   <CollapsibleGroup
-                    title={stylistGroupLabels.business}
+                    title={stylistGroupLabels.business ?? 'Business'}
                     items={groupedItems.business}
                     onNavigate={handleNavigation}
                     unreadCount={unreadCount}
@@ -261,7 +261,7 @@ export const MoreMenu = ({ open, onOpenChange, excludePaths }: MoreMenuProps) =>
                 )}
                 {groupedItems.growth && (
                   <CollapsibleGroup
-                    title={stylistGroupLabels.growth}
+                    title={stylistGroupLabels.growth ?? 'Growth'}
                     items={groupedItems.growth}
                     onNavigate={handleNavigation}
                     unreadCount={unreadCount}
@@ -269,7 +269,7 @@ export const MoreMenu = ({ open, onOpenChange, excludePaths }: MoreMenuProps) =>
                 )}
                 {groupedItems.tools && (
                   <CollapsibleGroup
-                    title={stylistGroupLabels.tools}
+                    title={stylistGroupLabels.tools ?? 'Tools'}
                     items={groupedItems.tools}
                     onNavigate={handleNavigation}
                     unreadCount={unreadCount}

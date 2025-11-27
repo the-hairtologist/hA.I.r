@@ -48,13 +48,18 @@ export const MobileSidebarOverlay = () => {
 
   // Handle swipe-to-close gesture
   const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStart(e.touches[0].clientX);
+    const touch = e.touches[0];
+    if (touch) {
+      setTouchStart(touch.clientX);
+    }
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
     if (touchStart === null) return;
 
-    const touchEnd = e.changedTouches[0].clientX;
+    const touchEnd = e.changedTouches[0]?.clientX;
+    if (touchEnd === undefined) return;
+    
     const swipeDistance = touchStart - touchEnd;
 
     // If user swipes right-to-left more than 50px, close sidebar

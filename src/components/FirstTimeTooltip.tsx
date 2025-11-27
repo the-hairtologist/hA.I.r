@@ -51,8 +51,9 @@ export const FirstTimeTooltip = ({
         return () => clearTimeout(timer);
       }
     } catch {
-      // If localStorage is unavailable or JSON parsing fails, don't show tooltip
+      // Failed to parse - ignore
     }
+    return undefined;
   }, [id, delayMs]);
 
   const handleDismiss = () => {

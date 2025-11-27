@@ -26,6 +26,7 @@ export const GlobalLoadingIndicator = ({
     } else {
       setShowLoader(false);
     }
+    return undefined;
   }, [isLoading]);
 
   if (!showLoader) return null;

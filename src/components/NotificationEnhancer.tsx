@@ -85,7 +85,7 @@ export const NotificationEnhancer = ({
       haptic.success();
 
       toast.success('New Appointment! 📅', {
-        description: `${latest.client?.user?.full_name} booked ${latest.service_type}`,
+        description: `${latest?.client?.user?.full_name || 'Someone'} booked ${latest?.service_type || 'a service'}`,
         action: {
           label: 'View',
           onClick: () => navigate('/appointments'),
@@ -151,7 +151,7 @@ export const NotificationEnhancer = ({
           haptic.success();
 
           toast.success('New Review! ⭐', {
-            description: `${latest.client?.user?.full_name} rated you ${latest.rating}/5`,
+            description: `${latest?.client?.user?.full_name || 'Someone'} rated you ${latest?.rating || 5}/5`,
             action: {
               label: 'View',
               onClick: () => navigate('/dashboard'),
@@ -194,7 +194,7 @@ export const NotificationEnhancer = ({
           haptic.success();
 
           toast.success('Appointment Confirmed! ✓', {
-            description: `Your appointment with ${latest.stylist?.user?.full_name} is confirmed`,
+            description: `Your appointment with ${latest?.stylist?.user?.full_name || 'your stylist'} is confirmed`,
           });
         }
 
@@ -208,6 +208,8 @@ export const NotificationEnhancer = ({
 
         if (newMilestones && newMilestones.length > 0) {
           const latest = newMilestones[0];
+          if (!latest) return;
+          
           haptic.success();
 
           const message =
