@@ -1,5 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
-import { prefetchOnHover } from '@/lib/performance/ResourceHints';
+import { useState, useEffect } from 'react';
 import { Edit3, RotateCcw } from 'lucide-react';
 import {
   DndContext,

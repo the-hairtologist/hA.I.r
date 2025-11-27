@@ -306,12 +306,12 @@ function levenshteinDistance(a: string, b: string): number {
       const left = matrix[i]?.[j - 1];
       
       if (b.charAt(i - 1) === a.charAt(j - 1)) {
-        if (matrix[i] !== undefined && prevDiag !== undefined) {
-          matrix[i][j] = prevDiag;
+        if (matrix[i] && prevDiag !== undefined) {
+          matrix[i]![j] = prevDiag;
         }
       } else {
-        if (matrix[i] !== undefined && prevDiag !== undefined && left !== undefined && above !== undefined) {
-          matrix[i][j] = Math.min(
+        if (matrix[i] && prevDiag !== undefined && left !== undefined && above !== undefined) {
+          matrix[i]![j] = Math.min(
             prevDiag + 1,
             left + 1,
             above + 1
