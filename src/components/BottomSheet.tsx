@@ -30,10 +30,10 @@ export function BottomSheet({
   useEffect(() => {
     if (open) {
       document.body.style.overflow = 'hidden';
-      return () => {
-        document.body.style.overflow = '';
-      };
     }
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [open]);
 
   // Close on Escape key

@@ -305,11 +305,10 @@ export function validateHeadingHierarchy() {
     const headings = Array.from(
       document.querySelectorAll('h1, h2, h3, h4, h5, h6')
     );
-    let lastLevel = 0;
 
     headings.forEach(heading => {
-      const level = parseInt(heading.tagName[1]);
-      lastLevel = level;
+      const level = parseInt(heading.tagName[1] || '0', 10);
+      console.log('Heading level:', level);
     });
   }
 }

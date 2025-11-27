@@ -44,7 +44,7 @@ export const CelebrationAnimation = ({
       }, 5000);
 
       // Auto-close after specified duration
-      let autoCloseTimer: NodeJS.Timeout;
+      let autoCloseTimer: NodeJS.Timeout | undefined;
       if (autoClose) {
         autoCloseTimer = setTimeout(() => {
           onClose();
@@ -58,6 +58,7 @@ export const CelebrationAnimation = ({
     } else {
       setShowConfetti(false);
     }
+    return undefined;
   }, [open, autoClose, autoCloseDuration, onClose]);
 
   const handleCopyCode = async () => {
