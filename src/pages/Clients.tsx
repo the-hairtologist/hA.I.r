@@ -235,7 +235,11 @@ export default function Clients() {
           });
         }
       } catch (error) {
-        logger.error('Error loading stylist profile', 'Clients', error as Error);
+        logger.error(
+          'Error loading stylist profile',
+          'Clients',
+          error as Error
+        );
         toast.error('Failed to load profile');
       }
     };
@@ -293,7 +297,7 @@ export default function Clients() {
         .eq('client_id', client.id)
         .order('created_at', { ascending: false });
 
-      setClientFormulas(formulas as any || []);
+      setClientFormulas((formulas as any) || []);
     } catch (error) {
       logger.error('Error loading formulas', 'Clients', error as Error);
       setClientFormulas([]);
@@ -651,7 +655,11 @@ export default function Clients() {
               <UserPlus className="h-3.5 w-3.5 xs:h-4 xs:w-4" />
               <span className="hidden sm:inline">Invite</span>
             </Button>
-            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen} modal={true}>
+            <Dialog
+              open={isDialogOpen}
+              onOpenChange={setIsDialogOpen}
+              modal={true}
+            >
               <DialogTrigger asChild>
                 <Button className="gap-1.5 xs:gap-2 text-xs xs:text-sm min-h-[44px] flex-1 xs:flex-none border-[2px] xs:border-[3px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] xs:shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] xs:hover:translate-x-[2px] xs:hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_hsl(var(--foreground))] xs:hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all">
                   <Plus className="h-3.5 w-3.5 xs:h-4 xs:w-4" />
@@ -1138,7 +1146,11 @@ export default function Clients() {
         )}
 
         {/* Edit Client Dialog */}
-        <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen} modal={true}>
+        <Dialog
+          open={editDialogOpen}
+          onOpenChange={setEditDialogOpen}
+          modal={true}
+        >
           <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto border-[3px] border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground))]">
             <DialogHeader>
               <DialogTitle className="text-xl sm:text-2xl md:text-3xl font-pixel gradient-text">
@@ -1376,7 +1388,11 @@ export default function Clients() {
         </Dialog>
 
         {/* Client History Dialog */}
-        <Dialog open={historyDialogOpen} onOpenChange={setHistoryDialogOpen} modal={true}>
+        <Dialog
+          open={historyDialogOpen}
+          onOpenChange={setHistoryDialogOpen}
+          modal={true}
+        >
           <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Client History</DialogTitle>

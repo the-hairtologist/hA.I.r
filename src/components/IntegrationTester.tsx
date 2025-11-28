@@ -1,6 +1,12 @@
 ﻿import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { Check, X, Loader2, Mail, Calendar, CreditCard } from 'lucide-react';
@@ -21,16 +27,21 @@ export function IntegrationTester() {
         case 'email':
           // Check email configuration health
           try {
-            const { error } = await supabase.functions.invoke('send-appointment-confirmation', {
-              body: { healthCheck: true },
-            });
+            const { error } = await supabase.functions.invoke(
+              'send-appointment-confirmation',
+              {
+                body: { healthCheck: true },
+              }
+            );
 
             if (error) {
               logger.error('Email test failed during health check', error, {
                 context: 'IntegrationTester',
               });
               setResults(prev => ({ ...prev, email: false }));
-              toast.error('Email function not accessible. Check if RESEND_API_KEY is configured.');
+              toast.error(
+                'Email function not accessible. Check if RESEND_API_KEY is configured.'
+              );
             } else {
               setResults(prev => ({ ...prev, email: true }));
               toast.success('Email integration is configured correctly!');
@@ -40,7 +51,9 @@ export function IntegrationTester() {
               context: 'IntegrationTester',
             });
             setResults(prev => ({ ...prev, email: false }));
-            toast.error('Email function failed. Verify edge function deployment.');
+            toast.error(
+              'Email function failed. Verify edge function deployment.'
+            );
           }
           break;
 
@@ -51,11 +64,15 @@ export function IntegrationTester() {
             .select('*')
             .eq('is_active', true)
             .maybeSingle();
-          
+
           if (calError) {
-            logger.error('Calendar test failed to query connections', calError, {
-              context: 'IntegrationTester',
-            });
+            logger.error(
+              'Calendar test failed to query connections',
+              calError,
+              {
+                context: 'IntegrationTester',
+              }
+            );
             setResults(prev => ({ ...prev, calendar: false }));
             toast.error('Calendar connection check failed.');
           } else if (connection) {
@@ -63,7 +80,9 @@ export function IntegrationTester() {
             toast.success('Calendar is connected.');
           } else {
             setResults(prev => ({ ...prev, calendar: false }));
-            toast.warning('No calendar connected. Connect Google Calendar first.');
+            toast.warning(
+              'No calendar connected. Connect Google Calendar first.'
+            );
           }
           break;
         }
@@ -72,34 +91,51 @@ export function IntegrationTester() {
           // Check Stripe configuration (webhooks can only be tested by actual Stripe events)
           try {
             // We can't directly invoke the webhook, but we can check if it's reachable
-            const { error } = await supabase.functions.invoke('stripe-webhook', {
-              body: { healthCheck: true },
-            });
+            const { error } = await supabase.functions.invoke(
+              'stripe-webhook',
+              {
+                body: { healthCheck: true },
+              }
+            );
 
             if (error) {
-              logger.error('Stripe test failed during webhook invocation', error, {
-                context: 'IntegrationTester',
-              });
+              logger.error(
+                'Stripe test failed during webhook invocation',
+                error,
+                {
+                  context: 'IntegrationTester',
+                }
+              );
               setResults(prev => ({ ...prev, stripe: false }));
-              toast.error('Stripe webhook not accessible. Check STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET configuration.');
+              toast.error(
+                'Stripe webhook not accessible. Check STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET configuration.'
+              );
             } else {
               setResults(prev => ({ ...prev, stripe: true }));
-              toast.success('Stripe webhook endpoint is reachable. Test with a real Stripe event.');
+              toast.success(
+                'Stripe webhook endpoint is reachable. Test with a real Stripe event.'
+              );
             }
           } catch (err) {
             logger.error('Stripe test threw an exception', err, {
               context: 'IntegrationTester',
             });
             setResults(prev => ({ ...prev, stripe: false }));
-            toast.error('Stripe webhook failed. Verify edge function deployment.');
+            toast.error(
+              'Stripe webhook failed. Verify edge function deployment.'
+            );
           }
           break;
       }
     } catch (error) {
-      logger.error('Integration tester encountered an unexpected error', error, {
-        context: 'IntegrationTester',
-        type,
-      });
+      logger.error(
+        'Integration tester encountered an unexpected error',
+        error,
+        {
+          context: 'IntegrationTester',
+          type,
+        }
+      );
       setResults(prev => ({ ...prev, [type]: false }));
       toast.error(`${type} test failed - unexpected error.`);
     } finally {
@@ -131,7 +167,9 @@ export function IntegrationTester() {
             <Mail className="h-5 w-5 text-muted-foreground" />
             <div>
               <p className="font-medium">Email Notifications</p>
-              <p className="text-sm text-muted-foreground">Resend integration</p>
+              <p className="text-sm text-muted-foreground">
+                Resend integration
+              </p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -215,17 +253,18 @@ export function IntegrationTester() {
         <div className="mt-6 p-4 bg-muted/50 rounded-lg">
           <p className="text-sm text-muted-foreground">
             <strong>Testing Notes:</strong>
-            <br />
-            - <strong>Email:</strong> Checks if function exists and RESEND_API_KEY is configured
-            <br />
-            - <strong>Calendar:</strong> Verifies if Google Calendar is connected
-            <br />
-            - <strong>Stripe:</strong> Checks webhook endpoint (real testing requires actual Stripe events)
+            <br />- <strong>Email:</strong> Checks if function exists and
+            RESEND_API_KEY is configured
+            <br />- <strong>Calendar:</strong> Verifies if Google Calendar is
+            connected
+            <br />- <strong>Stripe:</strong> Checks webhook endpoint (real
+            testing requires actual Stripe events)
             <br />
             <br />
             <strong>Full Integration Test:</strong>
             <br />
-            Create a real appointment to test email delivery and calendar sync together
+            Create a real appointment to test email delivery and calendar sync
+            together
           </p>
         </div>
       </CardContent>

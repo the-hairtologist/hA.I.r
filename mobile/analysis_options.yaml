@@ -1,6 +1,3 @@
-
-
-
 analyzer:
   exclude:
     - lib/custom_code/**

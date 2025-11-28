@@ -45,7 +45,10 @@ export const useSmartDefaults = () => {
         preferredStartTime: '09:00',
       });
     } catch (error) {
-      logger.error('Error loading smart defaults', error, { component: 'useSmartDefaults', userId: user?.id });
+      logger.error('Error loading smart defaults', error, {
+        component: 'useSmartDefaults',
+        userId: user?.id,
+      });
     } finally {
       setLoading(false);
     }

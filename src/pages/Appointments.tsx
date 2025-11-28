@@ -149,7 +149,7 @@ const Appointments = () => {
       },
       {
         successMessage: `Perfect. ${selectedAppointments.size} appointment${selectedAppointments.size !== 1 ? 's' : ''} marked complete.`,
-        errorMessage: 'Couldn\'t update those. Let\'s try again.',
+        errorMessage: "Couldn't update those. Let's try again.",
       }
     );
 
@@ -242,13 +242,16 @@ const Appointments = () => {
         setProfilesLoaded(true);
       } catch (error: any) {
         if (!navigator.onLine) {
-          toast.error('You\'re offline. Reconnect to see appointments.', {
-            description: 'Your changes will sync when you\'re back online.',
+          toast.error("You're offline. Reconnect to see appointments.", {
+            description: "Your changes will sync when you're back online.",
           });
         } else {
-          toast.error('Couldn\'t load your profile. Let\'s give that another shot.', {
-            description: 'Try refreshing the page.',
-          });
+          toast.error(
+            "Couldn't load your profile. Let's give that another shot.",
+            {
+              description: 'Try refreshing the page.',
+            }
+          );
         }
       }
     };
@@ -286,11 +289,11 @@ const Appointments = () => {
       );
     } catch (error: any) {
       if (!navigator.onLine) {
-        toast.error('You\'re offline. Changes saved locally.', {
+        toast.error("You're offline. Changes saved locally.", {
           description: 'Will sync when connection returns.',
         });
       } else {
-        toast.error('That didn\'t stick. One more time?', {
+        toast.error("That didn't stick. One more time?", {
           description: 'Try toggling your availability again.',
         });
       }

@@ -74,7 +74,9 @@ export const RoleSwitchProtection = () => {
 
         setHasChecked(true);
       } catch (error) {
-        logger.error('Role switch protection error', error, { component: 'RoleSwitchProtection' });
+        logger.error('Role switch protection error', error, {
+          component: 'RoleSwitchProtection',
+        });
       }
     };
 

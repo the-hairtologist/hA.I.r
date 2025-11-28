@@ -1,71 +1,71 @@
 version: 2
 updates:
   # Enable version updates for npm
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: 'npm'
+    directory: '/'
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
     open-pull-requests-limit: 10
     reviewers:
-      - "the-hairtologist"
+      - 'the-hairtologist'
     assignees:
-      - "the-hairtologist"
+      - 'the-hairtologist'
     labels:
-      - "dependencies"
-      - "automated"
+      - 'dependencies'
+      - 'automated'
     commit-message:
-      prefix: "chore(deps)"
-      include: "scope"
+      prefix: 'chore(deps)'
+      include: 'scope'
     # Group updates by type
     groups:
       react:
         patterns:
-          - "react*"
-          - "@types/react*"
+          - 'react*'
+          - '@types/react*'
       radix-ui:
         patterns:
-          - "@radix-ui/*"
+          - '@radix-ui/*'
       testing:
         patterns:
-          - "@playwright/*"
-          - "@testing-library/*"
-          - "vitest*"
-          - "@vitest/*"
+          - '@playwright/*'
+          - '@testing-library/*'
+          - 'vitest*'
+          - '@vitest/*'
       supabase:
         patterns:
-          - "@supabase/*"
+          - '@supabase/*'
       build-tools:
         patterns:
-          - "vite*"
-          - "typescript"
-          - "eslint*"
-          - "@typescript-eslint/*"
+          - 'vite*'
+          - 'typescript'
+          - 'eslint*'
+          - '@typescript-eslint/*'
       capacitor:
         patterns:
-          - "@capacitor/*"
+          - '@capacitor/*'
     # Ignore major version updates for stable dependencies
     ignore:
-      - dependency-name: "react"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "react-dom"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "typescript"
-        update-types: ["version-update:semver-major"]
+      - dependency-name: 'react'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'react-dom'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'typescript'
+        update-types: ['version-update:semver-major']
 
   # Enable version updates for GitHub Actions
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: 'github-actions'
+    directory: '/'
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
     reviewers:
-      - "the-hairtologist"
+      - 'the-hairtologist'
     labels:
-      - "dependencies"
-      - "github-actions"
-      - "automated"
+      - 'dependencies'
+      - 'github-actions'
+      - 'automated'
     commit-message:
-      prefix: "chore(ci)"
+      prefix: 'chore(ci)'

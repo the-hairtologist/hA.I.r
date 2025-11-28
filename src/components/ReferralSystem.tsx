@@ -99,10 +99,12 @@ export const ReferralSystem = () => {
         .order('signup_date', { ascending: false });
 
       if (trackingData) {
-        setReferrals(trackingData.map(ref => ({
-          ...ref,
-          is_qualified: ref.is_qualified ?? false,
-        })));
+        setReferrals(
+          trackingData.map(ref => ({
+            ...ref,
+            is_qualified: ref.is_qualified ?? false,
+          }))
+        );
       }
     } catch (error) {
       logger.error('Error loading referral data', 'ReferralSystem', error);

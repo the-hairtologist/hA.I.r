@@ -55,7 +55,11 @@ export function ClientSentimentTracker({
         setSentiment({ positive, neutral, negative, trend });
       }
     } catch (error) {
-      logger.error('Error loading sentiment', 'ClientSentimentTracker', error as Error);
+      logger.error(
+        'Error loading sentiment',
+        'ClientSentimentTracker',
+        error as Error
+      );
       toast.error('Failed to load client feedback data');
     } finally {
       setLoading(false);

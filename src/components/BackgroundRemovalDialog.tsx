@@ -80,7 +80,9 @@ export const BackgroundRemovalDialog = ({
         description: 'You can now download or use this image',
       });
     } catch (err) {
-      logger.error('Background removal failed', err, { component: 'BackgroundRemovalDialog' });
+      logger.error('Background removal failed', err, {
+        component: 'BackgroundRemovalDialog',
+      });
       setError(
         err instanceof Error ? err.message : 'Failed to remove background'
       );

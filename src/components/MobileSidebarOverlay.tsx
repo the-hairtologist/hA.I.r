@@ -59,7 +59,7 @@ export const MobileSidebarOverlay = () => {
 
     const touchEnd = e.changedTouches[0]?.clientX;
     if (touchEnd === undefined) return;
-    
+
     const swipeDistance = touchStart - touchEnd;
 
     // If user swipes right-to-left more than 50px, close sidebar

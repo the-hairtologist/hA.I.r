@@ -32,17 +32,20 @@ Thank you for your interest in contributing to hA.I.r! This document provides gu
 
 1. **Fork the repository** on GitHub
 2. **Clone your fork** locally:
+
    ```bash
    git clone https://github.com/YOUR_USERNAME/hA.I.r.git
    cd hA.I.r
    ```
 
 3. **Install dependencies**:
+
    ```bash
    npm install --legacy-peer-deps
    ```
 
 4. **Set up environment variables**:
+
    ```bash
    cp .env.example .env
    # Edit .env with your local configuration
@@ -69,6 +72,7 @@ Thank you for your interest in contributing to hA.I.r! This document provides gu
 ### Development Process
 
 1. **Create a branch** from `main`:
+
    ```bash
    git checkout -b feature/your-feature-name
    ```
@@ -76,6 +80,7 @@ Thank you for your interest in contributing to hA.I.r! This document provides gu
 2. **Make your changes** following our [coding standards](#coding-standards)
 
 3. **Run checks frequently**:
+
    ```bash
    npm run lint        # ESLint
    npm run type-check  # TypeScript
@@ -86,6 +91,7 @@ Thank you for your interest in contributing to hA.I.r! This document provides gu
 4. **Commit your changes** using [conventional commits](#commit-message-convention)
 
 5. **Push to your fork**:
+
    ```bash
    git push origin feature/your-feature-name
    ```
@@ -144,6 +150,7 @@ src/
 - **Provide user-friendly error messages**
 
 Example:
+
 ```typescript
 import { logger } from '@/lib/logger';
 import { handleError } from '@/lib/errorHandling';
@@ -166,6 +173,7 @@ try {
 - **Follow AAA pattern** - Arrange, Act, Assert
 
 Example:
+
 ```typescript
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
@@ -175,10 +183,10 @@ describe('MyComponent', () => {
   it('should render correctly', () => {
     // Arrange
     const props = { title: 'Test' };
-    
+
     // Act
     render(<MyComponent {...props} />);
-    
+
     // Assert
     expect(screen.getByText('Test')).toBeInTheDocument();
   });

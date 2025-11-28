@@ -129,7 +129,9 @@ export const QuickAddClientFAB = ({
               label="Email"
               type="email"
               value={values.email || ''}
-              onChange={value => setFieldValue('email', value ? String(value) : undefined)}
+              onChange={value =>
+                setFieldValue('email', value ? String(value) : undefined)
+              }
               onBlur={() => setFieldTouched('email')}
               error={errors.email}
               touched={touched.email}
@@ -142,7 +144,9 @@ export const QuickAddClientFAB = ({
               label="Phone"
               type="tel"
               value={values.phone || ''}
-              onChange={value => setFieldValue('phone', value ? String(value) : undefined)}
+              onChange={value =>
+                setFieldValue('phone', value ? String(value) : undefined)
+              }
               onBlur={() => setFieldTouched('phone')}
               error={errors.phone}
               touched={touched.phone}
@@ -155,7 +159,9 @@ export const QuickAddClientFAB = ({
               label="Notes"
               type="textarea"
               value={values.notes || ''}
-              onChange={value => setFieldValue('notes', value ? String(value) : undefined)}
+              onChange={value =>
+                setFieldValue('notes', value ? String(value) : undefined)
+              }
               onBlur={() => setFieldTouched('notes')}
               error={errors.notes}
               touched={touched.notes}

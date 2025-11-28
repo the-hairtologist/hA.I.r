@@ -78,7 +78,7 @@ export const ReviewsList = ({ stylistId, limit }: ReviewsListProps) => {
                 clientAvatar: null,
               };
             }
-            
+
             const { data: profile } = await supabase
               .from('profiles')
               .select('full_name, avatar_url')

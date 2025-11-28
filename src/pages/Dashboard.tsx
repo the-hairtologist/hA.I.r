@@ -412,7 +412,7 @@ const Dashboard = () => {
     if (userRole && profile) {
       // Force fresh data from React Query cache on dashboard load
       queryClient.invalidateQueries();
-      
+
       loadDashboardData();
 
       // GuidedTour handles onboarding automatically via useTour hook
@@ -480,7 +480,9 @@ const Dashboard = () => {
         // Delay showing by 3 seconds to let user see dashboard first
         const timer = setTimeout(() => {
           // Double-check flags before showing (user might have dismissed during delay)
-          const stillDismissed = localStorage.getItem('profile_setup_dismissed');
+          const stillDismissed = localStorage.getItem(
+            'profile_setup_dismissed'
+          );
           const stillCompleted = localStorage.getItem('profile_completed');
           if (stillDismissed !== 'true' && stillCompleted !== 'true') {
             setShowProfileCompletion(true);
@@ -551,9 +553,8 @@ const Dashboard = () => {
       }
 
       // Get appropriate profile based on role - using optimized query
-      const { getUserProfileWithRole } = await import(
-        '@/lib/queries/dashboardQueries'
-      );
+      const { getUserProfileWithRole } =
+        await import('@/lib/queries/dashboardQueries');
       const userRoleProfile = await getUserProfileWithRole(
         sessionUser.id,
         primaryRole
@@ -571,9 +572,8 @@ const Dashboard = () => {
       }
 
       // Check if profile needs completion - using optimized query
-      const { getBasicProfile } = await import(
-        '@/lib/queries/dashboardQueries'
-      );
+      const { getBasicProfile } =
+        await import('@/lib/queries/dashboardQueries');
       const basicProfile = await getBasicProfile(sessionUser.id);
       setUserProfile(basicProfile);
 
@@ -612,9 +612,8 @@ const Dashboard = () => {
   };
 
   const loadStylistDashboard = async () => {
-    const { getStylistDashboardData, getRecentActivity } = await import(
-      '@/lib/queries/dashboardQueries'
-    );
+    const { getStylistDashboardData, getRecentActivity } =
+      await import('@/lib/queries/dashboardQueries');
 
     // Load main dashboard data
     const { stats: dashboardStats, weekAppointments: weekAppts } =
@@ -637,9 +636,8 @@ const Dashboard = () => {
   };
 
   const loadClientDashboard = async () => {
-    const { getClientDashboardData } = await import(
-      '@/lib/queries/dashboardQueries'
-    );
+    const { getClientDashboardData } =
+      await import('@/lib/queries/dashboardQueries');
 
     const { stats: dashboardStats, weekAppointments: weekAppts } =
       await getClientDashboardData(profile.id, user.id);

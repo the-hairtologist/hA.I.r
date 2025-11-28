@@ -203,7 +203,6 @@ const BookingPage = () => {
         backTo="/settings"
       />
       <div className="space-y-6 max-w-4xl px-4 py-6">
-
         {/* Booking Link Card */}
         <Card>
           <CardHeader>

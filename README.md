@@ -192,29 +192,34 @@ VITE_SENTRY_DSN=https://xxxxx@sentry.io/xxxxx
 This project uses GitHub Actions for continuous integration and deployment:
 
 #### 🔍 **Lint Workflow** (`lint.yml`)
+
 - Runs ESLint with strict mode (fails on warnings)
 - Checks code formatting with Prettier
 - Validates package-lock.json synchronization
 - Detects extraneous packages with `npm prune`
 
 #### 🧪 **Unit Tests** (`test.yml`)
+
 - Runs Vitest unit tests with coverage
 - TypeScript type checking
 - Comments test results on PRs
 
 #### 📊 **Code Coverage** (`coverage.yml`)
+
 - Generates coverage reports with Vitest
 - Uploads to Codecov for tracking
 - Enforces coverage thresholds (70% lines/statements, 60% functions/branches)
 - Comments coverage summary on PRs
 
 #### 🔒 **Security Audit** (`audit.yml`)
+
 - Runs `npm audit` daily and on PRs
 - Checks for known vulnerabilities
 - Dependency review for PRs
 - Alerts on critical/high severity issues
 
 #### 🚀 **Semantic Release** (`semantic-release.yml`)
+
 - Automated versioning based on conventional commits
 - Auto-generates CHANGELOG.md
 - Creates GitHub releases
@@ -223,6 +228,7 @@ This project uses GitHub Actions for continuous integration and deployment:
 ### Development Standards
 
 **Code Quality Requirements:**
+
 - ✅ ESLint passes with zero warnings
 - ✅ TypeScript compiles with strict mode
 - ✅ All tests pass
@@ -230,6 +236,7 @@ This project uses GitHub Actions for continuous integration and deployment:
 - ✅ No security vulnerabilities
 
 **Before Submitting a PR:**
+
 ```bash
 npm run lint          # ESLint check
 npm run type-check    # TypeScript check
@@ -250,6 +257,7 @@ chore(scope): maintenance task     # No version bump
 ```
 
 **Breaking changes** trigger a major version bump:
+
 ```bash
 feat(api)!: change API structure
 
@@ -266,6 +274,7 @@ BREAKING CHANGE: API response format changed
 ### Contributing
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed guidelines on:
+
 - Setting up your development environment
 - Coding standards and best practices
 - Testing requirements

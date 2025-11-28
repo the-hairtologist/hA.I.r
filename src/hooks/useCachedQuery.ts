@@ -7,8 +7,10 @@ import { useQuery, UseQueryOptions, QueryKey } from '@tanstack/react-query';
 import { cacheManager, CACHE_STRATEGIES } from '@/lib/cache/CacheManager';
 import { logger } from '@/lib/logger';
 
-interface CachedQueryOptions<TData>
-  extends Omit<UseQueryOptions<TData>, 'queryKey' | 'queryFn'> {
+interface CachedQueryOptions<TData> extends Omit<
+  UseQueryOptions<TData>,
+  'queryKey' | 'queryFn'
+> {
   queryKey: QueryKey;
   queryFn: () => Promise<TData>;
   cacheType: keyof typeof CACHE_STRATEGIES;

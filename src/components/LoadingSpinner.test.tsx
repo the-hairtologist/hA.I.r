@@ -10,16 +10,22 @@ describe('LoadingSpinner', () => {
   });
 
   it('renders with custom message', () => {
-    const { container } = renderWithProviders(<LoadingSpinner message="Please wait..." />);
+    const { container } = renderWithProviders(
+      <LoadingSpinner message="Please wait..." />
+    );
 
     expect(container.textContent).toContain('Please wait...');
   });
 
   it('renders with different sizes', () => {
-    const { container: small } = renderWithProviders(<LoadingSpinner size="sm" />);
+    const { container: small } = renderWithProviders(
+      <LoadingSpinner size="sm" />
+    );
     expect(small).toBeTruthy();
 
-    const { container: large } = renderWithProviders(<LoadingSpinner size="lg" />);
+    const { container: large } = renderWithProviders(
+      <LoadingSpinner size="lg" />
+    );
     expect(large).toBeTruthy();
   });
 

@@ -52,7 +52,11 @@ export const useUndoableAction = <T = void>() => {
                 await undoAction();
                 toast.success(undoMessage);
               } catch (error) {
-                logger.error('Undo failed', 'useUndoableAction', error as Error);
+                logger.error(
+                  'Undo failed',
+                  'useUndoableAction',
+                  error as Error
+                );
                 toast.error('Failed to undo action');
               } finally {
                 setIsUndoing(false);

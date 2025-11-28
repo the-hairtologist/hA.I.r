@@ -88,7 +88,9 @@ export function SessionExpiryWarning() {
         setShowWarning(false);
       }
     } catch (error) {
-      logger.error('Error extending session', error, { component: 'SessionExpiryWarning' });
+      logger.error('Error extending session', error, {
+        component: 'SessionExpiryWarning',
+      });
       toast.error('Failed to extend session', {
         description: 'Please sign in again',
       });
