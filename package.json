@@ -22,11 +22,7 @@
     },
     "dependencies": {
         "@awesome-cordova-plugins/in-app-purchase-2": "^8.1.0",
-<<<<<<< HEAD
         "@capacitor/android": "^7.4.4",
-=======
-        "@capacitor/android": "^7.4.3",
->>>>>>> origin/main
         "@capacitor/app": "^7.1.0",
         "@capacitor/camera": "^7.0.2",
         "@capacitor/cli": "^7.4.4",
