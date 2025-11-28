@@ -37,7 +37,11 @@ class WebVitalsMonitor {
 
       logger.debug('📊 Web Vitals monitoring initialized', 'webVitals');
     } catch (error) {
-      logger.warn('Web Vitals library not available', 'webVitals', error as any);
+      logger.warn(
+        'Web Vitals library not available',
+        'webVitals',
+        error as any
+      );
     }
   }
 
@@ -122,16 +126,19 @@ class WebVitalsMonitor {
 
     // Send to database for detailed analysis
     try {
-      const { performanceTracker } = await import(
-        '@/lib/analytics/performanceTracker'
-      );
+      const { performanceTracker } =
+        await import('@/lib/analytics/performanceTracker');
       await performanceTracker.trackWebVital({
         name: metric.name,
         value: metric.value,
         rating: metric.rating,
       });
     } catch (error) {
-      logger.warn('Failed to send Web Vital to database', 'webVitals', error as any);
+      logger.warn(
+        'Failed to send Web Vital to database',
+        'webVitals',
+        error as any
+      );
     }
   }
 

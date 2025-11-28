@@ -51,7 +51,9 @@ export const AudioGuidePlayer = ({
       );
 
       if (error) {
-        logger.error('Audio generation error', error, { component: 'AudioGuidePlayer' });
+        logger.error('Audio generation error', error, {
+          component: 'AudioGuidePlayer',
+        });
         toast.error(error.message || 'Failed to generate audio guide');
         return null;
       }
@@ -78,7 +80,9 @@ export const AudioGuidePlayer = ({
       setAudioUrl(url);
       return url;
     } catch (error: any) {
-      logger.error('Error generating audio', error, { component: 'AudioGuidePlayer' });
+      logger.error('Error generating audio', error, {
+        component: 'AudioGuidePlayer',
+      });
       const errorMsg = error?.message || 'Failed to generate audio guide';
       toast.error(errorMsg);
       return null;

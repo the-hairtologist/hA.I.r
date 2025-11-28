@@ -126,7 +126,9 @@ export const useSmartPhotoCapture = () => {
 
         return enhancedPhoto;
       } catch (error) {
-        logger.error('Smart capture error', error, { component: 'useSmartPhotoCapture' });
+        logger.error('Smart capture error', error, {
+          component: 'useSmartPhotoCapture',
+        });
         toast.error('Failed to capture photo');
         return null;
       } finally {
@@ -168,7 +170,9 @@ export const useSmartPhotoCapture = () => {
       const serviceType = inferServiceType(data);
       return serviceType;
     } catch (error) {
-      logger.error('Auto-tagging failed', error, { component: 'useSmartPhotoCapture' });
+      logger.error('Auto-tagging failed', error, {
+        component: 'useSmartPhotoCapture',
+      });
       return null;
     }
   };

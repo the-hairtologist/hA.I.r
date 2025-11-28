@@ -12,27 +12,34 @@ interface SecurityNoticeProps {
   showIcon?: boolean;
 }
 
-export function SecurityNotice({ variant = 'inline', showIcon = true }: SecurityNoticeProps) {
+export function SecurityNotice({
+  variant = 'inline',
+  showIcon = true,
+}: SecurityNoticeProps) {
   const notices = [
     {
       icon: Lock,
       title: 'Data Protection',
-      description: 'All sensitive information is encrypted and protected with enterprise-grade security.',
+      description:
+        'All sensitive information is encrypted and protected with enterprise-grade security.',
     },
     {
       icon: Eye,
       title: 'Privacy First',
-      description: 'Client medical information requires explicit consent and is only accessible to authorized stylists.',
+      description:
+        'Client medical information requires explicit consent and is only accessible to authorized stylists.',
     },
     {
       icon: Key,
       title: 'Secure Authentication',
-      description: 'Your account is protected with industry-standard authentication and session management.',
+      description:
+        'Your account is protected with industry-standard authentication and session management.',
     },
     {
       icon: Shield,
       title: 'Regular Security Audits',
-      description: 'We perform continuous security monitoring to protect your data.',
+      description:
+        'We perform continuous security monitoring to protect your data.',
     },
   ];
 
@@ -53,7 +60,9 @@ export function SecurityNotice({ variant = 'inline', showIcon = true }: Security
                 <Icon className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="font-medium text-sm">{notice.title}</p>
-                  <p className="text-sm text-muted-foreground">{notice.description}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {notice.description}
+                  </p>
                 </div>
               </div>
             );

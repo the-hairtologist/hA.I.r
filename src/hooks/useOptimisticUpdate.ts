@@ -25,7 +25,7 @@ export function useOptimisticUpdate<T>() {
         onSuccess,
         onError,
         successMessage = 'Updated successfully',
-        errorMessage = 'Update failed'
+        errorMessage = 'Update failed',
       } = options;
 
       setIsUpdating(true);
@@ -33,21 +33,21 @@ export function useOptimisticUpdate<T>() {
 
       try {
         const result = await updateFn();
-        
+
         if (successMessage) {
           toast.success(successMessage);
         }
-        
+
         onSuccess?.(result);
         return result;
       } catch (err) {
         const error = err instanceof Error ? err : new Error('Update failed');
         setError(error);
-        
+
         if (errorMessage) {
           toast.error(errorMessage);
         }
-        
+
         onError?.(error);
         throw error;
       } finally {
@@ -60,6 +60,6 @@ export function useOptimisticUpdate<T>() {
   return {
     mutate,
     isUpdating,
-    error
+    error,
   };
 }

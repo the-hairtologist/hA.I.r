@@ -1,4 +1,8 @@
-import { renderWithProviders, screen, fireEvent } from '@/lib/testing/testUtils';
+import {
+  renderWithProviders,
+  screen,
+  fireEvent,
+} from '@/lib/testing/testUtils';
 import { A11yTester } from '../A11yTester';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 

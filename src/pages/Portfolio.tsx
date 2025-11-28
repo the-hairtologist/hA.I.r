@@ -98,7 +98,11 @@ const Portfolio = () => {
         .maybeSingle();
 
       if (error) {
-        logger.error('Error fetching stylist profile', 'Portfolio', error as Error);
+        logger.error(
+          'Error fetching stylist profile',
+          'Portfolio',
+          error as Error
+        );
         toast.error('Error loading portfolio');
         navigate('/dashboard');
         return;
@@ -131,7 +135,7 @@ const Portfolio = () => {
       logger.error('Error loading photos', 'Portfolio', error as Error);
       toast.error('Failed to load photos');
     } else {
-      setPhotos(data as any || []);
+      setPhotos((data as any) || []);
     }
   };
 
@@ -238,11 +242,11 @@ const Portfolio = () => {
     } catch (error: any) {
       logger.error('Upload error', 'Portfolio', error as Error);
       if (!navigator.onLine) {
-        toast.error('You\'re offline. Photo will upload when you reconnect.', {
-          description: 'Keep creating - we\'ll save it locally.',
+        toast.error("You're offline. Photo will upload when you reconnect.", {
+          description: "Keep creating - we'll save it locally.",
         });
       } else {
-        toast.error('Couldn\'t upload that photo. Mind trying again?', {
+        toast.error("Couldn't upload that photo. Mind trying again?", {
           description: 'Make sure your connection is stable.',
         });
       }

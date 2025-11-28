@@ -41,7 +41,9 @@ export function HairInspirationGenerator() {
         description: 'Your hair inspiration image is ready',
       });
     } catch (error) {
-      logger.error('Hair image generation failed', error, { component: 'HairInspirationGenerator' });
+      logger.error('Hair image generation failed', error, {
+        component: 'HairInspirationGenerator',
+      });
       toast({
         title: 'Generation failed',
         description: error instanceof Error ? error.message : 'Unknown error',

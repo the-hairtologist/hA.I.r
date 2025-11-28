@@ -7,8 +7,7 @@ import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { createBlurPlaceholder } from '@/lib/performance/imageOptimization';
 
-interface OptimizedImageProps
-  extends React.ImgHTMLAttributes<HTMLImageElement> {
+interface OptimizedImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   src: string;
   alt: string;
   width?: number;

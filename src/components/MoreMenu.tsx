@@ -1,21 +1,27 @@
-import { useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
-import { X, Search, ChevronDown, ChevronUp, Settings } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { haptic } from "@/platform/haptics";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Input } from "@/components/ui/input";
-import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
-import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
-import { NotificationDot } from "./NotificationDot";
+import { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { X, Search, ChevronDown, ChevronUp, Settings } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { haptic } from '@/platform/haptics';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+} from '@/components/ui/sheet';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Input } from '@/components/ui/input';
+import { useEnhancedAuth } from '@/contexts/EnhancedAuthContext';
+import { useRealtimeNotifications } from '@/hooks/useRealtimeNotifications';
+import { NotificationDot } from './NotificationDot';
 import {
   stylistNavigationItems,
   clientNavigationItems,
   getAdminNavigationItems,
   stylistGroupLabels,
   type NavigationItem,
-} from "@/config/navigationConfig";
+} from '@/config/navigationConfig';
 
 interface MoreMenuProps {
   open: boolean;
@@ -30,7 +36,12 @@ interface CollapsibleGroupProps {
   unreadCount?: number;
 }
 
-const CollapsibleGroup = ({ title, items, onNavigate, unreadCount }: CollapsibleGroupProps) => {
+const CollapsibleGroup = ({
+  title,
+  items,
+  onNavigate,
+  unreadCount,
+}: CollapsibleGroupProps) => {
   const [isOpen, setIsOpen] = useState(true);
 
   if (items.length === 0) return null;
@@ -45,45 +56,55 @@ const CollapsibleGroup = ({ title, items, onNavigate, unreadCount }: Collapsible
         className="flex items-center justify-between w-full px-4 py-3 text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors touch-manipulation"
         aria-expanded={isOpen}
       >
-        <span className="font-pixel text-xs tracking-wide uppercase">{title}</span>
-        {isOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+        <span className="font-pixel text-xs tracking-wide uppercase">
+          {title}
+        </span>
+        {isOpen ? (
+          <ChevronUp className="h-4 w-4" />
+        ) : (
+          <ChevronDown className="h-4 w-4" />
+        )}
       </button>
-      
+
       {isOpen && (
         <div className="space-y-1 px-2">
-          {items.map((item) => (
+          {items.map(item => (
             <button
               key={item.id}
               onClick={() => onNavigate(item.url)}
               disabled={item.comingSoon}
               className={cn(
-                "relative w-full flex items-center gap-3 px-4 py-3",
-                "min-h-[60px] rounded-lg transition-all duration-200",
-                "hover:bg-accent/50 active:scale-98 touch-manipulation",
-                "brutal-border border-muted",
-                item.comingSoon && "opacity-50 cursor-not-allowed"
+                'relative w-full flex items-center gap-3 px-4 py-3',
+                'min-h-[60px] rounded-lg transition-all duration-200',
+                'hover:bg-accent/50 active:scale-98 touch-manipulation',
+                'brutal-border border-muted',
+                item.comingSoon && 'opacity-50 cursor-not-allowed'
               )}
               aria-label={`Navigate to ${item.title}`}
             >
               <div
                 className={cn(
-                  "flex items-center justify-center w-10 h-10 rounded-lg",
+                  'flex items-center justify-center w-10 h-10 rounded-lg',
                   item.gradient
                 )}
               >
                 <item.icon className="h-5 w-5 text-white" />
               </div>
-              
+
               <div className="flex-1 text-left">
                 <div className="font-medium text-sm">{item.title}</div>
                 {item.description && (
-                  <div className="text-xs text-muted-foreground truncate">{item.description}</div>
+                  <div className="text-xs text-muted-foreground truncate">
+                    {item.description}
+                  </div>
                 )}
               </div>
 
-              {item.id === 'messages' && unreadCount !== undefined && unreadCount > 0 && (
-                <NotificationDot count={unreadCount} size="sm" />
-              )}
+              {item.id === 'messages' &&
+                unreadCount !== undefined &&
+                unreadCount > 0 && (
+                  <NotificationDot count={unreadCount} size="sm" />
+                )}
 
               {item.comingSoon && (
                 <span className="text-xs text-muted-foreground px-2 py-1 rounded bg-muted">
@@ -98,11 +119,15 @@ const CollapsibleGroup = ({ title, items, onNavigate, unreadCount }: Collapsible
   );
 };
 
-export const MoreMenu = ({ open, onOpenChange, excludePaths }: MoreMenuProps) => {
+export const MoreMenu = ({
+  open,
+  onOpenChange,
+  excludePaths,
+}: MoreMenuProps) => {
   const navigate = useNavigate();
   const { user, isAdmin, isStylist } = useEnhancedAuth();
   const { unreadCount } = useRealtimeNotifications(user?.id);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Get all navigation items based on role
   const allNavItems = useMemo(() => {
@@ -118,15 +143,15 @@ export const MoreMenu = ({ open, onOpenChange, excludePaths }: MoreMenuProps) =>
   // Filter out items already in bottom nav and flatten children
   const availableItems = useMemo(() => {
     const flatItems: NavigationItem[] = [];
-    
-    allNavItems.forEach((item) => {
+
+    allNavItems.forEach(item => {
       // Skip items in bottom nav
       if (excludePaths.includes(item.url)) return;
-      
+
       // Skip parent items that only exist for grouping
       if (item.url === '#' && item.children) {
         // Add all children
-        item.children.forEach((child) => {
+        item.children.forEach(child => {
           if (!excludePaths.includes(child.url)) {
             flatItems.push(child);
           }
@@ -135,17 +160,17 @@ export const MoreMenu = ({ open, onOpenChange, excludePaths }: MoreMenuProps) =>
         flatItems.push(item);
       }
     });
-    
+
     return flatItems;
   }, [allNavItems, excludePaths]);
 
   // Filter by search query
   const filteredItems = useMemo(() => {
     if (!searchQuery.trim()) return availableItems;
-    
+
     const query = searchQuery.toLowerCase();
     return availableItems.filter(
-      (item) =>
+      item =>
         item.title.toLowerCase().includes(query) ||
         item.description?.toLowerCase().includes(query)
     );
@@ -154,15 +179,15 @@ export const MoreMenu = ({ open, onOpenChange, excludePaths }: MoreMenuProps) =>
   // Group items
   const groupedItems = useMemo(() => {
     const groups: Record<string, NavigationItem[]> = {};
-    
-    filteredItems.forEach((item) => {
+
+    filteredItems.forEach(item => {
       const groupKey = item.group;
       if (!groups[groupKey]) {
         groups[groupKey] = [];
       }
       groups[groupKey].push(item);
     });
-    
+
     return groups;
   }, [filteredItems]);
 
@@ -175,7 +200,7 @@ export const MoreMenu = ({ open, onOpenChange, excludePaths }: MoreMenuProps) =>
   const handleClose = () => {
     haptic.tap();
     onOpenChange(false);
-    setSearchQuery("");
+    setSearchQuery('');
   };
 
   return (
@@ -211,7 +236,7 @@ export const MoreMenu = ({ open, onOpenChange, excludePaths }: MoreMenuProps) =>
               type="search"
               placeholder="Search features..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={e => setSearchQuery(e.target.value)}
               className="pl-10 h-12 bg-background"
               aria-label="Search features"
             />
@@ -299,7 +324,7 @@ export const MoreMenu = ({ open, onOpenChange, excludePaths }: MoreMenuProps) =>
         {/* Settings at bottom - Always visible */}
         <div className="border-t bg-muted/10 p-4">
           <button
-            onClick={() => handleNavigation("/settings")}
+            onClick={() => handleNavigation('/settings')}
             className="w-full flex items-center gap-3 px-4 py-4 rounded-lg bg-gradient-to-br from-blue-start to-blue-end text-white font-medium shadow-lg hover:shadow-xl transition-all active:scale-98 touch-manipulation"
             aria-label="Navigate to Settings"
           >

@@ -8,8 +8,9 @@ import { Button } from '@/components/ui/button';
 import { Loader2, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-interface ButtonWithFeedbackProps
-  extends React.ComponentPropsWithoutRef<typeof Button> {
+interface ButtonWithFeedbackProps extends React.ComponentPropsWithoutRef<
+  typeof Button
+> {
   onClickAsync?: () => Promise<void>;
   successMessage?: string;
   errorMessage?: string;

@@ -98,7 +98,10 @@ export const RescheduleDialog = ({
             },
           });
         } catch (smsError) {
-          logger.error('SMS notification failed', smsError, { component: 'RescheduleDialog', appointmentId: appointment.id });
+          logger.error('SMS notification failed', smsError, {
+            component: 'RescheduleDialog',
+            appointmentId: appointment.id,
+          });
         }
       },
       {
@@ -133,7 +136,10 @@ export const RescheduleDialog = ({
 
       setStylistSchedule(data?.weekly_schedule);
     } catch (error) {
-      logger.error('Error loading schedule', error, { component: 'RescheduleDialog', stylistId: appointment.stylist_id });
+      logger.error('Error loading schedule', error, {
+        component: 'RescheduleDialog',
+        stylistId: appointment.stylist_id,
+      });
     }
   };
 

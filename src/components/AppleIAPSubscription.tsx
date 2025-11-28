@@ -37,7 +37,9 @@ export const AppleIAPSubscription = () => {
       const iapProducts = await appleIAP.getProducts();
       setProducts(iapProducts);
     } catch (error) {
-      logger.error('Failed to load IAP products', error, { component: 'AppleIAPSubscription' });
+      logger.error('Failed to load IAP products', error, {
+        component: 'AppleIAPSubscription',
+      });
       toast.error('Failed to load subscription options');
     } finally {
       setLoading(false);
@@ -58,7 +60,10 @@ export const AppleIAPSubscription = () => {
         toast.error(result.error || 'Purchase failed');
       }
     } catch (error) {
-      logger.error('IAP purchase failed', error, { component: 'AppleIAPSubscription', productId });
+      logger.error('IAP purchase failed', error, {
+        component: 'AppleIAPSubscription',
+        productId,
+      });
       toast.error('Purchase failed. Please try again.');
     } finally {
       setPurchasing(null);
@@ -79,7 +84,9 @@ export const AppleIAPSubscription = () => {
         toast.error(result.error || 'No purchases to restore');
       }
     } catch (error) {
-      logger.error('IAP restore purchases failed', error, { component: 'AppleIAPSubscription' });
+      logger.error('IAP restore purchases failed', error, {
+        component: 'AppleIAPSubscription',
+      });
       toast.error('Failed to restore purchases');
     } finally {
       setLoading(false);

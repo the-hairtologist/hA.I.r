@@ -48,7 +48,11 @@ export const NotificationManager = ({
 
       setLastCheck(new Date());
     } catch (error) {
-      logger.error('Error checking notifications', error, { component: 'NotificationManager', userId, userRole });
+      logger.error('Error checking notifications', error, {
+        component: 'NotificationManager',
+        userId,
+        userRole,
+      });
     }
   };
 
@@ -89,7 +93,9 @@ export const NotificationManager = ({
               </p>
               <p className="text-[11px] sm:text-xs text-muted-foreground">
                 Next: {nextAppt?.client?.full_name || 'Client'} at{' '}
-                {nextAppt?.appointment_date ? format(new Date(nextAppt.appointment_date), 'h:mm a') : 'TBD'}
+                {nextAppt?.appointment_date
+                  ? format(new Date(nextAppt.appointment_date), 'h:mm a')
+                  : 'TBD'}
               </p>
             </div>
           </div>,

@@ -157,7 +157,11 @@ export const RealPerformanceMetrics = () => {
         totalFormulas: formulaCount || 0,
       });
     } catch (error) {
-      logger.error('Error loading performance metrics', 'RealPerformanceMetrics', error as Error);
+      logger.error(
+        'Error loading performance metrics',
+        'RealPerformanceMetrics',
+        error as Error
+      );
     } finally {
       setLoading(false);
     }

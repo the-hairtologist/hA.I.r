@@ -43,7 +43,9 @@ export default function AdGenerator() {
 
   const handleGenerate = async (includeImage: boolean = false) => {
     if (!prompt.trim()) {
-      toast.error("Tell us what you want to promote and we'll create something great.");
+      toast.error(
+        "Tell us what you want to promote and we'll create something great."
+      );
       return;
     }
 

@@ -132,7 +132,9 @@ describe('AI Components', () => {
     });
 
     it.skip('should handle empty formulas array', () => {
-      const { getByText } = renderWithProviders(<AIFormulaAnalyzer formulas={[]} />);
+      const { getByText } = renderWithProviders(
+        <AIFormulaAnalyzer formulas={[]} />
+      );
 
       // Should render without crashing
       expect(getByText(/analyze/i)).toBeInTheDocument();
@@ -161,13 +163,17 @@ describe('AI Components', () => {
     };
 
     it.skip('should render predict button', () => {
-      const { getByText } = renderWithProviders(<AIScheduleOptimizer {...mockProps} />);
+      const { getByText } = renderWithProviders(
+        <AIScheduleOptimizer {...mockProps} />
+      );
 
       expect(getByText(/predict/i)).toBeInTheDocument();
     });
 
     it.skip('should show loading state while predicting', async () => {
-      const { getByText } = renderWithProviders(<AIScheduleOptimizer {...mockProps} />);
+      const { getByText } = renderWithProviders(
+        <AIScheduleOptimizer {...mockProps} />
+      );
 
       const predictButton = getByText(/predict/i);
       expect(predictButton).toBeInTheDocument();
@@ -192,19 +198,25 @@ describe('AI Components', () => {
     };
 
     it('should render message type selector', () => {
-      const { getByText } = renderWithProviders(<AIMessageComposer {...mockProps} />);
+      const { getByText } = renderWithProviders(
+        <AIMessageComposer {...mockProps} />
+      );
 
       expect(getByText(/message type/i)).toBeInTheDocument();
     });
 
     it.skip('should render generate button', () => {
-      const { getByText } = renderWithProviders(<AIMessageComposer {...mockProps} />);
+      const { getByText } = renderWithProviders(
+        <AIMessageComposer {...mockProps} />
+      );
 
       expect(getByText(/generate/i)).toBeInTheDocument();
     });
 
     it.skip('should show loading state while generating', async () => {
-      const { getByText } = renderWithProviders(<AIMessageComposer {...mockProps} />);
+      const { getByText } = renderWithProviders(
+        <AIMessageComposer {...mockProps} />
+      );
 
       const generateButton = getByText(/generate/i);
       expect(generateButton).toBeInTheDocument();
@@ -217,19 +229,25 @@ describe('AI Components', () => {
     };
 
     it('should render photo input', () => {
-      const { getByLabelText } = renderWithProviders(<HairPhotoAnalyzer {...mockProps} />);
+      const { getByLabelText } = renderWithProviders(
+        <HairPhotoAnalyzer {...mockProps} />
+      );
 
       expect(getByLabelText(/photo url/i)).toBeInTheDocument();
     });
 
     it('should render analyze button', () => {
-      const { getByText } = renderWithProviders(<HairPhotoAnalyzer {...mockProps} />);
+      const { getByText } = renderWithProviders(
+        <HairPhotoAnalyzer {...mockProps} />
+      );
 
       expect(getByText(/analyze/i)).toBeInTheDocument();
     });
 
     it('should disable analyze when no photo URL', () => {
-      const { getByText } = renderWithProviders(<HairPhotoAnalyzer {...mockProps} />);
+      const { getByText } = renderWithProviders(
+        <HairPhotoAnalyzer {...mockProps} />
+      );
 
       const analyzeButton = getByText(/analyze/i);
       expect(analyzeButton).toBeDisabled();

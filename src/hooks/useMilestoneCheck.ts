@@ -40,7 +40,10 @@ export const useMilestoneCheck = (
           });
         }
       } catch (error) {
-        productionLogger.error('Error checking milestones', error, { component: 'useMilestoneCheck', clientId });
+        productionLogger.error('Error checking milestones', error, {
+          component: 'useMilestoneCheck',
+          clientId,
+        });
       }
     };
 

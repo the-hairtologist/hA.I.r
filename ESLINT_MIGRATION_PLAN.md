@@ -19,7 +19,7 @@
 2. **Enhanced TypeScript Configuration**
    - `strict`: true (already enabled)
    - `noUnusedLocals`: true (was: false)
-   - `noUnusedParameters`: true (was: false)  
+   - `noUnusedParameters`: true (was: false)
    - `noUncheckedIndexedAccess`: true (new)
    - `noImplicitReturns`: true (new)
    - `forceConsistentCasingInFileNames`: true (new)
@@ -36,8 +36,9 @@
 **Root Cause:** Strict mode applied to existing codebase with lenient rules
 
 **Common Error Types:**
+
 - `@typescript-eslint/no-explicit-any`: ~400 instances
-- `@typescript-eslint/no-unused-vars`: ~300 instances  
+- `@typescript-eslint/no-unused-vars`: ~300 instances
 - `react-hooks/exhaustive-deps`: ~250 instances
 - `prefer-const`: ~200 instances
 - `react-refresh/only-export-components`: ~150 instances
@@ -51,14 +52,16 @@
 
 **Phase 1: Allow Warnings Temporarily** (Immediate)
 Update `.github/workflows/lint.yml`:
+
 ```yaml
 - name: Run ESLint (strict - fail on warnings)
   run: npm run lint
-  continue-on-error: true  # Allow failures temporarily
+  continue-on-error: true # Allow failures temporarily
 ```
 
 **Phase 2: Fix Critical Issues First** (Week 1-2)
 Priority fixes:
+
 1. `@typescript-eslint/no-explicit-any` in new code
 2. `react-hooks/exhaustive-deps` critical cases
 3. Security-related unused variables
@@ -66,7 +69,8 @@ Priority fixes:
 
 **Phase 3: Systematic Cleanup** (Week 3-8)
 Tackle remaining issues by:
-- File/directory (e.g., all components/auth/* files)
+
+- File/directory (e.g., all components/auth/\* files)
 - Error type (e.g., all no-unused-vars)
 - Feature area (e.g., all dashboard-related files)
 
@@ -78,6 +82,7 @@ Remove `continue-on-error: true` from CI once < 50 errors remain
 **Not Recommended** - Would require fixing 1,561 errors before any PR can merge.
 
 However, if chosen:
+
 ```bash
 # Create a new branch
 git checkout -b fix/eslint-strict-mode
@@ -102,6 +107,7 @@ npm run lint  # Should pass with 0 errors
 
 2. **Allow CI Failures Temporarily**  
    Edit `.github/workflows/lint.yml`:
+
    ```yaml
    - name: Run ESLint (with warnings allowed during migration)
      run: npm run lint
@@ -119,6 +125,7 @@ npm run lint  # Should pass with 0 errors
    - All unused imports
 
 2. **Set Up ESLint Autofix**
+
    ```bash
    # Add to package.json scripts
    "lint:fix:safe": "eslint . --fix --ext .ts,.tsx --max-warnings 1500"
@@ -150,6 +157,7 @@ npm run lint  # Should pass with 0 errors
 ## Files Most Affected
 
 ### High Priority (Security/Performance)
+
 ```
 src/integrations/supabase/client.ts
 src/lib/monitoring.ts
@@ -159,6 +167,7 @@ src/contexts/*Context.tsx
 ```
 
 ### Medium Priority (Core Features)
+
 ```
 src/components/dashboard/*
 src/pages/Dashboard.tsx
@@ -167,6 +176,7 @@ src/components/appointments/*
 ```
 
 ### Low Priority (UI Components)
+
 ```
 src/components/ui/*
 src/components/landing/*
@@ -189,11 +199,13 @@ npm run lint:fix
 ```
 
 **Auto-fixable rules:**
+
 - `prefer-const` - Changes let to const
 - Some `no-unused-vars` - Removes unused imports
 - Some formatting issues
 
 **Requires manual fix:**
+
 - `no-explicit-any` - Need to add proper types
 - `exhaustive-deps` - Need to understand dependencies
 - Some `no-unused-vars` - Need to determine if code is needed
@@ -219,8 +231,8 @@ Add this to `.github/workflows/lint.yml`:
 ```yaml
 - name: Run ESLint (strict mode - migration in progress)
   run: npm run lint
-  continue-on-error: true  # TODO: Remove after lint cleanup is complete
-  
+  continue-on-error: true # TODO: Remove after lint cleanup is complete
+
 - name: Count lint errors (for tracking)
   run: |
     ERROR_COUNT=$(npm run lint 2>&1 | grep -c "error" || echo "0")
@@ -239,7 +251,7 @@ Add this to `.github/workflows/lint.yml`:
    - Files affected: ~150 files
 
 2. **Issue: Fix React Hooks `exhaustive-deps` errors**
-   - Priority: High  
+   - Priority: High
    - Estimated effort: 1-2 weeks
    - Files affected: ~100 files
 
@@ -258,6 +270,7 @@ Add this to `.github/workflows/lint.yml`:
 ## Monitoring Progress
 
 ### Weekly Lint Report
+
 ```bash
 #!/bin/bash
 # scripts/lint-report.sh
@@ -280,6 +293,7 @@ The strict ESLint configuration is **correctly implemented and valuable**.
 The high error count is **expected and manageable** with a phased approach.
 
 **Recommended next steps:**
+
 1. ✅ Merge this PR with strict config + temporary CI allowance
 2. 📝 Create follow-up issues for systematic cleanup
 3. 🔧 Fix errors gradually over next 2-3 months

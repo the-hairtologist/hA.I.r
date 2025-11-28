@@ -79,7 +79,10 @@ export const RoleSelectionDialog = ({
 
       onComplete();
     } catch (error: any) {
-      logger.error('Error assigning role', error, { component: 'RoleSelectionDialog', selectedRole });
+      logger.error('Error assigning role', error, {
+        component: 'RoleSelectionDialog',
+        selectedRole,
+      });
       toast({
         title: 'Error',
         description:
