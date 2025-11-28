@@ -50,7 +50,10 @@ export const ConversationSelector = ({
         onNewConversation();
       }
     } catch (error: any) {
-      logger.error('Error deleting conversation', error, { component: 'ConversationSelector', conversationId: id });
+      logger.error('Error deleting conversation', error, {
+        component: 'ConversationSelector',
+        conversationId: id,
+      });
       toast.error('Failed to delete conversation');
     }
   };

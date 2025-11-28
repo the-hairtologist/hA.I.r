@@ -24,7 +24,7 @@ import { ListSkeleton } from '@/components/LoadingSkeleton';
 ```tsx
 import { TableSkeleton } from '@/components/LoadingSkeleton';
 
-<TableSkeleton rows={10} columns={5} />
+<TableSkeleton rows={10} columns={5} />;
 ```
 
 ### Page Skeletons
@@ -64,7 +64,7 @@ import { Users } from 'lucide-react';
   onAction={() => setShowDialog(true)}
   secondaryActionLabel="Learn More"
   onSecondaryAction={() => navigate('/help')}
-/>
+/>;
 ```
 
 ### Table Empty State
@@ -79,7 +79,7 @@ import { Calendar } from 'lucide-react';
   description="Your calendar is clear"
   actionLabel="Book Appointment"
   onAction={handleBook}
-/>
+/>;
 ```
 
 ## Optimistic Updates
@@ -91,16 +91,13 @@ function MyComponent() {
   const { mutate, isUpdating, error } = useOptimisticUpdate();
 
   const handleUpdate = async () => {
-    await mutate(
-      () => supabase.from('table').update(data).eq('id', id),
-      {
-        successMessage: 'Updated!',
-        errorMessage: 'Update failed',
-        onSuccess: (result) => {
-          // Refresh data
-        }
-      }
-    );
+    await mutate(() => supabase.from('table').update(data).eq('id', id), {
+      successMessage: 'Updated!',
+      errorMessage: 'Update failed',
+      onSuccess: result => {
+        // Refresh data
+      },
+    });
   };
 
   return (
@@ -123,16 +120,17 @@ function SearchComponent() {
   const [query, setQuery] = useState('');
 
   const debouncedSearch = useMemo(
-    () => debounce((value: string) => {
-      // Perform search
-      fetchResults(value);
-    }, 300),
+    () =>
+      debounce((value: string) => {
+        // Perform search
+        fetchResults(value);
+      }, 300),
     []
   );
 
   return (
     <input
-      onChange={(e) => {
+      onChange={e => {
         setQuery(e.target.value);
         debouncedSearch(e.target.value);
       }}
@@ -153,7 +151,7 @@ async function fetchData() {
 
   // Fetch from API
   const data = await api.fetch();
-  
+
   // Cache for 5 minutes (default)
   dataCache.set('cache-key', data);
   return data;
@@ -172,11 +170,14 @@ dataCache.clear();
 import { batchFetch } from '@/lib/performance/dataFetching';
 
 // Fetch multiple resources with 50ms delay between each
-const [clients, appointments, services] = await batchFetch([
-  () => supabase.from('clients').select('*'),
-  () => supabase.from('appointments').select('*'),
-  () => supabase.from('services').select('*')
-], 50);
+const [clients, appointments, services] = await batchFetch(
+  [
+    () => supabase.from('clients').select('*'),
+    () => supabase.from('appointments').select('*'),
+    () => supabase.from('services').select('*'),
+  ],
+  50
+);
 ```
 
 ## Complete Page Pattern
@@ -192,7 +193,7 @@ import { Users } from 'lucide-react';
 function ClientsPage() {
   const { data: clients, isLoading } = useQuery({
     queryKey: ['clients'],
-    queryFn: fetchClients
+    queryFn: fetchClients,
   });
 
   // Loading state
@@ -219,11 +220,7 @@ function ClientsPage() {
   }
 
   // Success state
-  return (
-    <div>
-      {/* Your content */}
-    </div>
-  );
+  return <div>{/* Your content */}</div>;
 }
 ```
 
@@ -232,15 +229,17 @@ function ClientsPage() {
 For staggered animations in lists:
 
 ```tsx
-{items.map((item, i) => (
-  <div
-    key={item.id}
-    className="animate-fade-in"
-    style={{ animationDelay: `${i * 50}ms` }}
-  >
-    {/* Item content */}
-  </div>
-))}
+{
+  items.map((item, i) => (
+    <div
+      key={item.id}
+      className="animate-fade-in"
+      style={{ animationDelay: `${i * 50}ms` }}
+    >
+      {/* Item content */}
+    </div>
+  ));
+}
 ```
 
 ## Mobile-First Considerations
@@ -261,6 +260,7 @@ For staggered animations in lists:
 ## Accessibility
 
 Always include:
+
 - `role="status"` for loading states
 - `aria-label` for context
 - `aria-live="polite"` for updates
@@ -274,6 +274,7 @@ Always include:
 ---
 
 **Quick Tips:**
+
 1. Always show skeleton before data loads
 2. Always show empty state when no data
 3. Use optimistic updates for instant feedback

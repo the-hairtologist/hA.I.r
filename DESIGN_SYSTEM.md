@@ -5,6 +5,7 @@
 Hair AI uses **Adaptive Brutalism** - a design approach that maintains our bold, pixelated brand identity from the landing page while ensuring usability throughout the app. This system combines retro-gaming aesthetics with modern UX principles.
 
 **Core Principles:**
+
 - **Visual Consistency**: Bold colors, thick borders, hard shadows everywhere
 - **Typography Hierarchy**: Right font for the right purpose
 - **Readability First**: Never sacrifice usability for aesthetics
@@ -17,7 +18,9 @@ Hair AI uses **Adaptive Brutalism** - a design approach that maintains our bold,
 ### When to Use Each Font
 
 #### Press Start 2P (Pixelated Headers)
+
 **Use for:** Page titles, section headers, card titles, dialog titles, labels
+
 ```tsx
 <h1 className="font-pixel text-2xl sm:text-3xl lg:text-4xl">Dashboard</h1>
 <h2 className="font-pixel text-xl sm:text-2xl">Your Clients</h2>
@@ -25,15 +28,17 @@ Hair AI uses **Adaptive Brutalism** - a design approach that maintains our bold,
 ```
 
 #### Bold Sans (CTAs & Buttons)
+
 **Use for:** All buttons, navigation items, badges, action text
+
 ```tsx
-<Button className="font-bold uppercase tracking-wide">
-  Book Now
-</Button>
+<Button className="font-bold uppercase tracking-wide">Book Now</Button>
 ```
 
 #### DM Sans (Readable Body Text)
+
 **Use for:** Paragraphs, descriptions, form labels, table data
+
 ```tsx
 <p className="font-sans text-sm sm:text-base text-muted-foreground">
   Your appointment is confirmed for tomorrow at 3pm.
@@ -41,26 +46,32 @@ Hair AI uses **Adaptive Brutalism** - a design approach that maintains our bold,
 ```
 
 #### Space Grotesk (Data & Numbers)
+
 **Use for:** Statistics, metrics, prices, dates, large numbers
+
 ```tsx
 <div className="font-display text-3xl font-bold">247</div>
 ```
 
 ---
+
 Use these standardized spacing values across all components:
 
 ### Component Spacing
+
 - **Card padding**: `p-4 sm:p-5 md:p-6` (16px → 20px → 24px)
 - **Card gap between elements**: `space-y-4` (16px)
 - **Section gap**: `space-y-6` (24px)
 - **Grid gaps**: `gap-3 sm:gap-4` (12px → 16px)
 
 ### Text Spacing
+
 - **Heading margin bottom**: `mb-2` (8px) for subtitles, `mb-4` (16px) for sections
 - **Paragraph margin bottom**: `mb-3` (12px)
 - **List item spacing**: `space-y-2` (8px) for compact, `space-y-3` (12px) for comfortable
 
 ### Icon + Text Gaps
+
 - **Icon with text**: `gap-2` (8px)
 - **Button icon**: `gap-1.5` (6px)
 - **Flex items**: `gap-3` (12px)
@@ -68,6 +79,7 @@ Use these standardized spacing values across all components:
 ## Typography Scale
 
 ### Responsive Text Sizing
+
 ```tsx
 // Headings
 - Hero: "text-2xl sm:text-3xl lg:text-4xl"
@@ -83,6 +95,7 @@ Use these standardized spacing values across all components:
 ```
 
 ### Font Weights
+
 - **Headings**: `font-bold` or `font-black` for hero
 - **Subheadings**: `font-semibold`
 - **Body**: `font-medium` for emphasis, `font-normal` for regular
@@ -91,6 +104,7 @@ Use these standardized spacing values across all components:
 ## Component Sizing
 
 ### Cards
+
 ```tsx
 // Standard card
 <Card className="p-4 sm:p-5 md:p-6">
@@ -103,6 +117,7 @@ Use these standardized spacing values across all components:
 ```
 
 ### Buttons
+
 ```tsx
 // Size variants
 - xs: "h-7 px-2 text-[11px]"
@@ -112,6 +127,7 @@ Use these standardized spacing values across all components:
 ```
 
 ### Icons
+
 ```tsx
 // Icon sizes
 - Tiny: "h-3 w-3"
@@ -122,6 +138,7 @@ Use these standardized spacing values across all components:
 ```
 
 ### Containers
+
 ```tsx
 // Max widths
 - Narrow: "max-w-sm" (384px)
@@ -139,33 +156,37 @@ Use these standardized spacing values across all components:
 ## Mobile-First Breakpoints
 
 ### Screen Sizes
+
 - **Mobile**: 0-640px (sm)
 - **Tablet**: 641-1024px (md/lg)
 - **Desktop**: 1025px+ (xl/2xl)
 
 ### Touch Targets (Mobile)
+
 - **Minimum**: 44px x 44px (11 units / h-11 w-11)
 - **Comfortable**: 48px x 48px (12 units / h-12 w-12)
 - **Button height**: minimum `h-9` (36px) with padding
 
 ### Mobile Adjustments
+
 ```tsx
 // Grid columns responsive
-"grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4';
 
 // Padding responsive
-"p-3 sm:p-4 lg:p-6"
+'p-3 sm:p-4 lg:p-6';
 
 // Text responsive
-"text-xs sm:text-sm lg:text-base"
+'text-xs sm:text-sm lg:text-base';
 
 // Gap responsive
-"gap-2 sm:gap-3 lg:gap-4"
+'gap-2 sm:gap-3 lg:gap-4';
 ```
 
 ## Layout Patterns
 
 ### Dashboard Grid
+
 ```tsx
 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
   {/* Cards */}
@@ -173,6 +194,7 @@ Use these standardized spacing values across all components:
 ```
 
 ### Stats Grid
+
 ```tsx
 <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
   {/* Stat cards */}
@@ -180,20 +202,21 @@ Use these standardized spacing values across all components:
 ```
 
 ### Form Layout
+
 ```tsx
-<div className="space-y-4 sm:space-y-6">
-  {/* Form fields */}
-</div>
+<div className="space-y-4 sm:space-y-6">{/* Form fields */}</div>
 ```
 
 ## Animation Standards
 
 ### Timing
+
 - **Fast**: 150ms (hover states)
 - **Normal**: 300ms (transitions)
 - **Slow**: 500ms (page transitions)
 
 ### Easing
+
 - **UI**: `ease-in-out`
 - **Entrances**: `ease-out`
 - **Exits**: `ease-in`
@@ -201,6 +224,7 @@ Use these standardized spacing values across all components:
 ## Common Patterns
 
 ### Card with Icon Header
+
 ```tsx
 <Card className="p-4 sm:p-5">
   <CardHeader className="p-0 mb-4">
@@ -211,13 +235,12 @@ Use these standardized spacing values across all components:
       Title
     </CardTitle>
   </CardHeader>
-  <CardContent className="p-0 space-y-3">
-    {/* Content */}
-  </CardContent>
+  <CardContent className="p-0 space-y-3">{/* Content */}</CardContent>
 </Card>
 ```
 
 ### Empty State
+
 ```tsx
 <div className="p-6 sm:p-8 text-center">
   <div className="mb-3 sm:mb-4">
@@ -230,6 +253,7 @@ Use these standardized spacing values across all components:
 ```
 
 ### List Item
+
 ```tsx
 <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors">
   <Icon className="h-5 w-5 text-muted-foreground" />
@@ -237,28 +261,34 @@ Use these standardized spacing values across all components:
     <p className="text-sm font-medium truncate">Title</p>
     <p className="text-xs text-muted-foreground">Subtitle</p>
   </div>
-  <Button size="sm" variant="ghost">Action</Button>
+  <Button size="sm" variant="ghost">
+    Action
+  </Button>
 </div>
 ```
 
 ## Accessibility
 
 ### Color Contrast
+
 - Minimum: 4.5:1 for normal text
 - Large text: 3:1
 - UI components: 3:1
 - **Target**: WCAG AAA (7:1) for critical text
 
 ### Focus States
+
 - All interactive elements must have visible focus rings
 - Use `focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2`
 
 ### Touch Targets
+
 - Minimum 44x44px for mobile (iOS standard)
 - Comfortable: 48x48px
 - Adequate spacing between clickable elements (min 8px gap)
 
 ### Motion Preferences
+
 - Respect `prefers-reduced-motion`
 - Provide alternatives to animations
 - No auto-playing animations
@@ -268,31 +298,39 @@ Use these standardized spacing values across all components:
 ## Helper Components
 
 ### BrutalCard
+
 Pre-built card with brutalist styling:
+
 ```tsx
-import { BrutalCard } from "@/components/adaptive-brutalism";
+import { BrutalCard } from '@/components/adaptive-brutalism';
 
 <BrutalCard hover gradient>
   {/* Content */}
-</BrutalCard>
+</BrutalCard>;
 ```
 
 ### BrutalHeader
-Pixelated headers with responsive sizing:
-```tsx
-import { BrutalHeader } from "@/components/adaptive-brutalism";
 
-<BrutalHeader size="lg" as="h1">Page Title</BrutalHeader>
+Pixelated headers with responsive sizing:
+
+```tsx
+import { BrutalHeader } from '@/components/adaptive-brutalism';
+
+<BrutalHeader size="lg" as="h1">
+  Page Title
+</BrutalHeader>;
 ```
 
 ### BrutalText
+
 Readable body text:
+
 ```tsx
-import { BrutalText } from "@/components/adaptive-brutalism";
+import { BrutalText } from '@/components/adaptive-brutalism';
 
 <BrutalText size="normal" muted>
   Your description here
-</BrutalText>
+</BrutalText>;
 ```
 
 ---
@@ -316,11 +354,13 @@ Before committing new UI components:
 ## Quick Reference
 
 ### Import Utilities
+
 ```tsx
-import { typography, brutalist, spacing } from "@/lib/brutalismUtils";
+import { typography, brutalist, spacing } from '@/lib/brutalismUtils';
 ```
 
 ### Common Patterns
+
 ```tsx
 // Stat card
 <div className={brutalist.card}>
@@ -338,4 +378,3 @@ import { typography, brutalist, spacing } from "@/lib/brutalismUtils";
 
 **For complete guidelines, see:** `ADAPTIVE_BRUTALISM.md`
 **Design System Version:** 2.0.0 (Adaptive Brutalism)
-

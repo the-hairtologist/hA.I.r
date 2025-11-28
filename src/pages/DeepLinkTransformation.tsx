@@ -73,7 +73,11 @@ export default function DeepLinkTransformation() {
 
       setAppointment(data);
     } catch (error) {
-      logger.error('Error loading transformation', 'DeepLinkTransformation', error as Error);
+      logger.error(
+        'Error loading transformation',
+        'DeepLinkTransformation',
+        error as Error
+      );
       toast.error('Failed to load transformation');
     } finally {
       setLoading(false);

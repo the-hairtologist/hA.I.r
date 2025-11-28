@@ -13,9 +13,9 @@ interface SkipLinkProps {
   label?: string;
 }
 
-export const SkipLink: React.FC<SkipLinkProps> = ({ 
-  targetId, 
-  label = "Skip to main content" 
+export const SkipLink: React.FC<SkipLinkProps> = ({
+  targetId,
+  label = 'Skip to main content',
 }) => {
   return (
     <a
@@ -50,27 +50,27 @@ export const SkipLink: React.FC<SkipLinkProps> = ({
 
 /**
  * Usage Example:
- * 
+ *
  * // In your DashboardLayout or main layout component:
- * 
+ *
  * import { SkipLink } from '@/components/SkipLink';
- * 
+ *
  * export const DashboardLayout = ({ children }) => {
  *   return (
  *     <div>
  *       <SkipLink targetId="main-content" />
- *       
+ *
  *       <header>
  *         <nav>...</nav>
  *       </header>
- *       
+ *
  *       <main id="main-content" role="main" tabIndex={-1}>
  *         {children}
  *       </main>
  *     </div>
  *   );
  * };
- * 
+ *
  * Benefits:
  * - Keyboard users can skip repetitive navigation
  * - Screen reader users get quick access to main content

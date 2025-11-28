@@ -1,4 +1,5 @@
 # 🚀 Integration Quick Start Guide
+
 **Hair A.I. - Essential Integrations Setup**
 
 This guide walks you through setting up the **3 most critical integrations** for your salon app in the first week.
@@ -8,6 +9,7 @@ This guide walks you through setting up the **3 most critical integrations** for
 ## 📋 Prerequisites
 
 Before starting, have these ready:
+
 - [ ] Admin access to your Hair A.I. project
 - [ ] Credit card for paid services (most have free tiers)
 - [ ] Email for receiving alerts
@@ -71,7 +73,11 @@ export const trackPageView = (path: string) => {
   ReactGA.send({ hitType: 'pageview', page: path });
 };
 
-export const trackEvent = (category: string, action: string, label?: string) => {
+export const trackEvent = (
+  category: string,
+  action: string,
+  label?: string
+) => {
   ReactGA.event({
     category,
     action,
@@ -83,23 +89,20 @@ export const trackEvent = (category: string, action: string, label?: string) => 
 export const analytics = {
   signUp: () => trackEvent('Auth', 'sign_up'),
   login: () => trackEvent('Auth', 'login'),
-  
-  appointmentBooked: (serviceType: string) => 
+
+  appointmentBooked: (serviceType: string) =>
     trackEvent('Appointment', 'booked', serviceType),
-  
-  appointmentCancelled: () => 
-    trackEvent('Appointment', 'cancelled'),
-  
-  paymentCompleted: (amount: number) => 
+
+  appointmentCancelled: () => trackEvent('Appointment', 'cancelled'),
+
+  paymentCompleted: (amount: number) =>
     trackEvent('Payment', 'completed', `$${amount}`),
-  
-  formulaGenerated: () => 
-    trackEvent('AI', 'formula_generated'),
-  
-  stylistClaimed: () => 
-    trackEvent('Discovery', 'stylist_claimed'),
-  
-  reviewSubmitted: (rating: number) => 
+
+  formulaGenerated: () => trackEvent('AI', 'formula_generated'),
+
+  stylistClaimed: () => trackEvent('Discovery', 'stylist_claimed'),
+
+  reviewSubmitted: (rating: number) =>
     trackEvent('Review', 'submitted', `${rating}_stars`),
 };
 ```
@@ -142,6 +145,7 @@ function App() {
 Add tracking to important actions:
 
 **In Auth.tsx:**
+
 ```typescript
 import { analytics } from '@/lib/analytics';
 
@@ -157,6 +161,7 @@ const handleLogin = async () => {
 ```
 
 **In BookAppointment.tsx:**
+
 ```typescript
 const handleBooking = async () => {
   // ... existing code
@@ -165,6 +170,7 @@ const handleBooking = async () => {
 ```
 
 **In Stripe payment success:**
+
 ```typescript
 analytics.paymentCompleted(amount);
 ```
@@ -245,7 +251,7 @@ import * as Sentry from '@sentry/react';
 
 function App() {
   return (
-    <Sentry.ErrorBoundary 
+    <Sentry.ErrorBoundary
       fallback={({ error, resetError }) => (
         <div className="min-h-screen flex items-center justify-center p-4">
           <div className="text-center">
@@ -253,7 +259,7 @@ function App() {
             <p className="text-muted-foreground mb-6">
               We've been notified and are working on a fix.
             </p>
-            <button 
+            <button
               onClick={resetError}
               className="bg-primary text-primary-foreground px-6 py-2 rounded-md"
             >
@@ -330,6 +336,7 @@ Click it, then check Sentry dashboard → **Issues**. You should see the error.
 Click **Add New Monitor** for each:
 
 #### Monitor 1: Main Website
+
 - **Monitor Type:** HTTP(s)
 - **Friendly Name:** Hair A.I. - Main App
 - **URL:** https://yourdomain.com
@@ -338,6 +345,7 @@ Click **Add New Monitor** for each:
 - Click **Create Monitor**
 
 #### Monitor 2: Supabase API
+
 - **Monitor Type:** HTTP(s)
 - **Friendly Name:** Hair A.I. - Database API
 - **URL:** https://iyotklwiwyljospfqnoy.supabase.co/rest/v1/
@@ -345,6 +353,7 @@ Click **Add New Monitor** for each:
 - Click **Create Monitor**
 
 #### Monitor 3: Booking Function
+
 - **Monitor Type:** HTTP(s)
 - **Friendly Name:** Hair A.I. - Booking API
 - **URL:** https://iyotklwiwyljospfqnoy.supabase.co/functions/v1/create-appointment-checkout
@@ -382,7 +391,7 @@ You now have the 3 most critical integrations:
 
 ✅ **Google Analytics 4** - Track user behavior  
 ✅ **Sentry** - Catch and fix errors  
-✅ **UptimeRobot** - Monitor uptime  
+✅ **UptimeRobot** - Monitor uptime
 
 ### What to Check Daily (5 minutes)
 
@@ -425,6 +434,7 @@ See `ECOSYSTEM_REPORT.md` and `RECOMMENDED_INTEGRATIONS.json` for full roadmap.
 
 **Problem:** No data in Realtime report  
 **Solutions:**
+
 1. Check console for errors: `Failed to load resource: net::ERR_BLOCKED_BY_CLIENT` → Disable ad blocker
 2. Verify Measurement ID is correct
 3. Check `import.meta.env.PROD` is `true` in production
@@ -434,6 +444,7 @@ See `ECOSYSTEM_REPORT.md` and `RECOMMENDED_INTEGRATIONS.json` for full roadmap.
 
 **Problem:** Test error doesn't appear in Sentry  
 **Solutions:**
+
 1. Check DSN is correct
 2. Verify `import.meta.env.PROD` is `true`
 3. Check browser console for Sentry errors
@@ -443,6 +454,7 @@ See `ECOSYSTEM_REPORT.md` and `RECOMMENDED_INTEGRATIONS.json` for full roadmap.
 
 **Problem:** Getting down alerts but site is up  
 **Solutions:**
+
 1. Increase **Monitor Timeout** to 60 seconds
 2. Check **Expected Status Code** (for API monitors, 401 is OK)
 3. Whitelist UptimeRobot IPs if you have firewall
@@ -457,6 +469,7 @@ See `ECOSYSTEM_REPORT.md` and `RECOMMENDED_INTEGRATIONS.json` for full roadmap.
 - **Documentation:** [docs.lovable.dev](https://docs.lovable.dev)
 
 For service-specific help:
+
 - **GA4:** [support.google.com/analytics](https://support.google.com/analytics)
 - **Sentry:** [docs.sentry.io](https://docs.sentry.io)
 - **UptimeRobot:** [uptimerobot.com/kb](https://uptimerobot.com/kb)

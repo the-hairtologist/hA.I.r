@@ -45,11 +45,13 @@ npm run build
 ### 2. Configure Environment
 
 The app uses these environment variables (already configured in Lovable):
+
 - `VITE_SUPABASE_URL`
 - `VITE_SUPABASE_PUBLISHABLE_KEY`
 - `VITE_SUPABASE_PROJECT_ID`
 
 **Optional** (add for enhanced features):
+
 - `VITE_GA4_MEASUREMENT_ID` - Google Analytics
 - `VITE_SENTRY_DSN` - Crash reporting
 
@@ -106,16 +108,17 @@ In Xcode:
 
 4. **Info.plist:**
    Add these privacy descriptions (required):
+
    ```xml
    <key>NSCameraUsageDescription</key>
    <string>Take photos of hairstyles and color results</string>
-   
+
    <key>NSPhotoLibraryUsageDescription</key>
    <string>Save and access hairstyle photos</string>
-   
+
    <key>NSPhotoLibraryAddUsageDescription</key>
    <string>Save photos to your library</string>
-   
+
    <key>NSUserTrackingUsageDescription</key>
    <string>This helps us provide personalized experiences</string>
    ```
@@ -195,6 +198,7 @@ npx cap open android
 1. **Open** `android/app/build.gradle`
 
 2. **Update version info:**
+
    ```gradle
    android {
        defaultConfig {
@@ -208,27 +212,30 @@ npx cap open android
    ```
 
 3. **Configure signing:**
-   
+
    Generate keystore:
+
    ```bash
    keytool -genkey -v -keystore hair-ai-release.keystore \
      -alias hair-ai-key -keyalg RSA -keysize 2048 -validity 10000
    ```
-   
+
    Create `android/key.properties`:
+
    ```properties
    storeFile=../hair-ai-release.keystore
    storePassword=YOUR_STORE_PASSWORD
    keyAlias=hair-ai-key
    keyPassword=YOUR_KEY_PASSWORD
    ```
-   
+
    Update `android/app/build.gradle`:
+
    ```gradle
    def keystorePropertiesFile = rootProject.file("key.properties")
    def keystoreProperties = new Properties()
    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-   
+
    android {
        signingConfigs {
            release {
@@ -272,9 +279,10 @@ cd android
 3. Production → Create new release
 4. Upload `app-release.aab`
 5. Add release notes:
+
    ```
    Initial release - hA.I.r Pro v1.0.0
-   
+
    Features:
    • AI-powered hair color formula generator
    • Client management system
@@ -347,6 +355,7 @@ PATCH: Bug fixes, small improvements
 Before submitting each build:
 
 ### Functionality Tests
+
 - [ ] Login/signup works
 - [ ] AI formula generator works
 - [ ] Camera access works
@@ -358,7 +367,9 @@ Before submitting each build:
 - [ ] Offline mode functions
 
 ### Platform-Specific Tests
+
 **iOS:**
+
 - [ ] Apple IAP flows correctly to Apple payment
 - [ ] Restore purchases works
 - [ ] Face ID/Touch ID (if implemented)
@@ -366,6 +377,7 @@ Before submitting each build:
 - [ ] iPad layout responsive
 
 **Android:**
+
 - [ ] Stripe flows correctly to web checkout
 - [ ] Back button navigation correct
 - [ ] Material Design components render
@@ -373,6 +385,7 @@ Before submitting each build:
 - [ ] Dark mode works
 
 ### Performance Tests
+
 - [ ] App loads in < 3 seconds
 - [ ] No memory leaks
 - [ ] Smooth scrolling
@@ -386,29 +399,37 @@ Before submitting each build:
 ### iOS Issues
 
 **Issue:** "No signing certificate found"
+
 - **Fix:** Xcode → Preferences → Accounts → Manage Certificates → + → iOS Distribution
 
 **Issue:** "Bundle identifier already exists"
+
 - **Fix:** You must use your own unique bundle ID, not the default Lovable one
 
 **Issue:** "Provisioning profile doesn't include signing certificate"
+
 - **Fix:** Select "Automatically manage signing" in Xcode
 
 **Issue:** "App crashes on launch"
+
 - **Fix:** Check `capacitor.config.ts` - server block should be commented out for production
 
 ### Android Issues
 
 **Issue:** "Keystore not found"
+
 - **Fix:** Verify `key.properties` path is correct relative to `android/` folder
 
 **Issue:** "INSTALL_FAILED_UPDATE_INCOMPATIBLE"
+
 - **Fix:** Uninstall old version first: `adb uninstall app.lovable.a1a18f9db2f94d81aa8ce28408bee3a2`
 
 **Issue:** "App opens then closes immediately"
+
 - **Fix:** Check logcat for errors: `adb logcat *:E`
 
 **Issue:** "Build fails with 'minSdkVersion' error"
+
 - **Fix:** Ensure `minSdkVersion 22` in `build.gradle`
 
 ---
@@ -416,6 +437,7 @@ Before submitting each build:
 ## 📊 Post-Launch Monitoring
 
 ### Week 1
+
 - [ ] Monitor crash reports (if Sentry configured)
 - [ ] Check user reviews daily
 - [ ] Respond to 1-star reviews within 24 hours
@@ -423,6 +445,7 @@ Before submitting each build:
 - [ ] Monitor subscription conversion rate
 
 ### Week 2-4
+
 - [ ] Analyze user feedback patterns
 - [ ] Plan first update based on feedback
 - [ ] Optimize app store listing (keywords, screenshots)
@@ -443,6 +466,7 @@ Before submitting each build:
 ## ✅ Final Pre-Submission Checklist
 
 ### Both Platforms
+
 - [ ] `capacitor.config.ts` server block commented out
 - [ ] Version updated to `1.0.0`
 - [ ] All icons present (512x512, 192x192, 1024x1024)
@@ -453,6 +477,7 @@ Before submitting each build:
 - [ ] Screenshots captured (4-8 per platform)
 
 ### iOS Specific
+
 - [ ] Bundle ID registered in Apple Developer
 - [ ] IAP products created in App Store Connect
 - [ ] Shared secret generated and saved
@@ -461,6 +486,7 @@ Before submitting each build:
 - [ ] TestFlight tested with sandbox user
 
 ### Android Specific
+
 - [ ] Release keystore generated and backed up
 - [ ] key.properties configured
 - [ ] Data Safety form completed

@@ -1,11 +1,13 @@
 # Email Sequence System - Complete Documentation
 
 ## 🎯 Overview
+
 A comprehensive, production-ready email sequence system for hA.I.r that allows stylists to create automated, multi-step email campaigns for client engagement, retention, and growth.
 
 ## ✨ Features Implemented
 
 ### 1. **Database Architecture** ✅
+
 - `email_sequences` - Master sequence templates with triggers
 - `email_sequence_steps` - Individual email steps with delays
 - `email_sequence_enrollments` - Client enrollment tracking
@@ -15,6 +17,7 @@ A comprehensive, production-ready email sequence system for hA.I.r that allows s
 ### 2. **Core Functionality** ✅
 
 #### Sequence Builder
+
 - Create/edit multi-step email sequences
 - Visual step builder with drag-and-drop ordering
 - Variable support: `{{client_name}}`, `{{stylist_name}}`, `{{appointment_date}}`
@@ -23,6 +26,7 @@ A comprehensive, production-ready email sequence system for hA.I.r that allows s
 - Stop conditions (e.g., stop if client books appointment)
 
 #### Trigger Types
+
 - 📝 Manual - Enroll clients manually
 - 🆕 New Client - Auto-enroll new clients
 - ✅ Post-Appointment - After appointment completion
@@ -32,6 +36,7 @@ A comprehensive, production-ready email sequence system for hA.I.r that allows s
 - ⏰ Pre-Appointment - Before upcoming appointments
 
 #### Categories
+
 - **Onboarding** - Welcome new clients
 - **Retention** - Keep clients engaged
 - **Promotional** - Special offers and deals
@@ -40,6 +45,7 @@ A comprehensive, production-ready email sequence system for hA.I.r that allows s
 ### 3. **User Interfaces** ✅
 
 #### Admin/Stylist Views
+
 - **Sequences Tab**
   - List all sequences with status indicators
   - Quick activate/pause toggle
@@ -68,6 +74,7 @@ A comprehensive, production-ready email sequence system for hA.I.r that allows s
   - Active vs. completed enrollments breakdown
 
 #### Client View
+
 - **Email Preference Center** ✅
   - Control appointment reminders
   - Toggle rebooking reminders
@@ -77,6 +84,7 @@ A comprehensive, production-ready email sequence system for hA.I.r that allows s
 ### 4. **Backend Processing** ✅
 
 #### Edge Functions
+
 1. **process-email-sequences**
    - Runs every 15 minutes via cron job
    - Processes up to 50 enrollments per run
@@ -99,18 +107,22 @@ A comprehensive, production-ready email sequence system for hA.I.r that allows s
    - Provides confirmation page
 
 #### Automation
+
 - **Cron Job**: Runs every 15 minutes to process pending emails
 - **Automatic Enrollment**: Based on trigger conditions (future enhancement)
 - **Stop Conditions**: Auto-stop sequences when conditions met
 
 ### 5. **Email Templates** ✅
+
 Pre-built global templates included:
+
 - ✉️ Welcome New Client
 - ⏰ Appointment Reminder
 - 💕 Post-Appointment Thank You
 - 💇 Rebook Reminder
 
 ### 6. **Security & Permissions** ✅
+
 - Row-Level Security (RLS) policies for all tables
 - Stylists can only manage their own sequences
 - Global templates visible to all, editable by admins only
@@ -118,6 +130,7 @@ Pre-built global templates included:
 - Secure token-based unsubscribe functionality
 
 ### 7. **Analytics & Tracking** ✅
+
 - Email send logging
 - Open/click tracking placeholders (ready for Resend webhooks)
 - Bounce detection
@@ -127,18 +140,22 @@ Pre-built global templates included:
 ## 🗺️ Navigation & Routes
 
 ### Routes Added
+
 - `/email-sequences` - Main email sequence management page
 - `/email-campaigns` - Existing campaign builder (separate feature)
 - `/unsubscribe` - Public unsubscribe page
 
 ### Navigation Menu
+
 Located in **Growth & Marketing** section:
+
 - Email Campaigns (existing)
 - **Email Sequences** (NEW)
 
 ## 🔧 Technical Implementation
 
 ### Frontend Stack
+
 - React with TypeScript
 - TanStack Query for data fetching
 - React Hook Form for complex forms
@@ -147,13 +164,16 @@ Located in **Growth & Marketing** section:
 - Date-fns for date formatting
 
 ### Backend Stack
+
 - Supabase database (PostgreSQL)
 - Edge Functions (Deno runtime)
 - Resend for email delivery
 - pg_cron for scheduled tasks
 
 ### Variable System
+
 Supported variables in email templates:
+
 - `{{client_name}}` - Client's full name
 - `{{stylist_name}}` - Stylist's full name
 - `{{sequence_name}}` - Sequence title
@@ -180,11 +200,13 @@ email_templates (id, name, category, description, subject_template, html_content
 ## 🚀 Usage Guide
 
 ### For Admins
+
 1. Create global sequence templates
 2. Monitor system-wide analytics
 3. Manage email template library
 
 ### For Stylists
+
 1. **Create a Sequence**:
    - Go to Email Sequences → Sequences tab
    - Click "Create Sequence"
@@ -204,11 +226,13 @@ email_templates (id, name, category, description, subject_template, html_content
    - Track email sends
 
 ### For Clients
+
 1. Manage email preferences in Settings
 2. Unsubscribe via email links
 3. Update communication preferences anytime
 
 ## 🔒 Security Features
+
 - Encrypted email storage
 - Rate limiting on sends
 - Bounce/spam detection
@@ -217,6 +241,7 @@ email_templates (id, name, category, description, subject_template, html_content
 - RLS policies on all tables
 
 ## 📈 Performance Optimizations
+
 - Batch processing (50 enrollments per cron run)
 - Indexed queries for fast lookups
 - Efficient date calculations
@@ -224,6 +249,7 @@ email_templates (id, name, category, description, subject_template, html_content
 - Error recovery mechanisms
 
 ## 🎨 UI/UX Highlights
+
 - Role-based access control (Admin/Stylist/Client views)
 - Responsive design (mobile-friendly)
 - Real-time status updates
@@ -233,6 +259,7 @@ email_templates (id, name, category, description, subject_template, html_content
 - Toast notifications for user feedback
 
 ## 🔄 Future Enhancements (Optional)
+
 - [ ] A/B testing for subject lines
 - [ ] Advanced analytics dashboard
 - [ ] Email template visual builder
@@ -244,6 +271,7 @@ email_templates (id, name, category, description, subject_template, html_content
 - [ ] Conditional branching in sequences
 
 ## ✅ Testing Checklist
+
 - [x] Database tables created with RLS
 - [x] Edge functions deployed
 - [x] Cron job scheduled
@@ -259,6 +287,7 @@ email_templates (id, name, category, description, subject_template, html_content
 - [ ] Webhook integration (opens/clicks)
 
 ## 📝 Notes
+
 - Emails sent via Resend (requires valid RESEND_API_KEY)
 - Cron job runs every 15 minutes
 - Maximum 50 enrollments processed per run
@@ -267,4 +296,5 @@ email_templates (id, name, category, description, subject_template, html_content
 - Global templates are read-only for stylists (can copy to customize)
 
 ## 🎉 Status: Production Ready
+
 This email sequence system is fully functional and ready for production use. All core features are implemented, tested, and integrated into the hA.I.r platform.

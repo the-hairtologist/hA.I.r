@@ -1,6 +1,7 @@
 # 🚨 SECURITY INCIDENT RESPONSE PLAN
 
 ## Purpose
+
 This document outlines procedures for detecting, responding to, and recovering from security incidents.
 
 ---
@@ -10,6 +11,7 @@ This document outlines procedures for detecting, responding to, and recovering f
 ### Severity Levels
 
 **CRITICAL (P0) - Immediate Response Required**
+
 - Data breach affecting user data
 - Complete system compromise
 - Ransomware attack
@@ -17,6 +19,7 @@ This document outlines procedures for detecting, responding to, and recovering f
 - Payment system compromise
 
 **HIGH (P1) - Response Within 2 Hours**
+
 - Unauthorized access to admin accounts
 - DDoS attack
 - Suspicious data access patterns
@@ -24,6 +27,7 @@ This document outlines procedures for detecting, responding to, and recovering f
 - RLS policy bypass attempt
 
 **MEDIUM (P2) - Response Within 24 Hours**
+
 - Phishing attempts
 - Brute force login attempts
 - SQL injection attempts
@@ -31,6 +35,7 @@ This document outlines procedures for detecting, responding to, and recovering f
 - Suspicious user behavior
 
 **LOW (P3) - Response Within 72 Hours**
+
 - General security warnings
 - Outdated dependencies
 - Minor configuration issues
@@ -43,24 +48,28 @@ This document outlines procedures for detecting, responding to, and recovering f
 ### Primary Contacts
 
 **Incident Commander:**
+
 - Name: [Your Name]
 - Email: security@hair.app
 - Phone: [Your Phone]
 - Role: Overall incident coordination
 
 **Technical Lead:**
+
 - Name: [Lead Developer]
 - Email: tech@hair.app
 - Phone: [Phone]
 - Role: Technical investigation and remediation
 
 **Communications Lead:**
+
 - Name: [Communications Manager]
 - Email: support@hair.app
 - Phone: [Phone]
 - Role: User communication and PR
 
 **Legal Counsel:**
+
 - Name: [Lawyer Name]
 - Email: legal@hair.app
 - Phone: [Phone]
@@ -69,18 +78,22 @@ This document outlines procedures for detecting, responding to, and recovering f
 ### External Contacts
 
 **Hosting Provider:**
+
 - Lovable Support: support@lovable.dev
 - Supabase Support: support@supabase.com
 
 **Payment Processor:**
+
 - Stripe Support: support@stripe.com
 - Stripe Phone: 1-888-926-2289
 
 **Insurance Provider:**
+
 - Cyber Insurance: [Provider Contact]
 - Policy Number: [Policy #]
 
 **Law Enforcement:**
+
 - FBI Cyber Division: 1-800-CALL-FBI
 - Local Police: [Local Contact]
 
@@ -91,6 +104,7 @@ This document outlines procedures for detecting, responding to, and recovering f
 ### Phase 1: DETECTION (0-15 minutes)
 
 #### Monitoring Sources:
+
 1. **Automated Alerts:**
    - Supabase error logs
    - Failed login attempts > 5 in 1 hour
@@ -105,6 +119,7 @@ This document outlines procedures for detecting, responding to, and recovering f
    - Security research disclosures
 
 #### Detection Checklist:
+
 - [ ] Incident detected via [source]
 - [ ] Severity level assessed: [P0/P1/P2/P3]
 - [ ] Incident commander notified
@@ -118,6 +133,7 @@ This document outlines procedures for detecting, responding to, and recovering f
 #### Immediate Actions (P0/P1):
 
 **Step 1: Stop the Bleeding (5-15 minutes)**
+
 - [ ] Identify compromised systems/accounts
 - [ ] Disable compromised user accounts
 - [ ] Revoke API keys if compromised
@@ -126,6 +142,7 @@ This document outlines procedures for detecting, responding to, and recovering f
 - [ ] Take screenshots of evidence
 
 **Step 2: Preserve Evidence (15-30 minutes)**
+
 - [ ] Export relevant logs before rotation
 - [ ] Capture database snapshots
 - [ ] Document timeline of events
@@ -134,6 +151,7 @@ This document outlines procedures for detecting, responding to, and recovering f
 - [ ] Don't delete anything (evidence preservation)
 
 **Step 3: Assess Impact (30 min - 1 hour)**
+
 - [ ] How many users affected?
 - [ ] What data was accessed/exfiltrated?
 - [ ] When did breach start?
@@ -142,6 +160,7 @@ This document outlines procedures for detecting, responding to, and recovering f
 - [ ] Estimated severity and scope
 
 **Step 4: Emergency Communications (1-2 hours)**
+
 - [ ] Notify incident response team
 - [ ] Notify insurance provider
 - [ ] Notify legal counsel
@@ -154,12 +173,14 @@ This document outlines procedures for detecting, responding to, and recovering f
 #### Remove the Threat
 
 **For Compromised Accounts:**
+
 - [ ] Force password reset for affected users
 - [ ] Invalidate all sessions
 - [ ] Enable 2FA requirement
 - [ ] Review and update access permissions
 
 **For Code Vulnerabilities:**
+
 - [ ] Identify vulnerability source
 - [ ] Develop and test patch
 - [ ] Deploy fix to production
@@ -167,12 +188,14 @@ This document outlines procedures for detecting, responding to, and recovering f
 - [ ] Update affected dependencies
 
 **For Data Breaches:**
+
 - [ ] Identify leaked data
 - [ ] Assess legal notification requirements
 - [ ] Contact affected users (see Phase 4)
 - [ ] Offer credit monitoring if PII leaked
 
 **For Infrastructure Compromise:**
+
 - [ ] Rotate all secrets and API keys
 - [ ] Review and harden security rules
 - [ ] Update firewall rules
@@ -185,6 +208,7 @@ This document outlines procedures for detecting, responding to, and recovering f
 #### Restore Normal Operations
 
 **System Recovery:**
+
 - [ ] Verify all vulnerabilities patched
 - [ ] Restore from clean backups if needed
 - [ ] Monitor for reoccurrence
@@ -192,6 +216,7 @@ This document outlines procedures for detecting, responding to, and recovering f
 - [ ] Verify data integrity
 
 **User Recovery:**
+
 - [ ] Reset affected user credentials
 - [ ] Notify impacted users (see Communication Plan)
 - [ ] Provide instructions for account security
@@ -205,6 +230,7 @@ This document outlines procedures for detecting, responding to, and recovering f
 #### Learn and Improve
 
 **Incident Report (Due: 7 days after resolution)**
+
 - [ ] Document complete timeline
 - [ ] Root cause analysis
 - [ ] Impact assessment
@@ -213,6 +239,7 @@ This document outlines procedures for detecting, responding to, and recovering f
 - [ ] Recommendations for improvement
 
 **System Hardening:**
+
 - [ ] Implement preventive measures
 - [ ] Update security policies
 - [ ] Train team on new procedures
@@ -220,6 +247,7 @@ This document outlines procedures for detecting, responding to, and recovering f
 - [ ] Update incident response plan
 
 **Legal & Compliance:**
+
 - [ ] File required breach notifications
 - [ ] Document compliance efforts
 - [ ] Update insurance claims
@@ -232,11 +260,13 @@ This document outlines procedures for detecting, responding to, and recovering f
 ### Internal Communication
 
 **Incident Team Slack Channel:**
+
 - #security-incident-[date]
 - Updates every 30 minutes during P0/P1
 - Post-mortem after resolution
 
 **Executive Updates:**
+
 - Within 2 hours of P0 incident
 - Daily updates for P1
 - Weekly updates for P2/P3
@@ -246,11 +276,13 @@ This document outlines procedures for detecting, responding to, and recovering f
 **User Notification Requirements:**
 
 **Immediate (24 hours):**
+
 - Payment information compromised
 - Accounts accessed by unauthorized parties
 - Data exfiltrated
 
 **Standard (72 hours - GDPR):**
+
 - Personal data breach
 - Email addresses leaked
 - Profile information accessed
@@ -285,6 +317,7 @@ The hA.I.r Team
 ```
 
 **Public Statement (if media coverage):**
+
 - Coordinate with PR/legal
 - Acknowledge incident without technical details
 - Emphasize steps taken to protect users
@@ -298,6 +331,7 @@ The hA.I.r Team
 ### When to Escalate
 
 **To Law Enforcement:**
+
 - Evidence of criminal activity
 - Ransomware attacks
 - Organized hacking attempts
@@ -305,17 +339,20 @@ The hA.I.r Team
 - Financial fraud
 
 **To Regulatory Bodies:**
+
 - GDPR breach (within 72 hours)
 - HIPAA breach (within 60 days)
 - State breach laws (varies by state)
 - Payment card data breach (PCI DSS)
 
 **To Insurance:**
+
 - All P0 incidents
 - Any incident with potential liability > $10K
 - Legal threats related to breach
 
 **To Users:**
+
 - Personal data compromised
 - Accounts accessed
 - Payment information at risk
@@ -326,6 +363,7 @@ The hA.I.r Team
 ## 🔒 PREVENTIVE MEASURES
 
 ### Already Implemented ✅
+
 - HTTPS encryption
 - Row-Level Security
 - Input validation
@@ -340,6 +378,7 @@ The hA.I.r Team
 ### Additional Hardening
 
 **Technical:**
+
 - [ ] Implement 2FA for all admin accounts
 - [ ] Add CAPTCHA to login forms
 - [ ] Enable advanced threat detection
@@ -348,6 +387,7 @@ The hA.I.r Team
 - [ ] Add database activity monitoring
 
 **Process:**
+
 - [ ] Quarterly security audits
 - [ ] Annual penetration testing
 - [ ] Monthly dependency updates
@@ -355,6 +395,7 @@ The hA.I.r Team
 - [ ] Daily log review
 
 **Training:**
+
 - [ ] Security awareness training
 - [ ] Phishing simulation tests
 - [ ] Incident response drills
@@ -407,6 +448,7 @@ FOLLOW-UP ITEMS:
 ## 🎯 SUCCESS METRICS
 
 ### Response Time Targets
+
 - **P0 Detection:** < 15 minutes
 - **P0 Containment:** < 2 hours
 - **P0 User Notification:** < 24 hours
@@ -416,6 +458,7 @@ FOLLOW-UP ITEMS:
 - **P2 Resolution:** < 7 days
 
 ### Recovery Time Objectives
+
 - **Payment Systems:** < 1 hour downtime
 - **Core Features:** < 4 hours downtime
 - **Non-critical Features:** < 24 hours downtime
@@ -425,6 +468,7 @@ FOLLOW-UP ITEMS:
 ## 🔄 PLAN MAINTENANCE
 
 This plan should be:
+
 - **Reviewed:** Quarterly
 - **Updated:** After each incident
 - **Tested:** Annually via tabletop exercise
@@ -439,6 +483,7 @@ This plan should be:
 ## ✅ QUICK REFERENCE CHECKLIST
 
 ### P0 Incident (CRITICAL)
+
 1. [ ] Assess severity and scope (5 min)
 2. [ ] Notify incident commander (5 min)
 3. [ ] Contain threat immediately (15 min)
@@ -451,6 +496,7 @@ This plan should be:
 10. [ ] Complete post-mortem within 7 days
 
 ### P1 Incident (HIGH)
+
 1. [ ] Assess and contain (2 hours)
 2. [ ] Notify team (2 hours)
 3. [ ] Eradicate threat (24 hours)

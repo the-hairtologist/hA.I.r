@@ -68,16 +68,19 @@
 Common examples:
 
 **📅 Add to Google Calendar:**
+
 - Action: Google Calendar → Create Detailed Event
 - Map fields:
   - Title: `{{client_name}} - {{service_type}}`
   - Start Time: `{{appointment_date}}`
 
 **💬 Send Slack Notification:**
+
 - Action: Slack → Send Channel Message
 - Message: `New appointment: {{client_name}} booked {{service_type}}`
 
 **📧 Send Email:**
+
 - Action: Gmail → Send Email
 - Body: Include `{{client_name}}`, `{{service_type}}`, etc.
 
@@ -95,6 +98,7 @@ Common examples:
 ### **Live Metrics (In hA.I.r Settings → Zapier)**
 
 Each webhook shows:
+
 - **Triggered:** Total number of attempts
 - **Failures:** Failed delivery count
 - **Success Rate:** Automatic calculation (e.g., 95%)
@@ -103,6 +107,7 @@ Each webhook shows:
 - **Last Error:** If something failed, see why
 
 ### **Warning Signs:**
+
 - 🔴 **Success rate < 80%** = Red badge appears
 - ⚠️ **Error message visible** = Check Zapier URL still valid
 - 🕒 **"Never" in Last Success** = Webhook never worked, retest
@@ -111,13 +116,13 @@ Each webhook shows:
 
 ## 🔧 Advanced: Available Event Types
 
-| Event Type | Trigger | Data Sent |
-|-----------|---------|-----------|
-| `appointment.booked` | New appointment created | `client_name`, `service_type`, `appointment_date`, `duration_minutes`, `price` |
-| `appointment.completed` | Appointment marked complete | Same as above + `completed_at` |
-| `client.created` | New client added | `client_name`, `email`, `phone`, `stylist_name` |
-| `payment.received` | Payment processed | `amount`, `client_name`, `service`, `payment_method` |
-| `review.received` | Client leaves review | `rating`, `comment`, `client_name`, `service` |
+| Event Type              | Trigger                     | Data Sent                                                                      |
+| ----------------------- | --------------------------- | ------------------------------------------------------------------------------ |
+| `appointment.booked`    | New appointment created     | `client_name`, `service_type`, `appointment_date`, `duration_minutes`, `price` |
+| `appointment.completed` | Appointment marked complete | Same as above + `completed_at`                                                 |
+| `client.created`        | New client added            | `client_name`, `email`, `phone`, `stylist_name`                                |
+| `payment.received`      | Payment processed           | `amount`, `client_name`, `service`, `payment_method`                           |
+| `review.received`       | Client leaves review        | `rating`, `comment`, `client_name`, `service`                                  |
 
 ---
 
@@ -128,6 +133,7 @@ Each webhook shows:
 **Cause:** Webhook URL incorrect or Zapier Zap not set up yet
 
 **Fix:**
+
 1. Copy webhook URL again from Zapier
 2. Make sure Zap is turned ON
 3. Click "Test" again in hA.I.r
@@ -139,6 +145,7 @@ Each webhook shows:
 **Cause:** The event hasn't happened yet
 
 **Solution:**
+
 - For `appointment.booked`: Book a test appointment
 - For `client.created`: Add a new client
 - Or just click **"Test"** button for instant test
@@ -148,12 +155,14 @@ Each webhook shows:
 ### **Failure Count Increasing**
 
 **Causes:**
+
 1. Zapier Zap turned OFF
 2. Webhook URL changed
 3. Zapier rate limit hit (rare)
 4. Network issue (automatic retry handles this)
 
 **Fix:**
+
 1. Check Zap is ON in Zapier
 2. Check [Zap History](https://zapier.com/app/history) for errors
 3. If URL changed, update it in hA.I.r
@@ -166,6 +175,7 @@ Each webhook shows:
 **Cause:** Zapier endpoint took > 10 seconds to respond (3 attempts)
 
 **Fix:**
+
 - Usually temporary, will auto-recover next trigger
 - If persistent, check Zap complexity (too many actions slow it down)
 
@@ -174,25 +184,32 @@ Each webhook shows:
 ## 🚀 Production Best Practices
 
 ### **1. Test Before Going Live**
+
 Always click "Test" button after adding a webhook
 
 ### **2. Monitor Success Rate**
+
 Check weekly that success rate stays > 90%
 
 ### **3. Use Descriptive Event Names**
+
 When creating multiple webhooks, name Zaps clearly:
+
 - ✅ "Hair App → Google Calendar (Appointments)"
 - ❌ "My Zap"
 
 ### **4. Backup Critical Webhooks**
+
 For mission-critical automations (e.g., client notifications), create 2 webhooks to different platforms
 
 ### **5. Review Delivery Logs**
+
 For debugging, check `zapier_delivery_log` table in backend:
+
 ```sql
-SELECT * FROM zapier_delivery_log 
-WHERE status = 'failed' 
-ORDER BY created_at DESC 
+SELECT * FROM zapier_delivery_log
+WHERE status = 'failed'
+ORDER BY created_at DESC
 LIMIT 10;
 ```
 
@@ -201,6 +218,7 @@ LIMIT 10;
 ## 🎓 Popular Use Case Examples
 
 ### **1. Auto-Add Appointments to Google Calendar**
+
 - **Event:** `appointment.booked`
 - **Action:** Google Calendar → Create Event
 - **Result:** Every new booking auto-appears in calendar
@@ -208,6 +226,7 @@ LIMIT 10;
 ---
 
 ### **2. Slack Alert for New Clients**
+
 - **Event:** `client.created`
 - **Action:** Slack → Send Message
 - **Result:** Team notified instantly when new client signs up
@@ -215,6 +234,7 @@ LIMIT 10;
 ---
 
 ### **3. Invoice Creation in QuickBooks**
+
 - **Event:** `payment.received`
 - **Action:** QuickBooks → Create Invoice
 - **Result:** Payments auto-sync to accounting
@@ -222,6 +242,7 @@ LIMIT 10;
 ---
 
 ### **4. Auto-Share 5-Star Reviews on Instagram**
+
 - **Event:** `review.received`
 - **Action:** Filter (rating = 5) → Instagram → Post
 - **Result:** Best reviews auto-posted to social media
@@ -229,6 +250,7 @@ LIMIT 10;
 ---
 
 ### **5. CRM Sync (Salesforce/HubSpot)**
+
 - **Event:** `client.created`
 - **Action:** Salesforce → Create Lead
 - **Result:** Client data auto-flows to CRM

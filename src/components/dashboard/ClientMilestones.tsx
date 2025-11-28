@@ -132,7 +132,10 @@ export const ClientMilestones = ({ clientId }: ClientMilestonesProps) => {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => milestone.discount_code && handleCopyCode(milestone.discount_code)}
+                        onClick={() =>
+                          milestone.discount_code &&
+                          handleCopyCode(milestone.discount_code)
+                        }
                         className="min-h-[44px] text-xs sm:text-sm"
                       >
                         Copy Code

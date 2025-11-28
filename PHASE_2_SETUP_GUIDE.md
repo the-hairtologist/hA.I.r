@@ -5,6 +5,7 @@
 ## What Was Automatically Completed
 
 ### ✅ Stripe Subscription System
+
 - **create-checkout** edge function: Stripe checkout with 7-day free trial
 - **check-subscription** edge function: Real-time subscription status checking
 - **customer-portal** edge function: Manage subscription, payment method, cancel
@@ -13,12 +14,14 @@
 - **Features unlocked**: All stylist features available to subscribers
 
 ### ✅ Google Calendar Sync
+
 - **google-calendar-oauth** edge function: OAuth2 flow for Google authentication
 - **google-calendar-sync** edge function: Two-way sync with Google Calendar
 - **Security**: Tokens stored in Supabase Vault (encrypted)
 - **Features**: Auto-sync appointments, email/SMS reminders, conflict detection
 
 ### ✅ Frontend Pages Created
+
 - **`/subscription`**: Subscription management page
 - **Features**: View status, start trial, manage billing, cancel subscription
 
@@ -31,6 +34,7 @@
 **Why:** Allows users to manage their subscriptions (cancel, update payment)
 
 **Steps:**
+
 1. Go to https://dashboard.stripe.com/test/settings/billing/portal
 2. Click "Activate test link" (or "Activate" for live mode)
 3. Configure settings:
@@ -41,6 +45,7 @@
 4. Click "Save changes"
 
 **Verification:**
+
 ```bash
 # After setup, test the portal by:
 # 1. Subscribe to Stylist Pro ($15/month trial)
@@ -57,6 +62,7 @@
 **Why:** Enable OAuth flow for calendar sync
 
 **Steps:**
+
 1. Go to https://console.cloud.google.com/
 2. Select your project (or create new one: "hAIr App")
 3. Enable Google Calendar API:
@@ -85,6 +91,7 @@
 6. Copy Client ID and Client Secret (already in your secrets!)
 
 **Verification:**
+
 ```bash
 # After setup, test calendar sync:
 # 1. Go to /settings
@@ -113,6 +120,7 @@ graph LR
 ```
 
 **Key Points:**
+
 - Users get 7 days free to try all features
 - No charge until trial ends
 - Can cancel anytime during trial (no charge)
@@ -133,6 +141,7 @@ graph LR
 ```
 
 **Key Points:**
+
 - One-time OAuth (tokens refresh automatically)
 - Appointments sync immediately when created
 - Updates sync automatically (edit, cancel)
@@ -146,6 +155,7 @@ graph LR
 ### Stripe Subscription Testing
 
 **Test 1: Subscribe to Pro**
+
 - [ ] Go to `/subscription` page
 - [ ] Should see pricing card with $15/month and 7-day trial
 - [ ] Click "Start Free Trial"
@@ -156,6 +166,7 @@ graph LR
 - [ ] Page should update to show "Active Subscription" with trial badge
 
 **Test 2: Manage Subscription**
+
 - [ ] With active subscription, click "Manage Subscription"
 - [ ] Should open Stripe Customer Portal
 - [ ] Should see subscription details, payment method
@@ -164,6 +175,7 @@ graph LR
 - [ ] After cancellation, app should show "Subscribe" button again
 
 **Test 3: Subscription Auto-Refresh**
+
 - [ ] Check subscription status on login (should auto-check)
 - [ ] Status should persist across page refreshes
 - [ ] Expired trial should show "Subscribe" button
@@ -171,6 +183,7 @@ graph LR
 ### Google Calendar Sync Testing
 
 **Test 1: Connect Calendar**
+
 - [ ] Go to `/settings` page
 - [ ] Click "Connect Google Calendar"
 - [ ] Should redirect to Google OAuth screen
@@ -179,6 +192,7 @@ graph LR
 - [ ] Calendar sync indicator should show "Connected"
 
 **Test 2: Sync Appointment**
+
 - [ ] Create a new appointment (use `/appointments/new`)
 - [ ] Appointment should appear in Google Calendar within 5 seconds
 - [ ] Check Google Calendar app/website
@@ -186,6 +200,7 @@ graph LR
 - [ ] Event should have reminders: Email (24h), Popup (1h)
 
 **Test 3: Update Appointment**
+
 - [ ] Edit existing appointment (change time or service)
 - [ ] Changes should reflect in Google Calendar
 - [ ] Cancel appointment → should be removed from calendar
@@ -195,12 +210,14 @@ graph LR
 ## 🎯 Success Metrics
 
 ### Week 1 Goals
+
 - ✅ Stripe portal configured (PENDING)
 - ✅ Google Calendar API enabled (PENDING)
 - ⏳ At least 1 test subscription created
 - ⏳ At least 1 appointment synced to calendar
 
 ### Performance Targets
+
 - **Checkout conversion**: >80% (start trial → complete checkout)
 - **Calendar sync success**: 100% of appointments sync
 - **Sync latency**: <5 seconds from create to Google Calendar
@@ -235,7 +252,7 @@ const { data } = await supabase.functions.invoke('google-calendar-oauth');
 
 // Sync appointment
 const { data } = await supabase.functions.invoke('google-calendar-sync', {
-  body: { appointmentId: 'uuid' }
+  body: { appointmentId: 'uuid' },
 });
 // Returns: { success: true, eventId: string, eventLink: string }
 ```
@@ -243,11 +260,13 @@ const { data } = await supabase.functions.invoke('google-calendar-sync', {
 ### Security Architecture
 
 **Stripe:**
+
 - Secret key stored in Supabase secrets (never exposed to client)
 - Customer ID tied to user email (prevents impersonation)
 - Webhooks verify signatures (future: for instant updates)
 
 **Google Calendar:**
+
 - Tokens stored in Supabase Vault (encrypted at rest)
 - Access via RPC function `get_calendar_token` (row-level security)
 - Automatic token refresh (uses refresh token)
@@ -258,22 +277,29 @@ const { data } = await supabase.functions.invoke('google-calendar-sync', {
 ## ❓ Troubleshooting
 
 ### "Failed to create checkout session"
+
 **Fix:** Verify Stripe secret key is correct in Supabase secrets
 
 ### "No Stripe customer found"
+
 **Fix:** User must subscribe first before managing subscription
 
 ### "Google Calendar not connected"
+
 **Fix:** User must complete OAuth flow first (click "Connect Calendar")
 
 ### "Calendar sync failed"
-**Fix:** 
+
+**Fix:**
+
 1. Check Google Calendar API is enabled
 2. Verify OAuth redirect URI matches edge function URL
 3. Check token hasn't expired (should auto-refresh)
 
 ### Appointments not syncing
+
 **Fix:**
+
 1. Verify calendar connection is "active" in database
 2. Check `appointment_calendar_events` table for sync status
 3. Review edge function logs for errors
@@ -283,9 +309,10 @@ const { data } = await supabase.functions.invoke('google-calendar-sync', {
 ## ✅ Completion Checklist
 
 Phase 2 is complete when:
+
 - [x] All edge functions deployed
 - [ ] Stripe Customer Portal activated
-- [ ] Google Calendar API enabled  
+- [ ] Google Calendar API enabled
 - [ ] OAuth redirect URIs configured
 - [ ] Test subscription created successfully
 - [ ] Test appointment synced to Google Calendar

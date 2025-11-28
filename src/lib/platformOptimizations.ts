@@ -85,7 +85,9 @@ export const optimizeForPlatform = () => {
   }
 
   // Log capabilities for debugging
-  logger.debug('[Platform] Device capabilities', 'platformOptimizations', { capabilities });
+  logger.debug('[Platform] Device capabilities', 'platformOptimizations', {
+    capabilities,
+  });
 
   analytics.track('platform_detected', capabilities);
 

@@ -8,6 +8,7 @@
 ## ✅ COMPLETED
 
 ### 1. React Query Hook Infrastructure
+
 **Impact:** HIGH | **Performance:** +35%
 
 ```
@@ -18,6 +19,7 @@ src/hooks/
 ```
 
 **Benefits:**
+
 - 🎯 Automatic caching (2-3 min staleTime)
 - 🔄 Background refetching
 - 💾 Optimistic updates
@@ -27,6 +29,7 @@ src/hooks/
 ---
 
 ### 2. Type System Enhanced
+
 **Impact:** MEDIUM | **Type Safety:** +40%
 
 ```
@@ -37,6 +40,7 @@ src/types/
 ```
 
 **Fixed:**
+
 - Added missing `result_notes` and `tags` fields to Formula type
 - Added `FormulaWithClient` interface for joined queries
 - Proper nullable handling throughout
@@ -46,10 +50,12 @@ src/types/
 ### 3. Components Migrated to React Query
 
 #### ✅ Formulas.tsx (100% Complete)
+
 **Lines:** 1,064 → 1,022 (4% reduction)
 **Direct Supabase Calls:** 8 → 0
 
 **Changes:**
+
 - ✅ Replaced `loadData()` with `useFormulasByStylist()`
 - ✅ Replaced `loadClients()` with `useClients()`
 - ✅ Used `useCreateFormula`, `useUpdateFormula`, `useDeleteFormula` mutations
@@ -60,6 +66,7 @@ src/types/
 - ✅ Auto-refetch on mutations (no manual `loadData()` calls)
 
 **Performance Gains:**
+
 - 🎯 2-3 minute cache → fewer network requests
 - ⚡ Optimistic updates → instant UI feedback
 - 💾 Automatic background refetch → always fresh data
@@ -67,10 +74,12 @@ src/types/
 ---
 
 #### 🔲 Clients.tsx (Pending)
+
 **Lines:** 1,253 (needs refactor)
 **Status:** Already has VirtualList ✓ and ClientCard memoization ✓
 
 **TODO:**
+
 - Migrate `loadStylistProfile()` → inline in useEffect
 - Replace `loadClients()` with `useClients()`
 - Replace manual CRUD with `useCreateClient`, `useUpdateClient`, `useDeleteClient`
@@ -80,10 +89,12 @@ src/types/
 ---
 
 #### 🔲 Appointments.tsx (Pending)
+
 **Lines:** 948 (needs refactor)
 **Status:** No VirtualList yet
 
 **TODO:**
+
 - Migrate `loadData()` with `useAppointmentsByStylist()` or `useAppointmentsByClient()`
 - Replace manual CRUD with mutation hooks
 - Add `useUpdateAppointmentStatus` hook usage
@@ -95,19 +106,20 @@ src/types/
 
 ## 📊 METRICS
 
-| Metric | Phase 1 | Phase 2 (Current) |
-|--------|---------|-------------------|
-| **Direct Supabase calls in components** | 37 | ~29 (Formulas done) |
-| **React Query adoption** | 0% | 33% (1/3 pages) |
-| **useCallback optimizations** | 0 | 3 (Formulas) |
-| **VirtualList pages** | 1 | 1 (Formulas + Clients) |
-| **Memoized list components** | 2 | 2 (ClientCard, FormulaCard) |
+| Metric                                  | Phase 1 | Phase 2 (Current)           |
+| --------------------------------------- | ------- | --------------------------- |
+| **Direct Supabase calls in components** | 37      | ~29 (Formulas done)         |
+| **React Query adoption**                | 0%      | 33% (1/3 pages)             |
+| **useCallback optimizations**           | 0       | 3 (Formulas)                |
+| **VirtualList pages**                   | 1       | 1 (Formulas + Clients)      |
+| **Memoized list components**            | 2       | 2 (ClientCard, FormulaCard) |
 
 ---
 
 ## 🎯 PHASE 2 REMAINING TASKS
 
 ### Priority 1: Migrate Clients.tsx
+
 **Estimated Time:** 1 hour
 
 - [ ] Replace Supabase calls with React Query hooks
@@ -116,6 +128,7 @@ src/types/
 - [ ] Test bulk operations with mutations
 
 ### Priority 2: Migrate Appointments.tsx
+
 **Estimated Time:** 1.5 hours
 
 - [ ] Replace Supabase calls with React Query hooks
@@ -125,6 +138,7 @@ src/types/
 - [ ] Test status updates with optimistic UI
 
 ### Priority 3: Performance Audit
+
 **Estimated Time:** 30 minutes
 
 - [ ] Run React DevTools Profiler
@@ -136,14 +150,14 @@ src/types/
 
 ## 🚀 EXPECTED PHASE 2 COMPLETION METRICS
 
-| Metric | Target |
-|--------|--------|
-| **Direct Supabase calls** | 0 |
-| **React Query pages** | 3/3 (100%) |
-| **Average page load time** | < 800ms |
-| **Re-renders on filter change** | < 5 per list |
-| **FPS during scroll** | 60 FPS |
-| **Bundle size reduction** | -15KB gzipped |
+| Metric                          | Target        |
+| ------------------------------- | ------------- |
+| **Direct Supabase calls**       | 0             |
+| **React Query pages**           | 3/3 (100%)    |
+| **Average page load time**      | < 800ms       |
+| **Re-renders on filter change** | < 5 per list  |
+| **FPS during scroll**           | 60 FPS        |
+| **Bundle size reduction**       | -15KB gzipped |
 
 ---
 

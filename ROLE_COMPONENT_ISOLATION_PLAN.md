@@ -11,11 +11,12 @@
 ### Current Problem
 
 **Shared Components with Role Logic:**
+
 ```typescript
 // ❌ CURRENT APPROACH - Conditional logic everywhere
 export function Dashboard() {
   const { isStylist, isClient, isAdmin } = useEnhancedAuth();
-  
+
   return (
     <div>
       {isStylist && <StylistContent />}
@@ -27,6 +28,7 @@ export function Dashboard() {
 ```
 
 **Issues:**
+
 - Complex conditional logic scattered across components
 - Easy to introduce cross-role bugs
 - Difficult to test individual role experiences
@@ -38,6 +40,7 @@ export function Dashboard() {
 ### Recommended Approach
 
 **Role-Specific Components:**
+
 ```typescript
 // ✅ RECOMMENDED - Separate components per role
 // src/pages/stylist/StylistDashboard.tsx
@@ -60,6 +63,7 @@ export function AdminDashboard() {
 ```
 
 **Benefits:**
+
 - ✅ Clear separation of concerns
 - ✅ Easier to test (no role mocking needed)
 - ✅ Better performance (no unused code)
@@ -73,18 +77,21 @@ export function AdminDashboard() {
 ### Components Currently Shared Across Roles
 
 **High-Impact (Should Isolate First):**
+
 1. `DashboardLayout.tsx` - Mixed role logic in header/navigation
 2. `AppSidebar.tsx` - Different navigation per role
 3. `MobileBottomNav.tsx` - Different menu items per role
 4. `Dashboard.tsx` (if exists) - Mixed content per role
 
 **Medium-Impact (Should Isolate Second):**
+
 1. Client list views - Stylists vs. Admin see different data
 2. Appointment views - Stylists create, clients view
 3. Formula views - Stylists edit, clients view (read-only)
 4. Settings pages - Different settings per role
 
 **Low-Impact (Can Keep Shared):**
+
 1. UI primitives (Button, Input, Card, etc.)
 2. Utility components (LoadingSpinner, ErrorBoundary)
 3. Form validation components
@@ -157,12 +164,14 @@ src/
 **Priority:** CRITICAL - Foundation for everything else
 
 **Steps:**
+
 1. Create `src/layouts/StylistLayout.tsx`
 2. Create `src/layouts/ClientLayout.tsx`
 3. Create `src/layouts/AdminLayout.tsx`
 4. Extract shared layout logic into `src/layouts/BaseLayout.tsx`
 
 **Example: StylistLayout.tsx**
+
 ```typescript
 // src/layouts/StylistLayout.tsx
 import { ReactNode } from 'react';
@@ -207,6 +216,7 @@ export function StylistLayout({ children }: StylistLayoutProps) {
 ```
 
 **Testing:**
+
 - [ ] Stylist can access stylist layout
 - [ ] Client CANNOT access stylist layout (redirects)
 - [ ] Admin CAN access stylist layout (full access)
@@ -220,12 +230,14 @@ export function StylistLayout({ children }: StylistLayoutProps) {
 **Priority:** HIGH - Most visible UI difference
 
 **Steps:**
+
 1. Create `src/components/stylist/StylistSidebar.tsx`
 2. Create `src/components/client/ClientSidebar.tsx`
 3. Create `src/components/admin/AdminSidebar.tsx`
 4. Extract shared sidebar logic into hooks
 
 **Example: StylistSidebar.tsx**
+
 ```typescript
 // src/components/stylist/StylistSidebar.tsx
 import { NavLink } from 'react-router-dom';
@@ -277,6 +289,7 @@ export function StylistSidebar() {
 ```
 
 **Testing:**
+
 - [ ] Nav items match stylist role
 - [ ] Active route highlighted correctly
 - [ ] Icons render correctly
@@ -290,6 +303,7 @@ export function StylistSidebar() {
 **Priority:** HIGH - Core user experience
 
 **Steps:**
+
 1. Create `src/pages/stylist/StylistDashboard.tsx`
 2. Create `src/pages/client/ClientDashboard.tsx`
 3. Create `src/pages/admin/AdminDashboard.tsx`
@@ -297,6 +311,7 @@ export function StylistSidebar() {
 5. Remove old shared Dashboard.tsx (if exists)
 
 **Example: StylistDashboard.tsx**
+
 ```typescript
 // src/pages/stylist/StylistDashboard.tsx
 import { StylistLayout } from '@/layouts/StylistLayout';
@@ -308,7 +323,7 @@ export default function StylistDashboard() {
     <StylistLayout>
       <div className="space-y-6">
         <h1 className="text-3xl font-bold">Your Dashboard</h1>
-        
+
         {/* Stats - Stylist-specific metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard
@@ -359,6 +374,7 @@ export default function StylistDashboard() {
 ```
 
 **Testing:**
+
 - [ ] Only shows stylist-relevant content
 - [ ] Quick actions link to stylist routes
 - [ ] Stats pull from stylist's data only
@@ -372,12 +388,14 @@ export default function StylistDashboard() {
 **Priority:** HIGH - Connects everything together
 
 **Steps:**
+
 1. Update `src/routes/AppRoutes.tsx` with new routes
 2. Add role guards to prevent unauthorized access
 3. Redirect `/dashboard` to role-specific dashboard
 4. Remove old shared route configurations
 
 **Example: AppRoutes.tsx**
+
 ```typescript
 // src/routes/AppRoutes.tsx
 import { Routes, Route, Navigate } from 'react-router-dom';
@@ -441,6 +459,7 @@ export function AppRoutes() {
 ```
 
 **Testing:**
+
 - [ ] `/dashboard` redirects to correct role dashboard
 - [ ] Stylists cannot access `/client/*` routes
 - [ ] Clients cannot access `/stylist/*` routes
@@ -454,6 +473,7 @@ export function AppRoutes() {
 **Priority:** MEDIUM - Complete the isolation
 
 **Steps:**
+
 1. Migrate Clients page → Stylist + Admin versions
 2. Migrate Appointments page → Stylist + Client + Admin versions
 3. Migrate Formulas page → Stylist + Client versions
@@ -475,7 +495,7 @@ export default function StylistClients() {
             Add Client
           </Button>
         </div>
-        
+
         {/* Stylist can search, edit, delete */}
         <ClientSearchBar />
         <ClientList editable deletable />
@@ -491,13 +511,13 @@ export default function ClientAppointments() {
     <ClientLayout>
       <div className="space-y-6">
         <h1 className="text-3xl font-bold">My Appointments</h1>
-        
+
         {/* Client can only view and book new */}
         <Button onClick={handleBookNew}>
           <Calendar className="h-4 w-4 mr-2" />
           Book New Appointment
         </Button>
-        
+
         <AppointmentList readonly />
       </div>
     </ClientLayout>
@@ -506,6 +526,7 @@ export default function ClientAppointments() {
 ```
 
 **Testing:**
+
 - [ ] Stylist pages show full CRUD controls
 - [ ] Client pages show read-only views
 - [ ] Admin pages show management controls
@@ -517,42 +538,49 @@ export default function ClientAppointments() {
 ## 📝 Migration Checklist
 
 **Before Starting:**
+
 - [ ] Pin current stable version (rollback point)
 - [ ] Create feature branch: `feature/role-component-isolation`
 - [ ] Review this document completely
 - [ ] Estimate 15-20 hours total work
 
 **Phase 1: Layouts**
+
 - [ ] Create StylistLayout.tsx
 - [ ] Create ClientLayout.tsx
 - [ ] Create AdminLayout.tsx
 - [ ] Test role guards work correctly
 
 **Phase 2: Sidebars**
+
 - [ ] Create StylistSidebar.tsx
 - [ ] Create ClientSidebar.tsx
 - [ ] Create AdminSidebar.tsx
 - [ ] Test navigation items correct per role
 
 **Phase 3: Dashboards**
+
 - [ ] Create StylistDashboard.tsx
 - [ ] Create ClientDashboard.tsx
 - [ ] Create AdminDashboard.tsx
 - [ ] Update routes and test redirects
 
 **Phase 4: Routes**
+
 - [ ] Update AppRoutes.tsx with role-specific routes
 - [ ] Add role guards to all routes
 - [ ] Test `/dashboard` redirects correctly
 - [ ] Test unauthorized access blocked
 
 **Phase 5: Feature Pages**
+
 - [ ] Migrate Clients pages
 - [ ] Migrate Appointments pages
 - [ ] Migrate Formulas pages
 - [ ] Remove old shared pages
 
 **After Migration:**
+
 - [ ] Run full E2E test suite (72 tests)
 - [ ] Manual test all three roles
 - [ ] Check for TypeScript errors
@@ -566,6 +594,7 @@ export default function ClientAppointments() {
 ## 🎯 Success Criteria
 
 **Quantitative:**
+
 - [ ] Zero shared components with role conditionals
 - [ ] 100% of pages use role-specific layouts
 - [ ] All 72 E2E tests still passing
@@ -574,6 +603,7 @@ export default function ClientAppointments() {
 - [ ] Bundle size increase <10%
 
 **Qualitative:**
+
 - [ ] Code is easier to read and understand
 - [ ] Clear ownership of role-specific features
 - [ ] Faster to add new role-specific features
@@ -585,13 +615,18 @@ export default function ClientAppointments() {
 ## 🚨 Common Pitfalls to Avoid
 
 ### 1. **Over-Isolating Shared Logic**
+
 ```typescript
 // ❌ DON'T duplicate business logic
 // StylistDashboard.tsx
-const calculateRevenue = (appointments) => { /* logic */ };
+const calculateRevenue = appointments => {
+  /* logic */
+};
 
 // ClientDashboard.tsx
-const calculateRevenue = (appointments) => { /* SAME logic */ };
+const calculateRevenue = appointments => {
+  /* SAME logic */
+};
 
 // ✅ DO extract shared business logic to hooks/utils
 // src/hooks/useRevenueCalculation.ts
@@ -601,6 +636,7 @@ export function useRevenueCalculation() {
 ```
 
 ### 2. **Forgetting Admin Access**
+
 ```typescript
 // ❌ DON'T block admin from any route
 if (!isStylist) return <Navigate to="/auth" />;
@@ -610,6 +646,7 @@ if (!isStylist && !isAdmin) return <Navigate to="/auth" />;
 ```
 
 ### 3. **Breaking Existing Features**
+
 ```typescript
 // ❌ DON'T change API calls or data structures
 // ✅ DO keep same data fetching, just change UI
@@ -622,6 +659,7 @@ const { data: clients } = useClients();
 ```
 
 ### 4. **Incomplete Testing**
+
 ```typescript
 // ❌ DON'T just test happy path
 test('stylist dashboard loads', () => {
@@ -643,6 +681,7 @@ test('client cannot access stylist dashboard', () => {
 **If Migration Causes Issues:**
 
 1. **Immediate Rollback:**
+
    ```
    - Lovable → History → Restore to pinned version
    - Or Git: git revert <migration-commit>
@@ -667,11 +706,13 @@ test('client cannot access stylist dashboard', () => {
 ## 📚 Additional Resources
 
 **Related Documentation:**
+
 - `ENHANCED_KNOWLEDGE_2025_10_19.md` - Full product context
 - `POST_LAUNCH_VERSION_CONTROL_STRATEGY.md` - Deployment workflow
 - `FINAL_PRODUCTION_CERTIFICATION.md` - Quality standards
 
 **Helpful Links:**
+
 - React Router: Role-based routing patterns
 - TypeScript: Discriminated unions for role types
 - Testing Library: Testing role-specific components

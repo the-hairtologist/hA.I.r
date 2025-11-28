@@ -1,6 +1,7 @@
 # Responsive Design & Performance Guide
 
 ## Overview
+
 This guide documents the comprehensive responsive design system and performance optimizations implemented across all devices.
 
 ---
@@ -8,11 +9,13 @@ This guide documents the comprehensive responsive design system and performance 
 ## Responsive Breakpoints
 
 ### Device Categories
+
 - **Mobile**: < 768px
 - **Tablet**: 768px - 1023px
 - **Desktop**: ≥ 1024px
 
 ### Tailwind Breakpoints
+
 ```
 xs: 475px   - Small phones
 sm: 640px   - Large phones
@@ -27,19 +30,17 @@ xl: 1280px  - Laptops
 ## Typography Scaling
 
 ### Responsive Font Sizes
+
 - **Mobile (< 640px)**: Base 14px
 - **Tablet (641px - 1024px)**: Base 15px
 - **Desktop (> 1024px)**: Base 16px
 
 ### Typography Scale
+
 ```css
---text-xs: 0.75rem    /* 12px */
---text-sm: 0.875rem   /* 14px */
---text-base: 1rem     /* 16px */
---text-lg: 1.25rem    /* 20px */
---text-xl: 1.5rem     /* 24px */
---text-2xl: 2rem      /* 32px */
---text-3xl: 2.5rem    /* 40px */
+--text-xs: 0.75rem /* 12px */ --text-sm: 0.875rem /* 14px */ --text-base: 1rem
+  /* 16px */ --text-lg: 1.25rem /* 20px */ --text-xl: 1.5rem /* 24px */
+  --text-2xl: 2rem /* 32px */ --text-3xl: 2.5rem /* 40px */;
 ```
 
 ---
@@ -47,14 +48,17 @@ xl: 1280px  - Laptops
 ## Touch Targets
 
 ### Minimum Sizes (Following Apple HIG & Material Design)
+
 - **Mobile**: 44x44px (iOS) / 48x48px (Android)
 - **Tablet**: 40x40px
 - **Desktop**: No minimum (pointer precision)
 
 ### Implementation
+
 ```css
 @media (max-width: 640px) {
-  button, a[role="button"] {
+  button,
+  a[role='button'] {
     min-height: 44px;
     min-width: 44px;
     padding: 0.625rem 1rem;
@@ -67,6 +71,7 @@ xl: 1280px  - Laptops
 ## Safe Area Support
 
 ### iOS Notch & Dynamic Island
+
 ```css
 body {
   padding-top: env(safe-area-inset-top);
@@ -77,6 +82,7 @@ body {
 ```
 
 ### Utility Classes
+
 - `.safe-top` - Respects top safe area
 - `.safe-bottom` - Respects bottom safe area
 - `.safe-left` - Respects left safe area
@@ -87,9 +93,11 @@ body {
 ## Dynamic Viewport Height
 
 ### Problem
+
 Mobile browsers have collapsing/expanding address bars that change viewport height.
 
 ### Solution
+
 ```css
 /* Standard */
 min-height: 100vh;
@@ -98,6 +106,7 @@ min-height: 100dvh;
 ```
 
 ### Utility Classes
+
 - `.h-screen-safe` - Dynamic viewport height
 - `.min-h-screen-safe` - Minimum dynamic viewport height
 
@@ -106,6 +115,7 @@ min-height: 100dvh;
 ## Performance Optimizations
 
 ### Image Optimization
+
 ```typescript
 import { ResponsiveImage } from '@/components/ResponsiveImage';
 
@@ -119,6 +129,7 @@ import { ResponsiveImage } from '@/components/ResponsiveImage';
 ```
 
 ### Features
+
 - Automatic lazy loading
 - Device-specific sizing
 - Pixel ratio optimization
@@ -126,6 +137,7 @@ import { ResponsiveImage } from '@/components/ResponsiveImage';
 - Progressive loading
 
 ### Device Capabilities Detection
+
 ```typescript
 import { getDeviceCapabilities } from '@/lib/performanceOptimizer';
 
@@ -144,6 +156,7 @@ const {
 ## Responsive Hooks
 
 ### useResponsive()
+
 ```typescript
 import { useResponsive } from '@/hooks/useResponsive';
 
@@ -163,6 +176,7 @@ const {
 ```
 
 ### useBreakpoint()
+
 ```typescript
 import { useBreakpoint } from '@/hooks/useResponsive';
 
@@ -170,6 +184,7 @@ const isMdUp = useBreakpoint('md');
 ```
 
 ### useOrientation()
+
 ```typescript
 import { useOrientation } from '@/hooks/useResponsive';
 
@@ -181,6 +196,7 @@ const orientation = useOrientation(); // 'portrait' | 'landscape'
 ## Performance Monitoring
 
 ### Component Performance
+
 ```typescript
 import { usePerformanceMonitor } from '@/hooks/usePerformanceMonitor';
 
@@ -190,12 +206,13 @@ const MyComponent = () => {
     logToConsole: true,
     reportThreshold: 16, // 60fps threshold
   });
-  
+
   return <div>...</div>;
 };
 ```
 
 ### Timing Metrics
+
 ```typescript
 import { useComponentTiming } from '@/hooks/usePerformanceMonitor';
 
@@ -207,6 +224,7 @@ useComponentTiming('MyComponent');
 ## Optimization Utilities
 
 ### Debounce (Search, Input)
+
 ```typescript
 import { debounce } from '@/lib/performanceOptimizer';
 
@@ -216,6 +234,7 @@ const handleSearch = debounce((value: string) => {
 ```
 
 ### Throttle (Scroll, Resize)
+
 ```typescript
 import { throttle } from '@/lib/performanceOptimizer';
 
@@ -229,6 +248,7 @@ const handleScroll = throttle(() => {
 ## Accessibility Features
 
 ### Reduced Motion
+
 ```css
 @media (prefers-reduced-motion: reduce) {
   * {
@@ -239,15 +259,19 @@ const handleScroll = throttle(() => {
 ```
 
 ### High Contrast
+
 ```css
 @media (prefers-contrast: high) {
-  button, a, input {
+  button,
+  a,
+  input {
     border-width: 2px;
   }
 }
 ```
 
 ### Reduced Data
+
 ```css
 @media (prefers-reduced-data: reduce) {
   * {
@@ -262,6 +286,7 @@ const handleScroll = throttle(() => {
 ## Container Queries
 
 ### Component-Level Responsiveness
+
 ```css
 .container-responsive {
   container-type: inline-size;
@@ -274,12 +299,13 @@ const handleScroll = throttle(() => {
 ## Landscape Mode Optimizations
 
 ### Mobile Landscape
+
 ```css
 @media (max-width: 1024px) and (orientation: landscape) {
   body {
     font-size: 14px;
   }
-  
+
   .hide-landscape {
     display: none !important;
   }
@@ -291,6 +317,7 @@ const handleScroll = throttle(() => {
 ## GPU Acceleration
 
 ### Optimize Animations
+
 ```css
 .gpu-accelerated {
   transform: translateZ(0);
@@ -304,6 +331,7 @@ const handleScroll = throttle(() => {
 ## Scroll Performance
 
 ### Smooth Scrolling
+
 ```css
 .scroll-container {
   -webkit-overflow-scrolling: touch;
@@ -317,9 +345,9 @@ const handleScroll = throttle(() => {
 ## High DPI Displays
 
 ### Retina Optimization
+
 ```css
-@media (-webkit-min-device-pixel-ratio: 2),
-       (min-resolution: 192dpi) {
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
   body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -332,6 +360,7 @@ const handleScroll = throttle(() => {
 ## Best Practices
 
 ### ✅ Do
+
 - Use semantic breakpoints (isMobile, isTablet, isDesktop)
 - Lazy load images below the fold
 - Use throttle for scroll/resize events
@@ -343,6 +372,7 @@ const handleScroll = throttle(() => {
 - Respect safe areas on mobile
 
 ### ❌ Don't
+
 - Rely on user agent detection
 - Block main thread with heavy operations
 - Load all images eagerly
@@ -357,6 +387,7 @@ const handleScroll = throttle(() => {
 ## Testing Checklist
 
 ### Devices to Test
+
 - [ ] iPhone SE (small mobile)
 - [ ] iPhone 14 Pro (notch)
 - [ ] iPhone 14 Pro Max (large mobile)
@@ -368,17 +399,20 @@ const handleScroll = throttle(() => {
 - [ ] Desktop 4K
 
 ### Orientations
+
 - [ ] Portrait mode
 - [ ] Landscape mode
 - [ ] Rotation transitions
 
 ### Network Conditions
+
 - [ ] 4G
 - [ ] 3G
 - [ ] Slow 3G
 - [ ] Offline
 
 ### Accessibility
+
 - [ ] Reduced motion
 - [ ] High contrast
 - [ ] Screen readers
@@ -389,16 +423,19 @@ const handleScroll = throttle(() => {
 ## Performance Targets
 
 ### Load Times
+
 - **First Contentful Paint**: < 1.5s
 - **Largest Contentful Paint**: < 2.5s
 - **Time to Interactive**: < 3.5s
 - **Cumulative Layout Shift**: < 0.1
 
 ### Frame Rate
+
 - **Target**: 60fps (16.67ms per frame)
 - **Minimum**: 30fps (33.33ms per frame)
 
 ### Bundle Size
+
 - **Initial JS**: < 200KB (gzipped)
 - **Total JS**: < 500KB (gzipped)
 - **CSS**: < 50KB (gzipped)
@@ -408,6 +445,7 @@ const handleScroll = throttle(() => {
 ## Tools & Resources
 
 ### Development
+
 - Chrome DevTools Device Mode
 - React DevTools Profiler
 - Lighthouse
@@ -415,6 +453,7 @@ const handleScroll = throttle(() => {
 - BrowserStack
 
 ### Monitoring
+
 - `usePerformanceMonitor` hook
 - Browser Performance API
 - Console performance logs

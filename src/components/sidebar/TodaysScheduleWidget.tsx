@@ -72,7 +72,11 @@ export function TodaysScheduleWidget() {
 
         setAppointments(formattedData);
       } catch (error) {
-        logger.error("Error fetching today's appointments", 'TodaysScheduleWidget', error as Error);
+        logger.error(
+          "Error fetching today's appointments",
+          'TodaysScheduleWidget',
+          error as Error
+        );
       } finally {
         setLoading(false);
       }

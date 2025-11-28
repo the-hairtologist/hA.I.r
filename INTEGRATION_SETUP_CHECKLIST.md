@@ -1,6 +1,7 @@
 # 🚀 Final Integration Setup Checklist
 
 ## ✅ Already Complete
+
 - ✓ Supabase/Lovable Cloud (fully configured)
 - ✓ Stripe Payments (products, checkout, portal working)
 - ✓ Resend Email (sending working)
@@ -13,9 +14,11 @@
 ## 🔧 Remaining Setup (5 minutes)
 
 ### 1️⃣ Resend Webhook (2 minutes)
+
 **Purpose**: Track email opens, clicks, bounces
 
 **Steps**:
+
 1. Go to [Resend Dashboard → Webhooks](https://resend.com/webhooks)
 2. Click **"Add Webhook"**
 3. Enter this URL:
@@ -34,9 +37,11 @@
 ---
 
 ### 2️⃣ Stripe Webhook (2 minutes)
+
 **Purpose**: Process payments and create appointments automatically
 
 **Steps**:
+
 1. Go to [Stripe Dashboard → Webhooks](https://dashboard.stripe.com/webhooks)
 2. Click **"Add endpoint"**
 3. Enter this URL:
@@ -57,9 +62,11 @@
 ---
 
 ### 3️⃣ Google Calendar OAuth (1 minute - VERIFY ONLY)
+
 **Purpose**: Let stylists sync appointments to Google Calendar
 
 **Verification Steps**:
+
 1. In your app, go to **Integrations → Calendar**
 2. Click **"Connect Google Calendar"**
 3. If OAuth flow works → ✅ Done!
@@ -79,9 +86,11 @@
 ---
 
 ### 4️⃣ Zapier Integration
+
 **Status**: ✅ Fully configured and connected
 
 **What's working**:
+
 - All 5 event triggers connected:
   - ✅ `appointment.booked` - Triggers when new appointment is created
   - ✅ `client.created` - Triggers when new client is added
@@ -95,6 +104,7 @@
   - Live metrics dashboard in Settings → Integrations
 
 **What clients can do**:
+
 - Create Zaps triggered by any of the above events
 - Example: "New appointment → Send Slack notification"
 - Example: "Payment received → Add row to Google Sheets"
@@ -108,27 +118,30 @@
 
 After completing 1-3 above, test these flows:
 
-| Feature | Test Action | Expected Result |
-|---------|-------------|-----------------|
+| Feature            | Test Action                   | Expected Result                               |
+| ------------------ | ----------------------------- | --------------------------------------------- |
 | **Email Tracking** | Send appointment confirmation | Opens/clicks tracked in `email_sequence_logs` |
-| **Stripe Payment** | Complete test checkout | Appointment auto-created + payment recorded |
-| **Calendar Sync** | Connect Google Calendar | Appointments appear in Google Calendar |
+| **Stripe Payment** | Complete test checkout        | Appointment auto-created + payment recorded   |
+| **Calendar Sync**  | Connect Google Calendar       | Appointments appear in Google Calendar        |
 
 ---
 
 ## 🐛 Troubleshooting
 
 ### Resend Webhook Not Working
+
 - Check webhook URL matches exactly (no trailing slash)
 - Verify all 4 events are selected
 - Test with actual email send (not mock)
 
 ### Stripe Webhook Failing
+
 - Ensure `STRIPE_WEBHOOK_SECRET` is updated with new signing secret
 - Check webhook endpoint status in Stripe dashboard (should show green)
 - Test in Stripe test mode first
 
 ### Google Calendar Error
+
 - Verify redirect URI matches in Google Cloud Console
 - Check `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` are correct
 - Ensure Calendar API is enabled
@@ -138,6 +151,7 @@ After completing 1-3 above, test these flows:
 ## ✨ Once Complete
 
 Your app will have:
+
 - ✅ Real-time email engagement tracking
 - ✅ Automated payment processing
 - ✅ Seamless calendar synchronization

@@ -84,7 +84,11 @@ export function VacationConflictDialog({
               },
             });
           } catch (error) {
-            logger.error('Failed to send notification for appointment', 'VacationConflictDialog', error);
+            logger.error(
+              'Failed to send notification for appointment',
+              'VacationConflictDialog',
+              error
+            );
           }
         }
       );
@@ -97,7 +101,11 @@ export function VacationConflictDialog({
       onConfirm();
       onOpenChange(false);
     } catch (error) {
-      logger.error('Error sending vacation conflict notifications', 'VacationConflictDialog', error);
+      logger.error(
+        'Error sending vacation conflict notifications',
+        'VacationConflictDialog',
+        error
+      );
       toast.error('Some notifications failed to send');
     } finally {
       setSending(false);

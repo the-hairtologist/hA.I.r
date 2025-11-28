@@ -65,7 +65,11 @@ export function LoyaltyProgressWidget() {
         })) || []
       );
     } catch (error) {
-      logger.error('Error loading loyalty data', 'LoyaltyProgressWidget', error as Error);
+      logger.error(
+        'Error loading loyalty data',
+        'LoyaltyProgressWidget',
+        error as Error
+      );
     } finally {
       setLoading(false);
     }

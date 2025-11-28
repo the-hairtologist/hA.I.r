@@ -1,4 +1,5 @@
 # Design System Enforcement Guide
+
 **Version:** 2.0  
 **Status:** 🔒 MANDATORY
 
@@ -7,6 +8,7 @@
 ## ⛔ NEVER Use These (Auto-Fail Code Review)
 
 ### ❌ Hardcoded Colors
+
 ```tsx
 // ❌ WRONG - Direct color usage
 <div className="text-white bg-black">
@@ -18,6 +20,7 @@
 ```
 
 ### ❌ Custom Borders
+
 ```tsx
 // ❌ WRONG - Hardcoded border widths
 <Card className="border-[2px] border-foreground">
@@ -28,16 +31,17 @@
 ```
 
 ### ❌ Custom Shadows
+
 ```tsx
 // ❌ WRONG - Hardcoded shadow values
-className="shadow-[4px_4px_0px_0px_hsl(var(--foreground))]"
-className="shadow-[8px_8px_0px_0px_hsl(var(--foreground))]"
+className = 'shadow-[4px_4px_0px_0px_hsl(var(--foreground))]';
+className = 'shadow-[8px_8px_0px_0px_hsl(var(--foreground))]';
 
 // ✅ CORRECT - Standardized shadow tokens
-className="brutal-shadow-xs"  // 2px shadow
-className="brutal-shadow-sm"  // 4px shadow  
-className="brutal-shadow-md"  // 6px shadow
-className="brutal-shadow-lg"  // 8px shadow
+className = 'brutal-shadow-xs'; // 2px shadow
+className = 'brutal-shadow-sm'; // 4px shadow
+className = 'brutal-shadow-md'; // 6px shadow
+className = 'brutal-shadow-lg'; // 8px shadow
 ```
 
 ---
@@ -45,6 +49,7 @@ className="brutal-shadow-lg"  // 8px shadow
 ## ✅ Approved Design Tokens (Use These)
 
 ### Colors
+
 ```css
 /* Surface/Background Colors */
 --background
@@ -72,6 +77,7 @@ className="brutal-shadow-lg"  // 8px shadow
 ```
 
 ### Borders
+
 ```css
 /* Standard brutal borders */
 .brutal-border      /* 3px solid border */
@@ -85,6 +91,7 @@ className="brutal-shadow-lg"  // 8px shadow
 ```
 
 ### Shadows
+
 ```css
 .brutal-shadow-xs   /* 2px offset - subtle */
 .brutal-shadow-sm   /* 4px offset - small cards */
@@ -94,6 +101,7 @@ className="brutal-shadow-lg"  // 8px shadow
 ```
 
 ### Interactive States
+
 ```css
 .brutal-hover       /* Standard hover animation */
 .brutal-card        /* Card with border + shadow + hover */
@@ -105,6 +113,7 @@ className="brutal-shadow-lg"  // 8px shadow
 ## 🎯 Component Guidelines
 
 ### Buttons
+
 ```tsx
 // Default button already has brutal styling
 <Button variant="default">Click me</Button>
@@ -114,6 +123,7 @@ className="brutal-shadow-lg"  // 8px shadow
 ```
 
 ### Cards
+
 ```tsx
 // Use the variant system
 <Card variant="brutal">Content</Card>
@@ -125,6 +135,7 @@ className="brutal-shadow-lg"  // 8px shadow
 ```
 
 ### Dialogs
+
 ```tsx
 <DialogContent className="brutal-border brutal-shadow-md">
   {/* content */}
@@ -132,6 +143,7 @@ className="brutal-shadow-lg"  // 8px shadow
 ```
 
 ### Text on Colored Backgrounds
+
 ```tsx
 // On primary/secondary backgrounds
 <div className="bg-primary">
@@ -139,7 +151,7 @@ className="brutal-shadow-lg"  // 8px shadow
   <p className="text-on-surface-secondary">Slightly muted</p>
 </div>
 
-// On accent/success backgrounds  
+// On accent/success backgrounds
 <div className="bg-success">
   <span className="text-on-surface-primary">High contrast</span>
 </div>
@@ -165,12 +177,14 @@ Before committing code, verify:
 **Phase 1:** ✅ Design tokens created  
 **Phase 2:** ✅ Core components updated (buttons, cards, badges)  
 **Phase 3:** 🟡 IN PROGRESS (365 instances remaining)
+
 - 150 custom borders → brutal-border
-- 215 custom shadows → brutal-shadow-*
+- 215 custom shadows → brutal-shadow-\*
 
 **Remaining files to update:**
+
 - AIFeedbackPrompt.tsx
-- AIProgressNarrative.tsx  
+- AIProgressNarrative.tsx
 - FloatingActionButton.tsx
 - DelightfulToast.tsx
 - OnboardingWizard.tsx
@@ -180,13 +194,13 @@ Before committing code, verify:
 
 ## 📖 Quick Reference
 
-| Need | Use This | Not This |
-|------|----------|----------|
-| Card border | `brutal-border` | `border-[3px]` |
-| Card shadow | `brutal-shadow-sm` | `shadow-[4px_4px...]` |
-| White text | `text-on-surface-primary` | `text-white` |
-| Dialog | `brutal-border brutal-shadow-md` | Custom values |
-| Hover effect | `brutal-hover` | Custom transform + shadow |
+| Need         | Use This                         | Not This                  |
+| ------------ | -------------------------------- | ------------------------- |
+| Card border  | `brutal-border`                  | `border-[3px]`            |
+| Card shadow  | `brutal-shadow-sm`               | `shadow-[4px_4px...]`     |
+| White text   | `text-on-surface-primary`        | `text-white`              |
+| Dialog       | `brutal-border brutal-shadow-md` | Custom values             |
+| Hover effect | `brutal-hover`                   | Custom transform + shadow |
 
 ---
 

@@ -21,7 +21,7 @@ export const EmptyStateCard = ({
   onAction,
   secondaryActionLabel,
   onSecondaryAction,
-  className = ''
+  className = '',
 }: EmptyStateCardProps) => {
   return (
     <Card className={`animate-fade-in ${className}`}>
@@ -56,14 +56,19 @@ export const EmptyTableState = ({
   description,
   actionLabel,
   onAction,
-}: Omit<EmptyStateCardProps, 'secondaryActionLabel' | 'onSecondaryAction' | 'className'>) => {
+}: Omit<
+  EmptyStateCardProps,
+  'secondaryActionLabel' | 'onSecondaryAction' | 'className'
+>) => {
   return (
     <div className="flex flex-col items-center justify-center py-16 px-6 text-center animate-fade-in">
       <div className="w-20 h-20 rounded-full bg-muted/50 flex items-center justify-center mb-4">
         <Icon className="w-10 h-10 text-muted-foreground" />
       </div>
       <h3 className="text-2xl font-semibold mb-2">{title}</h3>
-      <p className="text-muted-foreground mb-6 max-w-lg text-lg">{description}</p>
+      <p className="text-muted-foreground mb-6 max-w-lg text-lg">
+        {description}
+      </p>
       {actionLabel && onAction && (
         <Button onClick={onAction} size="lg" className="mt-2">
           {actionLabel}

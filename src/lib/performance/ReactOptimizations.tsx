@@ -40,12 +40,20 @@ export function lazyWithRetry<T extends ComponentType<any>>(
             .then(resolve)
             .catch(error => {
               if (attemptsRemaining === 0) {
-                logger.error('[LazyLoad] Failed to load chunk after retries', 'ReactOptimizations', error as Error);
+                logger.error(
+                  '[LazyLoad] Failed to load chunk after retries',
+                  'ReactOptimizations',
+                  error as Error
+                );
                 reject(error);
                 return;
               }
 
-              logger.warn(`[LazyLoad] Chunk load failed, retrying in ${currentInterval}ms`, 'ReactOptimizations', { attemptsRemaining, currentInterval });
+              logger.warn(
+                `[LazyLoad] Chunk load failed, retrying in ${currentInterval}ms`,
+                'ReactOptimizations',
+                { attemptsRemaining, currentInterval }
+              );
 
               setTimeout(() => {
                 attemptLoad(attemptsRemaining - 1, currentInterval * 2);

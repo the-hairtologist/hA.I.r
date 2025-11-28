@@ -10,7 +10,9 @@
 All API requests require authentication via Supabase Auth tokens.
 
 ```typescript
-const { data: { session } } = await supabase.auth.getSession();
+const {
+  data: { session },
+} = await supabase.auth.getSession();
 const authHeader = { Authorization: `Bearer ${session.access_token}` };
 ```
 
@@ -29,11 +31,13 @@ Base URL: `https://iyotklwiwyljospfqnoy.supabase.co/functions/v1`
 **Description:** Validates if the authenticated user has an active Stripe subscription.
 
 **Request:**
+
 ```typescript
 await supabase.functions.invoke('check-subscription');
 ```
 
 **Response:**
+
 ```json
 {
   "subscribed": true,
@@ -42,6 +46,7 @@ await supabase.functions.invoke('check-subscription');
 ```
 
 **Status Codes:**
+
 - `200`: Success
 - `401`: Not authenticated
 - `500`: Server error
@@ -57,11 +62,13 @@ await supabase.functions.invoke('check-subscription');
 **Description:** Creates a Stripe checkout session for subscription with 7-day trial.
 
 **Request:**
+
 ```typescript
 const { data, error } = await supabase.functions.invoke('create-checkout');
 ```
 
 **Response:**
+
 ```json
 {
   "url": "https://checkout.stripe.com/c/pay/cs_test_..."
@@ -69,13 +76,15 @@ const { data, error } = await supabase.functions.invoke('create-checkout');
 ```
 
 **Flow:**
+
 1. Checks if Stripe customer exists for user email
 2. Creates checkout session with trial period
 3. Returns checkout URL for redirect
 
 **Status Codes:**
+
 - `200`: Checkout session created
-- `401`: Not authenticated  
+- `401`: Not authenticated
 - `500`: Stripe or server error
 
 ---
@@ -89,11 +98,13 @@ const { data, error } = await supabase.functions.invoke('create-checkout');
 **Description:** Creates Stripe Customer Portal session for subscription management.
 
 **Request:**
+
 ```typescript
 const { data, error } = await supabase.functions.invoke('customer-portal');
 ```
 
 **Response:**
+
 ```json
 {
   "url": "https://billing.stripe.com/p/session/..."
@@ -101,6 +112,7 @@ const { data, error } = await supabase.functions.invoke('customer-portal');
 ```
 
 **Status Codes:**
+
 - `200`: Portal session created
 - `401`: Not authenticated
 - `404`: No Stripe customer found
@@ -117,37 +129,44 @@ const { data, error } = await supabase.functions.invoke('customer-portal');
 **Description:** Creates Stripe checkout for appointment booking with deposit logic.
 
 **Request:**
+
 ```typescript
-const { data, error } = await supabase.functions.invoke('create-appointment-checkout', {
-  body: {
-    appointmentData: {
-      stylistId: "uuid",
-      serviceId: "uuid",
-      appointmentDate: "2025-10-25T14:00:00Z",
-      notes: "First time client"
+const { data, error } = await supabase.functions.invoke(
+  'create-appointment-checkout',
+  {
+    body: {
+      appointmentData: {
+        stylistId: 'uuid',
+        serviceId: 'uuid',
+        appointmentDate: '2025-10-25T14:00:00Z',
+        notes: 'First time client',
+      },
+      clientEmail: 'client@example.com',
+      clientName: 'Jane Doe',
     },
-    clientEmail: "client@example.com",
-    clientName: "Jane Doe"
   }
-});
+);
 ```
 
 **Response:**
+
 ```json
 {
   "sessionId": "cs_test_...",
   "url": "https://checkout.stripe.com/...",
-  "depositAmount": 50.00,
-  "remainingBalance": 120.00
+  "depositAmount": 50.0,
+  "remainingBalance": 120.0
 }
 ```
 
 **Deposit Logic:**
+
 - If service has `require_deposit = true`
 - Deposit type can be 'percentage' or 'fixed'
 - Calculates deposit amount based on service price
 
 **Status Codes:**
+
 - `200`: Checkout created
 - `400`: Validation error
 - `404`: Service not found
@@ -164,6 +183,7 @@ const { data, error } = await supabase.functions.invoke('create-appointment-chec
 **Description:** Processes Stripe webhook events for payment and subscription updates.
 
 **Handled Events:**
+
 - `checkout.session.completed` - Creates appointment after payment
 - `customer.subscription.updated` - Updates subscription status
 - `customer.subscription.deleted` - Handles subscription cancellation
@@ -182,13 +202,18 @@ const { data, error } = await supabase.functions.invoke('create-appointment-chec
 **Description:** Exchanges OAuth code for Google Calendar tokens.
 
 **Request:**
+
 ```typescript
-const { data, error } = await supabase.functions.invoke('google-calendar-oauth', {
-  body: { code: "oauth_code_from_google" }
-});
+const { data, error } = await supabase.functions.invoke(
+  'google-calendar-oauth',
+  {
+    body: { code: 'oauth_code_from_google' },
+  }
+);
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -199,6 +224,7 @@ const { data, error } = await supabase.functions.invoke('google-calendar-oauth',
 **Security:** Tokens stored encrypted in Supabase Vault
 
 **Status Codes:**
+
 - `200`: Connection successful
 - `401`: Not authenticated
 - `400`: Invalid OAuth code
@@ -215,16 +241,18 @@ const { data, error } = await supabase.functions.invoke('google-calendar-oauth',
 **Description:** Syncs appointment to connected Google Calendar.
 
 **Request:**
+
 ```typescript
 const { data, error } = await supabase.functions.invoke('sync-calendar-event', {
   body: {
-    appointmentId: "uuid",
-    action: "create" // or "update" or "delete"
-  }
+    appointmentId: 'uuid',
+    action: 'create', // or "update" or "delete"
+  },
 });
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -233,6 +261,7 @@ const { data, error } = await supabase.functions.invoke('sync-calendar-event', {
 ```
 
 **Status Codes:**
+
 - `200`: Sync successful
 - `401`: Not authenticated
 - `404`: Appointment or calendar connection not found
@@ -249,6 +278,7 @@ const { data, error } = await supabase.functions.invoke('sync-calendar-event', {
 **Description:** Tracks email delivery events from Resend.
 
 **Handled Events:**
+
 - `email.sent` - Email delivered
 - `email.delivered` - Email reached inbox
 - `email.bounced` - Email bounced
@@ -264,32 +294,38 @@ const { data, error } = await supabase.functions.invoke('sync-calendar-event', {
 ### Core Tables
 
 #### appointments
+
 - Stores all salon appointments
 - **Key Fields:** `stylist_id`, `client_id`, `appointment_date`, `status`, `service_type`
 - **Statuses:** `scheduled`, `confirmed`, `in_progress`, `completed`, `cancelled`, `no_show`
 - **RLS:** Client can view own, Stylist can view their appointments
 
 #### client_profiles
+
 - Client information and preferences
 - **Key Fields:** `user_id`, `full_name`, `email`, `preferred_stylist_id`, `hair_type`
 - **RLS:** Users can view/edit own profile, Stylists can view their clients
 
 #### stylist_profiles
+
 - Stylist business information
 - **Key Fields:** `user_id`, `business_name`, `specialty`, `is_public_listing`, `booking_link`
 - **RLS:** Stylists can edit own, public profiles viewable by all
 
 #### formulas
+
 - Hair color formulas with ingredients
 - **Key Fields:** `stylist_id`, `client_id`, `formula_text`, `color_line`, `developer_volume`
 - **RLS:** Stylist owns formula or has client relationship
 
 #### stylist_services
+
 - Services offered by stylists
 - **Key Fields:** `stylist_id`, `service_name`, `price`, `duration_minutes`, `require_deposit`
 - **RLS:** Public readable, stylist can edit own
 
 #### calendar_connections
+
 - OAuth calendar integrations
 - **Key Fields:** `user_id`, `provider`, `access_token_vault_id`, `is_active`
 - **Security:** Tokens stored in Supabase Vault (encrypted)
@@ -302,6 +338,7 @@ const { data, error } = await supabase.functions.invoke('sync-calendar-event', {
 ### Row Level Security (RLS)
 
 All tables have RLS enabled with policies for:
+
 - **User Isolation:** Users can only access their own data
 - **Relationship-Based Access:** Stylists can access client data only if relationship exists
 - **Admin Override:** Admin role can access all data
@@ -309,6 +346,7 @@ All tables have RLS enabled with policies for:
 ### Secret Management
 
 All sensitive credentials stored as Supabase secrets:
+
 - `STRIPE_SECRET_KEY` - Stripe API key
 - `STRIPE_WEBHOOK_SECRET` - Webhook signature verification
 - `RESEND_API_KEY` - Email sending
@@ -320,6 +358,7 @@ All sensitive credentials stored as Supabase secrets:
 ### Token Storage
 
 Calendar OAuth tokens stored in Supabase Vault:
+
 - Encrypted at rest
 - Accessible only via security definer function
 - Access logged in `calendar_token_access_log`
@@ -332,7 +371,8 @@ Calendar OAuth tokens stored in Supabase Vault:
 
 ```typescript
 // 1. Create checkout session
-const { data: checkoutData } = await supabase.functions.invoke('create-checkout');
+const { data: checkoutData } =
+  await supabase.functions.invoke('create-checkout');
 
 // 2. Redirect to Stripe
 window.open(checkoutData.url, '_blank');
@@ -351,13 +391,16 @@ window.location.href = authUrl;
 
 // 2. Handle callback with code
 const { data } = await supabase.functions.invoke('google-calendar-oauth', {
-  body: { code: oauthCode }
+  body: { code: oauthCode },
 });
 
 // 3. Sync appointments
-const { data: syncData } = await supabase.functions.invoke('sync-calendar-event', {
-  body: { appointmentId, action: 'create' }
-});
+const { data: syncData } = await supabase.functions.invoke(
+  'sync-calendar-event',
+  {
+    body: { appointmentId, action: 'create' },
+  }
+);
 ```
 
 ### Pattern 3: Real-time Appointment Updates
@@ -365,15 +408,19 @@ const { data: syncData } = await supabase.functions.invoke('sync-calendar-event'
 ```typescript
 const channel = supabase
   .channel('appointments')
-  .on('postgres_changes', {
-    event: '*',
-    schema: 'public',
-    table: 'appointments',
-    filter: `stylist_id=eq.${stylistId}`
-  }, (payload) => {
-    // Handle real-time updates
-    console.log('Appointment updated:', payload);
-  })
+  .on(
+    'postgres_changes',
+    {
+      event: '*',
+      schema: 'public',
+      table: 'appointments',
+      filter: `stylist_id=eq.${stylistId}`,
+    },
+    payload => {
+      // Handle real-time updates
+      console.log('Appointment updated:', payload);
+    }
+  )
   .subscribe();
 ```
 
@@ -382,16 +429,19 @@ const channel = supabase
 ## ⚡ Rate Limits & Quotas
 
 ### Lovable AI Gateway
+
 - **Rate Limit:** Per workspace
 - **Error Codes:**
   - `429`: Too many requests - back off and retry
   - `402`: Payment required - add credits to workspace
 
 ### Stripe API
+
 - **Rate Limit:** 100 requests/second
 - **Recommended:** Implement exponential backoff
 
 ### Google Calendar API
+
 - **Rate Limit:** 1M requests/day
 - **Quota:** 10 queries per second per user
 
@@ -457,6 +507,7 @@ if (isNative) {
 ## 🔄 Changelog
 
 ### v1.0.0 (October 2025)
+
 - Initial API documentation
 - All core endpoints documented
 - Security patterns established

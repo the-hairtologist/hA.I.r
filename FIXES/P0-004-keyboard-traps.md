@@ -1,13 +1,15 @@
 # Fix P0-004: Keyboard Traps in Modals
 
 ## Issue
+
 **Priority**: P0 - Critical  
 **Audit Finding**: C-004  
 **Location**: src/components/ui/dialog.tsx
 
 **Problem**: Users can't escape dialogs with keyboard, and Tab key doesn't properly cycle through focusable elements.
 
-**User Impact**: 
+**User Impact**:
+
 - Keyboard-only users trapped in dialogs
 - WCAG 2.1 AA violation (2.1.2 No Keyboard Trap)
 - Accessibility barrier
@@ -18,6 +20,7 @@
 ## Root Cause
 
 Radix Dialog component needed custom focus management:
+
 1. Tab cycling wasn't constrained to modal
 2. No focus trap implementation
 3. Close button lacked proper ARIA label
@@ -31,6 +34,7 @@ Radix Dialog component needed custom focus management:
 **File**: `src/components/ui/dialog.tsx`
 
 **Changes**:
+
 1. Added focus trap for Tab key
 2. Improved close button accessibility
 3. Added ref for focus containment
@@ -55,7 +59,7 @@ const DialogContent = React.forwardRef<
         const focusableElements = contentRef.current.querySelectorAll(
           'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
         );
-        
+
         const firstElement = focusableElements[0] as HTMLElement;
         const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
 
@@ -80,7 +84,7 @@ const DialogContent = React.forwardRef<
         <div ref={contentRef}>
           {children}
         </div>
-        <DialogPrimitive.Close 
+        <DialogPrimitive.Close
           aria-label="Close dialog"
         >
           <X className="h-4 w-4" />
@@ -97,6 +101,7 @@ const DialogContent = React.forwardRef<
 ## Testing
 
 ### Manual Testing (Keyboard-only)
+
 1. Open any dialog in the app
 2. Press Tab repeatedly
 3. Verify focus cycles through:
@@ -108,26 +113,28 @@ const DialogContent = React.forwardRef<
 5. Press Escape to verify close
 
 ### Screen Reader Testing
+
 1. Enable VoiceOver (Mac) or NVDA (Windows)
 2. Navigate to dialog
 3. Verify close button announces "Close dialog"
 4. Verify focus order is logical
 
 ### Automated Testing
+
 ```typescript
 describe('Dialog Keyboard Navigation', () => {
   it('should trap focus within dialog', () => {
     render(<DialogWithForm />);
-    
+
     const firstButton = screen.getByRole('button', { name: /submit/i });
     const closeButton = screen.getByRole('button', { name: /close dialog/i });
-    
+
     firstButton.focus();
     userEvent.tab();
     // Should cycle through elements
     userEvent.tab();
     expect(closeButton).toHaveFocus();
-    
+
     userEvent.tab();
     expect(firstButton).toHaveFocus(); // Cycles back
   });
@@ -135,7 +142,7 @@ describe('Dialog Keyboard Navigation', () => {
   it('should close on Escape', () => {
     const onClose = jest.fn();
     render(<Dialog onOpenChange={onClose} />);
-    
+
     userEvent.keyboard('{Escape}');
     expect(onClose).toHaveBeenCalled();
   });
@@ -163,5 +170,6 @@ describe('Dialog Keyboard Navigation', () => {
 ---
 
 ## Related Fixes
+
 - See A11Y_AUDIT.md for full accessibility report
 - See P0-002-input-validation.md

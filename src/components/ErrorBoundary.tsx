@@ -58,7 +58,9 @@ export class ErrorBoundary extends Component<Props, State> {
     });
 
     // Track error in journey
-    userJourney.trackError(error, { componentStack: errorInfo.componentStack || undefined });
+    userJourney.trackError(error, {
+      componentStack: errorInfo.componentStack || undefined,
+    });
 
     // Track error in production (could send to monitoring service)
     if (import.meta.env.PROD) {

@@ -153,7 +153,11 @@ const Services = () => {
         .maybeSingle();
 
       if (stylistError) {
-        logger.error('Error fetching stylist profile', 'Services', stylistError as Error);
+        logger.error(
+          'Error fetching stylist profile',
+          'Services',
+          stylistError as Error
+        );
         toast.error('Failed to load stylist profile');
         navigate('/dashboard');
         return;
@@ -199,7 +203,10 @@ const Services = () => {
     setFieldValue('price', Number(service.price));
     setFieldValue('deposit_amount', service.deposit_amount ?? 0);
     setFieldValue('deposit_type', service.deposit_type ?? 'fixed');
-    setFieldValue('buffer_time_minutes', service.buffer_time_minutes ?? undefined);
+    setFieldValue(
+      'buffer_time_minutes',
+      service.buffer_time_minutes ?? undefined
+    );
     setIsActive(service.is_active);
     setRequireDeposit(service.require_deposit ?? false);
     setUseCustomBuffer(service.buffer_time_minutes !== null);
@@ -363,7 +370,9 @@ const Services = () => {
                   label=""
                   type="number"
                   value={values.duration_minutes || 90}
-                  onChange={val => setFieldValue('duration_minutes', Number(val))}
+                  onChange={val =>
+                    setFieldValue('duration_minutes', Number(val))
+                  }
                   onBlur={() => setFieldTouched('duration_minutes')}
                   error={errors.duration_minutes}
                   touched={touched.duration_minutes}
@@ -563,7 +572,9 @@ const Services = () => {
                     label={`Deposit ${values.deposit_type === 'fixed' ? 'Amount ($)' : 'Percentage (%)'}`}
                     type="number"
                     value={values.deposit_amount || 0}
-                    onChange={val => setFieldValue('deposit_amount', Number(val || 0))}
+                    onChange={val =>
+                      setFieldValue('deposit_amount', Number(val || 0))
+                    }
                     onBlur={() => setFieldTouched('deposit_amount')}
                     error={errors.deposit_amount}
                     touched={touched.deposit_amount}

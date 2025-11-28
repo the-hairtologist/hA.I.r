@@ -1,4 +1,5 @@
 # Manual Steps Checklist
+
 ## Hair A.I. - Tasks Requiring External Setup
 
 **Version:** 1.0.0  
@@ -16,11 +17,13 @@ This document lists all manual steps that require external accounts, services, o
 ## 1. App Store Submission (iOS)
 
 ### Prerequisites
+
 - ❌ Apple Developer Account ($99/year)
 - ❌ Xcode installed on Mac
 - ❌ Valid Apple ID
 
 ### Steps
+
 1. **Enroll in Apple Developer Program**
    - Go to: https://developer.apple.com/programs/enroll/
    - Complete enrollment ($99 USD annual fee)
@@ -60,10 +63,12 @@ This document lists all manual steps that require external accounts, services, o
 ## 2. Google Play Store Submission (Android)
 
 ### Prerequisites
+
 - ❌ Google Play Console Account ($25 one-time fee)
 - ❌ Android Studio installed
 
 ### Steps
+
 1. **Create Google Play Developer Account**
    - Go to: https://play.google.com/console/signup
    - Pay $25 registration fee
@@ -108,10 +113,12 @@ This document lists all manual steps that require external accounts, services, o
 ## 3. Custom Domain Setup
 
 ### Prerequisites
+
 - ❌ Domain name purchased (e.g., hair-ai.app)
 - ❌ Access to domain DNS settings
 
 ### Steps
+
 1. **Purchase Domain**
    - Recommended: Namecheap, Google Domains, or Cloudflare
    - Search for: hair-ai.app or similar
@@ -120,11 +127,12 @@ This document lists all manual steps that require external accounts, services, o
 2. **Configure DNS**
    - Log in to domain registrar
    - Add A records or CNAME:
+
      ```
      Type: A
      Name: @
      Value: [Vercel IP]
-     
+
      Type: CNAME
      Name: www
      Value: [Your Vercel domain]
@@ -146,9 +154,11 @@ This document lists all manual steps that require external accounts, services, o
 ## 4. Stripe Production Mode
 
 ### Prerequisites
+
 - ❌ Verified Stripe account
 
 ### Steps
+
 1. **Complete Stripe Account Verification**
    - Go to: https://dashboard.stripe.com/
    - Click "Activate your account"
@@ -183,9 +193,11 @@ This document lists all manual steps that require external accounts, services, o
 ## 5. Email Service Setup (Resend/SendGrid)
 
 ### Prerequisites
+
 - ❌ Domain ownership for sending emails
 
 ### Steps
+
 1. **Create Resend Account**
    - Go to: https://resend.com/
    - Sign up for free tier (100 emails/day)
@@ -218,9 +230,11 @@ This document lists all manual steps that require external accounts, services, o
 ## 6. SMS Service Setup (Twilio)
 
 ### Prerequisites
+
 - ❌ Phone number for verification
 
 ### Steps
+
 1. **Create Twilio Account**
    - Go to: https://www.twilio.com/
    - Sign up and verify phone
@@ -251,6 +265,7 @@ This document lists all manual steps that require external accounts, services, o
 ## 7. Analytics Setup
 
 ### Google Analytics 4
+
 - ❌ Create GA4 property
 - ❌ Get Measurement ID
 - ❌ Add to environment variables
@@ -261,6 +276,7 @@ This document lists all manual steps that require external accounts, services, o
 **Cost:** Free
 
 ### Sentry Error Monitoring
+
 - ❌ Create Sentry account
 - ❌ Create project
 - ❌ Get DSN
@@ -274,6 +290,7 @@ This document lists all manual steps that require external accounts, services, o
 ## 8. Push Notifications
 
 ### Firebase Cloud Messaging
+
 1. **Create Firebase Project**
    - Go to: https://console.firebase.google.com/
    - Create new project: Hair A.I.
@@ -299,6 +316,7 @@ This document lists all manual steps that require external accounts, services, o
 ## 9. Monitoring Setup
 
 ### UptimeRobot
+
 - ❌ Create account: https://uptimerobot.com/
 - ❌ Add monitors for:
   - Web app
@@ -314,6 +332,7 @@ This document lists all manual steps that require external accounts, services, o
 ## 10. Backup & Disaster Recovery
 
 ### Supabase Backups
+
 1. **Enable Point-in-Time Recovery**
    - Go to Supabase Dashboard > Settings > Database
    - Enable PITR (paid feature)
@@ -336,16 +355,19 @@ This document lists all manual steps that require external accounts, services, o
 ## 11. Legal Documents
 
 ### Privacy Policy
+
 - ✅ Template provided in project
 - ❌ Review and customize for your business
 - ❌ Get legal review (recommended)
 
 ### Terms of Service
+
 - ✅ Template provided in project
 - ❌ Review and customize for your business
 - ❌ Get legal review (recommended)
 
 ### Cookie Policy
+
 - ✅ Template provided in project
 - ❌ Verify compliance with GDPR/CCPA
 
@@ -357,17 +379,20 @@ This document lists all manual steps that require external accounts, services, o
 ## 12. Marketing Setup
 
 ### Social Media Accounts
+
 - ❌ Create Instagram: @hairai_app
 - ❌ Create TikTok: @hairai_app
 - ❌ Create Facebook Page
 - ❌ Create Twitter/X: @hairai_app
 
 ### Meta Ads Account
+
 - ❌ Create Facebook Business Manager
 - ❌ Add payment method
 - ❌ Create initial campaigns
 
 ### Google Ads
+
 - ❌ Create Google Ads account
 - ❌ Link to GA4
 - ❌ Set up conversion tracking
@@ -380,12 +405,14 @@ This document lists all manual steps that require external accounts, services, o
 ## 13. CI/CD Pipeline
 
 ### GitHub Actions
+
 - ✅ Basic workflow exists
 - ❌ Configure secrets in GitHub
 - ❌ Set up branch protection rules
 - ❌ Configure deployment environments
 
 ### Fastlane (Mobile)
+
 - ❌ Install Fastlane
 - ❌ Configure Matchfile for code signing
 - ❌ Set up automated screenshots
@@ -399,11 +426,13 @@ This document lists all manual steps that require external accounts, services, o
 ## 14. Customer Support Setup
 
 ### Support Email
+
 - ❌ Create support@hair-ai.app
 - ❌ Set up email forwarding
 - ❌ Create response templates
 
 ### Help Center
+
 - ❌ Choose platform (Intercom, Zendesk, or custom)
 - ❌ Write FAQs
 - ❌ Create troubleshooting guides
@@ -416,12 +445,14 @@ This document lists all manual steps that require external accounts, services, o
 ## 15. Security Audits
 
 ### Pre-Launch Security Review
+
 - ❌ Run OWASP security scan
 - ❌ Review all RLS policies
 - ❌ Test authentication flows
 - ❌ Verify data encryption
 
 ### Penetration Testing (Optional)
+
 - ❌ Hire security firm
 - ❌ Fix identified vulnerabilities
 - ❌ Get security certificate
@@ -434,6 +465,7 @@ This document lists all manual steps that require external accounts, services, o
 ## Priority Matrix
 
 ### Must Complete Before Launch
+
 1. ✅ Legal documents reviewed
 2. ❌ App Store accounts created
 3. ❌ Stripe production mode activated
@@ -442,6 +474,7 @@ This document lists all manual steps that require external accounts, services, o
 6. ❌ Error monitoring configured
 
 ### Should Complete Within First Month
+
 1. ❌ Push notifications enabled
 2. ❌ Email service configured
 3. ❌ SMS service set up
@@ -449,6 +482,7 @@ This document lists all manual steps that require external accounts, services, o
 5. ❌ Customer support system
 
 ### Can Complete Later
+
 1. ❌ Marketing automation
 2. ❌ Advanced monitoring
 3. ❌ Automated backups
@@ -460,6 +494,7 @@ This document lists all manual steps that require external accounts, services, o
 ## Total Cost Estimate
 
 ### One-Time Costs
+
 - Apple Developer: $99
 - Google Play: $25
 - Domain: $15
@@ -467,6 +502,7 @@ This document lists all manual steps that require external accounts, services, o
 - **Total:** $139-639
 
 ### Monthly Costs
+
 - Twilio: $5-20
 - Email service: $0-20
 - Monitoring: $0
@@ -474,6 +510,7 @@ This document lists all manual steps that require external accounts, services, o
 - **Total:** $5-40/month
 
 ### Optional Costs
+
 - Push notifications: Free
 - Ads: Variable
 - Customer support: $0-79/month

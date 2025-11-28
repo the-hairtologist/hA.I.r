@@ -1,4 +1,5 @@
 # hA.I.r App - Complete Integration Checklist
+
 **Last Updated:** 2025-10-12
 
 ---
@@ -6,6 +7,7 @@
 ## ✅ ALREADY CONFIGURED & WORKING
 
 ### Backend & Infrastructure
+
 - ✅ **Lovable Cloud (Supabase)** - Database, Auth, Storage, Edge Functions
 - ✅ **Stripe Payments** - Secret key configured
   - Monthly subscription: $29/month per stylist
@@ -29,9 +31,11 @@
 ## 🔥 CRITICAL - IMPLEMENT IMMEDIATELY
 
 ### 1. Instagram Business API ⭐ HIGHEST PRIORITY
+
 **Why:** Your stylists showcase their work on Instagram - this is non-negotiable
 
 **Features:**
+
 - Auto-import portfolio from Instagram posts
 - Cross-post new work to Instagram automatically
 - Track engagement metrics (likes, comments, saves)
@@ -39,6 +43,7 @@
 - Import client testimonials from comments
 
 **Requirements:**
+
 - [ ] Instagram Business Account (free conversion from personal)
 - [ ] Facebook Developer Account (free)
 - [ ] Create Facebook App
@@ -46,6 +51,7 @@
 - [ ] OAuth flow for user authorization
 
 **API Keys Needed:**
+
 - `INSTAGRAM_APP_ID`
 - `INSTAGRAM_APP_SECRET`
 - `INSTAGRAM_ACCESS_TOKEN` (per user)
@@ -55,6 +61,7 @@
 **Business Impact:** 🔥 CRITICAL - Portfolio import + social proof = trust + conversions
 
 **Setup Steps:**
+
 1. Go to https://developers.facebook.com/
 2. Create new app (Type: Business)
 3. Add Instagram Basic Display product
@@ -66,9 +73,11 @@
 ---
 
 ### 2. ElevenLabs Voice AI ⭐ GAME CHANGER
+
 **Why:** 24/7 phone answering = never miss a booking
 
 **Features:**
+
 - Answer phone calls with natural voice AI
 - Book appointments via phone conversation
 - Answer common questions (hours, services, pricing)
@@ -76,6 +85,7 @@
 - Seamlessly integrate with appointment system
 
 **Requirements:**
+
 - [ ] ElevenLabs account
 - [ ] ElevenLabs API key
 - [ ] Twilio phone number (already configured ✅)
@@ -83,6 +93,7 @@
 - [ ] Edge function for appointment booking
 
 **API Keys Needed:**
+
 - `ELEVENLABS_API_KEY`
 
 **Recommended Model:** `eleven_turbo_v2_5` (low latency, high quality, 32 languages)  
@@ -93,6 +104,7 @@
 **Business Impact:** 🚀 Capture 3-5x more bookings outside business hours
 
 **Setup Steps:**
+
 1. Sign up at https://elevenlabs.io/
 2. Choose Conversational AI plan ($11/mo)
 3. Create API key
@@ -105,11 +117,13 @@
 ---
 
 ### 3. Complete Google Calendar Sync
+
 **Why:** Two-way sync = professional workflow
 
 **Status:** 60% complete (credentials already configured ✅)
 
 **Features:**
+
 - Two-way sync with Google Calendar
 - Automated appointment reminders
 - Conflict detection across calendars
@@ -117,6 +131,7 @@
 - Real-time updates
 
 **What's Missing:**
+
 - [ ] Implement OAuth flow
 - [ ] Complete two-way sync logic
 - [ ] Webhook setup for real-time sync
@@ -132,9 +147,11 @@
 ## 📊 HIGH PRIORITY - IMPLEMENT WITHIN 30 DAYS
 
 ### 4. Google Analytics 4
+
 **Why:** Track user behavior, conversions, viral growth metrics
 
 **Features:**
+
 - Page view tracking
 - Event tracking (appointments, bookings, signups)
 - Conversion funnel analysis
@@ -143,11 +160,13 @@
 - Viral growth metrics
 
 **Requirements:**
+
 - [ ] Google Analytics 4 account
 - [ ] Create GA4 property
 - [ ] Get Measurement ID
 
 **API Keys Needed:**
+
 - `GA4_MEASUREMENT_ID`
 
 **Implementation Time:** 30 minutes  
@@ -155,6 +174,7 @@
 **Business Impact:** Understanding user behavior = better product decisions
 
 **Setup Steps:**
+
 1. Go to https://analytics.google.com/
 2. Create new GA4 property
 3. Get Measurement ID (starts with G-)
@@ -165,9 +185,11 @@
 ---
 
 ### 5. Sentry Error Monitoring
+
 **Why:** Catch bugs before users complain
 
 **Features:**
+
 - Real-time error tracking
 - Performance monitoring
 - Release tracking
@@ -175,11 +197,13 @@
 - Source map support
 
 **Requirements:**
+
 - [ ] Sentry account
 - [ ] Create project
 - [ ] Get DSN
 
 **API Keys Needed:**
+
 - `SENTRY_DSN`
 - `SENTRY_AUTH_TOKEN` (for releases)
 
@@ -188,6 +212,7 @@
 **Business Impact:** Faster bug fixes = happier users
 
 **Setup Steps:**
+
 1. Sign up at https://sentry.io/
 2. Create new project (React)
 3. Get DSN from project settings
@@ -198,9 +223,11 @@
 ---
 
 ### 6. Zapier Integration Hub
+
 **Why:** Connect to 5,000+ apps without custom code
 
 **Features:**
+
 - Automated workflows
 - Social media automation (new portfolio → Twitter/Facebook)
 - Accounting sync (new payment → QuickBooks)
@@ -208,6 +235,7 @@
 - Backup automation (daily data export → Google Drive)
 
 **Requirements:**
+
 - [ ] Zapier account
 - [ ] Create webhook endpoint in app
 - [ ] Configure Zaps
@@ -217,6 +245,7 @@
 **Business Impact:** Unlimited custom automation possibilities
 
 **Example Workflows:**
+
 1. New client signup → Welcome email → Add to CRM
 2. New portfolio photo → Post to Instagram → Post to Facebook
 3. Appointment completed → Wait 1 day → Send satisfaction survey
@@ -227,9 +256,11 @@
 ## 💪 MEDIUM PRIORITY - IMPLEMENT MONTH 2-3
 
 ### 7. Mailchimp / ConvertKit Email Marketing
+
 **Why:** Automated client retention campaigns
 
 **Features:**
+
 - Welcome series for new clients
 - Rebooking reminders (6-8 weeks post-appointment)
 - Birthday discounts
@@ -238,11 +269,13 @@
 - Automated drip campaigns
 
 **Requirements:**
+
 - [ ] Mailchimp OR ConvertKit account
 - [ ] API key
 - [ ] Design email templates
 
 **API Keys Needed:**
+
 - `MAILCHIMP_API_KEY` + `MAILCHIMP_SERVER_PREFIX`
 - OR `CONVERTKIT_API_KEY` + `CONVERTKIT_API_SECRET`
 
@@ -253,9 +286,11 @@
 ---
 
 ### 8. Square Payment Integration
+
 **Why:** Many stylists prefer Square for in-person + online
 
 **Features:**
+
 - In-person payments via Square Terminal
 - Online checkout
 - Invoicing
@@ -263,11 +298,13 @@
 - Tip collection
 
 **Requirements:**
+
 - [ ] Square account
 - [ ] Square Developer account
 - [ ] Application ID and Access Token
 
 **API Keys Needed:**
+
 - `SQUARE_APPLICATION_ID`
 - `SQUARE_ACCESS_TOKEN`
 - `SQUARE_LOCATION_ID`
@@ -279,15 +316,18 @@
 ---
 
 ### 9. Venmo / CashApp Integration
+
 **Why:** Popular with younger clientele
 
 **Features:**
+
 - One-tap payments
 - Social payment sharing
 - Split payments
 - QR code payments
 
 **Requirements:**
+
 - [ ] Venmo Business account
 - [ ] CashApp Business account
 - [ ] API access (limited availability)
@@ -299,9 +339,11 @@
 ---
 
 ### 10. Google Reviews API
+
 **Why:** Aggregate all reviews in one place
 
 **Features:**
+
 - Pull reviews from Google Business Profile
 - Display on stylist profiles
 - Automated review requests post-appointment
@@ -309,11 +351,13 @@
 - Review response automation
 
 **Requirements:**
+
 - [ ] Google My Business account
 - [ ] Google Cloud project
 - [ ] Enable Google My Business API
 
 **API Keys Needed:**
+
 - `GOOGLE_MAPS_API_KEY` (with My Business API enabled)
 
 **Implementation Time:** 4-5 hours  
@@ -325,9 +369,11 @@
 ## 🔮 NICE TO HAVE - IMPLEMENT MONTH 4+
 
 ### 11. QuickBooks / FreshBooks Accounting
+
 **Why:** Automated financial tracking
 
 **Features:**
+
 - Sync all transactions automatically
 - Expense tracking (products, tools)
 - Tax preparation made easy
@@ -342,9 +388,11 @@
 ---
 
 ### 12. TikTok API Integration
+
 **Why:** TikTok is exploding for hair content
 
 **Features:**
+
 - Cross-post hair transformation videos
 - Track trending content
 - Engagement metrics
@@ -357,9 +405,11 @@
 ---
 
 ### 13. Facebook Graph API
+
 **Why:** Complete social media presence
 
 **Features:**
+
 - Auto-post to Facebook Business Page
 - Engagement tracking
 - Ad campaign integration
@@ -372,9 +422,11 @@
 ---
 
 ### 14. Apple Calendar Integration
+
 **Why:** Complete calendar ecosystem
 
 **Features:**
+
 - iCloud Calendar sync
 - CalDAV support
 - Availability sharing
@@ -386,15 +438,18 @@
 ---
 
 ### 15. UptimeRobot Monitoring
+
 **Why:** Monitor app uptime and get alerts
 
 **Features:**
+
 - Uptime monitoring (5-min intervals)
 - Email/SMS alerts on downtime
 - Status page
 - Response time tracking
 
 **Requirements:**
+
 - [ ] UptimeRobot account
 - [ ] Configure monitors
 
@@ -407,6 +462,7 @@
 ## 📋 IMPLEMENTATION TIMELINE
 
 ### Week 1-2 (Launch Critical)
+
 - [ ] Instagram Business API (3-4 hours)
 - [ ] Complete Google Calendar Sync (2-3 hours)
 - [ ] Google Analytics 4 (30 min)
@@ -419,6 +475,7 @@
 ---
 
 ### Month 1 (Growth Features)
+
 - [ ] ElevenLabs Voice AI (6-8 hours)
 - [ ] Zapier Integration (1-2 hours)
 - [ ] UptimeRobot (15 min)
@@ -430,6 +487,7 @@
 ---
 
 ### Month 2-3 (Client Retention)
+
 - [ ] Mailchimp/ConvertKit (3-4 hours)
 - [ ] Square Payments (2-3 hours)
 - [ ] Google Reviews API (4-5 hours)
@@ -441,6 +499,7 @@
 ---
 
 ### Month 4+ (Premium Features)
+
 - [ ] QuickBooks/FreshBooks (6-8 hours)
 - [ ] TikTok API (3-4 hours)
 - [ ] Venmo/CashApp (2-3 hours each)
@@ -455,51 +514,57 @@
 ## 💰 TOTAL COST BREAKDOWN
 
 ### Year 1 Integration Costs
-| Integration | Monthly | Annual | Priority |
-|------------|---------|--------|----------|
-| Stripe | Transaction fees | Variable | ✅ Active |
-| ElevenLabs AI | $11 | $132 | 🔥 Critical |
-| Zapier | $20 | $240 | High |
-| Mailchimp/ConvertKit | $0-9 | $0-108 | High |
-| Google Analytics | $0 | $0 | High |
-| Sentry | $0 | $0 | High |
-| UptimeRobot | $0 | $0 | Medium |
-| Square | Transaction fees | Variable | Medium |
-| QuickBooks | $30 | $360 | Nice to Have |
-| **TOTAL** | **$61-70** | **$732-840** | - |
+
+| Integration          | Monthly          | Annual       | Priority     |
+| -------------------- | ---------------- | ------------ | ------------ |
+| Stripe               | Transaction fees | Variable     | ✅ Active    |
+| ElevenLabs AI        | $11              | $132         | 🔥 Critical  |
+| Zapier               | $20              | $240         | High         |
+| Mailchimp/ConvertKit | $0-9             | $0-108       | High         |
+| Google Analytics     | $0               | $0           | High         |
+| Sentry               | $0               | $0           | High         |
+| UptimeRobot          | $0               | $0           | Medium       |
+| Square               | Transaction fees | Variable     | Medium       |
+| QuickBooks           | $30              | $360         | Nice to Have |
+| **TOTAL**            | **$61-70**       | **$732-840** | -            |
 
 ### Development Time Investment
-| Phase | Hours | Description |
-|-------|-------|-------------|
-| Phase 1 | 6-8 | Launch critical features |
-| Phase 2 | 7-10 | Growth and automation |
-| Phase 3 | 9-12 | Client retention |
-| Phase 4 | 16-22 | Premium features |
-| **TOTAL** | **38-52** | Complete implementation |
+
+| Phase     | Hours     | Description              |
+| --------- | --------- | ------------------------ |
+| Phase 1   | 6-8       | Launch critical features |
+| Phase 2   | 7-10      | Growth and automation    |
+| Phase 3   | 9-12      | Client retention         |
+| Phase 4   | 16-22     | Premium features         |
+| **TOTAL** | **38-52** | Complete implementation  |
 
 ---
 
 ## 🎯 TOP 3 RECOMMENDATIONS (START HERE)
 
 ### 🥇 #1: Instagram Business API
+
 - **Time:** 3-4 hours
 - **Cost:** Free
 - **Impact:** Portfolio import + social proof = trust + conversions
 - **Why:** Your users live on Instagram - non-negotiable
 
 ### 🥈 #2: Complete Google Calendar Sync
+
 - **Time:** 2-3 hours
 - **Cost:** Free
 - **Impact:** Prevent double-bookings, automated reminders
 - **Why:** Already 60% done, easy win
 
 ### 🥉 #3: ElevenLabs Voice AI
+
 - **Time:** 6-8 hours
 - **Cost:** $11/month
 - **Impact:** 3-5x more bookings captured outside hours
 - **Why:** Game changer for lead capture
 
 **Total for Top 3:**
+
 - Time: 11-15 hours
 - Cost: $11/month
 - ROI: Could 2-3x user acquisition
@@ -551,5 +616,5 @@
 
 ---
 
-*This checklist will be updated as integrations are completed.*
-*Last reviewed: 2025-10-12*
+_This checklist will be updated as integrations are completed._
+_Last reviewed: 2025-10-12_

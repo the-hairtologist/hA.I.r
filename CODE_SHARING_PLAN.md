@@ -1,4 +1,5 @@
 # Code Sharing Plan
+
 ## Hair A.I. Mono-Repo Strategy
 
 **Version:** 1.0.0  
@@ -20,7 +21,9 @@ This document outlines the strategy for maximizing code sharing between Hair A.I
 ## 1. Architecture Strategy
 
 ### 1.1 Chosen Approach: Capacitor + React
+
 **Why Capacitor?**
+
 - ✅ Already installed and configured
 - ✅ Uses existing React codebase
 - ✅ Web-first with native capabilities
@@ -29,11 +32,13 @@ This document outlines the strategy for maximizing code sharing between Hair A.I
 - ✅ Access to native plugins ecosystem
 
 **Rejected Alternatives:**
+
 - **Expo React Native:** Requires rewriting entire UI in React Native
 - **Flutter:** Requires learning Dart and rebuilding app
 - **Separate native apps:** 3x development effort
 
 ### 1.2 Directory Structure
+
 ```
 hair-ai-app/
 ├── src/
@@ -79,6 +84,7 @@ hair-ai-app/
 ### 2.1 100% Shared (No Platform Differences)
 
 **Business Logic**
+
 ```typescript
 // src/shared/api/appointments.ts
 export const bookAppointment = async (data: AppointmentData) => {
@@ -88,13 +94,14 @@ export const bookAppointment = async (data: AppointmentData) => {
     .insert(data)
     .select()
     .single();
-  
+
   if (error) throw error;
   return appointment;
 };
 ```
 
 **Data Models**
+
 ```typescript
 // src/shared/models/appointment.ts
 export interface Appointment {
@@ -110,6 +117,7 @@ export interface Appointment {
 ```
 
 **Validation Schemas**
+
 ```typescript
 // src/shared/validation/appointment.ts
 export const appointmentSchema = z.object({
@@ -125,6 +133,7 @@ export const appointmentSchema = z.object({
 ### 2.2 95% Shared (Minor Platform Adaptations)
 
 **React Hooks**
+
 ```typescript
 // src/shared/hooks/useAppointments.ts
 export const useAppointments = (userId: string) => {
@@ -133,12 +142,13 @@ export const useAppointments = (userId: string) => {
     queryKey: ['appointments', userId],
     queryFn: () => fetchAppointments(userId),
   });
-  
+
   return { data, isLoading };
 };
 ```
 
 **UI Components (with adapters)**
+
 ```typescript
 // src/components/ui/button.tsx
 import { ButtonBase } from '@/platform/button'; // Platform adapter
@@ -155,6 +165,7 @@ export const Button = ({ children, ...props }) => {
 ### 2.3 80% Shared (Platform-Specific Wrappers)
 
 **Navigation**
+
 ```typescript
 // src/platform/navigation.ts
 import { Platform } from './detector';
@@ -172,6 +183,7 @@ export const navigate = Platform.select({
 ```
 
 **File Upload**
+
 ```typescript
 // src/platform/camera.ts
 import { Camera } from '@capacitor/camera';
@@ -187,11 +199,11 @@ export const captureImage = async () => {
     return photo.dataUrl;
   } else {
     // Web file input
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const input = document.createElement('input');
       input.type = 'file';
       input.accept = 'image/*';
-      input.onchange = (e) => {
+      input.onchange = e => {
         const file = (e.target as HTMLInputElement).files?.[0];
         if (file) {
           const reader = new FileReader();
@@ -210,6 +222,7 @@ export const captureImage = async () => {
 ## 3. Platform Detection
 
 ### 3.1 Platform Detector Utility
+
 ```typescript
 // src/platform/detector.ts
 import { Capacitor } from '@capacitor/core';
@@ -219,8 +232,13 @@ export const Platform = {
   isMobile: Capacitor.isNativePlatform(),
   isIOS: Capacitor.getPlatform() === 'ios',
   isAndroid: Capacitor.getPlatform() === 'android',
-  
-  select<T>(options: { web?: T; mobile?: T; ios?: T; android?: T }): T | undefined {
+
+  select<T>(options: {
+    web?: T;
+    mobile?: T;
+    ios?: T;
+    android?: T;
+  }): T | undefined {
     if (this.isIOS && options.ios) return options.ios;
     if (this.isAndroid && options.android) return options.android;
     if (this.isMobile && options.mobile) return options.mobile;
@@ -231,14 +249,16 @@ export const Platform = {
 ```
 
 ### 3.2 Usage Example
+
 ```typescript
 import { Platform } from '@/platform/detector';
 
-const headerHeight = Platform.select({
-  web: 64,
-  ios: 88, // Account for notch
-  android: 56,
-}) ?? 64;
+const headerHeight =
+  Platform.select({
+    web: 64,
+    ios: 88, // Account for notch
+    android: 56,
+  }) ?? 64;
 ```
 
 ---
@@ -246,12 +266,15 @@ const headerHeight = Platform.select({
 ## 4. Component Adaptation Strategy
 
 ### 4.1 Universal Components (No Changes Needed)
+
 These components work identically on web and mobile:
+
 - All shadcn/ui primitives (Button, Input, Card, etc.)
 - Pure presentational components
 - Layout components using flexbox
 
 ### 4.2 Platform-Aware Components
+
 ```typescript
 // src/components/AppHeader.tsx
 import { Platform } from '@/platform/detector';
@@ -259,9 +282,9 @@ import { useStatusBar } from '@/platform/statusBar';
 
 export const AppHeader = () => {
   useStatusBar({ style: 'dark' }); // Mobile only
-  
+
   return (
-    <header 
+    <header
       className="header"
       style={{
         paddingTop: Platform.select({
@@ -278,6 +301,7 @@ export const AppHeader = () => {
 ```
 
 ### 4.3 Component Mapping
+
 ```typescript
 // src/platform/components.ts
 import { Platform } from './detector';
@@ -293,6 +317,7 @@ export const InteractiveButton = Platform.isMobile
 ## 5. Styling Strategy
 
 ### 5.1 Shared Design Tokens
+
 ```css
 /* src/index.css - Used by both platforms */
 :root {
@@ -306,6 +331,7 @@ export const InteractiveButton = Platform.isMobile
 ```
 
 ### 5.2 Tailwind Config (Shared)
+
 ```typescript
 // tailwind.config.ts
 export default {
@@ -316,7 +342,7 @@ export default {
         secondary: 'hsl(var(--color-secondary))',
       },
       spacing: {
-        'unit': 'var(--spacing-unit)',
+        unit: 'var(--spacing-unit)',
       },
     },
   },
@@ -324,6 +350,7 @@ export default {
 ```
 
 ### 5.3 Platform-Specific Styles
+
 ```typescript
 // src/platform/styles.ts
 export const platformStyles = {
@@ -343,6 +370,7 @@ export const platformStyles = {
 ## 6. Navigation Sharing
 
 ### 6.1 Route Definitions (100% Shared)
+
 ```typescript
 // src/shared/routes.ts
 export const ROUTES = {
@@ -359,6 +387,7 @@ export const ROUTES = {
 ```
 
 ### 6.2 Navigation Implementation
+
 ```typescript
 // src/platform/navigation.ts
 import { ROUTES } from '@/shared/routes';
@@ -368,7 +397,7 @@ import { Platform } from './detector';
 
 export const useNavigation = () => {
   const webNavigate = Platform.isWeb ? useWebNavigate() : null;
-  
+
   const navigate = (route: string) => {
     if (Platform.isWeb) {
       webNavigate?.(route);
@@ -376,7 +405,7 @@ export const useNavigation = () => {
       App.open({ url: route });
     }
   };
-  
+
   return { navigate, ROUTES };
 };
 ```
@@ -386,6 +415,7 @@ export const useNavigation = () => {
 ## 7. State Management (100% Shared)
 
 ### 7.1 React Query Configuration
+
 ```typescript
 // src/shared/api/queryClient.ts
 import { QueryClient } from '@tanstack/react-query';
@@ -402,7 +432,9 @@ export const queryClient = new QueryClient({
 ```
 
 ### 7.2 Shared Hooks
+
 All hooks in `src/hooks/` remain 100% shared:
+
 - `useAuth.ts`
 - `useProfile.ts`
 - `useAppointments.ts`
@@ -414,6 +446,7 @@ All hooks in `src/hooks/` remain 100% shared:
 ## 8. Platform Adapters
 
 ### 8.1 Storage Adapter
+
 ```typescript
 // src/platform/storage.ts
 import { Preferences } from '@capacitor/preferences';
@@ -427,7 +460,7 @@ export const Storage = {
       localStorage.setItem(key, value);
     }
   },
-  
+
   async get(key: string): Promise<string | null> {
     if (Platform.isMobile) {
       const { value } = await Preferences.get({ key });
@@ -436,7 +469,7 @@ export const Storage = {
       return localStorage.getItem(key);
     }
   },
-  
+
   async remove(key: string) {
     if (Platform.isMobile) {
       await Preferences.remove({ key });
@@ -448,6 +481,7 @@ export const Storage = {
 ```
 
 ### 8.2 Haptic Feedback Adapter
+
 ```typescript
 // src/platform/haptics.ts
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
@@ -467,7 +501,7 @@ export const haptic = {
       navigator.vibrate?.(style === 'heavy' ? 50 : 20);
     }
   },
-  
+
   notification(type: 'success' | 'warning' | 'error' = 'success') {
     if (Platform.isMobile) {
       // More advanced patterns for mobile
@@ -483,6 +517,7 @@ export const haptic = {
 ```
 
 ### 8.3 Notification Adapter
+
 ```typescript
 // src/platform/notifications.ts
 import { PushNotifications } from '@capacitor/push-notifications';
@@ -498,7 +533,7 @@ export const notifications = {
       return permission === 'granted';
     }
   },
-  
+
   async getToken(): Promise<string | null> {
     if (Platform.isMobile) {
       const result = await PushNotifications.register();
@@ -517,6 +552,7 @@ export const notifications = {
 ## 9. Build Configuration
 
 ### 9.1 Package.json Scripts
+
 ```json
 {
   "scripts": {
@@ -536,6 +572,7 @@ export const notifications = {
 ```
 
 ### 9.2 Vite Configuration
+
 ```typescript
 // vite.config.ts
 import { defineConfig } from 'vite';
@@ -568,6 +605,7 @@ export default defineConfig(({ mode }) => ({
 ## 10. Testing Strategy
 
 ### 10.1 Shared Unit Tests
+
 ```typescript
 // src/shared/__tests__/appointments.test.ts
 import { describe, it, expect } from 'vitest';
@@ -583,6 +621,7 @@ describe('Appointment Booking', () => {
 ```
 
 ### 10.2 Platform-Specific E2E Tests
+
 ```typescript
 // E2E/tests/web/booking.spec.ts
 test('Web: Complete booking flow', async ({ page }) => {
@@ -600,36 +639,42 @@ test('Mobile: Complete booking flow', async ({ device }) => {
 ## 11. Migration Plan
 
 ### Phase 1: Foundation (Week 1)
+
 - [ ] Create `src/shared/` directory structure
 - [ ] Move business logic to shared folder
 - [ ] Create platform detection utility
 - [ ] Set up platform adapters (storage, camera)
 
 ### Phase 2: Component Adaptation (Week 2)
+
 - [ ] Identify components needing platform-specific versions
 - [ ] Create mobile-specific component wrappers
 - [ ] Test components on both platforms
 - [ ] Update imports throughout codebase
 
 ### Phase 3: Navigation & Routing (Week 3)
+
 - [ ] Implement unified navigation abstraction
 - [ ] Test deep linking on mobile
 - [ ] Ensure route parity across platforms
 - [ ] Add mobile-specific navigation gestures
 
 ### Phase 4: Native Features (Week 4)
+
 - [ ] Add haptic feedback to mobile
 - [ ] Implement native camera integration
 - [ ] Set up push notifications for both platforms
 - [ ] Add biometric authentication (mobile only)
 
 ### Phase 5: Testing & Optimization (Week 5-6)
+
 - [ ] Write cross-platform integration tests
 - [ ] Performance audit on both platforms
 - [ ] Fix platform-specific bugs
 - [ ] Optimize bundle sizes
 
 ### Phase 6: CI/CD & Deployment (Week 7-8)
+
 - [ ] Set up mobile build pipeline
 - [ ] Configure Fastlane or EAS Build
 - [ ] Create beta distribution channels
@@ -640,16 +685,18 @@ test('Mobile: Complete booking flow', async ({ device }) => {
 ## 12. Code Sharing Metrics
 
 ### Target Metrics
-| Category | Current | Target | Strategy |
-|----------|---------|--------|----------|
-| Business Logic | 85% | 95% | Move remaining logic to `shared/` |
-| UI Components | 70% | 85% | Create platform adapters |
-| Hooks & State | 90% | 95% | Already highly shared |
-| Styling | 60% | 80% | Use design tokens consistently |
-| Navigation | 50% | 85% | Unified navigation abstraction |
-| **Overall** | **75%** | **90%** | Systematic refactoring |
+
+| Category       | Current | Target  | Strategy                          |
+| -------------- | ------- | ------- | --------------------------------- |
+| Business Logic | 85%     | 95%     | Move remaining logic to `shared/` |
+| UI Components  | 70%     | 85%     | Create platform adapters          |
+| Hooks & State  | 90%     | 95%     | Already highly shared             |
+| Styling        | 60%     | 80%     | Use design tokens consistently    |
+| Navigation     | 50%     | 85%     | Unified navigation abstraction    |
+| **Overall**    | **75%** | **90%** | Systematic refactoring            |
 
 ### Measurement
+
 ```typescript
 // scripts/measure-sharing.ts
 // Analyzes import statements and calculates sharing percentage
@@ -664,32 +711,36 @@ console.log(`Code sharing: ${sharingPercentage}%`);
 ## 13. Best Practices
 
 ### 13.1 Do's
+
 ✅ Write platform-agnostic business logic  
 ✅ Use platform detection for conditional features  
 ✅ Abstract platform-specific APIs behind adapters  
 ✅ Share design tokens and constants  
 ✅ Test on both platforms regularly  
-✅ Document platform differences  
+✅ Document platform differences
 
 ### 13.2 Don'ts
+
 ❌ Hardcode platform-specific values  
 ❌ Use web-only APIs without fallbacks  
 ❌ Duplicate business logic  
 ❌ Mix platform-specific code with shared code  
 ❌ Forget to sync mobile builds after changes  
-❌ Assume identical behavior without testing  
+❌ Assume identical behavior without testing
 
 ---
 
 ## 14. Tools & Resources
 
 ### Development Tools
+
 - **Capacitor DevTools:** For debugging mobile builds
 - **React DevTools:** Works on both platforms
 - **Sentry:** Error tracking for web and mobile
 - **Flipper:** Advanced mobile debugging
 
 ### Documentation
+
 - [Capacitor Documentation](https://capacitorjs.com/docs)
 - [React Native Web](https://necolas.github.io/react-native-web/) (for reference)
 - [Tailwind RN](https://www.nativewind.dev/) (future consideration)
@@ -699,18 +750,21 @@ console.log(`Code sharing: ${sharingPercentage}%`);
 ## 15. Success Criteria
 
 ### Code Sharing Goals
+
 - [x] 85% business logic sharing (Current)
 - [ ] 90% UI logic sharing (Target)
 - [ ] 95% data model sharing (Target)
 - [ ] 100% API client sharing (Current)
 
 ### Quality Metrics
+
 - [ ] Zero code duplication in business logic
 - [ ] All platform-specific code isolated to adapters
 - [ ] 100% feature parity between platforms
 - [ ] < 5% performance difference between platforms
 
 ### Developer Experience
+
 - [ ] Single command to build both platforms
 - [ ] Hot reload works on mobile
 - [ ] Clear documentation for adding new features
@@ -723,6 +777,7 @@ console.log(`Code sharing: ${sharingPercentage}%`);
 By following this code sharing plan, Hair A.I. will achieve 90%+ code reuse between web and mobile platforms while maintaining native performance and UX quality. The Capacitor-based approach leverages existing React expertise and minimizes the learning curve while providing access to native capabilities.
 
 **Next Steps:**
+
 1. Review this plan with development team
 2. Begin Phase 1 implementation
 3. Set up weekly progress tracking

@@ -80,7 +80,9 @@ async function sendToAnalytics(data: VitalsData) {
     );
   } catch (error) {
     // Silently fail - don't break user experience for analytics
-    productionLogger.error('Failed to send Core Web Vitals', error, { component: 'CoreWebVitals' });
+    productionLogger.error('Failed to send Core Web Vitals', error, {
+      component: 'CoreWebVitals',
+    });
   }
 }
 

@@ -3,6 +3,7 @@
 ## Google Analytics 4 (GA4) Setup
 
 ### Step 1: Create GA4 Property
+
 1. Go to [Google Analytics](https://analytics.google.com/)
 2. Click **Admin** (bottom left gear icon)
 3. In the **Property** column, click **Create Property**
@@ -11,6 +12,7 @@
 6. Click **Next** and complete setup
 
 ### Step 2: Get Measurement ID
+
 1. In your GA4 property, go to **Admin** → **Data Streams**
 2. Click **Add stream** → **Web**
 3. Enter website URL: `https://your-domain.com`
@@ -19,6 +21,7 @@
 6. Copy the **Measurement ID** (format: `G-XXXXXXXXXX`)
 
 ### Step 3: Add to Lovable Project
+
 1. Open your Lovable project
 2. Go to **Settings** → **Environment Variables**
 3. Add new variable:
@@ -28,6 +31,7 @@
 5. Redeploy your app
 
 ### Step 4: Verify Installation
+
 1. Visit your published app
 2. In GA4, go to **Reports** → **Realtime**
 3. Navigate around your app
@@ -40,11 +44,13 @@
 The app automatically tracks:
 
 ### Page Views
+
 - Every route change
 - Initial page load
 - Navigation events
 
 ### User Events
+
 - **Appointments**: created, updated, completed, cancelled
 - **Clients**: added, updated
 - **Formulas**: saved, duplicated, deleted
@@ -53,11 +59,13 @@ The app automatically tracks:
 - **UI Interactions**: button clicks, form submissions
 
 ### Performance Metrics
+
 - Core Web Vitals (LCP, FID, CLS)
 - Page load times
 - API response times
 
 ### User Properties
+
 - User ID (when logged in)
 - User role (client/stylist/admin)
 - Subscription status
@@ -77,6 +85,7 @@ The app automatically tracks:
 ### Custom Reports
 
 Create custom reports for:
+
 - Appointment conversion rate
 - Client retention metrics
 - Feature adoption rates
@@ -87,18 +96,21 @@ Create custom reports for:
 ## Privacy & Compliance
 
 ### What We Track
+
 - ✅ Anonymous user IDs
 - ✅ Page views and navigation
 - ✅ Feature usage (no PII)
 - ✅ Performance metrics
 
 ### What We DON'T Track
+
 - ❌ Personal information (names, emails)
 - ❌ Client data
 - ❌ Formula details
 - ❌ Payment information
 
 ### GDPR/CCPA Compliance
+
 - Users can opt-out via browser settings
 - No personally identifiable information is collected
 - Data retention follows GA4 defaults (14 months)
@@ -109,7 +121,7 @@ Create custom reports for:
 
 ### Analytics Not Working?
 
-1. **Check Measurement ID**: 
+1. **Check Measurement ID**:
    - Verify format is `G-XXXXXXXXXX`
    - Confirm it's added to environment variables
 
@@ -129,11 +141,13 @@ Create custom reports for:
 ### Still Not Working?
 
 Check the browser console for:
+
 ```
 GA4 not configured or invalid
 ```
 
 This means either:
+
 - `VITE_GA4_MEASUREMENT_ID` is not set
 - The measurement ID format is invalid
 

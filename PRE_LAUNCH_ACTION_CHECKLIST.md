@@ -9,6 +9,7 @@
 ## ✅ COMPLETED (In Lovable Platform)
 
 ### Legal Pages (100% Complete)
+
 - ✅ **Terms of Service** - `/terms` page with comprehensive AI disclaimers
 - ✅ **Privacy Policy** - `/privacy` page (GDPR & CCPA compliant)
 - ✅ **Cookie Policy** - `/cookie-policy` page with consent management
@@ -16,6 +17,7 @@
 - ✅ **All pages linked in footer** - Easily accessible from all pages
 
 ### Technical (100% Complete)
+
 - ✅ **Desktop Testing** - All features tested and working
 - ✅ **Mobile Testing** - Responsive at 375px, 414px, 768px breakpoints
 - ✅ **PWA Configuration** - Installable on mobile devices
@@ -35,6 +37,7 @@
 **Time:** 15-30 minutes to file, 6-8 months for registration
 
 **Steps:**
+
 1. Go to **https://copyright.gov/registration**
 2. Register the following:
    - ✅ Your app design and UI/UX
@@ -56,6 +59,7 @@
 **Time:** 30 minutes to file, 8-12 months for approval
 
 **Steps:**
+
 1. Go to **https://uspto.gov/trademarks**
 2. Search existing trademarks to ensure "hA.I.r" is available in your category
 3. File trademark application for:
@@ -76,6 +80,7 @@
 **Time:** 10 minutes online
 
 **Steps:**
+
 1. Go to **https://www.irs.gov/businesses/small-businesses-self-employed/apply-for-an-employer-identification-number-ein-online**
 2. Choose business structure:
    - **Sole Proprietor** (simplest, you personally own it)
@@ -85,12 +90,14 @@
 5. Save EIN letter/document - you'll need it for Stripe and taxes
 
 **Optional LLC Setup ($50-$150):**
+
 - If you want more legal protection, create an LLC through your state's business website
 - Search: "[Your State] LLC formation"
 - File Articles of Organization with your state
 - Get separate business bank account
 
 **Why EIN matters:**
+
 - Required for Stripe business account
 - Keeps business finances separate from personal
 - Makes tax filing easier (Schedule C or 1099)
@@ -106,6 +113,7 @@
 **Your app is READY for Stripe - just needs YOUR account connection:**
 
 **Steps:**
+
 1. Go to **https://stripe.com**
 2. Create Stripe account (or sign in)
 3. Complete Stripe onboarding:
@@ -121,6 +129,7 @@
 **Note:** Your app code already has Stripe integration built-in. You just need to connect YOUR Stripe account.
 
 **Tax Tracking:**
+
 - Keep records of ALL income (Stripe provides reports)
 - If online-only (no physical goods), usually won't charge sales tax initially
 - Consult with tax professional for your specific situation
@@ -135,6 +144,7 @@
 **Time:** 30 minutes
 
 **Domain Setup:**
+
 1. Purchase domain from:
    - **Namecheap** (recommended, ~$12/year)
    - **Google Domains**
@@ -150,10 +160,10 @@
    - Wait 24-48 hours for propagation
 
 **Email Setup:**
+
 1. **Option A: Free (Gmail forwarding)**
    - Set up email forwarding in domain registrar
    - Forward `support@yourdomain.com` → `ThehA.I.rtologist@gmail.com`
-   
 2. **Option B: Professional ($6/month - Google Workspace)**
    - Go to **workspace.google.com**
    - Sign up for Business Starter plan
@@ -161,6 +171,7 @@
    - Looks more professional to clients
 
 **Why this matters:**
+
 - `support@hairtologist.com` looks WAY more professional than Gmail
 - Builds trust with clients and stylists
 - Required for some app store submissions
@@ -174,6 +185,7 @@
 **Time:** 1-2 hours setup per platform
 
 **Google Play Store (Android):**
+
 1. Go to **play.google.com/console**
 2. Create Google Play Developer account
 3. Pay **$25 one-time registration fee**
@@ -189,6 +201,7 @@
    - Full description (4000 characters)
 
 **Apple App Store (iOS):**
+
 1. Go to **developer.apple.com**
 2. Enroll in Apple Developer Program
 3. Pay **$99/year subscription**
@@ -197,6 +210,7 @@
 6. Important: Apple has stricter review process (7-14 days)
 
 **When to do this:**
+
 - If launching as native mobile app: **Do NOW**
 - If launching as PWA (web app) only: **Wait until needed**
 - Your app already works as PWA (installable from browser)
@@ -210,14 +224,17 @@
 **Time:** 15 minutes
 
 **Current Status:**
+
 - Your Terms of Service mentions refund policy (stylist discretion)
 - Consider adding dedicated `/refund-policy` page
 
 **Create via:**
+
 - **https://www.termsfeed.com/refund-policy-generator** (free)
 - **https://www.websitepolicies.com/refund-policy-generator** (free)
 
 **Key points to include:**
+
 - Subscription refunds (within 14 days of purchase)
 - Service refunds (at stylist's discretion)
 - How to request refund
@@ -225,6 +242,7 @@
 - Non-refundable items (no-show appointments)
 
 **Steps:**
+
 1. Generate refund policy using generator above
 2. Review and customize for your business
 3. Create `/refund-policy` page in Lovable
@@ -235,17 +253,20 @@
 ## 🎯 OPTIONAL BUT SMART (Post-Launch)
 
 ### Logo Trademark (Visual Mark Protection)
+
 - **Cost:** $250-$350 (separate from name trademark)
 - **Why:** Protects your visual branding
 - **When:** After initial launch, if budget allows
 
 ### Official Business Email (Professional)
+
 - **Service:** Google Workspace ($6/month)
 - **Why:** More professional than Gmail
 - **Emails:** support@, hello@, team@yourdomain.com
 - **When:** Before heavy marketing
 
 ### Copyright Any Videos/Tutorials
+
 - **Cost:** $65 per work
 - **Why:** Protects your educational content
 - **When:** After creating significant video content
@@ -255,6 +276,7 @@
 ## 📊 Pre-Launch Checklist Summary
 
 **Must Complete (CRITICAL):**
+
 - [ ] Copyright registration filed (copyright.gov) - $45-$65
 - [ ] Trademark application filed (uspto.gov) - $250-$350
 - [ ] EIN obtained (irs.gov) - FREE
@@ -264,6 +286,7 @@
 - [ ] App store accounts created (if launching native) - $124/year total
 
 **Already Complete in Lovable:**
+
 - [x] Terms of Service page
 - [x] Privacy Policy page
 - [x] Cookie Policy page
@@ -274,6 +297,7 @@
 - [x] Legal pages linked in footer
 
 **Optional (But Recommended):**
+
 - [ ] Refund policy page created
 - [ ] LLC formed (if desired) - $50-$150
 - [ ] Google Workspace email - $6/month
@@ -284,6 +308,7 @@
 ## 💰 Total Estimated Costs (First Year)
 
 ### Minimum (Sole Proprietor, DIY):
+
 - Copyright: $45
 - Trademark: $250
 - EIN: $0
@@ -292,6 +317,7 @@
 - **Total: ~$307**
 
 ### Recommended (Professional Setup):
+
 - Copyright: $65
 - Trademark (name + logo): $600
 - LLC: $100
@@ -300,10 +326,12 @@
 - **Total: ~$849**
 
 ### With App Stores:
+
 - Add $124/year (Google Play + Apple Developer)
 - **Total: ~$973**
 
 ### Transaction Costs:
+
 - Stripe: 2.9% + $0.30 per transaction
 - Example: $100 appointment = $3.20 fee
 
@@ -312,6 +340,7 @@
 ## 📅 Suggested Timeline
 
 ### Week 1 (BEFORE Launch):
+
 - Day 1: File copyright registration
 - Day 2: File trademark application
 - Day 3: Get EIN
@@ -319,12 +348,14 @@
 - Day 5: Purchase domain and connect to Lovable
 
 ### Week 2 (Pre-Launch):
+
 - Day 1: Set up professional email
 - Day 2-3: Create app store accounts (if needed)
 - Day 4: Create refund policy page
 - Day 5: Final testing and verification
 
 ### Week 3:
+
 - 🚀 **LAUNCH!**
 
 ---
@@ -332,21 +363,25 @@
 ## 🎓 Why This Checklist Matters
 
 **Legal Protection:**
+
 - Copyright + Trademark = You own your brand legally
 - Prevents copycats and theft
 - Required for legal action if someone copies you
 
 **Business Legitimacy:**
+
 - EIN = Separate business identity
 - Professional domain/email = Trust and credibility
 - Proper policies = App store approval
 
 **Payment & Taxes:**
+
 - Stripe connection = Accept payments
 - EIN = Proper tax reporting
 - Records = Tax compliance
 
 **Long-term Security:**
+
 - Everything is legally yours
 - Payments go to your business
 - Brand is protected
@@ -357,24 +392,29 @@
 ## 📞 Resources & Links
 
 ### Government/Legal:
+
 - **Copyright:** https://copyright.gov/registration
 - **Trademark:** https://uspto.gov/trademarks
 - **EIN:** https://www.irs.gov/businesses/small-businesses-self-employed/apply-for-an-employer-identification-number-ein-online
 
 ### Business Tools:
+
 - **Stripe:** https://stripe.com
 - **Google Workspace:** https://workspace.google.com
 - **Domain Registrars:** Namecheap.com, Google Domains, GoDaddy.com
 
 ### Policy Generators:
+
 - **Terms & Privacy:** https://www.termsfeed.com, https://www.privacypolicies.com
 - **Refund Policy:** https://www.termsfeed.com/refund-policy-generator
 
 ### App Stores:
+
 - **Google Play:** https://play.google.com/console
 - **Apple App Store:** https://developer.apple.com
 
 ### DNS Verification:
+
 - **DNS Checker:** https://dnschecker.org
 
 ---
@@ -384,6 +424,7 @@
 You've built an amazing, production-ready application. Now it's time to protect it legally and set up the business infrastructure.
 
 **What you've accomplished so far:**
+
 - 🏆 A+ grade app (98/100 quality score)
 - 🔐 Bank-level security
 - ⚖️ Legal compliance (Terms, Privacy, Cookie, DMCA)
@@ -391,6 +432,7 @@ You've built an amazing, production-ready application. Now it's time to protect 
 - 🤖 AI-powered features with safety disclaimers
 
 **What's left:**
+
 - 📄 File legal paperwork (copyright, trademark, EIN)
 - 💳 Connect Stripe to accept payments
 - 🌐 Get professional domain and email
@@ -407,6 +449,7 @@ You've built an amazing, production-ready application. Now it's time to protect 
 This checklist ensures you're protected legally, set up professionally, and ready to accept payments from day one.
 
 **Next Steps:**
+
 1. Start with copyright and trademark (most important)
 2. Get your EIN
 3. Connect Stripe

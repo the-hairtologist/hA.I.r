@@ -1,21 +1,23 @@
 # Testing Strategy & Guidelines
 
 ## Overview
+
 This document outlines the comprehensive testing strategy for hA.I.r, covering unit tests, integration tests, and end-to-end tests.
 
 ## Testing Philosophy
 
 **Test Pyramid:**
+
 ```
         /\
        /  \        E2E Tests (10%)
       /    \       - Critical user journeys
      /------\      - Cross-browser compatibility
-    /        \     
+    /        \
    /          \    Integration Tests (30%)
   /            \   - Component interactions
  /--------------\  - API integrations
-/                \ 
+/                \
 ------------------  Unit Tests (60%)
                     - Pure functions
                     - Hooks
@@ -23,6 +25,7 @@ This document outlines the comprehensive testing strategy for hA.I.r, covering u
 ```
 
 **Key Principles:**
+
 - ✅ Test behavior, not implementation
 - ✅ Focus on user-facing functionality
 - ✅ Maintain >80% coverage on critical paths
@@ -33,12 +36,14 @@ This document outlines the comprehensive testing strategy for hA.I.r, covering u
 ## Test Frameworks
 
 ### Unit & Integration Tests
+
 - **Runner:** Vitest 3.2.4 (fast, ESM-native)
 - **React Testing:** @testing-library/react 16.3.0
 - **User Interactions:** @testing-library/user-event 14.6.1
 - **Assertions:** Vitest expect (Jest-compatible)
 
 ### E2E Tests
+
 - **Framework:** Playwright 1.55.1
 - **Browsers:** Chrome, Firefox, Safari
 - **Mobile:** iOS (iPhone 12), Android (Pixel 5)
@@ -48,6 +53,7 @@ This document outlines the comprehensive testing strategy for hA.I.r, covering u
 ## Running Tests
 
 ### Quick Commands
+
 ```bash
 # Run all unit tests
 npm test
@@ -69,6 +75,7 @@ npx playwright test --headed
 ```
 
 ### CI/CD Integration
+
 ```bash
 # Pre-commit hook (recommended)
 npm test -- --run --reporter=verbose
@@ -86,6 +93,7 @@ npm run test:coverage && npm run test:e2e
 **Location:** `src/**/*.test.ts(x)` (co-located with source)
 
 **Example: Pure Function Test**
+
 ```typescript
 // src/lib/utils.test.ts
 import { describe, it, expect } from 'vitest';
@@ -107,6 +115,7 @@ describe('cn utility', () => {
 ```
 
 **Example: React Hook Test**
+
 ```typescript
 // src/hooks/useAICall.test.ts
 import { describe, it, expect, vi } from 'vitest';
@@ -116,10 +125,10 @@ import { useAICall } from './useAICall';
 describe('useAICall', () => {
   it('should handle successful AI call', async () => {
     const { result } = renderHook(() => useAICall());
-    
+
     await result.current.callAI({
       model: 'google/gemini-2.5-flash',
-      messages: [{ role: 'user', content: 'Test' }]
+      messages: [{ role: 'user', content: 'Test' }],
     });
 
     expect(result.current.isLoading).toBe(false);
@@ -129,6 +138,7 @@ describe('useAICall', () => {
 ```
 
 **Example: Component Test**
+
 ```typescript
 // src/components/Button.test.tsx
 import { render, screen } from '@testing-library/react';
@@ -139,15 +149,15 @@ describe('Button', () => {
   it('should call onClick when clicked', async () => {
     const handleClick = vi.fn();
     render(<Button onClick={handleClick}>Click me</Button>);
-    
+
     await userEvent.click(screen.getByRole('button'));
-    
+
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
   it('should be disabled when loading', () => {
     render(<Button loading>Submit</Button>);
-    
+
     expect(screen.getByRole('button')).toBeDisabled();
     expect(screen.getByRole('button')).toHaveTextContent('Submit');
   });
@@ -159,6 +169,7 @@ describe('Button', () => {
 **Location:** `src/**/*.integration.test.tsx`
 
 **Example: Form Submission**
+
 ```typescript
 // src/components/AppointmentForm.integration.test.tsx
 import { render, screen, waitFor } from '@testing-library/react';
@@ -177,15 +188,15 @@ describe('AppointmentForm Integration', () => {
   it('should submit appointment successfully', async () => {
     const onSuccess = vi.fn();
     render(<AppointmentForm onSuccess={onSuccess} />, { wrapper });
-    
+
     // Fill form
     await userEvent.type(screen.getByLabelText('Client Name'), 'John Doe');
     await userEvent.click(screen.getByLabelText('Date'));
     await userEvent.click(screen.getByText('15')); // Select 15th
-    
+
     // Submit
     await userEvent.click(screen.getByRole('button', { name: 'Book' }));
-    
+
     // Wait for success
     await waitFor(() => {
       expect(onSuccess).toHaveBeenCalled();
@@ -199,6 +210,7 @@ describe('AppointmentForm Integration', () => {
 **Location:** `E2E/tests/*.spec.ts`
 
 **Example: User Journey**
+
 ```typescript
 // E2E/tests/booking-flow.spec.ts
 import { test, expect } from '@playwright/test';
@@ -251,22 +263,24 @@ test.describe('Appointment Booking', () => {
 ### 1. Query Priorities (React Testing Library)
 
 **Preferred Queries (in order):**
+
 ```typescript
 // 1. Accessible to everyone (best)
-screen.getByRole('button', { name: 'Submit' })
-screen.getByLabelText('Email address')
+screen.getByRole('button', { name: 'Submit' });
+screen.getByLabelText('Email address');
 
 // 2. Semantic queries
-screen.getByPlaceholderText('Enter email...')
-screen.getByText('Welcome back')
+screen.getByPlaceholderText('Enter email...');
+screen.getByText('Welcome back');
 
 // 3. Test IDs (last resort)
-screen.getByTestId('submit-button')
+screen.getByTestId('submit-button');
 ```
 
 ### 2. Async Operations
 
 **Always use waitFor for async assertions:**
+
 ```typescript
 // ❌ BAD - Race condition
 expect(screen.getByText('Loading...')).toBeInTheDocument();
@@ -280,6 +294,7 @@ await waitFor(() => {
 ### 3. Mocking External Dependencies
 
 **Mock Supabase client:**
+
 ```typescript
 // src/lib/testing/mocks/supabase.ts
 import { vi } from 'vitest';
@@ -297,6 +312,7 @@ export const mockSupabase = {
 ```
 
 **Mock fetch for edge functions:**
+
 ```typescript
 global.fetch = vi.fn().mockResolvedValue({
   ok: true,
@@ -307,6 +323,7 @@ global.fetch = vi.fn().mockResolvedValue({
 ### 4. Test Data Factories
 
 **Create reusable test data:**
+
 ```typescript
 // src/lib/testing/factories.ts
 import { faker } from '@faker-js/faker';
@@ -327,12 +344,14 @@ export const createMockAppointment = (overrides = {}) => ({
 ## Coverage Goals
 
 ### Target Metrics
+
 - **Statements:** 80%+
 - **Branches:** 75%+
 - **Functions:** 80%+
 - **Lines:** 80%+
 
 ### Critical Paths (Must Have 100% Coverage)
+
 - Authentication flow
 - Payment processing
 - AI formula generation
@@ -340,6 +359,7 @@ export const createMockAppointment = (overrides = {}) => ({
 - Data validation (Zod schemas)
 
 ### View Coverage Report
+
 ```bash
 npm run test:coverage
 # Opens HTML report in browser
@@ -351,6 +371,7 @@ open coverage/index.html
 ## Common Testing Patterns
 
 ### Pattern 1: Mocking useNavigate
+
 ```typescript
 const mockNavigate = vi.fn();
 vi.mock('react-router-dom', () => ({
@@ -360,6 +381,7 @@ vi.mock('react-router-dom', () => ({
 ```
 
 ### Pattern 2: Testing Custom Hooks
+
 ```typescript
 import { renderHook } from '@testing-library/react';
 
@@ -371,6 +393,7 @@ expect(result.current.count).toBe(1);
 ```
 
 ### Pattern 3: Testing Forms
+
 ```typescript
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -383,10 +406,10 @@ const schema = z.object({
 // Test validation
 it('should show error for invalid email', async () => {
   render(<LoginForm />);
-  
+
   await userEvent.type(screen.getByLabelText('Email'), 'invalid');
   await userEvent.click(screen.getByRole('button', { name: 'Submit' }));
-  
+
   expect(await screen.findByText('Invalid email')).toBeInTheDocument();
 });
 ```
@@ -396,6 +419,7 @@ it('should show error for invalid email', async () => {
 ## Continuous Integration
 
 ### GitHub Actions Workflow
+
 ```yaml
 name: Tests
 on: [push, pull_request]
@@ -417,7 +441,9 @@ jobs:
 ## Troubleshooting Tests
 
 ### Issue: Tests timeout
+
 **Solution:** Increase timeout in `vitest.config.ts`
+
 ```typescript
 export default defineConfig({
   test: {
@@ -427,10 +453,13 @@ export default defineConfig({
 ```
 
 ### Issue: "Cannot find module" errors
+
 **Solution:** Check `tsconfig.json` paths and `vite.config.ts` aliases match
 
 ### Issue: Flaky E2E tests
+
 **Solution:** Add explicit waits
+
 ```typescript
 // ❌ BAD
 await page.click('button');

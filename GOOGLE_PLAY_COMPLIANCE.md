@@ -1,4 +1,5 @@
 # Google Play Store Compliance Check
+
 ## hA.I.r App Policy Review
 
 **Date:** 2025-10-16  
@@ -9,18 +10,21 @@
 ## ✅ COMPLIANT Areas
 
 ### 1. **Privacy Policy** ✅
+
 - **Required:** YES
 - **Status:** ✅ You have `/privacy` page
 - **Location:** Already in app
 - **Action:** None needed
 
 ### 2. **Terms of Service** ✅
+
 - **Required:** YES
 - **Status:** ✅ You have `/terms` page
 - **Location:** Already in app
 - **Action:** None needed
 
 ### 3. **Data Safety Section** ✅
+
 - **Required:** YES (Fill in Play Console)
 - **Your App Collects:**
   - Email, name, phone (user profiles)
@@ -31,22 +35,26 @@
 - **Action:** Fill Data Safety form when submitting
 
 ### 4. **Content Rating** ⚠️
+
 - **Required:** YES
 - **Status:** Needs submission
 - **Your App:** Likely "Everyone" or "Teen" (professional tool)
 - **Action:** Complete IARC questionnaire in Play Console
 
 ### 5. **Target API Level** ✅
+
 - **Required:** Android 14 (API 34) minimum
 - **Status:** ✅ Capacitor handles this automatically
 - **Action:** None (Capacitor updates)
 
 ### 6. **App Icon & Graphics** ✅
+
 - **Required:** YES
 - **Status:** ✅ You have icons in `/public`
 - **Action:** Generate Play Store assets (1024x500 feature graphic)
 
 ### 7. **Refund Policy** ⚠️
+
 - **Required:** YES (for paid apps/subscriptions)
 - **Status:** Should add to Terms page
 - **Action:** Add refund policy section to `/terms`
@@ -84,6 +92,7 @@
 ## 🎯 Compliance Score: 95/100
 
 **Missing only minor items:**
+
 - Refund policy (5 points)
 - Store graphics ready (already have icons)
 
@@ -96,6 +105,7 @@
 Copy this when filling Play Console form:
 
 **Data Collected:**
+
 - Personal Info: Email, Name, Phone
 - Photos: Hair photos (client/portfolio)
 - Financial: Payment via Stripe (PCI compliant)
@@ -103,17 +113,20 @@ Copy this when filling Play Console form:
 - App Activity: Analytics (usage patterns)
 
 **Data Usage:**
+
 - App functionality
 - Account management
 - Fraud prevention
 - Analytics
 
 **Data Sharing:**
+
 - Stripe (payment processing)
 - Google Analytics (anonymized)
 - No sale of data
 
 **Security:**
+
 - Encrypted in transit (HTTPS/TLS)
 - Encrypted at rest (Supabase)
 - User can delete account

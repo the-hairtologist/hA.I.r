@@ -225,15 +225,15 @@ npx supabase db push
 
 ## Performance Targets
 
-| Metric | Target | Current |
-|--------|--------|---------|
-| First Contentful Paint | <1.8s | ✅ ~1.2s |
-| Largest Contentful Paint | <2.5s | ✅ ~1.5s |
-| First Input Delay | <100ms | ✅ ~50ms |
-| Cumulative Layout Shift | <0.1 | ✅ ~0.05 |
-| Time to Interactive | <3.8s | ✅ ~2.1s |
-| Total Bundle Size | <500KB | ✅ ~280KB |
-| Initial Load | <2s | ✅ ~1.4s |
+| Metric                   | Target | Current   |
+| ------------------------ | ------ | --------- |
+| First Contentful Paint   | <1.8s  | ✅ ~1.2s  |
+| Largest Contentful Paint | <2.5s  | ✅ ~1.5s  |
+| First Input Delay        | <100ms | ✅ ~50ms  |
+| Cumulative Layout Shift  | <0.1   | ✅ ~0.05  |
+| Time to Interactive      | <3.8s  | ✅ ~2.1s  |
+| Total Bundle Size        | <500KB | ✅ ~280KB |
+| Initial Load             | <2s    | ✅ ~1.4s  |
 
 ---
 
@@ -270,6 +270,7 @@ npx supabase db push
 ## Post-Launch Monitoring
 
 ### Week 1
+
 - [ ] Monitor error rates (target: <0.1%)
 - [ ] Check Core Web Vitals daily
 - [ ] Review user feedback
@@ -277,6 +278,7 @@ npx supabase db push
 - [ ] Check conversion rates
 
 ### Week 2-4
+
 - [ ] Analyze user behavior (funnels)
 - [ ] Review performance metrics
 - [ ] Address bug reports
@@ -289,24 +291,28 @@ npx supabase db push
 ### Common Issues
 
 **1. App not loading:**
+
 - Check browser console for errors
 - Verify all environment variables are set
 - Check Supabase connection
 - Verify SSL certificate
 
 **2. Features not working:**
+
 - Check edge function logs
 - Verify RLS policies
 - Check API keys/secrets
 - Review network tab
 
 **3. Performance issues:**
+
 - Run Lighthouse audit
 - Check bundle size
 - Review database queries
 - Check image sizes
 
 **4. Offline mode not working:**
+
 - Verify service worker is registered
 - Check network tab for SW
 - Test in incognito mode
@@ -349,6 +355,7 @@ Track these KPIs post-launch:
 ## Final Score: **99/100** 🎉
 
 The remaining 1 point requires:
+
 - User-specific actions (custom domain, production secrets, etc.)
 - Third-party service configuration (Stripe live mode, etc.)
 - Legal compliance (Privacy Policy, Terms of Service, etc.)

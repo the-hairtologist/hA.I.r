@@ -10,16 +10,17 @@
 
 ### Core Web Vitals
 
-| Metric | Current | Target | Status |
-|--------|---------|--------|--------|
-| **LCP** (Largest Contentful Paint) | 1.8s | <2.5s | ✅ Good |
-| **FID** (First Input Delay) | 45ms | <100ms | ✅ Good |
-| **CLS** (Cumulative Layout Shift) | 0.05 | <0.1 | ✅ Good |
-| **INP** (Interaction to Next Paint) | 180ms | <200ms | ✅ Good |
-| **FCP** (First Contentful Paint) | 1.2s | <1.8s | ✅ Good |
-| **TTFB** (Time to First Byte) | 300ms | <600ms | ✅ Good |
+| Metric                              | Current | Target | Status  |
+| ----------------------------------- | ------- | ------ | ------- |
+| **LCP** (Largest Contentful Paint)  | 1.8s    | <2.5s  | ✅ Good |
+| **FID** (First Input Delay)         | 45ms    | <100ms | ✅ Good |
+| **CLS** (Cumulative Layout Shift)   | 0.05    | <0.1   | ✅ Good |
+| **INP** (Interaction to Next Paint) | 180ms   | <200ms | ✅ Good |
+| **FCP** (First Contentful Paint)    | 1.2s    | <1.8s  | ✅ Good |
+| **TTFB** (Time to First Byte)       | 300ms   | <600ms | ✅ Good |
 
 ### Mobile Performance
+
 - **60 FPS** capability achieved
 - **Bundle size:** 487KB (gzipped)
 - **Initial load:** ~2.1s on 4G
@@ -53,7 +54,7 @@ const { data } = useQuery({
   queryFn: fetchAppointments,
   staleTime: 5 * 60 * 1000, // 5 minutes
   cacheTime: 10 * 60 * 1000, // 10 minutes
-  refetchOnWindowFocus: false
+  refetchOnWindowFocus: false,
 });
 ```
 
@@ -68,7 +69,7 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 const virtualizer = useVirtualizer({
   count: items.length,
   getScrollElement: () => parentRef.current,
-  estimateSize: () => 80
+  estimateSize: () => 80,
 });
 ```
 
@@ -88,6 +89,7 @@ const virtualizer = useVirtualizer({
 ```
 
 **Features:**
+
 - WebP format with fallback
 - Responsive srcset
 - Blur placeholder
@@ -115,12 +117,14 @@ export const ExpensiveComponent = memo(Component, (prev, next) => {
 ### 6. Bundle Size Optimization
 
 **Implemented:**
+
 - Tree-shaking for lodash (lodash-es)
 - Dynamic imports for heavy libraries
 - Removed unused dependencies
 - Minification in production
 
 **Bundle Analysis:**
+
 ```bash
 npm run build -- --analyze
 ```
@@ -132,29 +136,33 @@ npm run build -- --analyze
 ### Quick Wins (Can Implement Now)
 
 #### 1. Prefetch Critical Resources
+
 ```html
 <!-- In index.html -->
-<link rel="preconnect" href="https://iyotklwiwyljospfqnoy.supabase.co">
-<link rel="dns-prefetch" href="https://checkout.stripe.com">
+<link rel="preconnect" href="https://iyotklwiwyljospfqnoy.supabase.co" />
+<link rel="dns-prefetch" href="https://checkout.stripe.com" />
 ```
 
 #### 2. Service Worker for Offline Support
+
 ```typescript
 // Already configured via vite-plugin-pwa
 // Caches API responses and static assets
 ```
 
 #### 3. Debounce Search Inputs
+
 ```typescript
 import { useDebouncedCallback } from 'use-debounce';
 
 const debouncedSearch = useDebouncedCallback(
-  (value) => performSearch(value),
+  value => performSearch(value),
   300
 );
 ```
 
 #### 4. Optimize Calendar Re-renders
+
 ```typescript
 // Prevent unnecessary calendar re-renders
 const CalendarMemo = memo(Calendar, (prev, next) => {
@@ -170,6 +178,7 @@ const CalendarMemo = memo(Calendar, (prev, next) => {
 ## 📱 Mobile-Specific Optimizations
 
 ### Touch Response
+
 ```css
 /* Prevent 300ms click delay */
 * {
@@ -178,11 +187,13 @@ const CalendarMemo = memo(Calendar, (prev, next) => {
 ```
 
 ### Passive Event Listeners
+
 ```typescript
 element.addEventListener('scroll', handleScroll, { passive: true });
 ```
 
 ### Reduced Motion
+
 ```css
 @media (prefers-reduced-motion: reduce) {
   * {
@@ -201,17 +212,18 @@ element.addEventListener('scroll', handleScroll, { passive: true });
 ```typescript
 import { reportWebVitals } from '@/lib/performance/webVitals';
 
-reportWebVitals((metric) => {
+reportWebVitals(metric => {
   // Sends to analytics
   analytics.track('web_vitals', {
     name: metric.name,
     value: metric.value,
-    rating: metric.rating
+    rating: metric.rating,
   });
 });
 ```
 
 ### Performance Observer
+
 ```typescript
 // Already implemented in PerformanceMonitor component
 <PerformanceMonitor
@@ -229,6 +241,7 @@ reportWebVitals((metric) => {
 ## ⚡ Advanced Optimization Strategies
 
 ### 1. Intersection Observer for Lazy Components
+
 ```typescript
 const { ref, inView } = useInView({
   triggerOnce: true,
@@ -243,31 +256,34 @@ return (
 ```
 
 ### 2. Request Batching
+
 ```typescript
 // Batch multiple requests into one
 const batchedQuery = Promise.all([
   supabase.from('appointments').select(),
   supabase.from('clients').select(),
-  supabase.from('services').select()
+  supabase.from('services').select(),
 ]);
 ```
 
 ### 3. Optimistic Updates
+
 ```typescript
 const mutation = useMutation({
   mutationFn: updateAppointment,
-  onMutate: async (newData) => {
+  onMutate: async newData => {
     // Optimistically update UI
     queryClient.setQueryData(['appointment', id], newData);
   },
   onError: (err, variables, context) => {
     // Rollback on error
     queryClient.setQueryData(['appointment', id], context.previousData);
-  }
+  },
 });
 ```
 
 ### 4. Resource Hints
+
 ```typescript
 // Preload critical fonts
 <link rel="preload" href="/fonts/inter.woff2" as="font" crossOrigin="anonymous" />
@@ -294,6 +310,7 @@ const items = useMemo(() => [...data], [data]);
 ```
 
 ### Virtual Lists for Long Data
+
 ```typescript
 // Already available: VirtualList component
 import { VirtualList } from '@/components/ui/virtual-list';
@@ -327,12 +344,14 @@ getTTFB(sendToAnalytics);
 ## 🔧 Performance Debugging
 
 ### Tools
+
 - Chrome DevTools Performance tab
 - Lighthouse CI
 - React DevTools Profiler
 - Bundle analyzer
 
 ### Commands
+
 ```bash
 # Analyze bundle
 npm run build -- --analyze

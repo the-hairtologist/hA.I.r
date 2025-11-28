@@ -83,7 +83,10 @@ export const SubscriptionGate = ({
           toast.success('Redirecting to checkout...');
         }
       } catch (error: any) {
-        logger.error('Subscription error', error, { component: 'SubscriptionGate', feature });
+        logger.error('Subscription error', error, {
+          component: 'SubscriptionGate',
+          feature,
+        });
         toast.error('Failed to start subscription process');
       } finally {
         setSubscribing(false);

@@ -37,7 +37,10 @@ export class MediaErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    logger.error('MediaErrorBoundary caught error', error, { component: 'MediaErrorBoundary', errorInfo });
+    logger.error('MediaErrorBoundary caught error', error, {
+      component: 'MediaErrorBoundary',
+      errorInfo,
+    });
 
     this.setState({
       error,

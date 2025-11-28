@@ -9,6 +9,7 @@
 ## ✅ Current Compliance
 
 ### Keyboard Navigation
+
 - ✅ All interactive elements keyboard accessible
 - ✅ Focus indicators visible
 - ✅ Skip navigation link implemented (`@reach/skip-nav`)
@@ -16,6 +17,7 @@
 - ✅ No keyboard traps
 
 ### Screen Reader Support
+
 - ✅ Semantic HTML structure (`<main>`, `<nav>`, `<section>`, `<article>`)
 - ✅ ARIA labels on icon buttons
 - ✅ Form labels properly associated
@@ -23,17 +25,20 @@
 - ✅ Loading states communicated
 
 ### Color & Contrast
+
 - ✅ Color contrast ratios meet WCAG AA (4.5:1 for text)
 - ✅ Information not conveyed by color alone
 - ✅ Focus indicators have 3:1 contrast ratio
 - ✅ Dark mode fully supported with proper contrast
 
 ### Touch Targets
+
 - ✅ Minimum 44x44px tap targets (mobile)
 - ✅ Adequate spacing between interactive elements
 - ✅ No overlapping touch areas
 
 ### Forms
+
 - ✅ All inputs have associated labels
 - ✅ Required fields marked with asterisk and aria-required
 - ✅ Error messages descriptive and linked to fields
@@ -46,6 +51,7 @@
 ### Priority 1: High Impact, Easy Fixes
 
 #### 1.1 Add More ARIA Live Regions
+
 **Current:** Limited use of aria-live  
 **Improvement:** Add dynamic status announcements
 
@@ -63,6 +69,7 @@
 ---
 
 #### 1.2 Enhance Form Validation Announcements
+
 **Current:** Visual error messages  
 **Improvement:** Connect errors to inputs with aria-describedby
 
@@ -86,6 +93,7 @@
 ---
 
 #### 1.3 Add Skip Links for Complex Pages
+
 **Current:** Main skip link exists  
 **Improvement:** Add multiple skip links for complex layouts
 
@@ -112,11 +120,12 @@
 ### Priority 2: Medium Impact, Moderate Effort
 
 #### 2.1 Improve Modal Focus Management
+
 **Current:** Modals trap focus  
 **Improvement:** Announce modal purpose, restore focus on close
 
 ```typescript
-<Dialog 
+<Dialog
   aria-labelledby="dialog-title"
   aria-describedby="dialog-description"
   onOpenChange={(open) => {
@@ -140,6 +149,7 @@
 ---
 
 #### 2.2 Add Breadcrumb Navigation
+
 **Current:** Back buttons  
 **Improvement:** Full breadcrumb trail with aria-label
 
@@ -162,6 +172,7 @@
 ---
 
 #### 2.3 Improve Data Table Accessibility
+
 **Current:** Tables work but limited screen reader support  
 **Improvement:** Add table headers, captions, and sorting announcements
 
@@ -171,7 +182,7 @@
   <thead>
     <tr>
       <th scope="col">
-        <button 
+        <button
           onClick={sort}
           aria-label="Sort by date"
           aria-sort={sortDirection}
@@ -193,6 +204,7 @@
 ### Priority 3: Polish & Advanced
 
 #### 3.1 Add Keyboard Shortcuts
+
 **Improvement:** Global keyboard shortcuts with help dialog
 
 ```typescript
@@ -218,6 +230,7 @@ useEffect(() => {
 ```
 
 **Shortcuts:**
+
 - `Cmd/Ctrl + K` - Open search
 - `Cmd/Ctrl + N` - New appointment
 - `Cmd/Ctrl + /` - Show shortcuts help
@@ -230,6 +243,7 @@ useEffect(() => {
 ---
 
 #### 3.2 Reduce Motion Support
+
 **Current:** Animations enabled  
 **Improvement:** Respect prefers-reduced-motion
 
@@ -252,10 +266,13 @@ useEffect(() => {
 ---
 
 #### 3.3 Add High Contrast Mode
+
 **Improvement:** Detect and enhance for high contrast
 
 ```typescript
-const prefersHighContrast = window.matchMedia('(prefers-contrast: more)').matches;
+const prefersHighContrast = window.matchMedia(
+  '(prefers-contrast: more)'
+).matches;
 
 if (prefersHighContrast) {
   document.documentElement.classList.add('high-contrast');
@@ -279,6 +296,7 @@ if (prefersHighContrast) {
 ## 🧪 Testing Checklist
 
 ### Automated Testing
+
 - [ ] Run axe-core Playwright tests
 - [ ] Check color contrast ratios
 - [ ] Validate ARIA usage
@@ -289,6 +307,7 @@ npm run test:a11y
 ```
 
 ### Manual Testing
+
 - [ ] Navigate entire app using only keyboard
 - [ ] Test with screen reader enabled
 - [ ] Verify form submissions with screen reader
@@ -300,20 +319,20 @@ npm run test:a11y
 
 ## 📏 WCAG 2.2 Compliance Scorecard
 
-| Criterion | Level | Status | Notes |
-|-----------|-------|--------|-------|
-| **1.1 Text Alternatives** | A | ✅ Pass | All images have alt text |
-| **1.3 Adaptable** | A | ✅ Pass | Semantic HTML throughout |
-| **1.4.3 Contrast (Minimum)** | AA | ✅ Pass | 4.5:1 ratio met |
-| **1.4.11 Non-text Contrast** | AA | ✅ Pass | UI components have 3:1 |
-| **2.1 Keyboard Accessible** | A | ✅ Pass | All functions keyboard accessible |
-| **2.4 Navigable** | A | ✅ Pass | Clear focus indicators, skip links |
-| **2.4.7 Focus Visible** | AA | ✅ Pass | Focus always visible |
-| **2.5.5 Target Size** | AAA | ✅ Pass | 44x44px minimum |
-| **3.1 Readable** | A | ✅ Pass | Language declared, clear headings |
-| **3.2 Predictable** | A | ✅ Pass | Consistent navigation |
-| **3.3 Input Assistance** | A | ✅ Pass | Labels, error identification |
-| **4.1 Compatible** | A | ✅ Pass | Valid HTML, proper ARIA |
+| Criterion                    | Level | Status  | Notes                              |
+| ---------------------------- | ----- | ------- | ---------------------------------- |
+| **1.1 Text Alternatives**    | A     | ✅ Pass | All images have alt text           |
+| **1.3 Adaptable**            | A     | ✅ Pass | Semantic HTML throughout           |
+| **1.4.3 Contrast (Minimum)** | AA    | ✅ Pass | 4.5:1 ratio met                    |
+| **1.4.11 Non-text Contrast** | AA    | ✅ Pass | UI components have 3:1             |
+| **2.1 Keyboard Accessible**  | A     | ✅ Pass | All functions keyboard accessible  |
+| **2.4 Navigable**            | A     | ✅ Pass | Clear focus indicators, skip links |
+| **2.4.7 Focus Visible**      | AA    | ✅ Pass | Focus always visible               |
+| **2.5.5 Target Size**        | AAA   | ✅ Pass | 44x44px minimum                    |
+| **3.1 Readable**             | A     | ✅ Pass | Language declared, clear headings  |
+| **3.2 Predictable**          | A     | ✅ Pass | Consistent navigation              |
+| **3.3 Input Assistance**     | A     | ✅ Pass | Labels, error identification       |
+| **4.1 Compatible**           | A     | ✅ Pass | Valid HTML, proper ARIA            |
 
 **Overall Score:** 98/100 ✅
 
@@ -343,6 +362,7 @@ npm run test:a11y
 Your app already has strong accessibility fundamentals. The suggested enhancements above will take it from "compliant" to "exceptional" - but none are blocking launch.
 
 **Priority Order for Implementation:**
+
 1. ARIA live regions for dynamic content (30 min)
 2. Enhanced form validation announcements (45 min)
 3. Additional skip links for complex pages (20 min)

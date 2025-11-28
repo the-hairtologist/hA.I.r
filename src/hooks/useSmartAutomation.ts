@@ -106,8 +106,11 @@ export const useSmartAutomation = (stylistId?: string) => {
         clientCount: Object.keys(clientPatterns).length,
       });
     } catch (error) {
-      productionLogger.error('Error learning timing patterns', error, { component: 'useSmartAutomation', stylistId });
-    } finally{
+      productionLogger.error('Error learning timing patterns', error, {
+        component: 'useSmartAutomation',
+        stylistId,
+      });
+    } finally {
       setLoading(false);
     }
   };
@@ -143,11 +146,7 @@ export const useSmartAutomation = (stylistId?: string) => {
         const timing = timingProfiles[score.client_id];
         const churnProb = score.churn_probability ?? 0;
         const urgency =
-          churnProb >= 0.7
-            ? 'high'
-            : churnProb >= 0.4
-              ? 'medium'
-              : 'low';
+          churnProb >= 0.7 ? 'high' : churnProb >= 0.4 ? 'medium' : 'low';
 
         // Calculate optimal send time
         const now = new Date();
@@ -179,7 +178,10 @@ export const useSmartAutomation = (stylistId?: string) => {
 
       setSmartReminders(reminders);
     } catch (error) {
-      productionLogger.error('Error generating smart reminders', error, { component: 'useSmartAutomation', stylistId });
+      productionLogger.error('Error generating smart reminders', error, {
+        component: 'useSmartAutomation',
+        stylistId,
+      });
     }
   };
 

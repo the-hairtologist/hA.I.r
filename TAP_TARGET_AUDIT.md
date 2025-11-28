@@ -31,21 +31,25 @@
 **User Impact**: HIGH - Users struggle to collapse/expand sidebar
 
 **Current Code**:
+
 ```typescript
 // Line 229
 className={cn("h-7 w-7", className)}
 ```
 
 **Fix Required**:
+
 ```typescript
 // Change to:
 className={cn("h-11 w-11 min-h-[44px] min-w-[44px]", className)}
 ```
 
 **Files to Update**:
+
 - `src/components/ui/sidebar.tsx` (line 229)
 
 **Test Cases**:
+
 - ✓ Tap on mobile (360×800 viewport)
 - ✓ Tap on tablet (768×1024 viewport)
 - ✓ Verify spacing from adjacent elements ≥8px
@@ -62,6 +66,7 @@ className={cn("h-11 w-11 min-h-[44px] min-w-[44px]", className)}
 **User Impact**: MEDIUM - Some users may miss tap on small screens
 
 **Current Code**:
+
 ```typescript
 // Line 75
 <Button variant="ghost" size="sm" className="relative">
@@ -69,15 +74,18 @@ className={cn("h-11 w-11 min-h-[44px] min-w-[44px]", className)}
 ```
 
 **Fix Required**:
+
 ```typescript
 <Button variant="ghost" size="icon" className="relative min-h-[44px] min-w-[44px]">
   <Bell className="h-5 w-5" />
 ```
 
 **Files to Update**:
+
 - `src/components/NotificationCenter.tsx` (line 75)
 
 **Additional Changes**:
+
 - Increase icon size from `h-4 w-4` to `h-5 w-5` for better visibility
 - Update badge positioning to account for larger button
 
@@ -91,10 +99,11 @@ className={cn("h-11 w-11 min-h-[44px] min-w-[44px]", className)}
 **Required**: Explicit mobile min-size
 
 **Current Code**:
+
 ```typescript
 // Line 32
-<Button 
-  variant="ghost" 
+<Button
+  variant="ghost"
   size="icon"
   onClick={() => navigate(backTo)}
   aria-label="Go back"
@@ -103,9 +112,10 @@ className={cn("h-11 w-11 min-h-[44px] min-w-[44px]", className)}
 ```
 
 **Fix Required**:
+
 ```typescript
-<Button 
-  variant="ghost" 
+<Button
+  variant="ghost"
   size="icon"
   onClick={() => navigate(backTo)}
   aria-label="Go back"
@@ -114,6 +124,7 @@ className={cn("h-11 w-11 min-h-[44px] min-w-[44px]", className)}
 ```
 
 **Files to Update**:
+
 - `src/components/PageHeader.tsx` (line 32)
 
 ---
@@ -127,11 +138,13 @@ className={cn("h-11 w-11 min-h-[44px] min-w-[44px]", className)}
 **Issue**: Some lack explicit min-size declarations
 
 **Affected Components**:
+
 1. **ClientRequests.tsx** (lines 399, 408) - Edit/Delete buttons
 2. **Portfolio.tsx** - Photo action buttons
 3. **Formulas.tsx** (lines 250, 257) - Edit/Delete buttons
 
 **Current Pattern**:
+
 ```typescript
 // Example from ClientRequests.tsx line 399
 <Button variant="ghost" size="sm" onClick={() => handleEdit(post)}>
@@ -140,10 +153,11 @@ className={cn("h-11 w-11 min-h-[44px] min-w-[44px]", className)}
 ```
 
 **Fix Pattern**:
+
 ```typescript
-<Button 
-  variant="ghost" 
-  size="icon" 
+<Button
+  variant="ghost"
+  size="icon"
   className="min-h-[44px] min-w-[44px]"
   onClick={() => handleEdit(post)}
   aria-label="Edit post"
@@ -153,6 +167,7 @@ className={cn("h-11 w-11 min-h-[44px] min-w-[44px]", className)}
 ```
 
 **Files to Update**:
+
 - `src/pages/ClientRequests.tsx` (lines 399, 408)
 - `src/pages/Portfolio.tsx` (search for icon buttons)
 - `src/pages/Formulas.tsx` (lines 250, 257)
@@ -166,6 +181,7 @@ className={cn("h-11 w-11 min-h-[44px] min-w-[44px]", className)}
 **Issue**: Need to verify full clickable area includes padding
 
 **Current Structure**:
+
 ```typescript
 // Line 119-122
 <div className={`p-1.5 rounded-lg bg-gradient-to-br ${item.gradient}`}>
@@ -175,21 +191,24 @@ className={cn("h-11 w-11 min-h-[44px] min-w-[44px]", className)}
 ```
 
 **Analysis**:
+
 - Icon div: 16px (icon) + 3px padding × 2 = 22px
 - Full SidebarMenuButton provides the tap target
 - **Verify**: Actual rendered height ≥44px
 
 **Fix (if needed)**:
 Add explicit min-height to SidebarMenuButton wrapper:
+
 ```typescript
-<SidebarMenuButton 
-  asChild 
+<SidebarMenuButton
+  asChild
   tooltip={item.title}
   className="min-h-[44px]"
 >
 ```
 
 **Files to Update**:
+
 - `src/components/AppSidebar.tsx` (all SidebarMenuButton instances)
 
 ---
@@ -202,9 +221,10 @@ Add explicit min-height to SidebarMenuButton wrapper:
 **Issue**: Likely smaller than 44px
 
 **Location in Code**:
+
 ```typescript
 // Line 45-48
-<DialogPrimitive.Close 
+<DialogPrimitive.Close
   className="absolute right-4 top-4 rounded-lg opacity-70 ..."
   aria-label="Close dialog"
 >
@@ -212,8 +232,9 @@ Add explicit min-height to SidebarMenuButton wrapper:
 ```
 
 **Fix Required**:
+
 ```typescript
-<DialogPrimitive.Close 
+<DialogPrimitive.Close
   className="absolute right-4 top-4 rounded-lg opacity-70 min-h-[44px] min-w-[44px] flex items-center justify-center ring-offset-background transition-opacity data-[state=open]:bg-accent data-[state=open]:text-muted-foreground hover:opacity-100 focus:outline-none focus-visible:ring-4 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none border-2 border-foreground hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))]"
   aria-label="Close dialog"
 >
@@ -221,6 +242,7 @@ Add explicit min-height to SidebarMenuButton wrapper:
 ```
 
 **Files to Update**:
+
 - `src/components/ui/dialog.tsx` (line 45)
 
 ---
@@ -235,17 +257,20 @@ Add explicit min-height to SidebarMenuButton wrapper:
 **Recommendation**: Increase to `gap-3` (12px) for safety margin
 
 **Current Code**:
+
 ```typescript
 // Line 428
 <div className="flex gap-2 pt-4">
 ```
 
 **Recommended**:
+
 ```typescript
 <div className="flex gap-3 pt-4">
 ```
 
 **Files to Update**:
+
 - `src/pages/Appointments.tsx` (lines 428, 448)
 
 ---
@@ -258,6 +283,7 @@ Add explicit min-height to SidebarMenuButton wrapper:
 **Recommendation**: Monitor, consider `gap-3` if user feedback indicates mis-taps
 
 **Current Code**:
+
 ```typescript
 // Line 35
 <div className="flex justify-around items-center h-16 px-2 gap-2">
@@ -292,27 +318,25 @@ Add explicit min-height to SidebarMenuButton wrapper:
 ### Sprint 1 (This Week) - P0/P1 Fixes
 
 **Day 1-2**: Critical Fixes (P0)
+
 1. ✅ SidebarTrigger (15 min)
 2. ✅ Notification bell (10 min)
 3. ✅ PageHeader back button (5 min)
 
-**Day 3-4**: High Priority (P1)
-4. ✅ Icon buttons in cards (1 hour - multiple files)
-5. ✅ Dialog close buttons (15 min)
-6. ✅ Sidebar menu verification (30 min)
+**Day 3-4**: High Priority (P1) 4. ✅ Icon buttons in cards (1 hour - multiple files) 5. ✅ Dialog close buttons (15 min) 6. ✅ Sidebar menu verification (30 min)
 
 **Day 5**: Testing & Verification
+
 - ✅ E2E tests on all fixed components
 - ✅ Manual testing on real devices
 - ✅ Accessibility audit re-run
 
 ### Sprint 2 (Next Week) - P2 Improvements
 
-**Day 1**: Spacing refinements
-7. ✅ Appointment dialog spacing (5 min)
-8. ✅ Mobile nav spacing (monitor only)
+**Day 1**: Spacing refinements 7. ✅ Appointment dialog spacing (5 min) 8. ✅ Mobile nav spacing (monitor only)
 
 **Day 2-3**: Documentation & Monitoring
+
 - ✅ Update design system docs
 - ✅ Add tap target linting rule
 - ✅ Create component audit checklist
@@ -357,9 +381,9 @@ Add explicit min-height to SidebarMenuButton wrapper:
 describe('Tap Target Compliance', () => {
   test('all buttons meet 44x44px minimum', async ({ page }) => {
     await page.goto('/dashboard');
-    
+
     const buttons = await page.locator('button').all();
-    
+
     for (const button of buttons) {
       const box = await button.boundingBox();
       expect(box?.height).toBeGreaterThanOrEqual(44);
@@ -371,13 +395,13 @@ describe('Tap Target Compliance', () => {
     // Test mobile nav spacing
     await page.setViewportSize({ width: 375, height: 667 });
     await page.goto('/dashboard');
-    
+
     const navButtons = await page.locator('nav button').all();
-    
+
     for (let i = 0; i < navButtons.length - 1; i++) {
       const box1 = await navButtons[i].boundingBox();
       const box2 = await navButtons[i + 1].boundingBox();
-      
+
       if (box1 && box2) {
         const spacing = box2.x - (box1.x + box1.width);
         expect(spacing).toBeGreaterThanOrEqual(8);
@@ -389,19 +413,20 @@ describe('Tap Target Compliance', () => {
 
 ### Manual Testing Matrix
 
-| Component | Mobile (360×800) | Tablet (768×1024) | Desktop (1920×1080) | Status |
-|-----------|------------------|-------------------|---------------------|--------|
-| SidebarTrigger | 🔴 28px → ✅ 44px | 🔴 28px → ✅ 44px | ✅ 44px | Pending |
-| Notification Bell | 🟡 40px → ✅ 44px | 🟡 40px → ✅ 44px | ✅ 44px | Pending |
-| Back Button | ✅ 44px | ✅ 44px | ✅ 44px | Verified |
-| Icon Buttons (cards) | 🟡 40px → ✅ 44px | ✅ 44px | ✅ 44px | Pending |
-| Dialog Close | 🔴 32px → ✅ 44px | 🔴 32px → ✅ 44px | ✅ 44px | Pending |
-| Mobile Nav | ✅ 44px | N/A (hidden) | N/A (hidden) | Verified |
-| Form Buttons | ✅ 44px | ✅ 44px | ✅ 44px | Verified |
+| Component            | Mobile (360×800)  | Tablet (768×1024) | Desktop (1920×1080) | Status   |
+| -------------------- | ----------------- | ----------------- | ------------------- | -------- |
+| SidebarTrigger       | 🔴 28px → ✅ 44px | 🔴 28px → ✅ 44px | ✅ 44px             | Pending  |
+| Notification Bell    | 🟡 40px → ✅ 44px | 🟡 40px → ✅ 44px | ✅ 44px             | Pending  |
+| Back Button          | ✅ 44px           | ✅ 44px           | ✅ 44px             | Verified |
+| Icon Buttons (cards) | 🟡 40px → ✅ 44px | ✅ 44px           | ✅ 44px             | Pending  |
+| Dialog Close         | 🔴 32px → ✅ 44px | 🔴 32px → ✅ 44px | ✅ 44px             | Pending  |
+| Mobile Nav           | ✅ 44px           | N/A (hidden)      | N/A (hidden)        | Verified |
+| Form Buttons         | ✅ 44px           | ✅ 44px           | ✅ 44px             | Verified |
 
 ### Device Testing
 
 **Devices to Test**:
+
 - ✅ iPhone SE (375×667) - Smallest modern phone
 - ✅ iPhone 12 (390×844) - Common size
 - ✅ Pixel 5 (393×851) - Android reference
@@ -409,6 +434,7 @@ describe('Tap Target Compliance', () => {
 - ✅ Desktop (1920×1080) - Standard desktop
 
 **Test Scenarios**:
+
 1. **Single tap**: Verify button activates on first tap
 2. **Rapid taps**: Verify no accidental adjacent taps
 3. **Thumb reach**: Test one-handed use on phone
@@ -422,6 +448,7 @@ describe('Tap Target Compliance', () => {
 ### SidebarTrigger (Most Critical)
 
 **Before**:
+
 ```
 ┌────────────────┐
 │  ←    28×28px  │ ← Too small!
@@ -429,6 +456,7 @@ describe('Tap Target Compliance', () => {
 ```
 
 **After**:
+
 ```
 ┌──────────────────────┐
 │   ←    44×44px       │ ✅ Compliant
@@ -438,12 +466,14 @@ describe('Tap Target Compliance', () => {
 ### Icon Button Pattern (Cards)
 
 **Before**:
+
 ```
 [Edit 40×40px] [Delete 40×40px]
       ↑ Slightly too small
 ```
 
 **After**:
+
 ```
 [Edit 44×44px]  [Delete 44×44px]
       ↑ 8px gap  ↑
@@ -461,11 +491,11 @@ Add to **design-system-guidelines.md**:
 ```typescript
 /**
  * TAP TARGET SIZE REQUIREMENTS
- * 
+ *
  * Minimum: 44×44px (iOS HIG, WCAG 2.1 Level AAA)
  * Recommended: 48×48px (Material Design)
  * Spacing: ≥8px between interactive elements
- * 
+ *
  * Implementation:
  * - Always use Button component (has built-in min-sizes)
  * - For icon-only buttons: size="icon" + explicit min-h-[44px] min-w-[44px]
@@ -479,7 +509,7 @@ Add to **design-system-guidelines.md**:
 </Button>
 
 // ❌ BAD
-<button className="h-8 w-8"> 
+<button className="h-8 w-8">
   <Icon />
 </button>
 ```
@@ -512,6 +542,7 @@ Add to **design-system-guidelines.md**:
 ### Continuous Monitoring
 
 **Add to CI/CD**:
+
 ```yaml
 # .github/workflows/a11y-check.yml
 - name: Check Tap Targets
@@ -521,6 +552,7 @@ Add to **design-system-guidelines.md**:
 ```
 
 **Linting Rule** (ESLint plugin):
+
 ```javascript
 // Warn on icon buttons without explicit sizing
 'tap-target-size': ['warn', {
@@ -533,9 +565,10 @@ Add to **design-system-guidelines.md**:
 ### Future Prevention
 
 **Component Template**:
+
 ```typescript
 // Always use this pattern for icon buttons
-<Button 
+<Button
   variant="ghost"
   size="icon"
   className="min-h-[44px] min-w-[44px]"

@@ -9,11 +9,13 @@ This guide will help you set up a custom domain for your hA.I.r application. You
 ## 📋 Prerequisites
 
 Before starting, you'll need:
+
 - [ ] A domain name purchased from a registrar (GoDaddy, Namecheap, Google Domains, etc.)
 - [ ] Access to your domain's DNS settings
 - [ ] A Lovable paid plan (required for custom domains)
 
 **Recommended Domains for hA.I.r:**
+
 - `hair-ai.com`
 - `myhair-ai.com`
 - `hair-assistant.com`
@@ -27,6 +29,7 @@ Before starting, you'll need:
 ### Step 1: Purchase Your Domain
 
 If you don't have a domain yet, purchase one from:
+
 - **Namecheap** - Affordable, easy to use (recommended)
 - **Google Domains** - Clean interface, good integration
 - **GoDaddy** - Popular, lots of features
@@ -56,6 +59,7 @@ You'll need to add these DNS records at your domain registrar:
 #### For Root Domain (e.g., hair-ai.com)
 
 **A Record:**
+
 ```
 Type: A
 Name: @ (or leave blank)
@@ -66,6 +70,7 @@ TTL: 3600 (or automatic)
 #### For WWW Subdomain (e.g., www.hair-ai.com)
 
 **A Record:**
+
 ```
 Type: A
 Name: www
@@ -95,6 +100,7 @@ Lovable automatically provisions a **free SSL certificate** (HTTPS) using Let's 
 - ✅ No configuration needed
 
 **Verify SSL:**
+
 - Visit `https://yourdomain.com` in browser
 - Look for 🔒 padlock icon in address bar
 - Certificate should show "Issued to: yourdomain.com"
@@ -171,12 +177,15 @@ Lovable automatically provisions a **free SSL certificate** (HTTPS) using Let's 
 Want to use `app.hair-ai.com` or `booking.yoursalon.com`?
 
 ### In Lovable:
+
 1. First, add your root domain (hair-ai.com)
 2. Check the box "I want to add a subdomain"
 3. Enter your subdomain (e.g., `app`)
 
 ### In Your DNS:
+
 Add another A record:
+
 ```
 Type: A
 Name: app (or your subdomain)
@@ -185,6 +194,7 @@ TTL: 3600
 ```
 
 **Use Cases for Subdomains:**
+
 - `app.hair-ai.com` - Main application
 - `booking.yoursalon.com` - Public booking page
 - `stylists.hair-ai.com` - Stylist directory
@@ -199,6 +209,7 @@ TTL: 3600
 **Problem:** "Domain verification failed" message in Lovable
 
 **Solutions:**
+
 - ✅ Wait 24-48 hours for DNS propagation
 - ✅ Check DNS records at [DNSChecker.org](https://dnschecker.org)
 - ✅ Ensure A record points to `185.158.133.1`
@@ -213,6 +224,7 @@ TTL: 3600
 **Problem:** "Your connection is not private" or "NET::ERR_CERT_COMMON_NAME_INVALID"
 
 **Solutions:**
+
 - ✅ Wait 30 minutes after DNS propagation
 - ✅ Check that DNS is fully propagated worldwide
 - ✅ Verify no CAA records block Let's Encrypt
@@ -221,6 +233,7 @@ TTL: 3600
 
 **Check CAA Records:**
 If you have CAA records, ensure they allow Let's Encrypt:
+
 ```
 CAA record: 0 issue "letsencrypt.org"
 ```
@@ -232,6 +245,7 @@ CAA record: 0 issue "letsencrypt.org"
 **Problem:** Domain doesn't load at all
 
 **Solutions:**
+
 - ✅ DNS hasn't propagated yet - wait 24-48 hours
 - ✅ A record is incorrect - should be `185.158.133.1`
 - ✅ DNS server cached old records - flush DNS:
@@ -246,6 +260,7 @@ CAA record: 0 issue "letsencrypt.org"
 **Problem:** Browser can't connect to domain
 
 **Solutions:**
+
 - ✅ Check DNS propagation status
 - ✅ Verify A record is correct
 - ✅ Check if domain is active (not expired)
@@ -259,6 +274,7 @@ CAA record: 0 issue "letsencrypt.org"
 **Problem:** "Domain already in use" error
 
 **Solutions:**
+
 1. Go to old Lovable project
 2. Navigate to Settings → Domains
 3. Click **Remove** on the domain
@@ -274,22 +290,26 @@ CAA record: 0 issue "letsencrypt.org"
 Want to use email@yourdomain.com?
 
 ### Option 1: Google Workspace (Recommended)
+
 - Cost: $6/user/month
 - Professional email with Gmail interface
 - Setup: [Google Workspace](https://workspace.google.com)
 - Add MX records provided by Google
 
 ### Option 2: Outlook/Microsoft 365
+
 - Cost: $5/user/month
 - Professional email with Outlook
 - Setup: [Microsoft 365](https://www.microsoft.com/microsoft-365)
 
 ### Option 3: Zoho Mail (Budget-Friendly)
+
 - Cost: Free for 1 user, $1/user/month for more
 - Professional email hosting
 - Setup: [Zoho Mail](https://www.zoho.com/mail/)
 
 ### Option 4: Domain Registrar Email
+
 - Most registrars offer email hosting
 - Usually $2-5/month per mailbox
 - Check your registrar's email offerings
@@ -345,24 +365,29 @@ Once everything is set up, verify:
 After domain setup, improve SEO:
 
 ### 1. Update Meta Tags
+
 Already done in your app! ✅
+
 - Title tags
 - Meta descriptions
 - OG tags for social sharing
 
 ### 2. Submit Sitemap
+
 ```
 Your sitemap: https://yourdomain.com/sitemap.xml
 Submit to: Google Search Console
 ```
 
 ### 3. Set Up Google Search Console
+
 1. Go to [Google Search Console](https://search.google.com/search-console)
 2. Add property: `yourdomain.com`
 3. Verify ownership (DNS method recommended)
 4. Submit sitemap
 
 ### 4. Set Up Google Analytics (Optional)
+
 1. Create GA4 property
 2. Add tracking code (already in app if configured)
 3. Link to Search Console
@@ -372,10 +397,12 @@ Submit to: Google Search Console
 ## 💰 Cost Summary
 
 **One-Time Costs:**
+
 - Domain registration: $10-15/year
 - Lovable paid plan: $20-100/month (required for custom domain)
 
 **Optional Ongoing:**
+
 - Email hosting: $0-6/user/month
 - CDN (Cloudflare): Free-$200/month
 
@@ -386,10 +413,12 @@ Submit to: Google Search Console
 ## 🆘 Still Need Help?
 
 ### Lovable Support
+
 - Email: support@lovable.dev
 - Include: Your domain name and screenshot of DNS settings
 
 ### DNS Verification Tools
+
 - [DNSChecker.org](https://dnschecker.org) - Check DNS propagation
 - [WhatIsMyDNS.net](https://www.whatismydns.net) - Global DNS lookup
 - [MXToolbox.com](https://mxtoolbox.com) - Comprehensive DNS tools
@@ -400,14 +429,17 @@ Submit to: Google Search Console
 ## 📅 Typical Timeline
 
 **Day 1:**
+
 - Purchase domain (5 minutes)
 - Connect in Lovable (2 minutes)
 - Configure DNS (5 minutes)
 
 **Day 1-2:**
+
 - Wait for DNS propagation (1-48 hours, usually ~2 hours)
 
 **Day 2:**
+
 - SSL certificate auto-provisions (10-30 minutes after DNS)
 - Domain is live! 🎉
 

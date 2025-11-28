@@ -62,7 +62,11 @@ export const WeeklyScheduleView = ({
       });
       setServiceColors(colorMap);
     } catch (error) {
-      logger.error('Failed to load service colors', 'WeeklyScheduleView', error);
+      logger.error(
+        'Failed to load service colors',
+        'WeeklyScheduleView',
+        error
+      );
     }
   };
 

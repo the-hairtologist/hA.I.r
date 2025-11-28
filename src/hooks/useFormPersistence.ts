@@ -16,7 +16,10 @@ export const useFormPersistence = <T extends Record<string, any>>(
         const parsed = JSON.parse(stored);
         setValues({ ...initialValues, ...parsed });
       } catch (e) {
-        logger.error('Failed to parse stored form data', e, { component: 'useFormPersistence', key });
+        logger.error('Failed to parse stored form data', e, {
+          component: 'useFormPersistence',
+          key,
+        });
       }
     }
     setLoaded(true);

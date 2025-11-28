@@ -84,7 +84,8 @@ This guide will help you complete the final setup steps for Google Analytics 4 (
    - In Sentry, go to Issues
    - You should see errors appear within seconds
 
-**Free Tier:** 
+**Free Tier:**
+
 - 5,000 errors per month
 - 10,000 performance units per month
 - Unlimited projects
@@ -99,6 +100,7 @@ This guide will help you complete the final setup steps for Google Analytics 4 (
 Once you add these keys, the following will be tracked automatically:
 
 ### Google Analytics 4:
+
 - ✅ Page views on all routes
 - ✅ User signups and logins
 - ✅ Appointment bookings
@@ -109,6 +111,7 @@ Once you add these keys, the following will be tracked automatically:
 - ✅ User engagement time
 
 ### Sentry Error Monitoring:
+
 - ✅ JavaScript errors
 - ✅ Unhandled promise rejections
 - ✅ React component errors
@@ -121,6 +124,7 @@ Once you add these keys, the following will be tracked automatically:
 ## 🎯 Optional: Enhanced Tracking
 
 ### Mixpanel (Advanced User Analytics)
+
 If you want more detailed user behavior tracking beyond GA4:
 
 1. Sign up at [https://mixpanel.com](https://mixpanel.com)
@@ -134,13 +138,13 @@ If you want more detailed user behavior tracking beyond GA4:
 
 ## ⚙️ Current Status
 
-| Feature | Status | Action Required |
-|---------|--------|-----------------|
-| SEO (robots.txt) | ✅ Fixed | None |
-| Sitemap | ✅ Fixed | None |
-| PWA Icons | ✅ Fixed | None |
-| GA4 Integration | ⚠️ Ready | Add `VITE_GA4_MEASUREMENT_ID` |
-| Sentry Integration | ⚠️ Ready | Add `VITE_SENTRY_DSN` |
+| Feature            | Status   | Action Required               |
+| ------------------ | -------- | ----------------------------- |
+| SEO (robots.txt)   | ✅ Fixed | None                          |
+| Sitemap            | ✅ Fixed | None                          |
+| PWA Icons          | ✅ Fixed | None                          |
+| GA4 Integration    | ⚠️ Ready | Add `VITE_GA4_MEASUREMENT_ID` |
+| Sentry Integration | ⚠️ Ready | Add `VITE_SENTRY_DSN`         |
 
 ---
 

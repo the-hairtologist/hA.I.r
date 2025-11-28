@@ -15,6 +15,7 @@ This runbook provides step-by-step instructions for deploying the hA.I.r applica
 ## 🎯 Pre-Deployment Checklist
 
 ### Code Quality
+
 - [ ] All tests passing (`npm test`)
 - [ ] No TypeScript errors (`npm run type-check`)
 - [ ] No ESLint errors (`npm run lint`)
@@ -22,6 +23,7 @@ This runbook provides step-by-step instructions for deploying the hA.I.r applica
 - [ ] No console.log statements in production code
 
 ### Security
+
 - [ ] All P0 security issues fixed (see SECURITY_REPORT.md)
 - [ ] Environment variables properly configured
 - [ ] Secrets stored in Supabase Vault
@@ -30,12 +32,14 @@ This runbook provides step-by-step instructions for deploying the hA.I.r applica
 - [ ] RLS policies enabled on all tables
 
 ### Performance
+
 - [ ] Lighthouse score > 90
 - [ ] Core Web Vitals passing (LCP < 2.5s, INP < 200ms, CLS < 0.1)
 - [ ] Images optimized
 - [ ] Fonts preloaded
 
 ### Accessibility
+
 - [ ] WCAG 2.1 Level AA compliance
 - [ ] All images have alt text
 - [ ] Keyboard navigation working
@@ -43,6 +47,7 @@ This runbook provides step-by-step instructions for deploying the hA.I.r applica
 - [ ] Color contrast passing
 
 ### SEO
+
 - [ ] Meta tags configured
 - [ ] Open Graph image created
 - [ ] Sitemap.xml present
@@ -50,6 +55,7 @@ This runbook provides step-by-step instructions for deploying the hA.I.r applica
 - [ ] Structured data implemented
 
 ### Backend
+
 - [ ] Database migrations tested
 - [ ] Edge functions deployed
 - [ ] Supabase auth configured
@@ -82,6 +88,7 @@ npm run preview
 ### Step 2: Environment Setup
 
 **Verify Environment Variables**:
+
 ```bash
 # Check .env file (local only, not committed)
 VITE_SUPABASE_URL=https://[project-id].supabase.co
@@ -94,6 +101,7 @@ VITE_GA4_MEASUREMENT_ID=[GA4-ID]
 ### Step 3: Database Preparation
 
 **Run Pending Migrations**:
+
 ```bash
 # Connect to Supabase
 npx supabase db push
@@ -103,6 +111,7 @@ npx supabase db diff
 ```
 
 **Backup Database** (if applicable):
+
 ```bash
 # Via Supabase Dashboard > Database > Backups
 # Or via CLI
@@ -112,12 +121,14 @@ npx supabase db dump > backup-$(date +%Y%m%d).sql
 ### Step 4: Deploy Application
 
 **Via Lovable/Vercel**:
+
 1. Click "Publish" button in Lovable
 2. Wait for build to complete (~2 minutes)
 3. Verify preview URL works
 4. Promote to production domain
 
 **Via CLI** (if configured):
+
 ```bash
 # Deploy to Vercel
 npm run deploy
@@ -130,6 +141,7 @@ npm run build
 ### Step 5: Post-Deployment Verification
 
 **Smoke Tests**:
+
 ```bash
 # Check homepage loads
 curl -I https://hair.app/
@@ -142,6 +154,7 @@ curl https://hair.app/sitemap.xml
 ```
 
 **Manual Checks**:
+
 - [ ] Homepage loads correctly
 - [ ] Sign up flow works
 - [ ] Sign in flow works
@@ -154,6 +167,7 @@ curl https://hair.app/sitemap.xml
 ### Step 6: Monitoring Setup
 
 **Enable Monitoring**:
+
 ```bash
 # Verify Google Analytics tracking
 # Open browser dev tools, check for GA4 requests
@@ -171,7 +185,7 @@ curl https://hair.app/sitemap.xml
 
 ### Quick Rollback (Vercel)
 
-1. **Via Lovable**: 
+1. **Via Lovable**:
    - Open project history
    - Click "Revert" on previous working version
    - Confirm rollback
@@ -225,6 +239,7 @@ psql [connection-string] < backup-20250104.sql
 **Symptoms**: Homepage not loading, 500 errors
 
 **Quick Fix**:
+
 1. Check Vercel/hosting status page
 2. Roll back to previous deployment
 3. Check Supabase status (status.supabase.com)
@@ -235,6 +250,7 @@ psql [connection-string] < backup-20250104.sql
 **Symptoms**: "Error connecting to database", timeouts
 
 **Quick Fix**:
+
 1. Check Supabase dashboard for connection limits
 2. Restart database (if needed)
 3. Check RLS policies for infinite loops
@@ -245,6 +261,7 @@ psql [connection-string] < backup-20250104.sql
 **Symptoms**: Stripe checkout failing, webhook errors
 
 **Quick Fix**:
+
 1. Check Stripe dashboard for errors
 2. Verify webhook endpoint URL
 3. Check webhook secret is correct
@@ -255,6 +272,7 @@ psql [connection-string] < backup-20250104.sql
 **Symptoms**: Slow page loads, timeouts
 
 **Quick Fix**:
+
 1. Check Supabase query performance
 2. Review recent database changes
 3. Check for memory leaks (monitor RAM usage)
@@ -277,9 +295,9 @@ export default async function handler(req, res) {
       .from('profiles')
       .select('count')
       .limit(1);
-    
+
     if (error) throw error;
-    
+
     // Return healthy status
     res.status(200).json({
       status: 'healthy',
@@ -297,6 +315,7 @@ export default async function handler(req, res) {
 ```
 
 **Monitor Health**:
+
 ```bash
 # Set up monitoring (UptimeRobot, Pingdom, etc.)
 curl https://hair.app/api/health
@@ -312,6 +331,7 @@ curl https://hair.app/api/health
 ### First 24 Hours
 
 **Monitor**:
+
 - [ ] Error rate (should be < 1%)
 - [ ] Response time (should be < 1s)
 - [ ] Sign-up conversions
@@ -319,6 +339,7 @@ curl https://hair.app/api/health
 - [ ] User-reported issues
 
 **Check Logs**:
+
 ```bash
 # Supabase logs
 # Dashboard > Logs > Filter by error
@@ -330,6 +351,7 @@ curl https://hair.app/api/health
 ### First Week
 
 **Review**:
+
 - [ ] Google Analytics traffic
 - [ ] Core Web Vitals
 - [ ] User feedback
@@ -339,6 +361,7 @@ curl https://hair.app/api/health
 ### First Month
 
 **Analyze**:
+
 - [ ] Monthly Active Users (MAU)
 - [ ] Retention rate
 - [ ] Feature adoption
@@ -354,6 +377,7 @@ curl https://hair.app/api/health
 **Cause**: TypeScript errors, missing dependencies
 
 **Solution**:
+
 ```bash
 # Clear cache
 rm -rf node_modules dist
@@ -366,6 +390,7 @@ npm run build
 **Cause**: Variables not set in hosting platform
 
 **Solution**:
+
 1. Verify variables in hosting dashboard
 2. Ensure variables start with `VITE_` for client-side
 3. Redeploy after adding variables
@@ -375,12 +400,11 @@ npm run build
 **Cause**: SPA routing not configured
 
 **Solution**:
+
 ```json
 // vercel.json
 {
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
-  ]
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }
 ```
 
@@ -389,11 +413,13 @@ npm run build
 **Cause**: API requests blocked by browser
 
 **Solution**:
+
 ```typescript
 // Add CORS headers in edge functions
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
 };
 ```
 
@@ -404,11 +430,13 @@ const corsHeaders = {
 ### Support Contacts
 
 **Technical Issues**:
+
 - Lovable Support: support@lovable.dev
 - Supabase Support: support@supabase.com
 - Stripe Support: stripe.com/support
 
 **Escalation Path**:
+
 1. Check documentation & runbooks
 2. Review error logs
 3. Attempt rollback if critical

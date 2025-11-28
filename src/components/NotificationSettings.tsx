@@ -45,7 +45,9 @@ export const NotificationSettings = () => {
         toast.error('Failed to enable notifications');
       }
     } catch (error) {
-      logger.error('Error enabling notifications', error, { component: 'NotificationSettings' });
+      logger.error('Error enabling notifications', error, {
+        component: 'NotificationSettings',
+      });
       toast.error('Failed to enable notifications');
     } finally {
       setRegistering(false);

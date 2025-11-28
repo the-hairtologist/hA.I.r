@@ -1,24 +1,24 @@
 version: 2
 updates:
   # Keep npm dependencies up to date
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: 'npm'
+    directory: '/'
     schedule:
-      interval: "weekly"
-      day: "monday"
+      interval: 'weekly'
+      day: 'monday'
     open-pull-requests-limit: 5
     assignees:
-      - "@me"
+      - '@me'
     labels:
-      - "dependencies"
-      - "automated"
+      - 'dependencies'
+      - 'automated'
     commit-message:
-      prefix: "chore"
-      include: "scope"
+      prefix: 'chore'
+      include: 'scope'
     # Auto-merge patch updates
     groups:
       patch-updates:
         patterns:
-          - "*"
+          - '*'
         update-types:
-          - "patch"
+          - 'patch'

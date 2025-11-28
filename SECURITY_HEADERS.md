@@ -1,6 +1,7 @@
 # Security Headers Configuration
 
 ## Overview
+
 Security headers protect against common web vulnerabilities like XSS, clickjacking, and MIME sniffing.
 
 ---
@@ -8,6 +9,7 @@ Security headers protect against common web vulnerabilities like XSS, clickjacki
 ## REQUIRED HEADERS (For Production)
 
 ### 1. Content Security Policy (CSP)
+
 ```
 Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://checkout.stripe.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co https://api.stripe.com; frame-src https://checkout.stripe.com https://js.stripe.com;
 ```
@@ -17,6 +19,7 @@ Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' h
 ---
 
 ### 2. X-Frame-Options
+
 ```
 X-Frame-Options: DENY
 ```
@@ -26,6 +29,7 @@ X-Frame-Options: DENY
 ---
 
 ### 3. X-Content-Type-Options
+
 ```
 X-Content-Type-Options: nosniff
 ```
@@ -35,6 +39,7 @@ X-Content-Type-Options: nosniff
 ---
 
 ### 4. Strict-Transport-Security (HSTS)
+
 ```
 Strict-Transport-Security: max-age=31536000; includeSubDomains
 ```
@@ -44,6 +49,7 @@ Strict-Transport-Security: max-age=31536000; includeSubDomains
 ---
 
 ### 5. Referrer-Policy
+
 ```
 Referrer-Policy: strict-origin-when-cross-origin
 ```
@@ -53,6 +59,7 @@ Referrer-Policy: strict-origin-when-cross-origin
 ---
 
 ### 6. Permissions-Policy
+
 ```
 Permissions-Policy: camera=(), microphone=(), geolocation=()
 ```
@@ -64,6 +71,7 @@ Permissions-Policy: camera=(), microphone=(), geolocation=()
 ## IMPLEMENTATION
 
 ### Via vercel.json (Recommended)
+
 ```json
 {
   "headers": [
@@ -101,10 +109,12 @@ Permissions-Policy: camera=(), microphone=(), geolocation=()
 ## CURRENT STATUS
 
 ✅ **Implemented:**
+
 - HTTPS enforced (Lovable hosting)
 - CORS headers on edge functions
 
 ⚠️ **Missing:**
+
 - CSP header
 - X-Frame-Options
 - X-Content-Type-Options
