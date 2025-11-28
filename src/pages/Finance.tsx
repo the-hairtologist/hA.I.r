@@ -162,14 +162,20 @@ const Finance = () => {
         .maybeSingle();
 
       if (stylistError) {
-        logger.error('Error fetching stylist profile', 'Finance', stylistError as Error);
+        logger.error(
+          'Error fetching stylist profile',
+          'Finance',
+          stylistError as Error
+        );
         toast.error('Failed to load stylist profile');
         navigate('/dashboard');
         return;
       }
 
       if (!stylist) {
-        logger.warn('No stylist profile found for user', 'Finance', { userId: session.user.id });
+        logger.warn('No stylist profile found for user', 'Finance', {
+          userId: session.user.id,
+        });
         toast.error(
           'Stylist profile not found. Please complete your profile first.'
         );
@@ -530,57 +536,63 @@ const Finance = () => {
                       CartesianGrid &&
                       Tooltip &&
                       Legend && (
-                        <div style={{ minWidth: '320px', width: '100%', height: '300px' }}>
+                        <div
+                          style={{
+                            minWidth: '320px',
+                            width: '100%',
+                            height: '300px',
+                          }}
+                        >
                           <ResponsiveContainer width="100%" height="100%">
-                          <LineChart
-                            data={chartData}
-                            margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
-                          >
-                            <CartesianGrid
-                              strokeDasharray="3 3"
-                              className="stroke-muted"
-                            />
-                            <XAxis
-                              dataKey="date"
-                              className="text-xs fill-muted-foreground"
-                            />
-                            <YAxis
-                              className="text-xs fill-muted-foreground"
-                              tickFormatter={value => `$${value}`}
-                            />
-                            <Tooltip
-                              formatter={(value: number) => [
-                                `$${value.toFixed(2)}`,
-                                '',
-                              ]}
-                            />
-                            <Legend />
-                            <Line
-                              type="monotone"
-                              dataKey="payments"
-                              stroke="hsl(var(--primary))"
-                              strokeWidth={2}
-                              name="Service Payments"
-                              dot={{ fill: 'hsl(var(--primary))', r: 4 }}
-                            />
-                            <Line
-                              type="monotone"
-                              dataKey="commissions"
-                              stroke="hsl(var(--chart-3))"
-                              strokeWidth={2}
-                              name="Commissions"
-                              dot={{ fill: 'hsl(var(--chart-3))', r: 4 }}
-                            />
-                            <Line
-                              type="monotone"
-                              dataKey="total"
-                              stroke="hsl(var(--chart-1))"
-                              strokeWidth={3}
-                              name="Total Revenue"
-                              dot={{ fill: 'hsl(var(--chart-1))', r: 5 }}
-                            />
-                          </LineChart>
-                        </ResponsiveContainer>
+                            <LineChart
+                              data={chartData}
+                              margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
+                            >
+                              <CartesianGrid
+                                strokeDasharray="3 3"
+                                className="stroke-muted"
+                              />
+                              <XAxis
+                                dataKey="date"
+                                className="text-xs fill-muted-foreground"
+                              />
+                              <YAxis
+                                className="text-xs fill-muted-foreground"
+                                tickFormatter={value => `$${value}`}
+                              />
+                              <Tooltip
+                                formatter={(value: number) => [
+                                  `$${value.toFixed(2)}`,
+                                  '',
+                                ]}
+                              />
+                              <Legend />
+                              <Line
+                                type="monotone"
+                                dataKey="payments"
+                                stroke="hsl(var(--primary))"
+                                strokeWidth={2}
+                                name="Service Payments"
+                                dot={{ fill: 'hsl(var(--primary))', r: 4 }}
+                              />
+                              <Line
+                                type="monotone"
+                                dataKey="commissions"
+                                stroke="hsl(var(--chart-3))"
+                                strokeWidth={2}
+                                name="Commissions"
+                                dot={{ fill: 'hsl(var(--chart-3))', r: 4 }}
+                              />
+                              <Line
+                                type="monotone"
+                                dataKey="total"
+                                stroke="hsl(var(--chart-1))"
+                                strokeWidth={3}
+                                name="Total Revenue"
+                                dot={{ fill: 'hsl(var(--chart-1))', r: 5 }}
+                              />
+                            </LineChart>
+                          </ResponsiveContainer>
                         </div>
                       )}
                   </div>

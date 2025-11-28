@@ -63,7 +63,7 @@ export function ServiceTemplatesDialog({
     try {
       // Get stylist profile
       if (!user?.id) return;
-      
+
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id')
@@ -80,12 +80,17 @@ export function ServiceTemplatesDialog({
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setTemplates((data || []).map(t => ({
-        ...t,
-        created_at: t.created_at || new Date().toISOString()
-      })));
+      setTemplates(
+        (data || []).map(t => ({
+          ...t,
+          created_at: t.created_at || new Date().toISOString(),
+        }))
+      );
     } catch (error) {
-      logger.error('Error loading templates', error, { component: 'ServiceTemplatesDialog', userId: user?.id });
+      logger.error('Error loading templates', error, {
+        component: 'ServiceTemplatesDialog',
+        userId: user?.id,
+      });
     } finally {
       setLoading(false);
     }
@@ -94,7 +99,7 @@ export function ServiceTemplatesDialog({
   const loadAvailableServices = async () => {
     try {
       if (!user?.id) return;
-      
+
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id')
@@ -112,7 +117,10 @@ export function ServiceTemplatesDialog({
       if (error) throw error;
       setAvailableServices(data || []);
     } catch (error) {
-      logger.error('Error loading services', error, { component: 'ServiceTemplatesDialog', userId: user?.id });
+      logger.error('Error loading services', error, {
+        component: 'ServiceTemplatesDialog',
+        userId: user?.id,
+      });
     }
   };
 
@@ -125,7 +133,7 @@ export function ServiceTemplatesDialog({
     setCreating(true);
     try {
       if (!user?.id) throw new Error('User not found');
-      
+
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id')
@@ -162,7 +170,10 @@ export function ServiceTemplatesDialog({
       setSelectedServices([]);
       loadTemplates();
     } catch (error: any) {
-      logger.error('Error creating template', error, { component: 'ServiceTemplatesDialog', templateName: newTemplateName });
+      logger.error('Error creating template', error, {
+        component: 'ServiceTemplatesDialog',
+        templateName: newTemplateName,
+      });
       toast.error(error.message || 'Failed to create template');
     } finally {
       setCreating(false);
@@ -180,7 +191,10 @@ export function ServiceTemplatesDialog({
       toast.success('Template deleted');
       loadTemplates();
     } catch (error: any) {
-      logger.error('Error deleting template', error, { component: 'ServiceTemplatesDialog', templateId: id });
+      logger.error('Error deleting template', error, {
+        component: 'ServiceTemplatesDialog',
+        templateId: id,
+      });
       toast.error('Failed to delete template');
     }
   };

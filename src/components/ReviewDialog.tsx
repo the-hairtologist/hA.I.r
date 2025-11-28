@@ -70,7 +70,11 @@ export const ReviewDialog = ({
           client_id: clientId,
         });
       } catch (error) {
-        logger.error('Zapier webhook failed', error, { component: 'ReviewDialog', appointmentId, stylistId });
+        logger.error('Zapier webhook failed', error, {
+          component: 'ReviewDialog',
+          appointmentId,
+          stylistId,
+        });
       }
     },
     {

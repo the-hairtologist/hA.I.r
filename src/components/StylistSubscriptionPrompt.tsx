@@ -98,7 +98,9 @@ export const StylistSubscriptionPrompt = ({
         toast.success('Redirecting to checkout...');
       }
     } catch (error: any) {
-      logger.error('Subscription error', error, { component: 'StylistSubscriptionPrompt' });
+      logger.error('Subscription error', error, {
+        component: 'StylistSubscriptionPrompt',
+      });
       toast.error('Failed to start subscription process');
     } finally {
       setLoading(false);

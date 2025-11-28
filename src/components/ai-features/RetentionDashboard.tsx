@@ -65,18 +65,23 @@ export function RetentionDashboard({ stylistId }: { stylistId: string }) {
 
       if (error) throw error;
 
-      setScores((data || []).map(score => ({
-        ...score,
-        days_since_last_visit: score.days_since_last_visit || 0,
-        churn_probability: score.churn_probability || 0,
-        average_visit_frequency: score.average_visit_frequency || 0,
-        predicted_next_visit: score.predicted_next_visit || new Date().toISOString(),
-        client: score.client ? {
-          full_name: score.client.full_name || 'Unknown',
-          email: score.client.email || '',
-          phone: score.client.phone || ''
-        } : undefined
-      })));
+      setScores(
+        (data || []).map(score => ({
+          ...score,
+          days_since_last_visit: score.days_since_last_visit || 0,
+          churn_probability: score.churn_probability || 0,
+          average_visit_frequency: score.average_visit_frequency || 0,
+          predicted_next_visit:
+            score.predicted_next_visit || new Date().toISOString(),
+          client: score.client
+            ? {
+                full_name: score.client.full_name || 'Unknown',
+                email: score.client.email || '',
+                phone: score.client.phone || '',
+              }
+            : undefined,
+        }))
+      );
 
       // Calculate stats
       const atRisk =
@@ -92,7 +97,11 @@ export function RetentionDashboard({ stylistId }: { stylistId: string }) {
 
       setStats({ atRisk, healthy, avgScore });
     } catch (error) {
-      logger.error('Error loading retention scores', 'RetentionDashboard', error as Error);
+      logger.error(
+        'Error loading retention scores',
+        'RetentionDashboard',
+        error as Error
+      );
       toast.error('Failed to load retention data');
     } finally {
       setLoading(false);

@@ -77,7 +77,10 @@ export const useProactiveInsights = (stylistId?: string, enabled = true) => {
         await saveInsightsToDatabase(stylistId, newInsights);
       }
     } catch (error) {
-      logger.error('Error generating proactive insights', error, { component: 'useProactiveInsights', stylistId });
+      logger.error('Error generating proactive insights', error, {
+        component: 'useProactiveInsights',
+        stylistId,
+      });
     } finally {
       setLoading(false);
     }

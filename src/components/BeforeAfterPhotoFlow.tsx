@@ -167,7 +167,10 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
         description: 'Professional photo ready',
       });
     } catch (error) {
-      logger.error('Background removal error', error, { component: 'BeforeAfterPhotoFlow', clientId });
+      logger.error('Background removal error', error, {
+        component: 'BeforeAfterPhotoFlow',
+        clientId,
+      });
       triggerError();
       toast({
         title: 'Processing Failed',

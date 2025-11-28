@@ -1,11 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import {
-  AlertTriangle,
-  DollarSign,
-  Calendar,
-  CheckCircle,
-} from 'lucide-react';
+import { AlertTriangle, DollarSign, Calendar, CheckCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface AppointmentInsightsProps {

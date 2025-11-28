@@ -20,7 +20,9 @@ src/components/
 ## 🎯 Component Categories
 
 ### AI Features (`ai/`)
+
 All AI-powered components:
+
 - AIFormulaAnalyzer
 - AIProductRecommendations
 - AIScheduleOptimizer
@@ -28,44 +30,58 @@ All AI-powered components:
 - AISmartNotifications
 
 ### Appointments (`appointments/`)
+
 Scheduling and calendar features:
+
 - AppointmentInsights
 - AppointmentTimerWidget
 - CalendarView
 - SmartSchedulingSuggestions
 
 ### Clients (`clients/`)
+
 Client management tools:
+
 - AddClientDialog
 - ClientHistoryTimeline
 - PredictiveClientInsights
 
 ### Formulas (`formulas/`)
+
 Color formula management:
+
 - AIFormulaQuickStart
 - FormulaCard
 
 ### Admin (`admin/`)
+
 Administrative tools:
+
 - AdminDivineWeapon
 - AuditLogViewer
 
 ### Layout (`layout/`)
+
 Core app structure:
+
 - DashboardLayout
 - AppSidebar
 - MobileBottomNav
 - MobileHeader
 
 ### Shared (`shared/`)
+
 Reusable components:
+
 - EmptyState
 - LoadingStates
 - ErrorBoundaries
 - Tooltips
 
 ### UI (`ui/`)
+
 Base design system (shadcn):
+
 - button.tsx
 - card.tsx
 - dialog.tsx

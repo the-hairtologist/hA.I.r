@@ -44,7 +44,9 @@ const ZapierIntegration = () => {
     setTestSuccess(false);
 
     try {
-      logger.info('[Zapier] Testing webhook', 'ZapierIntegration', { webhookUrl });
+      logger.info('[Zapier] Testing webhook', 'ZapierIntegration', {
+        webhookUrl,
+      });
 
       const response = await fetch(webhookUrl, {
         method: 'POST',

@@ -79,10 +79,14 @@ const Settings = () => {
   const [userEmail, setUserEmail] = useState('');
   const [userRole, setUserRole] = useState('');
   const { isDevMode, toggleDevMode } = useDevMode();
-  
+
   // Save state tracking
-  const [profileSaveState, setProfileSaveState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
-  const [passwordSaveState, setPasswordSaveState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  const [profileSaveState, setProfileSaveState] = useState<
+    'idle' | 'saving' | 'saved' | 'error'
+  >('idle');
+  const [passwordSaveState, setPasswordSaveState] = useState<
+    'idle' | 'saving' | 'saved' | 'error'
+  >('idle');
 
   // Security - Password change
   const [currentPassword, setCurrentPassword] = useState('');
@@ -238,7 +242,7 @@ const Settings = () => {
     useFormSubmit(
       async () => {
         setProfileSaveState('saving');
-        
+
         try {
           // Validation
           if (!fullName?.trim()) {
@@ -293,7 +297,9 @@ const Settings = () => {
             const depositPct = depositPercentage
               ? parseFloat(depositPercentage)
               : 0;
-            const maxClients = maxClientsPerDay ? parseInt(maxClientsPerDay) : 8;
+            const maxClients = maxClientsPerDay
+              ? parseInt(maxClientsPerDay)
+              : 8;
 
             const { error: stylistError } = await supabase
               .from('stylist_profiles')
@@ -362,7 +368,7 @@ const Settings = () => {
       },
       {
         successMessage: 'Locked in. Your profile is updated.',
-        errorMessage: 'That didn\'t save. One more time?',
+        errorMessage: "That didn't save. One more time?",
       }
     );
 
@@ -431,7 +437,7 @@ const Settings = () => {
   } = useFormSubmit(
     async () => {
       setPasswordSaveState('saving');
-      
+
       try {
         const errors: {
           currentPassword?: string;
@@ -472,7 +478,7 @@ const Settings = () => {
         setNewPassword('');
         setConfirmPassword('');
         setPasswordErrors({});
-        
+
         setPasswordSaveState('saved');
         setTimeout(() => setPasswordSaveState('idle'), 3000);
       } catch (error) {
@@ -483,7 +489,7 @@ const Settings = () => {
     },
     {
       successMessage: 'Perfect. Your password is updated.',
-      errorMessage: 'That didn\'t work. Let\'s try that again.',
+      errorMessage: "That didn't work. Let's try that again.",
     }
   );
 

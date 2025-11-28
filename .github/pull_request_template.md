@@ -5,6 +5,7 @@
 ## 🔗 Related Issue
 
 <!-- Link to the issue this PR addresses -->
+
 Fixes #(issue number)
 
 ## 🎯 Type of Change
@@ -26,6 +27,7 @@ Fixes #(issue number)
 <!-- Mark completed items with an "x" -->
 
 ### Code Quality
+
 - [ ] My code follows the project's style guidelines
 - [ ] I have performed a self-review of my code
 - [ ] I have commented my code, particularly in hard-to-understand areas
@@ -33,6 +35,7 @@ Fixes #(issue number)
 - [ ] I have removed any console.logs and debug code
 
 ### Testing
+
 - [ ] I have added tests that prove my fix is effective or that my feature works
 - [ ] New and existing unit tests pass locally with my changes
 - [ ] I have tested on multiple devices/browsers (if UI change)
@@ -42,23 +45,27 @@ Fixes #(issue number)
   - [ ] Mobile Android
 
 ### Documentation
+
 - [ ] I have updated the documentation accordingly
 - [ ] I have added/updated comments in the code
 - [ ] I have updated the README (if needed)
 
 ### Accessibility
+
 - [ ] All interactive elements are keyboard accessible
 - [ ] Color contrast meets WCAG 2.2 AA standards
 - [ ] All images have appropriate alt text
 - [ ] Tap targets are at least 44x44px on mobile
 
 ### Performance
+
 - [ ] No unnecessary re-renders introduced
 - [ ] Images are optimized and lazy-loaded
 - [ ] No significant bundle size increase
 - [ ] API calls are optimized
 
 ### Security
+
 - [ ] No sensitive data exposed in client code
 - [ ] Input validation implemented
 - [ ] XSS prevention measures in place
@@ -69,9 +76,11 @@ Fixes #(issue number)
 <!-- Add screenshots for UI changes -->
 
 ### Before
+
 <!-- Screenshot before changes -->
 
 ### After
+
 <!-- Screenshot after changes -->
 
 ## 🧪 Testing Instructions
@@ -86,12 +95,12 @@ Fixes #(issue number)
 
 <!-- What devices/browsers have you tested on? -->
 
-| Device | Browser | Status |
-|--------|---------|--------|
-| Desktop (1920x1080) | Chrome | ✅ |
-| iPhone 12 (390x844) | Safari | ⬜ |
-| Pixel 7 (412x915) | Chrome | ⬜ |
-| iPad Air (820x1180) | Safari | ⬜ |
+| Device              | Browser | Status |
+| ------------------- | ------- | ------ |
+| Desktop (1920x1080) | Chrome  | ✅     |
+| iPhone 12 (390x844) | Safari  | ⬜     |
+| Pixel 7 (412x915)   | Chrome  | ⬜     |
+| iPad Air (820x1180) | Safari  | ⬜     |
 
 ## ⚡ Performance Impact
 

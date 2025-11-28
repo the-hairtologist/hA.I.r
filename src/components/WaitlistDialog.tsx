@@ -62,7 +62,7 @@ export function WaitlistDialog() {
     setLoading(true);
     try {
       if (!user?.id) return;
-      
+
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id')
@@ -96,7 +96,7 @@ export function WaitlistDialog() {
     setLoading(true);
     try {
       if (!user?.id) throw new Error('User not found');
-      
+
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id')

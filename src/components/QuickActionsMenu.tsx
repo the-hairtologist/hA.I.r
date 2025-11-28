@@ -102,9 +102,8 @@ export function QuickActionsMenu({
 
         // Trigger Zapier webhook
         try {
-          const { triggerAppointmentCompleted } = await import(
-            '@/lib/zapierTriggers'
-          );
+          const { triggerAppointmentCompleted } =
+            await import('@/lib/zapierTriggers');
           await triggerAppointmentCompleted(data.stylist_id, {
             appointment_id: data.id,
             appointment_date: data.appointment_date,

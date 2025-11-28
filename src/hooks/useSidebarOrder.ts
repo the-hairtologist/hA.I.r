@@ -56,7 +56,10 @@ export function useSidebarOrder(
         .maybeSingle();
 
       if (error && error.code !== 'PGRST116') {
-        logger.error('Error loading sidebar order', error, { component: 'useSidebarOrder', userId: user?.id });
+        logger.error('Error loading sidebar order', error, {
+          component: 'useSidebarOrder',
+          userId: user?.id,
+        });
         setItems(defaultItems);
         setIsLoading(false);
         return;
@@ -78,7 +81,10 @@ export function useSidebarOrder(
         setItems(defaultItems);
       }
     } catch (error) {
-      logger.error('Error loading sidebar order', error, { component: 'useSidebarOrder', userId: user?.id });
+      logger.error('Error loading sidebar order', error, {
+        component: 'useSidebarOrder',
+        userId: user?.id,
+      });
       setItems(defaultItems);
     } finally {
       setIsLoading(false);
@@ -105,10 +111,16 @@ export function useSidebarOrder(
       );
 
       if (error) {
-        logger.error('Error saving sidebar order', error, { component: 'useSidebarOrder', userId: user?.id });
+        logger.error('Error saving sidebar order', error, {
+          component: 'useSidebarOrder',
+          userId: user?.id,
+        });
       }
     } catch (error) {
-      logger.error('Error saving sidebar order', error, { component: 'useSidebarOrder', userId: user?.id });
+      logger.error('Error saving sidebar order', error, {
+        component: 'useSidebarOrder',
+        userId: user?.id,
+      });
     }
   };
 
@@ -124,10 +136,16 @@ export function useSidebarOrder(
         .eq('user_id', user.id);
 
       if (error) {
-        logger.error('Error resetting sidebar order', error, { component: 'useSidebarOrder', userId: user?.id });
+        logger.error('Error resetting sidebar order', error, {
+          component: 'useSidebarOrder',
+          userId: user?.id,
+        });
       }
     } catch (error) {
-      logger.error('Error resetting sidebar order', error, { component: 'useSidebarOrder', userId: user?.id });
+      logger.error('Error resetting sidebar order', error, {
+        component: 'useSidebarOrder',
+        userId: user?.id,
+      });
     }
   };
 

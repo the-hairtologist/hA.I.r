@@ -7,8 +7,7 @@ import * as React from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 
-export interface TextareaWithCounterProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+export interface TextareaWithCounterProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   maxLength: number;
   value: string;
   onValueChange: (value: string) => void;

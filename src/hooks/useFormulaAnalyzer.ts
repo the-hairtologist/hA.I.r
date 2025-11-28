@@ -72,7 +72,7 @@ export function useFormulaAnalyzer() {
         });
         toast.success(`Analyzed ${Object.keys(analysisMap).length} formulas`);
 
-      return analysisMap;
+        return analysisMap;
       }
 
       return null;

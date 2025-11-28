@@ -31,7 +31,10 @@ export const useHairAnalysis = () => {
       );
 
       if (error) {
-        logger.error('Hair photo analysis error', error, { component: 'useHairAnalysis', clientId });
+        logger.error('Hair photo analysis error', error, {
+          component: 'useHairAnalysis',
+          clientId,
+        });
         throw error;
       }
 
@@ -56,7 +59,10 @@ export const useHairAnalysis = () => {
 
       return data;
     } catch (error: any) {
-      logger.error('Hair analysis error', error, { component: 'useHairAnalysis', clientId });
+      logger.error('Hair analysis error', error, {
+        component: 'useHairAnalysis',
+        clientId,
+      });
 
       let errorMessage = 'Failed to analyze photo';
 
@@ -95,7 +101,10 @@ export const useHairAnalysis = () => {
 
       return data || [];
     } catch (error) {
-      logger.error('Error fetching analysis history', error, { component: 'useHairAnalysis', clientId });
+      logger.error('Error fetching analysis history', error, {
+        component: 'useHairAnalysis',
+        clientId,
+      });
       toast({
         title: 'Error',
         description: 'Failed to load analysis history',

@@ -185,11 +185,11 @@ const Messages = () => {
     } catch (error: any) {
       log.error('Error loading data', 'Messages', error as Error);
       if (!navigator.onLine) {
-        toast.error('You\'re offline. Reconnect to see messages.', {
-          description: 'Your messages will sync when you\'re back online.',
+        toast.error("You're offline. Reconnect to see messages.", {
+          description: "Your messages will sync when you're back online.",
         });
       } else {
-        toast.error('Couldn\'t load messages. Let\'s try that again.', {
+        toast.error("Couldn't load messages. Let's try that again.", {
           description: 'Check your connection and refresh.',
         });
       }

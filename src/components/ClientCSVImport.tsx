@@ -67,7 +67,8 @@ export function ClientCSVImport({
         return;
       }
 
-      const headers = lines[0]?.split(',').map(h => h.trim().toLowerCase()) || [];
+      const headers =
+        lines[0]?.split(',').map(h => h.trim().toLowerCase()) || [];
       const requiredHeaders = ['full_name'];
 
       if (!requiredHeaders.every(h => headers.includes(h))) {
@@ -142,7 +143,10 @@ export function ClientCSVImport({
         onImportComplete();
       }
     } catch (error) {
-      logger.error('Error importing CSV', error, { component: 'ClientCSVImport', stylistId });
+      logger.error('Error importing CSV', error, {
+        component: 'ClientCSVImport',
+        stylistId,
+      });
       toast.error('Failed to process CSV file');
     } finally {
       setImporting(false);
