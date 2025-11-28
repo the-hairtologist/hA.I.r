@@ -1,4 +1,9 @@
-import { renderWithProviders, screen, fireEvent, waitFor } from '@/lib/testing/testUtils';
+import {
+  renderWithProviders,
+  screen,
+  fireEvent,
+  waitFor,
+} from '@/lib/testing/testUtils';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 
 vi.mock('sonner', () => ({

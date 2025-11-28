@@ -3,6 +3,7 @@
 ## 🚨 CRITICAL BLOCKER FIXED
 
 ### Database RLS Policy (P0)
+
 **Problem:** Profiles table blocked ALL users from reading their own data  
 **Solution:** Removed broken policy, added correct authenticated user policy  
 **Result:** ✅ Dashboard loads, profiles accessible, app functional
@@ -26,6 +27,7 @@
 **After:** 🟢 85/100 (Launch Ready)
 
 **All core features now working:**
+
 - Login/Signup ✅
 - Dashboard (all roles) ✅
 - Profile management ✅
@@ -47,6 +49,7 @@
 ## 🎯 READY FOR TESTING
 
 The app is now fully functional. Test by:
+
 1. Sign up as new stylist
 2. Sign up as new client
 3. Browse stylist directory

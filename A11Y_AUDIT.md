@@ -6,12 +6,12 @@
 **WCAG Version**: 2.1 Level AA  
 **Overall Score**: 71/100 🟡
 
-| Category | Score | Pass/Fail |
-|----------|-------|-----------|
-| Perceivable | 68/100 | 🟡 |
-| Operable | 72/100 | 🟡 |
-| Understandable | 78/100 | 🟡 |
-| Robust | 75/100 | 🟡 |
+| Category       | Score  | Pass/Fail |
+| -------------- | ------ | --------- |
+| Perceivable    | 68/100 | 🟡        |
+| Operable       | 72/100 | 🟡        |
+| Understandable | 78/100 | 🟡        |
+| Robust         | 75/100 | 🟡        |
 
 **Critical Blockers**: 7  
 **High Priority**: 14  
@@ -30,14 +30,15 @@
 
 **Issues Found**:
 
-| Location | Issue | Count |
-|----------|-------|-------|
-| Portfolio photos | No alt text on user-uploaded images | ~50 images |
-| Client request photos | Alt attribute missing | ~30 images |
-| Avatar images | Alt = "" (decorative) but should describe user | 3 files |
-| Background decorative images | Missing alt="" | ~5 images |
+| Location                     | Issue                                          | Count      |
+| ---------------------------- | ---------------------------------------------- | ---------- |
+| Portfolio photos             | No alt text on user-uploaded images            | ~50 images |
+| Client request photos        | Alt attribute missing                          | ~30 images |
+| Avatar images                | Alt = "" (decorative) but should describe user | 3 files    |
+| Background decorative images | Missing alt=""                                 | ~5 images  |
 
 **How to Test**:
+
 ```bash
 # Using browser DevTools
 document.querySelectorAll('img:not([alt])').length
@@ -75,6 +76,7 @@ Most icon buttons have proper aria-labels:
 ```
 
 **Exceptions** (need fixing):
+
 - Search icon button (no label)
 - Filter icon button (no label)
 - Close (X) buttons in modals (some missing)
@@ -88,6 +90,7 @@ Most icon buttons have proper aria-labels:
 App doesn't currently use video or audio, so these criteria don't apply.
 
 **Future Consideration**: If adding video tutorials, will need:
+
 - Captions for audio
 - Transcripts
 - Audio descriptions for visual content
@@ -104,10 +107,11 @@ App doesn't currently use video or audio, so these criteria don't apply.
 **Issues**:
 
 1. **Missing Landmarks**
+
    ```typescript
    // Bad (Dashboard.tsx currently has some of this)
    <div className="header">...</div>
-   
+
    // Good
    <header role="banner">...</header>
    <nav role="navigation" aria-label="Main">...</nav>
@@ -115,6 +119,7 @@ App doesn't currently use video or audio, so these criteria don't apply.
    ```
 
 2. **Heading Hierarchy Violations**
+
    ```typescript
    // Bad - skips from h1 to h3
    <h1>Dashboard</h1>
@@ -122,13 +127,14 @@ App doesn't currently use video or audio, so these criteria don't apply.
    ```
 
 3. **Lists Not Marked Up**
+
    ```typescript
    // Bad - appointment list
    <div>
      <div className="appointment">...</div>
      <div className="appointment">...</div>
    </div>
-   
+
    // Good
    <ul role="list">
      <li>...</li>
@@ -138,12 +144,12 @@ App doesn't currently use video or audio, so these criteria don't apply.
 
 **Audit Results**:
 
-| Page | Landmark Issues | Heading Issues | List Issues |
-|------|----------------|----------------|-------------|
-| Dashboard | ✅ Has header/main | ❌ h1→h3 skip | ❌ Stats not list |
-| Appointments | ✅ Good landmarks | ❌ h2→h4 skip | ❌ Appts not list |
-| Auth | ❌ Missing main | ✅ Good hierarchy | N/A |
-| Clients | ✅ Good landmarks | ✅ Good hierarchy | ❌ Cards not list |
+| Page         | Landmark Issues    | Heading Issues    | List Issues       |
+| ------------ | ------------------ | ----------------- | ----------------- |
+| Dashboard    | ✅ Has header/main | ❌ h1→h3 skip     | ❌ Stats not list |
+| Appointments | ✅ Good landmarks  | ❌ h2→h4 skip     | ❌ Appts not list |
+| Auth         | ❌ Missing main    | ✅ Good hierarchy | N/A               |
+| Clients      | ✅ Good landmarks  | ✅ Good hierarchy | ❌ Cards not list |
 
 **Priority**: P1  
 **Estimated Fix Time**: 2 days
@@ -153,6 +159,7 @@ App doesn't currently use video or audio, so these criteria don't apply.
 #### ✅ PARTIAL: Responsive Text Resize
 
 Text scales reasonably up to 200% zoom, but:
+
 - Some button text truncates
 - Long names overflow cards
 - Mobile nav labels disappear
@@ -172,19 +179,20 @@ Text scales reasonably up to 200% zoom, but:
 
 **Contrast Audit Results**:
 
-| Element | Foreground | Background | Ratio | Required | Pass/Fail |
-|---------|------------|------------|-------|----------|-----------|
-| Body text (light mode) | #1a1a1a | #ffffff | 8.2:1 | 4.5:1 | ✅ |
-| Body text (dark mode) | #e5e5e5 | #0a0a0a | 8.5:1 | 4.5:1 | ✅ |
-| Link text | #6366f1 | #ffffff | 5.3:1 | 4.5:1 | ✅ |
-| Placeholder text | #9ca3af | #ffffff | 2.8:1 | 4.5:1 | ❌ |
-| Secondary button text | #525252 | #f5f5f5 | 4.1:1 | 4.5:1 | ❌ |
-| Disabled button | #a3a3a3 | #e5e5e5 | 1.9:1 | 3:1 | ❌ |
-| Error text | #dc2626 | #ffffff | 5.7:1 | 4.5:1 | ✅ |
-| Success text | #16a34a | #ffffff | 3.6:1 | 4.5:1 | ❌ |
-| Badge (secondary) | #71717a | #f4f4f5 | 3.9:1 | 4.5:1 | ❌ |
+| Element                | Foreground | Background | Ratio | Required | Pass/Fail |
+| ---------------------- | ---------- | ---------- | ----- | -------- | --------- |
+| Body text (light mode) | #1a1a1a    | #ffffff    | 8.2:1 | 4.5:1    | ✅        |
+| Body text (dark mode)  | #e5e5e5    | #0a0a0a    | 8.5:1 | 4.5:1    | ✅        |
+| Link text              | #6366f1    | #ffffff    | 5.3:1 | 4.5:1    | ✅        |
+| Placeholder text       | #9ca3af    | #ffffff    | 2.8:1 | 4.5:1    | ❌        |
+| Secondary button text  | #525252    | #f5f5f5    | 4.1:1 | 4.5:1    | ❌        |
+| Disabled button        | #a3a3a3    | #e5e5e5    | 1.9:1 | 3:1      | ❌        |
+| Error text             | #dc2626    | #ffffff    | 5.7:1 | 4.5:1    | ✅        |
+| Success text           | #16a34a    | #ffffff    | 3.6:1 | 4.5:1    | ❌        |
+| Badge (secondary)      | #71717a    | #f4f4f5    | 3.9:1 | 4.5:1    | ❌        |
 
 **How to Test**:
+
 1. Chrome DevTools > Inspect element
 2. Check "Show rulers" in Rendering tab
 3. Use "Emulate vision deficiencies" to simulate color blindness
@@ -193,7 +201,9 @@ Text scales reasonably up to 200% zoom, but:
 
 ```css
 /* Current (fails) */
---muted-foreground: hsl(0 0% 45.1%); /* #737373 = 4.6:1, slightly pass but inconsistent */
+--muted-foreground: hsl(
+  0 0% 45.1%
+); /* #737373 = 4.6:1, slightly pass but inconsistent */
 
 /* Fix: Darken for better contrast */
 --muted-foreground: hsl(0 0% 40%); /* #666666 = 5.7:1, safer */
@@ -217,6 +227,7 @@ input::placeholder {
 #### ✅ PASS: Content Not Solely Conveyed by Color
 
 Good examples:
+
 - Appointment status: Uses badge + text ("Scheduled", "Confirmed")
 - Form errors: Uses icon + text + red border
 - Success messages: Uses icon + text + green background
@@ -229,6 +240,7 @@ Good examples:
 **WCAG**: 1.4.11 (Level AA)
 
 **Current Implementation**:
+
 ```typescript
 // button.tsx line 8
 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
@@ -237,6 +249,7 @@ focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
 **Issue**: 2px ring barely visible on some backgrounds
 
 **Fix**:
+
 ```typescript
 // Increase to 4px for better visibility
 focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2
@@ -250,6 +263,7 @@ focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2
 #### ✅ PASS: Text Spacing
 
 Text remains readable when:
+
 - Line height = 1.5× font size ✅
 - Paragraph spacing = 2× font size ✅
 - Letter spacing = 0.12× font size ✅
@@ -296,9 +310,9 @@ Text remains readable when:
 **Issues**:
 
 | Shortcut | App Function | Browser Default | Conflict |
-|----------|--------------|-----------------|----------|
-| `/` | Open search | Find in page | ❌ Yes |
-| `Ctrl+K` | Open search | Browser omnibox | ❌ Yes |
+| -------- | ------------ | --------------- | -------- |
+| `/`      | Open search  | Find in page    | ❌ Yes   |
+| `Ctrl+K` | Open search  | Browser omnibox | ❌ Yes   |
 
 **Fix**: Add escape hatch (allow disabling in settings)
 
@@ -310,6 +324,7 @@ Text remains readable when:
 #### ✅ PARTIAL: Focus Order Logical
 
 Most pages have logical tab order, but:
+
 - Mobile nav icons: Tab jumps between non-adjacent items
 - Form fields: Some labels not associated, tab order breaks
 - Dashboard: Drag handles interfere with tab order
@@ -324,11 +339,13 @@ Most pages have logical tab order, but:
 #### ✅ PASS: No Time Limits
 
 App doesn't have:
+
 - Session timeouts
 - Auto-advancing carousels
 - Disappearing content (except dismissible toasts)
 
-**Toast Timing**: 
+**Toast Timing**:
+
 - Currently 3-5 seconds (good for success)
 - Consider longer for errors (10+ seconds)
 
@@ -350,6 +367,7 @@ No flashing elements detected.
 **WCAG**: 2.4.1 (Level A)
 
 **Status**:
+
 - ✅ Auth page has skip link (line 196-198)
 - ✅ Appointments page has skip link (line 227-229)
 - ❌ Dashboard missing skip link
@@ -357,9 +375,10 @@ No flashing elements detected.
 - ❌ Settings missing skip link
 
 **Fix**: Add to all pages:
+
 ```typescript
-<a 
-  href="#main-content" 
+<a
+  href="#main-content"
   className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg"
 >
   Skip to main content
@@ -383,7 +402,7 @@ No flashing elements detected.
 ```typescript
 // Each page
 useEffect(() => {
-  document.title = "Appointments - hA.I.r";
+  document.title = 'Appointments - hA.I.r';
 }, []);
 ```
 
@@ -401,6 +420,7 @@ Tab order generally follows visual layout.
 #### ✅ PASS: Link Purpose Clear
 
 Links have descriptive text:
+
 ```typescript
 // Good
 <a href="/appointments">View All Appointments</a>
@@ -414,6 +434,7 @@ Links have descriptive text:
 #### ✅ PASS: Multiple Ways to Navigate
 
 Users can navigate via:
+
 1. Sidebar menu (desktop)
 2. Bottom nav (mobile)
 3. Search (on some pages)
@@ -432,12 +453,12 @@ Users can navigate via:
 
 **Summary**:
 
-| Component | Current | Required | Status |
-|-----------|---------|----------|--------|
-| Mobile nav icons | 40×40px | 44×44px | ❌ |
-| Calendar dates | 36×36px | 44×44px | ❌ |
-| Icon buttons | 40×40px | 44×44px | ❌ |
-| Checkboxes | 20×20px | 44×44px container | ❌ |
+| Component        | Current | Required          | Status |
+| ---------------- | ------- | ----------------- | ------ |
+| Mobile nav icons | 40×40px | 44×44px           | ❌     |
+| Calendar dates   | 36×36px | 44×44px           | ❌     |
+| Icon buttons     | 40×40px | 44×44px           | ❌     |
+| Checkboxes       | 20×20px | 44×44px container | ❌     |
 
 **Priority**: P0  
 **Estimated Fix Time**: 2 days
@@ -453,11 +474,11 @@ Users can navigate via:
 
 **Violations**:
 
-| Location | Current Spacing | Required | Fix |
-|----------|----------------|----------|-----|
-| Appointment action buttons | 4px | 8px | Add `gap-2` |
-| Calendar date cells | 2px | 8px | Increase gap |
-| Form button group | 4px | 8px | Use `space-x-2` |
+| Location                   | Current Spacing | Required | Fix             |
+| -------------------------- | --------------- | -------- | --------------- |
+| Appointment action buttons | 4px             | 8px      | Add `gap-2`     |
+| Calendar date cells        | 2px             | 8px      | Increase gap    |
+| Form button group          | 4px             | 8px      | Use `space-x-2` |
 
 **Priority**: P0  
 **Estimated Fix Time**: 1 day
@@ -467,6 +488,7 @@ Users can navigate via:
 #### ✅ PASS: Label in Name
 
 Button labels match accessible names:
+
 ```typescript
 <Button aria-label="Sign Out">
   <LogOut className="h-4 w-4" />
@@ -483,7 +505,7 @@ Button labels match accessible names:
 #### ✅ PASS: Language Declared
 
 ```html
-<html lang="en">
+<html lang="en"></html>
 ```
 
 ---
@@ -494,6 +516,7 @@ Button labels match accessible names:
 **WCAG**: 3.1.5 (Level AAA)
 
 Some error messages use technical jargon:
+
 - "Authentication failed: Invalid credentials" → "Email or password incorrect"
 - "Error: PGRST116" → "Item not found"
 
@@ -513,6 +536,7 @@ Sidebar/mobile nav consistent across pages.
 #### ✅ PASS: Consistent Identification
 
 Icons and buttons have consistent meaning:
+
 - ArrowLeft always goes back
 - X always closes modals
 - Plus always creates new items
@@ -525,6 +549,7 @@ Icons and buttons have consistent meaning:
 **WCAG**: 3.2.2 (Level A)
 
 **Issues**:
+
 1. Toggling availability switch doesn't warn before changing state
 2. Some form fields auto-submit on change (unexpected)
 
@@ -543,18 +568,23 @@ Icons and buttons have consistent meaning:
 **WCAG**: 3.3.3 (Level AA)
 
 **Current**:
+
 ```typescript
-toast.error("Error loading appointments");
+toast.error('Error loading appointments');
 ```
 
 **Better**:
+
 ```typescript
-toast.error("Couldn't load appointments. Check your internet connection and try again.", {
-  action: {
-    label: "Retry",
-    onClick: () => loadData()
+toast.error(
+  "Couldn't load appointments. Check your internet connection and try again.",
+  {
+    action: {
+      label: 'Retry',
+      onClick: () => loadData(),
+    },
   }
-});
+);
 ```
 
 **Priority**: P1  
@@ -570,6 +600,7 @@ toast.error("Couldn't load appointments. Check your internet connection and try 
 **Current**: Some forms don't mark required fields
 
 **Fix**:
+
 ```typescript
 <Label htmlFor="email">
   Email <span className="text-destructive" aria-label="required">*</span>
@@ -584,6 +615,7 @@ toast.error("Couldn't load appointments. Check your internet connection and try 
 #### ✅ PASS: Error Prevention (Forms)
 
 Most forms have:
+
 - Confirmation dialogs for destructive actions
 - "Are you sure?" prompts
 - Undo options (for some actions)
@@ -607,13 +639,13 @@ No duplicate IDs detected. HTML validates.
 
 **Missing ARIA**:
 
-| Component | Missing | Fix |
-|-----------|---------|-----|
-| Search input | `role="search"` | Add role |
-| Error messages | `aria-live="assertive"` | Add live region |
-| Loading states | `aria-busy="true"` | Add while loading |
-| Toasts | `role="status"` | Add to toast container |
-| Modal backdrop | `aria-hidden="true"` | Add to prevent focus |
+| Component      | Missing                 | Fix                    |
+| -------------- | ----------------------- | ---------------------- |
+| Search input   | `role="search"`         | Add role               |
+| Error messages | `aria-live="assertive"` | Add live region        |
+| Loading states | `aria-busy="true"`      | Add while loading      |
+| Toasts         | `role="status"`         | Add to toast container |
+| Modal backdrop | `aria-hidden="true"`    | Add to prevent focus   |
 
 **Priority**: P1  
 **Estimated Fix Time**: 2 days
@@ -626,6 +658,7 @@ No duplicate IDs detected. HTML validates.
 **WCAG**: 4.1.3 (Level AA)
 
 **Issue**: Screen readers don't announce:
+
 - "Appointment saved"
 - "Loading..."
 - "3 new messages"
@@ -651,16 +684,16 @@ No duplicate IDs detected. HTML validates.
 **Tested On**: iPhone 12, iOS 17  
 **Pages Tested**: Auth, Dashboard, Appointments
 
-| Test | Result | Notes |
-|------|--------|-------|
-| Navigate by headings | ✅ Pass | Most pages have good heading structure |
-| Navigate by landmarks | 🟡 Partial | Some pages missing main landmark |
-| Read form labels | ✅ Pass | Labels properly associated |
-| Announce buttons | 🟡 Partial | Some icon buttons unlabeled |
-| Read image alt text | ❌ Fail | Many images missing alt |
-| Announce status changes | ❌ Fail | Loading/success/error not announced |
-| Tab through interactive elements | ✅ Pass | Focus order correct |
-| Dismiss modal | 🟡 Partial | Some modals don't announce close action |
+| Test                             | Result     | Notes                                   |
+| -------------------------------- | ---------- | --------------------------------------- |
+| Navigate by headings             | ✅ Pass    | Most pages have good heading structure  |
+| Navigate by landmarks            | 🟡 Partial | Some pages missing main landmark        |
+| Read form labels                 | ✅ Pass    | Labels properly associated              |
+| Announce buttons                 | 🟡 Partial | Some icon buttons unlabeled             |
+| Read image alt text              | ❌ Fail    | Many images missing alt                 |
+| Announce status changes          | ❌ Fail    | Loading/success/error not announced     |
+| Tab through interactive elements | ✅ Pass    | Focus order correct                     |
+| Dismiss modal                    | 🟡 Partial | Some modals don't announce close action |
 
 ---
 
@@ -669,12 +702,12 @@ No duplicate IDs detected. HTML validates.
 **Tested On**: Windows 11, NVDA 2023.3  
 **Pages Tested**: Auth, Dashboard
 
-| Test | Result | Notes |
-|------|--------|-------|
-| Navigate by region | 🟡 Partial | Dashboard missing regions |
-| Read form errors | ❌ Fail | Errors not associated with fields |
-| Announce dynamic content | ❌ Fail | No live regions |
-| Navigate tables | N/A | No data tables in tested pages |
+| Test                     | Result     | Notes                             |
+| ------------------------ | ---------- | --------------------------------- |
+| Navigate by region       | 🟡 Partial | Dashboard missing regions         |
+| Read form errors         | ❌ Fail    | Errors not associated with fields |
+| Announce dynamic content | ❌ Fail    | No live regions                   |
+| Navigate tables          | N/A        | No data tables in tested pages    |
 
 ---
 

@@ -74,7 +74,10 @@ export function RebookingPrompt() {
         .maybeSingle();
 
       if (error) {
-        logger.error('Error fetching rebooking reminder', error, { component: 'RebookingPrompt', userId: user?.id });
+        logger.error('Error fetching rebooking reminder', error, {
+          component: 'RebookingPrompt',
+          userId: user?.id,
+        });
       }
 
       if (data) {

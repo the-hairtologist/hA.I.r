@@ -1,4 +1,5 @@
 # 🎯 QUICK REFERENCE GUIDE
+
 ## hA.I.r Platform - Developer & Admin Cheat Sheet
 
 ---
@@ -14,16 +15,19 @@
 ## 👥 User Roles
 
 ### Enum Type
+
 ```sql
 app_role: 'admin' | 'stylist' | 'client'
 ```
 
 ### Hook Usage
+
 ```typescript
 const { roles, isAdmin, isStylist, isClient, loading } = useUserRole(userId);
 ```
 
 ### Protect Routes
+
 ```typescript
 <ProtectedRoute allowedRoles={['stylist', 'admin']}>
   <YourComponent />
@@ -34,12 +38,12 @@ const { roles, isAdmin, isStylist, isClient, loading } = useUserRole(userId);
 
 ## 🗄️ Database Tables
 
-| Table | Purpose | RLS |
-|-------|---------|-----|
-| `profiles` | Base user data | ✅ |
-| `user_roles` | Role assignments | ✅ |
-| `stylist_profiles` | Stylist info | ✅ |
-| `client_profiles` | Client info | ✅ |
+| Table              | Purpose          | RLS |
+| ------------------ | ---------------- | --- |
+| `profiles`         | Base user data   | ✅  |
+| `user_roles`       | Role assignments | ✅  |
+| `stylist_profiles` | Stylist info     | ✅  |
+| `client_profiles`  | Client info      | ✅  |
 
 ---
 
@@ -60,15 +64,17 @@ xl:  1280px  /* Large desktop */
 ## 🎨 Design Tokens
 
 ### Color Usage
+
 ```typescript
 // ✅ Correct
-className="bg-primary text-primary-foreground"
+className = 'bg-primary text-primary-foreground';
 
 // ❌ Wrong
-className="bg-red-500 text-white"
+className = 'bg-red-500 text-white';
 ```
 
 ### Common Tokens
+
 ```
 --primary      /* Main brand color */
 --secondary    /* Secondary actions */
@@ -83,11 +89,13 @@ className="bg-red-500 text-white"
 ## 🔒 Security Functions
 
 ### Check Role
+
 ```sql
 SELECT has_role(auth.uid(), 'admin');
 ```
 
 ### Get User Profile ID
+
 ```sql
 SELECT get_stylist_profile_id(auth.uid());
 SELECT get_client_profile_id(auth.uid());
@@ -98,6 +106,7 @@ SELECT get_client_profile_id(auth.uid());
 ## 🚀 Quick Commands
 
 ### Run Tests
+
 ```bash
 npm test                 # Unit tests
 npm run test:e2e         # E2E tests
@@ -105,6 +114,7 @@ npm run test:coverage    # Coverage report
 ```
 
 ### Development
+
 ```bash
 npm run dev              # Start dev server
 npm run build            # Production build
@@ -112,6 +122,7 @@ npm run preview          # Preview build
 ```
 
 ### Lint & Format
+
 ```bash
 npm run lint             # Check code
 npm run format           # Fix formatting
@@ -121,13 +132,13 @@ npm run format           # Fix formatting
 
 ## 📍 Admin Pages
 
-| Page | Path | Purpose |
-|------|------|---------|
-| Command Center | `/admin/command` | Platform control |
-| Users | `/admin/users` | User management |
-| System Health | `/system-health` | Monitoring |
-| **Design System** | `/design-system` | Style guide |
-| Audit Report | `/admin/audit-report` | Security audit |
+| Page              | Path                  | Purpose          |
+| ----------------- | --------------------- | ---------------- |
+| Command Center    | `/admin/command`      | Platform control |
+| Users             | `/admin/users`        | User management  |
+| System Health     | `/system-health`      | Monitoring       |
+| **Design System** | `/design-system`      | Style guide      |
+| Audit Report      | `/admin/audit-report` | Security audit   |
 
 ---
 
@@ -140,6 +151,7 @@ VITE_SUPABASE_PROJECT_ID       # Auto-configured
 ```
 
 **Secrets** (Supabase dashboard):
+
 - LOVABLE_API_KEY (auto)
 - STRIPE_SECRET_KEY
 - TWILIO_AUTH_TOKEN
@@ -150,13 +162,13 @@ VITE_SUPABASE_PROJECT_ID       # Auto-configured
 
 ## 📊 Performance Targets
 
-| Metric | Target | Current |
-|--------|--------|---------|
-| FCP | < 1.8s | ~1.2s ✅ |
-| LCP | < 2.5s | ~1.8s ✅ |
-| TTI | < 3.8s | ~2.5s ✅ |
-| TBT | < 300ms | ~180ms ✅ |
-| CLS | < 0.1 | ~0.05 ✅ |
+| Metric | Target  | Current   |
+| ------ | ------- | --------- |
+| FCP    | < 1.8s  | ~1.2s ✅  |
+| LCP    | < 2.5s  | ~1.8s ✅  |
+| TTI    | < 3.8s  | ~2.5s ✅  |
+| TBT    | < 300ms | ~180ms ✅ |
+| CLS    | < 0.1   | ~0.05 ✅  |
 
 ---
 
@@ -175,18 +187,20 @@ VITE_SUPABASE_PROJECT_ID       # Auto-configured
 ## 🐛 Common Issues
 
 ### "User has no role"
+
 ```typescript
 // Assign role via database
 await supabase.rpc('assign_user_role', {
   _user_id: userId,
-  _role: 'stylist' // or 'client'
+  _role: 'stylist', // or 'client'
 });
 ```
 
 ### "RLS policy violation"
+
 ```sql
 -- Check policies
-SELECT * FROM pg_policies 
+SELECT * FROM pg_policies
 WHERE tablename = 'your_table';
 
 -- Check role
@@ -194,6 +208,7 @@ SELECT has_role(auth.uid(), 'admin');
 ```
 
 ### Mobile nav not showing
+
 ```typescript
 // Check role-specific config
 localStorage.getItem('mobileNav-stylist');

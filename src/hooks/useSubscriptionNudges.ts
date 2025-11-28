@@ -71,7 +71,11 @@ export const useSubscriptionNudges = () => {
 
       setAppointmentCount(appointments || 0);
     } catch (error) {
-      logger.error('Error loading subscription nudge data', 'useSubscriptionNudges', error as Error);
+      logger.error(
+        'Error loading subscription nudge data',
+        'useSubscriptionNudges',
+        error as Error
+      );
     }
   };
 
@@ -81,7 +85,11 @@ export const useSubscriptionNudges = () => {
       try {
         setDismissedNudges(new Set(JSON.parse(dismissed)));
       } catch (error) {
-        logger.error('Error loading dismissed nudges', 'useSubscriptionNudges', error as Error);
+        logger.error(
+          'Error loading dismissed nudges',
+          'useSubscriptionNudges',
+          error as Error
+        );
       }
     }
   };

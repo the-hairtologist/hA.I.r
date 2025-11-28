@@ -32,6 +32,7 @@ npm run test:e2e
 ## Test Structure
 
 ### Unit Tests
+
 Test individual components and functions in isolation.
 
 ```typescript
@@ -48,6 +49,7 @@ describe('Button', () => {
 ```
 
 ### Integration Tests
+
 Test how multiple components work together.
 
 ```typescript
@@ -62,11 +64,13 @@ describe('Appointment Flow', () => {
 ```
 
 ### E2E Tests
+
 Test complete user journeys (located in `E2E/tests/`).
 
 ## Testing Utilities
 
 ### `renderWithProviders`
+
 Renders components with all necessary providers (React Query, Router, etc.).
 
 ```typescript
@@ -76,6 +80,7 @@ const { user } = renderWithProviders(<MyComponent />);
 ```
 
 ### Mock Data
+
 Pre-defined mock data for common entities:
 
 ```typescript
@@ -91,11 +96,14 @@ import {
 ## Best Practices
 
 ### 1. Test User Behavior, Not Implementation
+
 ✅ **Good**: `expect(screen.getByText('Submit')).toBeInTheDocument()`  
 ❌ **Bad**: `expect(component.state.value).toBe('test')`
 
 ### 2. Use Semantic Queries
+
 Prefer queries that reflect how users interact:
+
 - `getByRole` (most preferred)
 - `getByLabelText`
 - `getByPlaceholderText`
@@ -103,6 +111,7 @@ Prefer queries that reflect how users interact:
 - `getByTestId` (last resort)
 
 ### 3. Test Accessibility
+
 Always include accessibility checks:
 
 ```typescript
@@ -113,6 +122,7 @@ it('has proper ARIA labels', () => {
 ```
 
 ### 4. Mock External Dependencies
+
 Always mock Supabase and external APIs:
 
 ```typescript
@@ -124,6 +134,7 @@ vi.mock('@/integrations/supabase/client', () => ({
 ```
 
 ### 5. Clean Up After Tests
+
 Use `afterEach` to reset state:
 
 ```typescript
@@ -141,6 +152,7 @@ afterEach(() => {
 - **Lines**: >80%
 
 Focus on testing:
+
 - Critical user flows
 - Edge cases and error handling
 - Accessibility features
@@ -149,10 +161,11 @@ Focus on testing:
 ## Common Patterns
 
 ### Testing Async Operations
+
 ```typescript
 it('loads data on mount', async () => {
   renderWithProviders(<DataComponent />);
-  
+
   await waitFor(() => {
     expect(screen.getByText('Loaded')).toBeInTheDocument();
   });
@@ -160,23 +173,25 @@ it('loads data on mount', async () => {
 ```
 
 ### Testing Forms
+
 ```typescript
 it('submits form data', async () => {
   const onSubmit = vi.fn();
   const { user } = renderWithProviders(<Form onSubmit={onSubmit} />);
-  
+
   await user.type(screen.getByLabelText('Name'), 'John Doe');
   await user.click(screen.getByRole('button', { name: 'Submit' }));
-  
+
   expect(onSubmit).toHaveBeenCalledWith({ name: 'John Doe' });
 });
 ```
 
 ### Testing Navigation
+
 ```typescript
 it('navigates to details page', async () => {
   const { user } = renderWithProviders(<AppointmentList />);
-  
+
   await user.click(screen.getByText('View Details'));
   expect(screen.getByText('Appointment Details')).toBeInTheDocument();
 });
@@ -185,11 +200,13 @@ it('navigates to details page', async () => {
 ## Continuous Integration
 
 Tests run automatically on:
+
 - Every pull request
 - Every commit to main branch
 - Before deployment
 
 CI fails if:
+
 - Any test fails
 - Coverage drops below threshold
 - Build errors occur

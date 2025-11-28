@@ -54,7 +54,11 @@ export function useMessageGenerator() {
 
       return null;
     } catch (error) {
-      logger.error('Message generation failed', 'MessageGenerator', error as any);
+      logger.error(
+        'Message generation failed',
+        'MessageGenerator',
+        error as any
+      );
       toast.error('Failed to generate message');
       return null;
     } finally {
@@ -86,7 +90,11 @@ export function useMessageGenerator() {
       toast.success(`Generated ${messages.length} messages`);
       return messages;
     } catch (error) {
-      logger.error('Bulk message generation failed', 'MessageGenerator', error as any);
+      logger.error(
+        'Bulk message generation failed',
+        'MessageGenerator',
+        error as any
+      );
       toast.error('Failed to generate messages');
       return [];
     } finally {

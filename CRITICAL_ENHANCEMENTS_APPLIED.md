@@ -9,22 +9,30 @@ Based on industry best practices, web standards (WCAG 2.2, PWA guidelines), and 
 ## What Was Added
 
 ### 1. **Server-Side Rate Limiting** ✅
+
 **File:** `supabase/functions/_shared/rateLimiter.ts`
 
 **What it does:**
+
 - Protects edge functions from abuse and DDoS attacks
 - Different rate limits for different endpoints (AI: 20/min, Email: 50/min, etc.)
 - Returns proper HTTP 429 with retry-after headers
 - Automatic cleanup of expired entries
 
 **Why it matters:**
+
 - Client-side rate limiting can be bypassed
 - Prevents API abuse and excessive costs
 - Industry standard for production APIs
 
 **Usage in edge functions:**
+
 ```typescript
-import { checkRateLimit, RATE_LIMITS, rateLimitErrorResponse } from '../_shared/rateLimiter.ts';
+import {
+  checkRateLimit,
+  RATE_LIMITS,
+  rateLimitErrorResponse,
+} from '../_shared/rateLimiter.ts';
 
 const userIdentifier = req.headers.get('x-user-id') || 'anonymous';
 const rateLimit = checkRateLimit(userIdentifier, RATE_LIMITS.AI_GENERATION);
@@ -39,9 +47,11 @@ if (!rateLimit.allowed) {
 ---
 
 ### 2. **Core Web Vitals Monitoring** ✅
+
 **File:** `src/components/CoreWebVitals.tsx`
 
 **What it does:**
+
 - Tracks LCP (Largest Contentful Paint)
 - Tracks FID (First Input Delay)
 - Tracks CLS (Cumulative Layout Shift)
@@ -51,12 +61,14 @@ if (!rateLimit.allowed) {
 - Stores 10% sample in database for analysis
 
 **Why it matters:**
+
 - Core Web Vitals directly impact SEO rankings
 - Google uses these metrics for search ranking
 - Helps identify performance issues before users complain
 - Industry standard for measuring user experience
 
 **Current Performance:**
+
 - LCP: ~1.5s (Target: <2.5s) ✅
 - FID: ~50ms (Target: <100ms) ✅
 - CLS: ~0.05 (Target: <0.1) ✅
@@ -66,9 +78,11 @@ if (!rateLimit.allowed) {
 ---
 
 ### 3. **Network Status Indicator** ✅
+
 **File:** `src/components/NetworkStatusIndicator.tsx`
 
 **What it does:**
+
 - Shows online/offline status to users
 - Automatically syncs offline changes when back online
 - Shows progress during sync
@@ -76,12 +90,14 @@ if (!rateLimit.allowed) {
 - Shows pending changes count
 
 **Why it matters:**
+
 - Users need visual feedback about offline mode
 - Prevents confusion when offline changes don't appear
 - Provides confidence that data won't be lost
 - Standard UX pattern for PWAs
 
 **User Experience:**
+
 - Offline: Red badge "Offline Mode (3 pending)"
 - Syncing: Green badge "Syncing 3 changes..."
 - Synced: Badge disappears
@@ -89,9 +105,11 @@ if (!rateLimit.allowed) {
 ---
 
 ### 4. **Accessibility Testing Utility** ✅
+
 **File:** `src/components/A11yTester.tsx` (Dev mode only)
 
 **What it does:**
+
 - Scans page for WCAG 2.2 AA violations
 - Checks missing alt text on images
 - Checks buttons without accessible names
@@ -101,12 +119,14 @@ if (!rateLimit.allowed) {
 - Shows errors and warnings with WCAG levels
 
 **Why it matters:**
+
 - Legal requirement in many jurisdictions (ADA, Section 508)
 - Improves usability for everyone
 - Prevents expensive accessibility lawsuits
 - Industry standard for inclusive design
 
 **How to use:**
+
 - Press `Ctrl/Cmd + Shift + A` to open
 - Click "Run Audit" to scan current page
 - Fix errors before deploying
@@ -114,9 +134,11 @@ if (!rateLimit.allowed) {
 ---
 
 ### 5. **Service Worker Update Notification** ✅
+
 **File:** `src/components/ServiceWorkerUpdate.tsx`
 
 **What it does:**
+
 - Detects when new version is deployed
 - Shows toast notification to users
 - One-click update to latest version
@@ -124,12 +146,14 @@ if (!rateLimit.allowed) {
 - Toast notification when app ready offline
 
 **Why it matters:**
+
 - Users often cache old versions and report "bugs" that are already fixed
 - Ensures users always have latest features/fixes
 - Standard PWA pattern
 - Improves user experience
 
 **User Experience:**
+
 - "New version available! Click update to get the latest features"
 - User clicks "Update" button
 - Page reloads with new version
@@ -137,9 +161,11 @@ if (!rateLimit.allowed) {
 ---
 
 ### 6. **Production Deployment Checklist** ✅
+
 **File:** `PRODUCTION_CHECKLIST.md`
 
 **What it does:**
+
 - Comprehensive 13-phase checklist
 - Covers security, performance, accessibility, SEO, testing
 - User action items clearly marked
@@ -148,6 +174,7 @@ if (!rateLimit.allowed) {
 - Emergency rollback procedures
 
 **Why it matters:**
+
 - Prevents forgetting critical steps
 - Reduces deployment risks
 - Standard practice for production deployments
@@ -158,12 +185,14 @@ if (!rateLimit.allowed) {
 ### 7. **Integration with Existing Systems** ✅
 
 All new components are integrated into `src/App.tsx` using:
+
 - Lazy loading for optimal performance
 - Error boundaries to prevent crashes
 - Suspense for graceful fallbacks
 - React.Suspense wrappers
 
 **Integration points:**
+
 ```typescript
 // Core Web Vitals - tracks performance metrics
 <CoreWebVitals />
@@ -183,11 +212,13 @@ All new components are integrated into `src/App.tsx` using:
 ## Performance Impact
 
 ### Bundle Size
+
 - New components: ~15KB (gzipped)
 - Total increase: <2% of bundle
 - All lazy-loaded (don't affect initial load)
 
 ### Runtime Performance
+
 - Core Web Vitals: Passive observer (no impact)
 - Network Status: 5-second poll (minimal CPU)
 - Service Worker: Background updates only
@@ -198,14 +229,16 @@ All new components are integrated into `src/App.tsx` using:
 ## What This Achieves
 
 ### Before
+
 - ✅ Security: 98/100
-- ✅ Performance: 96/100  
+- ✅ Performance: 96/100
 - ⚠️ Monitoring: Basic
 - ⚠️ Offline UX: No visual feedback
 - ⚠️ Accessibility: Manual testing only
 - ⚠️ Updates: No user notification
 
 ### After
+
 - ✅ Security: 98/100 (server-side rate limiting added)
 - ✅ Performance: 96/100 (Core Web Vitals tracking)
 - ✅ Monitoring: Enterprise-grade
@@ -234,6 +267,7 @@ All new components are integrated into `src/App.tsx` using:
 The remaining 1% requires **user-specific actions:**
 
 ### Required Actions (High Priority)
+
 1. **Stripe:** Switch from test mode to live mode
 2. **Domain:** Configure custom domain
 3. **Email:** Configure professional email domain
@@ -242,6 +276,7 @@ The remaining 1% requires **user-specific actions:**
 6. **Legal:** Add Privacy Policy + Terms of Service
 
 ### Recommended Actions (Medium Priority)
+
 1. **Analytics:** Verify GA4 is receiving data
 2. **Security:** Run final RLS policy audit
 3. **Performance:** Run Lighthouse audit (target: 90+)
@@ -249,6 +284,7 @@ The remaining 1% requires **user-specific actions:**
 5. **Mobile:** Test on real iOS/Android devices
 
 ### Optional Actions (Nice to Have)
+
 1. **Monitoring:** Set up error alerting (email/Slack)
 2. **Documentation:** Create user guides
 3. **Support:** Set up support system
@@ -259,6 +295,7 @@ The remaining 1% requires **user-specific actions:**
 ## Testing the New Features
 
 ### 1. Test Core Web Vitals
+
 ```bash
 # Open DevTools Console
 # Navigate to any page
@@ -266,6 +303,7 @@ The remaining 1% requires **user-specific actions:**
 ```
 
 ### 2. Test Network Status
+
 ```bash
 # Open DevTools
 # Network tab → Throttling → Offline
@@ -276,6 +314,7 @@ The remaining 1% requires **user-specific actions:**
 ```
 
 ### 3. Test Service Worker Update
+
 ```bash
 # Make a code change
 # Deploy new version
@@ -284,6 +323,7 @@ The remaining 1% requires **user-specific actions:**
 ```
 
 ### 4. Test A11y Tester (Dev Mode)
+
 ```bash
 # Press Ctrl+Shift+A
 # Click "Run Audit"
@@ -292,6 +332,7 @@ The remaining 1% requires **user-specific actions:**
 ```
 
 ### 5. Test Rate Limiting
+
 ```bash
 # Try calling AI generation 21 times rapidly
 # 21st call should return 429 error
@@ -303,12 +344,14 @@ The remaining 1% requires **user-specific actions:**
 ## Deployment Instructions
 
 ### Before Deploying
+
 1. Complete all "Required Actions" above
 2. Run through testing checklist
 3. Review `PRODUCTION_CHECKLIST.md`
 4. Make sure all secrets are production-ready
 
 ### Deploy Command
+
 ```bash
 # 1. Build production bundle
 npm run build
@@ -326,6 +369,7 @@ npx lighthouse http://localhost:4173 --view
 ```
 
 ### After Deploying
+
 1. Verify Core Web Vitals in GA4
 2. Test offline functionality
 3. Monitor error rates
@@ -337,21 +381,25 @@ npx lighthouse http://localhost:4173 --view
 ## Support & Troubleshooting
 
 ### If Core Web Vitals Not Working
+
 - Check GA4 is configured (`VITE_GA4_MEASUREMENT_ID`)
 - Check browser console for errors
 - Verify `web-vitals` package installed
 
 ### If Network Status Not Showing
+
 - Check service worker is registered
 - Verify HTTPS (required for SW)
 - Check browser supports navigator.onLine
 
 ### If Service Worker Updates Not Working
+
 - Check `vite-plugin-pwa` configuration
 - Verify service worker is registered
 - Check browser console for SW errors
 
 ### If A11y Tester Not Showing
+
 - Only works in development mode
 - Press `Ctrl+Shift+A` to toggle
 - Check browser console for errors
@@ -400,6 +448,7 @@ Complete the items in `PRODUCTION_CHECKLIST.md` and you're ready to launch! 🚀
 ---
 
 **Need Help?**
+
 - Review `PRODUCTION_CHECKLIST.md` for detailed steps
 - Check `COMPLETE_INTEGRATION_GUIDE.md` for technical details
 - Reference `DATABASE_OPTIMIZATION_GUIDE.md` for performance tips

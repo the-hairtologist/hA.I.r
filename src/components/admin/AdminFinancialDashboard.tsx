@@ -170,7 +170,11 @@ export const AdminFinancialDashboard = () => {
         topStylist,
       });
     } catch (error) {
-      logger.error('Failed to load financial data', 'AdminFinancialDashboard', error);
+      logger.error(
+        'Failed to load financial data',
+        'AdminFinancialDashboard',
+        error
+      );
     } finally {
       setLoading(false);
     }

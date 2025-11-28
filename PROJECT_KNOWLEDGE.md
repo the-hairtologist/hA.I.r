@@ -33,6 +33,7 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 ### Tech Stack
 
 **Frontend**:
+
 - React 18.3+ with TypeScript
 - Vite (build tool)
 - TanStack React Query (data fetching & caching)
@@ -41,22 +42,26 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 - Zod (validation)
 
 **Backend**:
+
 - Supabase (PostgreSQL database)
 - Supabase Edge Functions (Deno runtime)
 - Row Level Security (RLS) policies
 
 **AI/ML**:
+
 - Lovable AI Gateway (Gemini 2.5 models)
 - OpenAI integration (optional)
 - Hugging Face Transformers (background removal)
 
 **Integrations**:
+
 - Stripe (payments & subscriptions)
 - Resend (transactional email)
 - Twilio (SMS notifications)
 - Google Calendar sync (OAuth ready)
 
 **Mobile**:
+
 - Capacitor (native features)
 - PWA capabilities
 - Camera integration
@@ -67,12 +72,14 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 **100+ tables** organized into domains:
 
 **Core Entities**:
+
 - `profiles` - User accounts
 - `user_roles` - Role-based access (admin, stylist, client)
 - `stylist_profiles` - Stylist-specific data
 - `client_profiles` - Client-specific data
 
 **Business Logic**:
+
 - `appointments` - Booking system
 - `services` - Service catalog
 - `formulas` - Hair color formulas
@@ -80,18 +87,21 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 - `reviews` - Client feedback
 
 **AI/Analytics**:
+
 - `ai_insights` - Generated recommendations
 - `client_retention_scores` - Churn prediction
 - `client_sentiment_analysis` - NLP analysis
 - `ai_analytics_events` - Usage tracking
 
 **Automation**:
+
 - `email_sequences` - Drip campaigns
 - `email_sequence_enrollments` - Client enrollments
 - `automated_followups` - Triggered messages
 - `rebooking_reminders` - Retention automation
 
 **Commerce**:
+
 - `subscription_tiers` - Pricing plans
 - `stylist_subscriptions` - Active subscriptions
 - `commissions` - Affiliate tracking
@@ -104,6 +114,7 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 ### 1. Dashboard (All Roles)
 
 **Stylist Dashboard**:
+
 - Today's appointments
 - Weekly revenue overview
 - AI insights widget (churn alerts, upsell opportunities)
@@ -112,6 +123,7 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 - Client milestones
 
 **Client Dashboard**:
+
 - Next appointment
 - Hair journey timeline
 - Preferred stylist card
@@ -119,6 +131,7 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 - Photo gallery
 
 **Admin Dashboard**:
+
 - System health metrics
 - User management
 - Security audit
@@ -128,6 +141,7 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 ### 2. Appointment Management
 
 **Booking Flow**:
+
 1. Select stylist
 2. Choose service
 3. Pick date/time
@@ -136,6 +150,7 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 6. Receive confirmation (email/SMS)
 
 **Features**:
+
 - Conflict detection
 - Calendar view
 - Quick appointment dialog
@@ -147,6 +162,7 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 ### 3. Client Management
 
 **Client Profiles**:
+
 - Contact info (name, email, phone)
 - Hair details (type, allergies, goals)
 - Medical consent
@@ -155,6 +171,7 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 - Referral source
 
 **Client Features**:
+
 - CSV import
 - Search & filtering
 - Tags/categories
@@ -166,6 +183,7 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 ### 4. Formula Library
 
 **Formula System**:
+
 - Create custom color formulas
 - Attach photos
 - Add processing notes
@@ -174,6 +192,7 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 - AI analysis (suggest improvements)
 
 **AI Features**:
+
 - Analyze formula complexity
 - Suggest alternatives
 - Predict results
@@ -182,6 +201,7 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 ### 5. AI-Powered Features
 
 **Client Retention AI**:
+
 - Churn risk scoring (0-100)
 - Risk levels (high, medium, low)
 - Days since last visit tracking
@@ -189,6 +209,7 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 - Recommended actions
 
 **AI Insights**:
+
 - Upsell opportunities
 - Re-engagement alerts
 - Seasonal trends
@@ -196,17 +217,20 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 - Schedule gaps
 
 **AI Schedule Optimizer**:
+
 - Fill appointment gaps
 - Suggest optimal times
 - Maximize revenue per day
 - Balance workload
 
 **AI Message Composer**:
+
 - Generate client messages
 - Personalized tone
 - Context-aware suggestions
 
 **Hair Photo Analyzer**:
+
 - Analyze hair condition
 - Suggest treatments
 - Detect damage
@@ -215,6 +239,7 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 ### 6. Business Analytics
 
 **Revenue Tracking**:
+
 - Daily/weekly/monthly revenue
 - Revenue by service
 - Revenue by stylist
@@ -222,6 +247,7 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 - Client lifetime value
 
 **Performance Metrics**:
+
 - Appointment completion rate
 - Cancellation rate
 - Rebook rate
@@ -229,6 +255,7 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 - Service popularity
 
 **Charts**:
+
 - Revenue trends
 - Appointment heatmap
 - Service breakdown
@@ -237,6 +264,7 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 ### 7. Automation & Email
 
 **Email Sequences**:
+
 - Welcome series
 - Post-appointment follow-up
 - Re-engagement campaigns
@@ -244,6 +272,7 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 - Loyalty programs
 
 **Triggers**:
+
 - Appointment confirmed
 - Appointment completed
 - X days since last visit
@@ -251,6 +280,7 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 - Milestone reached
 
 **Templates**:
+
 - Customizable content
 - Variable substitution
 - A/B testing ready
@@ -259,6 +289,7 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 ### 8. Payments & Subscriptions
 
 **Stripe Integration**:
+
 - Subscription tiers (Free, Pro, Team)
 - Payment processing
 - Invoice generation
@@ -266,11 +297,13 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 - Webhook processing
 
 **Pricing Tiers**:
+
 - **Free**: 1 stylist, 10 clients
 - **Pro** ($29/mo): Unlimited clients, AI features
 - **Team** ($99/mo): Multi-stylist, advanced analytics
 
 **Dynamic Pricing** (optional):
+
 - Weekend premium (+20%)
 - Off-peak discount (-15%)
 - Last-minute surcharge (+30%)
@@ -279,6 +312,7 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 ### 9. Calendar Sync
 
 **Infrastructure** (OAuth ready):
+
 - Google Calendar integration
 - Event sync (bi-directional)
 - Conflict detection
@@ -288,6 +322,7 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 ### 10. Mobile Features
 
 **Native Capabilities**:
+
 - Camera capture
 - Photo gallery access
 - Haptic feedback
@@ -297,6 +332,7 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 - Background removal
 
 **PWA**:
+
 - Installable
 - Offline support
 - App-like experience
@@ -305,12 +341,14 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 ### 11. Communication
 
 **Client Messaging**:
+
 - In-app notifications
 - Email notifications
 - SMS reminders (Twilio)
 - Push notifications (ready)
 
 **Channels**:
+
 - Appointment reminders (24h, 48h)
 - Confirmation requests
 - Follow-up messages
@@ -320,6 +358,7 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 ### 12. Reviews & Reputation
 
 **Review System**:
+
 - Star ratings (1-5)
 - Written feedback
 - Service-specific ratings
@@ -327,6 +366,7 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 - Public/private toggle
 
 **Reputation Management**:
+
 - Average rating calculation
 - Review moderation
 - Response system
@@ -335,6 +375,7 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 ### 13. Reports & Exports
 
 **Data Export**:
+
 - Client list (CSV)
 - Appointment history
 - Revenue reports
@@ -342,6 +383,7 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 - Photo gallery
 
 **PDF Generation**:
+
 - Invoices
 - Service records
 - Formula cards
@@ -350,12 +392,14 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 ### 14. Admin Tools
 
 **User Management**:
+
 - Role assignment
 - Access code system (5 slots)
 - Subscription management
 - Account deletion
 
 **System Tools**:
+
 - Security audit
 - Database linter
 - Cache management
@@ -363,6 +407,7 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 - Analytics dashboard
 
 **Divine Weapon**:
+
 - Mass client import
 - Bulk operations
 - Data cleanup
@@ -371,6 +416,7 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 ### 15. Onboarding & Tours
 
 **New User Onboarding**:
+
 - Welcome wizard
 - Role selection
 - Profile setup
@@ -378,6 +424,7 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 - Quick start guides
 
 **Guided Tours**:
+
 - Dashboard tour
 - Booking flow
 - Formula creation
@@ -393,6 +440,7 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 **Base URL**: `https://ai.gateway.lovable.dev/v1/chat/completions`
 
 **Available Models**:
+
 - `google/gemini-2.5-flash` (default) - Fast, balanced
 - `google/gemini-2.5-pro` - Most powerful, slower
 - `google/gemini-2.5-flash-lite` - Fastest, simple tasks
@@ -404,6 +452,7 @@ hA.I.r is an **AI-powered salon management platform** designed specifically for 
 ### Edge Functions
 
 **AI-Powered Functions**:
+
 - `chat` - General AI chat
 - `analyze-formula` - Formula analysis
 - `analyze-retention` - Churn prediction
@@ -427,6 +476,7 @@ Client Request → Edge Function → Lovable AI Gateway → Response
 ```
 
 **Data Flow**:
+
 1. Client triggers AI feature
 2. Edge function validates request
 3. Fetches context from database
@@ -438,11 +488,13 @@ Client Request → Edge Function → Lovable AI Gateway → Response
 ### Prompt Engineering
 
 **System Prompts** (in edge functions):
+
 - Retention analysis: "Analyze client visit patterns..."
 - Formula suggestions: "You are an expert hair colorist..."
 - Schedule optimization: "Optimize appointment gaps..."
 
 **Context Injection**:
+
 - Client history
 - Previous formulas
 - Appointment patterns
@@ -455,6 +507,7 @@ Client Request → Edge Function → Lovable AI Gateway → Response
 ### Authentication
 
 **Supabase Auth**:
+
 - Email/password
 - Magic links
 - Google OAuth (ready)
@@ -462,6 +515,7 @@ Client Request → Edge Function → Lovable AI Gateway → Response
 - Auto-refresh tokens
 
 **Role System**:
+
 - `admin` - Full system access
 - `stylist` - Business management
 - `client` - Self-service portal
@@ -469,12 +523,14 @@ Client Request → Edge Function → Lovable AI Gateway → Response
 ### Authorization
 
 **Row Level Security (RLS)**:
+
 - 18/18 tables secured
 - User can only see own data
 - Stylist can see their clients
 - Admin can see everything
 
 **Policy Examples**:
+
 ```sql
 -- Clients can only view their own profile
 CREATE POLICY "client_select_own"
@@ -490,12 +546,14 @@ USING (is_client_of_stylist(id, auth.uid()));
 ### Data Protection
 
 **Sensitive Data**:
+
 - Medical info (consent required)
 - Payment details (Stripe-hosted)
 - API keys (Supabase Vault)
 - Passwords (bcrypt hashed)
 
 **Encryption**:
+
 - In transit: TLS 1.3
 - At rest: PostgreSQL encryption
 - Tokens: Vault-secured
@@ -521,11 +579,13 @@ USING (is_client_of_stylist(id, auth.uid()));
 ### Common Patterns
 
 **Soft Deletes**:
+
 ```sql
 deleted_at timestamptz NULL
 ```
 
 **Audit Trail**:
+
 ```sql
 created_at timestamptz DEFAULT now()
 updated_at timestamptz DEFAULT now()
@@ -533,11 +593,13 @@ created_by uuid REFERENCES profiles(id)
 ```
 
 **Metadata**:
+
 ```sql
 metadata jsonb DEFAULT '{}'::jsonb
 ```
 
 **Status Enums**:
+
 ```sql
 status text CHECK (status IN ('active', 'inactive', 'pending'))
 ```
@@ -545,15 +607,18 @@ status text CHECK (status IN ('active', 'inactive', 'pending'))
 ### Relationships
 
 **One-to-Many**:
+
 - Stylist → Clients
 - Stylist → Appointments
 - Client → Hair Photos
 
 **Many-to-Many**:
+
 - Clients ↔ Services (via appointments)
 - Stylists ↔ Specialties (via stylist_specialties)
 
 **Polymorphic**:
+
 - AI conversations (context_type + context_id)
 - Notifications (notifiable_type + notifiable_id)
 
@@ -564,6 +629,7 @@ status text CHECK (status IN ('active', 'inactive', 'pending'))
 ### Bundle Optimization
 
 **Code Splitting**:
+
 - Vendor chunk (React, libraries)
 - UI chunk (shadcn components)
 - Charts chunk (Recharts)
@@ -575,12 +641,14 @@ status text CHECK (status IN ('active', 'inactive', 'pending'))
 ### React Query Caching
 
 **Strategy**:
+
 - `staleTime: 5 minutes` (dashboard)
 - `staleTime: 1 minute` (appointments)
 - `staleTime: 0` (real-time data)
 - `gcTime: 10 minutes` (keep unused)
 
 **Invalidation Patterns**:
+
 - See `src/lib/dataFlow/queryInvalidation.ts`
 - Centralized invalidation logic
 - Related cache updates
@@ -588,23 +656,25 @@ status text CHECK (status IN ('active', 'inactive', 'pending'))
 ### Database Indexes
 
 **Key Indexes**:
+
 ```sql
 -- Appointments by date
-CREATE INDEX idx_appointments_date 
+CREATE INDEX idx_appointments_date
 ON appointments(appointment_date);
 
 -- Clients by stylist
-CREATE INDEX idx_clients_stylist 
+CREATE INDEX idx_clients_stylist
 ON client_profiles(preferred_stylist_id);
 
 -- Formulas by client
-CREATE INDEX idx_formulas_client 
+CREATE INDEX idx_formulas_client
 ON formulas(client_id);
 ```
 
 ### Image Optimization
 
 **Strategy**:
+
 - WebP format preferred
 - Lazy loading
 - Background removal (ML)
@@ -618,13 +688,11 @@ ON formulas(client_id);
 ### Color Palette
 
 **Semantic Tokens** (HSL):
+
 ```css
---primary: /* Main brand color */
---secondary: /* Accent color */
---accent: /* Interactive elements */
---destructive: /* Errors/warnings */
---muted: /* Backgrounds */
---foreground: /* Text */
+--primary: /* Main brand color */ --secondary: /* Accent color */
+  --accent: /* Interactive elements */ --destructive: /* Errors/warnings */
+  --muted: /* Backgrounds */ --foreground: /* Text */;
 ```
 
 **Usage**: ALWAYS use semantic tokens, never hard-coded colors
@@ -632,10 +700,12 @@ ON formulas(client_id);
 ### Typography
 
 **Font Stack**:
+
 - Primary: System fonts
 - Pixel: Retro gaming font (branding)
 
 **Scale**:
+
 - xs: 0.75rem
 - sm: 0.875rem
 - base: 1rem
@@ -646,6 +716,7 @@ ON formulas(client_id);
 ### Components
 
 **shadcn/ui**:
+
 - Button (variants: default, destructive, outline, secondary, ghost, link)
 - Card, Dialog, Sheet, Drawer
 - Form (React Hook Form + Zod)
@@ -654,6 +725,7 @@ ON formulas(client_id);
 - Badge, Avatar, Separator
 
 **Custom**:
+
 - LoadingSpinner
 - ErrorBoundary
 - DataErrorBoundary
@@ -690,16 +762,18 @@ xl: 1280px
 ### Native Features
 
 **Camera**:
+
 ```typescript
 import { Camera } from '@capacitor/camera';
 const photo = await Camera.getPhoto({
   quality: 90,
   allowEditing: true,
-  resultType: CameraResultType.Uri
+  resultType: CameraResultType.Uri,
 });
 ```
 
 **Haptics**:
+
 ```typescript
 import { Haptics } from '@capacitor/haptics';
 await Haptics.impact({ style: ImpactStyle.Medium });
@@ -768,7 +842,7 @@ graph TD
 src/__tests__/
   example.test.tsx
   AIComponents.test.tsx
-  
+
 src/components/
   ErrorBoundary.test.tsx
 ```
@@ -803,6 +877,7 @@ npm run preview
 ### Environment Variables
 
 **Required**:
+
 ```env
 VITE_SUPABASE_URL=
 VITE_SUPABASE_PUBLISHABLE_KEY=
@@ -810,6 +885,7 @@ VITE_SUPABASE_PROJECT_ID=
 ```
 
 **Optional**:
+
 ```env
 VITE_STRIPE_PUBLIC_KEY=
 VITE_GOOGLE_MAPS_KEY=
@@ -934,21 +1010,25 @@ git push origin feature/new-feature
 ### Common Issues
 
 **Build Errors**:
+
 - Clear node_modules and reinstall
 - Check TypeScript errors
 - Verify environment variables
 
 **Auth Issues**:
+
 - Check RLS policies
 - Verify JWT tokens
 - Check user roles
 
 **AI Errors**:
+
 - Check rate limits (429)
 - Verify credits (402)
 - Check edge function logs
 
 **Performance**:
+
 - Check bundle size
 - Review React Query cache
 - Check database indexes

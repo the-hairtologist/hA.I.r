@@ -46,7 +46,10 @@ export const QuickRebookButton = ({
         .maybeSingle();
 
       if (fetchError) {
-        logger.error('Error fetching appointment', fetchError, { component: 'QuickRebookButton', appointmentId });
+        logger.error('Error fetching appointment', fetchError, {
+          component: 'QuickRebookButton',
+          appointmentId,
+        });
         toast.error('Failed to load appointment details');
         return;
       }
@@ -69,17 +72,25 @@ export const QuickRebookButton = ({
         .maybeSingle();
 
       if (scheduleError) {
-        logger.error('Error fetching schedule', scheduleError, { component: 'QuickRebookButton', stylistId });
+        logger.error('Error fetching schedule', scheduleError, {
+          component: 'QuickRebookButton',
+          stylistId,
+        });
       }
 
       // Find next available slot
       const dayOfWeek = suggestedDate.getDay();
       const weeklySchedule = schedule?.weekly_schedule;
-      const daySchedule = weeklySchedule && typeof weeklySchedule === 'object' 
-        ? (weeklySchedule as Record<string, any>)[dayOfWeek.toString()] 
-        : null;
+      const daySchedule =
+        weeklySchedule && typeof weeklySchedule === 'object'
+          ? (weeklySchedule as Record<string, any>)[dayOfWeek.toString()]
+          : null;
 
-      if (daySchedule?.is_available && Array.isArray(daySchedule.slots) && daySchedule.slots.length > 0) {
+      if (
+        daySchedule?.is_available &&
+        Array.isArray(daySchedule.slots) &&
+        daySchedule.slots.length > 0
+      ) {
         const firstSlot = daySchedule.slots[0];
         const appointmentTime = new Date(suggestedDate);
         const [hours, minutes] = firstSlot.start.split(':');
@@ -131,7 +142,11 @@ export const QuickRebookButton = ({
         });
       }
     } catch (error) {
-      logger.error('Error rebooking', error, { component: 'QuickRebookButton', appointmentId, clientId });
+      logger.error('Error rebooking', error, {
+        component: 'QuickRebookButton',
+        appointmentId,
+        clientId,
+      });
       haptic.error();
       toast.error('Failed to rebook appointment');
     } finally {

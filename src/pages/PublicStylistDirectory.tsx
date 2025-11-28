@@ -69,7 +69,11 @@ const PublicStylistDirectory = () => {
       if (error) throw error;
       setStylists(data || []);
     } catch (error: any) {
-      logger.error('Error fetching stylists', 'PublicStylistDirectory', error as Error);
+      logger.error(
+        'Error fetching stylists',
+        'PublicStylistDirectory',
+        error as Error
+      );
     } finally {
       setLoading(false);
     }

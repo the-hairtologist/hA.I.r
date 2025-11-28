@@ -47,9 +47,9 @@ export const PageHeader = ({
             </Button>
             <div className="flex items-center gap-3 min-w-0">
               {icon && <div className="text-primary flex-shrink-0">{icon}</div>}
-            <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-pixel gradient-text truncate max-w-[200px] xs:max-w-[250px] sm:max-w-none">
-              {title}
-            </div>
+              <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-pixel gradient-text truncate max-w-[200px] xs:max-w-[250px] sm:max-w-none">
+                {title}
+              </div>
             </div>
           </div>
           {actions && (

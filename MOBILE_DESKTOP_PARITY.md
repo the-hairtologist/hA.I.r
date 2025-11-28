@@ -1,6 +1,7 @@
 # Mobile-Desktop Experience Parity Guide
 
 ## 🎯 Goal
+
 Ensure users have a nearly identical experience whether using the web app on desktop or the native mobile app on iOS/Android, within the constraints of each platform's capabilities.
 
 ---
@@ -8,17 +9,19 @@ Ensure users have a nearly identical experience whether using the web app on des
 ## 📱 Platform Architecture
 
 ### Current Setup
+
 - **Web**: React + Vite + Tailwind CSS
 - **Mobile**: Capacitor wrapper (iOS & Android)
 - **Platform Detection**: `src/platform/detector.ts`
 - **Native Features**: Camera, Haptics, Share, Storage, Status Bar, Keyboard
 
 ### Configuration
+
 ```typescript
 // capacitor.config.ts
-appId: 'app.lovable.a1a18f9db2f94d81aa8ce28408bee3a2'
-appName: 'hair-ai-app'
-webDir: 'dist'
+appId: 'app.lovable.a1a18f9db2f94d81aa8ce28408bee3a2';
+appName: 'hair-ai-app';
+webDir: 'dist';
 ```
 
 ---
@@ -28,21 +31,25 @@ webDir: 'dist'
 ### ✅ Already Implemented
 
 #### 1. **Responsive Layout**
+
 - Sidebar (Desktop) ↔ Bottom Navigation (Mobile)
 - Fluid typography using `clamp()` for consistent reading sizes
 - Touch targets minimum 44x44px (WCAG compliant)
 - Safe area insets for notched devices
 
 #### 2. **Navigation**
+
 ```
 Desktop: AppSidebar (left) + Header (top)
 Mobile:  MobileNav (bottom) + Header (top)
 ```
+
 - Both provide access to all core features
 - Active states synchronized
 - Icon consistency across platforms
 
 #### 3. **Platform-Specific Features**
+
 - **Haptic Feedback**: Mobile only (buttons, interactions)
 - **Camera Access**: Native on mobile, file picker on web
 - **Share API**: Native sheets on mobile, Web Share API fallback
@@ -50,6 +57,7 @@ Mobile:  MobileNav (bottom) + Header (top)
 - **Keyboard**: Resize behavior optimized for mobile
 
 #### 4. **Floating Action Button (Star)**
+
 - Positioned dynamically: `6rem-10rem` from bottom
 - Clears mobile nav (64px) with 32px+ buffer
 - Scales responsively: 56px-64px
@@ -61,6 +69,7 @@ Mobile:  MobileNav (bottom) + Header (top)
 ## 🎨 Design Consistency
 
 ### Colors & Theming
+
 ```css
 /* Both platforms use same design tokens */
 --primary, --secondary, --accent, etc.
@@ -69,12 +78,14 @@ Mobile:  MobileNav (bottom) + Header (top)
 ```
 
 ### Typography
+
 ```typescript
 // Fluid scaling ensures consistency
 text-[clamp(1rem,3vw,1.125rem)] // Adapts to device
 ```
 
 ### Spacing
+
 ```typescript
 // Responsive containers
 container mx-auto p-4 sm:p-6 md:p-8 lg:p-12
@@ -84,48 +95,50 @@ container mx-auto p-4 sm:p-6 md:p-8 lg:p-12
 
 ## 📊 Feature Matrix
 
-| Feature | Desktop | Mobile Web | iOS App | Android App |
-|---------|---------|------------|---------|-------------|
-| **Core Features** |
-| Authentication | ✅ | ✅ | ✅ | ✅ |
-| Client Management | ✅ | ✅ | ✅ | ✅ |
-| Appointments | ✅ | ✅ | ✅ | ✅ |
-| Formula Generator | ✅ | ✅ | ✅ | ✅ |
-| Messaging | ✅ | ✅ | ✅ | ✅ |
-| AI Assistant | ✅ | ✅ | ✅ | ✅ |
-| **Navigation** |
-| Sidebar | ✅ | ❌ | ❌ | ❌ |
-| Bottom Nav | ❌ | ✅ | ✅ | ✅ |
-| Breadcrumbs | ✅ | ✅ (smaller) | ✅ (smaller) | ✅ (smaller) |
+| Feature             | Desktop        | Mobile Web   | iOS App      | Android App  |
+| ------------------- | -------------- | ------------ | ------------ | ------------ |
+| **Core Features**   |
+| Authentication      | ✅             | ✅           | ✅           | ✅           |
+| Client Management   | ✅             | ✅           | ✅           | ✅           |
+| Appointments        | ✅             | ✅           | ✅           | ✅           |
+| Formula Generator   | ✅             | ✅           | ✅           | ✅           |
+| Messaging           | ✅             | ✅           | ✅           | ✅           |
+| AI Assistant        | ✅             | ✅           | ✅           | ✅           |
+| **Navigation**      |
+| Sidebar             | ✅             | ❌           | ❌           | ❌           |
+| Bottom Nav          | ❌             | ✅           | ✅           | ✅           |
+| Breadcrumbs         | ✅             | ✅ (smaller) | ✅ (smaller) | ✅ (smaller) |
 | **Native Features** |
-| Haptic Feedback | ❌ | ❌ | ✅ | ✅ |
-| Camera (Native) | ❌ | ❌ | ✅ | ✅ |
-| Share Sheet | ❌ | Limited | ✅ | ✅ |
-| Push Notifications | ❌ | ❌ | ✅ | ✅ |
-| Offline Storage | Browser | Browser | Native | Native |
-| Status Bar Control | ❌ | ❌ | ✅ | ✅ |
-| Keyboard Control | ❌ | ❌ | ✅ | ✅ |
-| **UI/UX** |
-| Gestures | Mouse/Trackpad | Touch | Touch | Touch |
-| Hover States | ✅ | ❌ | ❌ | ❌ |
-| Touch Targets | 44px+ | 44px+ | 44px+ | 44px+ |
-| Safe Areas | N/A | N/A | ✅ | ✅ |
-| Pull-to-Refresh | ❌ | ❌ | ✅ | ✅ |
+| Haptic Feedback     | ❌             | ❌           | ✅           | ✅           |
+| Camera (Native)     | ❌             | ❌           | ✅           | ✅           |
+| Share Sheet         | ❌             | Limited      | ✅           | ✅           |
+| Push Notifications  | ❌             | ❌           | ✅           | ✅           |
+| Offline Storage     | Browser        | Browser      | Native       | Native       |
+| Status Bar Control  | ❌             | ❌           | ✅           | ✅           |
+| Keyboard Control    | ❌             | ❌           | ✅           | ✅           |
+| **UI/UX**           |
+| Gestures            | Mouse/Trackpad | Touch        | Touch        | Touch        |
+| Hover States        | ✅             | ❌           | ❌           | ❌           |
+| Touch Targets       | 44px+          | 44px+        | 44px+        | 44px+        |
+| Safe Areas          | N/A            | N/A          | ✅           | ✅           |
+| Pull-to-Refresh     | ❌             | ❌           | ✅           | ✅           |
 
 ---
 
 ## 🔧 Implementation Patterns
 
 ### 1. Platform-Specific Logic
+
 ```typescript
 import { Platform } from '@/platform';
 
 // Select implementation based on platform
-const headerHeight = Platform.select({
-  web: 64,
-  ios: 88,    // Account for status bar
-  android: 56,
-}) ?? 64;
+const headerHeight =
+  Platform.select({
+    web: 64,
+    ios: 88, // Account for status bar
+    android: 56,
+  }) ?? 64;
 
 // Conditional features
 if (Platform.isMobile) {
@@ -135,6 +148,7 @@ if (Platform.isMobile) {
 ```
 
 ### 2. Responsive Components
+
 ```typescript
 import { useResponsive } from '@/hooks/useResponsive';
 
@@ -149,6 +163,7 @@ return (
 ```
 
 ### 3. Touch-Optimized Interactions
+
 ```typescript
 // Always use minimum touch targets
 className={touchTargets.comfortable} // min-h-[48px] min-w-[48px]
@@ -181,6 +196,7 @@ npx cap run android
 ### Platform-Specific Considerations
 
 #### iOS
+
 - Safe area insets for notch/Dynamic Island
 - Status bar style adapts to dark/light mode
 - Haptic feedback uses iOS patterns
@@ -188,6 +204,7 @@ npx cap run android
 - Share sheet integration
 
 #### Android
+
 - Material Design ripple effects
 - Status bar color customization
 - Vibration patterns
@@ -199,12 +216,14 @@ npx cap run android
 ## 🎯 UX Differences (By Design)
 
 ### Desktop-Only Features
+
 1. **Hover States**: Not applicable on touch devices
 2. **Keyboard Shortcuts**: `Cmd/Ctrl+K`, `G+D`, etc.
 3. **Multi-window Support**: Desktop can open multiple tabs
 4. **Precise Cursor**: Fine-grained interactions
 
 ### Mobile-Only Features
+
 1. **Haptic Feedback**: Physical vibration on interactions
 2. **Native Camera**: Direct camera access with flash/filters
 3. **Pull-to-Refresh**: Natural mobile gesture
@@ -215,6 +234,7 @@ npx cap run android
 ### Optimizations
 
 #### Mobile Optimizations
+
 - Larger touch targets (48px vs 44px minimum)
 - Bottom navigation for thumb reach
 - Reduced animations (performance)
@@ -222,6 +242,7 @@ npx cap run android
 - Offline-first approach
 
 #### Desktop Optimizations
+
 - Sidebar for persistent navigation
 - Keyboard shortcuts
 - Hover previews and tooltips
@@ -233,6 +254,7 @@ npx cap run android
 ## 📐 Layout Adaptations
 
 ### Screen Size Breakpoints
+
 ```typescript
 // Tailwind breakpoints
 xs: 475px   // Large phones
@@ -244,6 +266,7 @@ xl: 1280px  // Desktops
 ```
 
 ### Navigation Pattern
+
 ```
 Mobile (< 768px):
 ┌─────────────────┐
@@ -273,24 +296,28 @@ Desktop (≥ 768px):
 ### Required Testing
 
 #### Desktop Browsers
+
 - [ ] Chrome (Windows/Mac/Linux)
 - [ ] Safari (Mac)
 - [ ] Firefox (Windows/Mac/Linux)
 - [ ] Edge (Windows)
 
 #### Mobile Browsers (Web)
+
 - [ ] Safari (iOS)
 - [ ] Chrome (iOS)
 - [ ] Chrome (Android)
 - [ ] Samsung Internet (Android)
 
 #### Native Apps
+
 - [ ] iPhone (iOS 15+)
 - [ ] iPad (iOS 15+)
 - [ ] Android Phone (Android 8+)
 - [ ] Android Tablet (Android 8+)
 
 #### Screen Sizes
+
 - [ ] iPhone SE (375x667)
 - [ ] iPhone 14 (390x844)
 - [ ] iPhone 14 Pro Max (430x932)
@@ -301,6 +328,7 @@ Desktop (≥ 768px):
 - [ ] Android Large (480x800)
 
 #### Orientations
+
 - [ ] Portrait
 - [ ] Landscape
 
@@ -309,13 +337,16 @@ Desktop (≥ 768px):
 ## 🎨 Visual Consistency
 
 ### Component Parity
+
 All UI components render identically:
+
 - Buttons, Cards, Inputs, Dialogs
 - Colors, Shadows, Borders
 - Animations, Transitions
 - Icons, Typography
 
 ### Neobrutalism Style
+
 - Thick borders (`border-2`, `border-3`)
 - Offset shadows (`shadow-[4px_4px_0px_0px]`)
 - Bold colors (orange, purple, cyan)
@@ -328,15 +359,17 @@ All UI components render identically:
 ### When Adding Features
 
 1. **Think Responsive First**
+
    ```typescript
    // ❌ BAD
    <div className="w-[800px]">
-   
+
    // ✅ GOOD
    <div className="w-full max-w-4xl">
    ```
 
 2. **Use Platform Detection**
+
    ```typescript
    // Check before using native features
    if (Platform.isMobile) {
@@ -352,6 +385,7 @@ All UI components render identically:
    - Ensure feature is accessible from both
 
 4. **Touch Targets**
+
    ```typescript
    // Always use proper sizes
    className={buttonSizes.md} // 44px minimum
@@ -368,25 +402,33 @@ All UI components render identically:
 ## 🐛 Common Issues & Solutions
 
 ### Issue: Layout Breaks on Small Screens
+
 **Solution**: Use responsive utilities
+
 ```typescript
-className="flex flex-col md:flex-row gap-4"
+className = 'flex flex-col md:flex-row gap-4';
 ```
 
 ### Issue: Button Too Small on Mobile
+
 **Solution**: Use touch target sizing
+
 ```typescript
 className={touchTargets.comfortable} // min-h-[48px]
 ```
 
 ### Issue: Text Too Small/Large
+
 **Solution**: Use fluid typography
+
 ```typescript
 className={fluidText.base} // clamp(1rem,3vw,1.125rem)
 ```
 
 ### Issue: Feature Only Works on Desktop
+
 **Solution**: Implement platform-specific fallback
+
 ```typescript
 if (Platform.isMobile) {
   // Mobile implementation

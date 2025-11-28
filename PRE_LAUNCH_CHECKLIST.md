@@ -8,6 +8,7 @@
 ## ✅ COMPLETED
 
 ### Core Implementation
+
 - [x] Apple IAP fully integrated with receipt verification
 - [x] Stripe payments for web/Android subscriptions
 - [x] Platform detection (iOS → Apple IAP, Web/Android → Stripe)
@@ -39,11 +40,13 @@ server: {
 ```
 
 **Required Action:**
+
 - **REMOVE or COMMENT OUT** the `server` block for production builds
 - This is ONLY for development hot-reload
 - Production builds should use local `dist` folder
 
 **Fix:** Before building for stores, edit `capacitor.config.ts`:
+
 ```typescript
 const config: CapacitorConfig = {
   appId: 'app.lovable.a1a18f9db2f94d81aa8ce28408bee3a2',
@@ -60,11 +63,13 @@ const config: CapacitorConfig = {
 **Current:** `package.json` shows version `0.0.0`
 
 **Required Actions:**
+
 - Update version to `1.0.0` for initial launch
 - Set version in Xcode (iOS)
 - Set version in `android/app/build.gradle`
 
 **Recommended Versioning:**
+
 - **App Version:** 1.0.0
 - **Build Number:** 1 (iOS CFBundleVersion)
 - **Version Code:** 1 (Android)
@@ -76,8 +81,9 @@ const config: CapacitorConfig = {
 **Current:** `capacitor.config.ts` has `appName: 'hair-ai-app'`
 
 **Recommendation:** Update to match your brand:
+
 ```typescript
-appName: 'hA.I.r Pro' // or 'hA.I.r' or 'Hair AI Pro'
+appName: 'hA.I.r Pro'; // or 'hA.I.r' or 'Hair AI Pro'
 ```
 
 This is what appears under the app icon.
@@ -103,6 +109,7 @@ VITE_SENTRY_DSN=your_sentry_dsn
 Need to prepare for both stores:
 
 #### **App Store Connect (iOS)**
+
 - [ ] App name (30 chars): "hA.I.r - Hair Stylist Pro"
 - [ ] Subtitle (30 chars): "AI Color Formula Generator"
 - [ ] Keywords (100 chars): "hair,stylist,salon,color,formula,appointment,booking,client"
@@ -116,6 +123,7 @@ Need to prepare for both stores:
 - [ ] Category: Business (Primary), Productivity (Secondary)
 
 #### **Google Play Console**
+
 - [ ] App name (50 chars): "hA.I.r - AI Hair Color Assistant"
 - [ ] Short description (80 chars): "AI-powered hair formulas & salon management for professional stylists"
 - [ ] Full description (4000 chars)
@@ -132,6 +140,7 @@ Need to prepare for both stores:
 Both stores require screenshots. **Target: 4-8 screenshots**
 
 **Recommended Shots:**
+
 1. **AI Formula Generator** - Show the quick formula feature
 2. **Client Management** - Dashboard with client list
 3. **Appointment Booking** - Calendar view
@@ -142,10 +151,12 @@ Both stores require screenshots. **Target: 4-8 screenshots**
 8. **Analytics Dashboard** - Business insights
 
 **Specs:**
+
 - **iOS**: 1290x2796px (iPhone 15 Pro Max)
 - **Android**: 1080x1920px minimum
 
 **Tool Recommendations:**
+
 - Use your actual app in simulator/device
 - Screenshot with `Cmd+S` (iOS Simulator) or device tools
 - Add text overlays with Figma/Canva (optional)
@@ -161,6 +172,7 @@ For store listings, provide:
 **Support Page:** Create at `/support` (optional but recommended)
 
 **Recommendation:** Add a simple support page with:
+
 - FAQ
 - Contact email
 - Feature request link
@@ -182,7 +194,8 @@ If you want users to share specific pages (like stylist profiles), configure dee
 
 **Currently:** Plugin configured in `capacitor.config.ts` but not implemented
 
-**Action:** 
+**Action:**
+
 - Either remove PushNotifications config if not using
 - OR implement before launch if you want notifications
 
@@ -222,6 +235,7 @@ npx cap open android # For Android (requires Android Studio)
 ## 📋 Week of Launch Action Items
 
 ### Before Building (30 mins)
+
 1. [ ] Update `capacitor.config.ts` - remove dev server URL
 2. [ ] Update `package.json` version to `1.0.0`
 3. [ ] Choose final app display name
@@ -230,6 +244,7 @@ npx cap open android # For Android (requires Android Studio)
 6. [ ] Replace icon files with your logo design
 
 ### App Store Connect Setup (1 hour)
+
 7. [ ] Create IAP products with exact IDs
 8. [ ] Generate shared secret
 9. [ ] Fill app metadata (name, description, keywords)
@@ -239,6 +254,7 @@ npx cap open android # For Android (requires Android Studio)
 13. [ ] Add privacy policy URL
 
 ### Google Play Console Setup (1 hour)
+
 14. [ ] Fill app metadata (name, description)
 15. [ ] Upload feature graphic ✅ (already created)
 16. [ ] Upload screenshots (4-8 images)
@@ -248,6 +264,7 @@ npx cap open android # For Android (requires Android Studio)
 20. [ ] Add privacy policy URL
 
 ### Build & Upload (2 hours)
+
 21. [ ] Build production iOS app in Xcode
 22. [ ] Archive iOS app for App Store
 23. [ ] Upload to TestFlight
@@ -256,6 +273,7 @@ npx cap open android # For Android (requires Android Studio)
 26. [ ] Upload to Google Play (Internal Testing track first)
 
 ### Testing (2-3 days)
+
 27. [ ] Test iOS build via TestFlight
 28. [ ] Test Android build via Internal Testing
 29. [ ] Verify Apple IAP purchases (sandbox user)
@@ -264,6 +282,7 @@ npx cap open android # For Android (requires Android Studio)
 32. [ ] Test core user flows (signup, booking, formulas, etc)
 
 ### Final Review (30 mins)
+
 33. [ ] Submit for App Store review
 34. [ ] Submit for Google Play review
 35. [ ] Prepare launch announcement
@@ -276,6 +295,7 @@ npx cap open android # For Android (requires Android Studio)
 Before hitting "Submit for Review":
 
 ### Functionality
+
 - [ ] Can users sign up successfully?
 - [ ] Can stylists subscribe (both platforms)?
 - [ ] Can clients book appointments?
@@ -284,6 +304,7 @@ Before hitting "Submit for Review":
 - [ ] Does offline mode work (PWA)?
 
 ### Legal & Compliance
+
 - [ ] Privacy policy accessible from app
 - [ ] Terms of service accessible from app
 - [ ] Refund policy clearly stated
@@ -291,12 +312,14 @@ Before hitting "Submit for Review":
 - [ ] Medical disclaimer for allergies (if applicable)
 
 ### Performance
+
 - [ ] App loads in < 3 seconds
 - [ ] No console errors in production
 - [ ] Images optimized and loading fast
 - [ ] Database queries performant
 
 ### Security
+
 - [ ] RLS policies enforced
 - [ ] Authentication required for sensitive data
 - [ ] Secrets not exposed in frontend
@@ -307,6 +330,7 @@ Before hitting "Submit for Review":
 ## 📊 Post-Launch Monitoring
 
 **Week 1:**
+
 - Monitor crash reports (Sentry if configured)
 - Check user reviews and ratings
 - Track subscription conversion rates
@@ -314,6 +338,7 @@ Before hitting "Submit for Review":
 - Watch for security issues
 
 **Week 2-4:**
+
 - Gather user feedback
 - Plan v1.1 feature updates
 - Optimize based on usage data
@@ -331,7 +356,7 @@ Before hitting "Submit for Review":
 ✅ Payment processing ready  
 ✅ Mobile-responsive design  
 ✅ PWA configured  
-✅ Testing suite comprehensive  
+✅ Testing suite comprehensive
 
 ---
 
@@ -353,11 +378,13 @@ These are **NOT required** for launch but consider for v1.1:
 ## 📞 Need Help?
 
 **Technical Issues:**
+
 - Review APPLE_IAP_IMPLEMENTATION.md
 - Check FINAL_PRODUCTION_CHECKLIST.md
 - Search Apple/Google developer docs
 
 **Store Submission:**
+
 - [Apple App Review Guidelines](https://developer.apple.com/app-store/review/guidelines/)
 - [Google Play Policy Center](https://play.google.com/console/about/guides/)
 
@@ -366,6 +393,7 @@ These are **NOT required** for launch but consider for v1.1:
 ---
 
 **TLDR:** You're 95% ready. Main gaps are:
+
 1. Production build config (remove dev server URL)
 2. Version numbers
 3. App screenshots

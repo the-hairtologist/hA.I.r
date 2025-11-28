@@ -1,5 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { renderWithProviders, screen, waitFor, act } from '@/lib/testing/testUtils';
+import {
+  renderWithProviders,
+  screen,
+  waitFor,
+  act,
+} from '@/lib/testing/testUtils';
 import userEvent from '@testing-library/user-event';
 import { InviteClientDialog } from './InviteClientDialog';
 import { supabase } from '@/integrations/supabase/client';
@@ -46,7 +51,7 @@ describe('InviteClientDialog - Double Submit Prevention', () => {
     // Delay the response to simulate network latency
     (supabase.functions.invoke as MockedSupabaseInvoke).mockImplementation(
       () =>
-        new Promise(resolve => setTimeout(() => resolve({ error: null }), 250)),
+        new Promise(resolve => setTimeout(() => resolve({ error: null }), 250))
     );
 
     renderWithProviders(<InviteClientDialog {...defaultProps} />);
@@ -77,16 +82,16 @@ describe('InviteClientDialog - Double Submit Prevention', () => {
     expect(supabase.functions.invoke).toHaveBeenCalledTimes(1);
 
     // Wait for the submission to complete to avoid test pollution
-    await waitFor(
-      () => expect(sendButton).not.toBeDisabled(),
-      { timeout: 5000 },
-    );
+    await waitFor(() => expect(sendButton).not.toBeDisabled(), {
+      timeout: 5000,
+    });
   });
 
   it('should disable send button during submission', async () => {
     const user = userEvent.setup();
     (supabase.functions.invoke as MockedSupabaseInvoke).mockImplementation(
-      () => new Promise(resolve => setTimeout(() => resolve({ error: null }), 100))
+      () =>
+        new Promise(resolve => setTimeout(() => resolve({ error: null }), 100))
     );
     renderWithProviders(<InviteClientDialog {...defaultProps} />);
 
@@ -111,7 +116,8 @@ describe('InviteClientDialog - Double Submit Prevention', () => {
   it('should show loading indicator during invite send', async () => {
     const user = userEvent.setup();
     (supabase.functions.invoke as MockedSupabaseInvoke).mockImplementation(
-      () => new Promise(resolve => setTimeout(() => resolve({ error: null }), 100))
+      () =>
+        new Promise(resolve => setTimeout(() => resolve({ error: null }), 100))
     );
     renderWithProviders(<InviteClientDialog {...defaultProps} />);
 
@@ -161,7 +167,8 @@ describe('InviteClientDialog - Loading State Visibility', () => {
   it('should show loading spinner during submission', async () => {
     const user = userEvent.setup();
     (supabase.functions.invoke as MockedSupabaseInvoke).mockImplementation(
-      () => new Promise(resolve => setTimeout(() => resolve({ error: null }), 100))
+      () =>
+        new Promise(resolve => setTimeout(() => resolve({ error: null }), 100))
     );
     renderWithProviders(<InviteClientDialog {...defaultProps} />);
 
@@ -239,7 +246,8 @@ describe('InviteClientDialog - Button Disabled States', () => {
     const user = userEvent.setup();
 
     (supabase.functions.invoke as MockedSupabaseInvoke).mockImplementation(
-      () => new Promise(resolve => setTimeout(() => resolve({ error: null }), 100))
+      () =>
+        new Promise(resolve => setTimeout(() => resolve({ error: null }), 100))
     );
     renderWithProviders(<InviteClientDialog {...defaultProps} />);
 
@@ -336,14 +344,17 @@ describe('InviteClientDialog - Success/Error Scenarios', () => {
     });
 
     await waitFor(() => {
-      expect(supabase.functions.invoke).toHaveBeenCalledWith('send-client-invite', {
-        body: {
-          clientEmail: 'client@example.com',
-          clientName: 'Jane Doe',
-          stylistName: 'John Stylist',
-          customMessage: 'Looking forward to working with you!',
-        },
-      });
+      expect(supabase.functions.invoke).toHaveBeenCalledWith(
+        'send-client-invite',
+        {
+          body: {
+            clientEmail: 'client@example.com',
+            clientName: 'Jane Doe',
+            stylistName: 'John Stylist',
+            customMessage: 'Looking forward to working with you!',
+          },
+        }
+      );
       expect(onOpenChange).toHaveBeenCalledWith(false);
     });
   });
@@ -356,7 +367,7 @@ describe('InviteClientDialog - Success/Error Scenarios', () => {
 
     const onOpenChange = vi.fn();
     renderWithProviders(
-      <InviteClientDialog {...defaultProps} onOpenChange={onOpenChange} />,
+      <InviteClientDialog {...defaultProps} onOpenChange={onOpenChange} />
     );
 
     const sendButton = screen.getByRole('button', { name: /send invite/i });
@@ -375,5 +386,4 @@ describe('InviteClientDialog - Success/Error Scenarios', () => {
     // Form should be re-enabled for retry
     expect(sendButton).not.toBeDisabled();
   });
-
 });

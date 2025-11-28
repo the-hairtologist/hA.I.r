@@ -1,4 +1,5 @@
 # Code Protection & Optimization Guide
+
 ## hA.I.r Multi-Platform Security
 
 **Version:** 1.0.0  
@@ -23,6 +24,7 @@ esbuild: {
 ```
 
 **What this does:**
+
 - ✅ Minifies JavaScript (removes whitespace, shortens variable names)
 - ✅ Tree-shaking (removes unused code)
 - ✅ Removes console.log statements
@@ -30,6 +32,7 @@ esbuild: {
 - ✅ Compresses bundle size by ~70%
 
 **Bundle size:**
+
 - Development: ~3-5 MB
 - Production: ~800-1000 KB (gzipped)
 
@@ -42,20 +45,24 @@ esbuild: {
 Tools like `javascript-obfuscator` are **not recommended** for React apps because:
 
 ❌ **Breaks React optimizations**
+
 - React DevTools becomes unusable
 - Hot Module Replacement breaks
 - Source maps become useless
 
 ❌ **Increases bundle size**
+
 - Obfuscated code is 20-40% larger
 - Slower parsing and execution
 
 ❌ **False sense of security**
+
 - Client-side code can always be deobfuscated
 - Tools like JS Beautify reverse it in seconds
 - Real security comes from backend validation
 
 ❌ **Industry standard**
+
 - Google, Facebook, Netflix don't aggressively obfuscate
 - Current minification is the industry standard
 
@@ -86,7 +93,7 @@ android {
             // Enable code shrinking
             minifyEnabled true
             shrinkResources true
-            
+
             // ProGuard rules
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -120,12 +127,14 @@ android {
 ```
 
 **What ProGuard does:**
+
 - ✅ Removes unused Java/Kotlin code (30-50% size reduction)
 - ✅ Optimizes bytecode
 - ✅ Shrinks resources (images, layouts)
 - ⚠️ Does NOT obfuscate (breaks Capacitor bridge)
 
 **APK size impact:**
+
 - Without ProGuard: ~15-20 MB
 - With ProGuard: ~8-12 MB
 
@@ -142,12 +151,14 @@ Xcode automatically optimizes release builds:
 3. Archive for App Store
 
 **What iOS does automatically:**
+
 - ✅ Strips debug symbols
 - ✅ Optimizes Swift/Objective-C code
 - ✅ Compresses resources
 - ✅ Enables dead code elimination
 
 **App size impact:**
+
 - Debug build: ~40-60 MB
 - Release build: ~15-25 MB
 
@@ -197,11 +208,11 @@ npx cap open ios
 
 ## 📈 Size Comparison
 
-| Platform | Development | Production | Savings |
-|----------|-------------|------------|---------|
-| **Web** | 3-5 MB | 800 KB-1 MB | 70-80% |
-| **Android** | 20 MB | 8-12 MB | 40-60% |
-| **iOS** | 50 MB | 15-25 MB | 50-70% |
+| Platform    | Development | Production  | Savings |
+| ----------- | ----------- | ----------- | ------- |
+| **Web**     | 3-5 MB      | 800 KB-1 MB | 70-80%  |
+| **Android** | 20 MB       | 8-12 MB     | 40-60%  |
+| **iOS**     | 50 MB       | 15-25 MB    | 50-70%  |
 
 ---
 
@@ -243,7 +254,7 @@ Http.request({
   method: 'GET',
   // Pin your SSL certificate
   enableSslPinning: true,
-  certificateFingerprint: 'YOUR_CERT_SHA256_HASH'
+  certificateFingerprint: 'YOUR_CERT_SHA256_HASH',
 });
 ```
 
@@ -272,12 +283,14 @@ Http.request({
 ## 🎉 Summary
 
 Your app is **already production-grade** for web builds:
+
 - ✅ Minified (70% size reduction)
 - ✅ Tree-shaken (unused code removed)
 - ✅ Console logs stripped
 - ✅ Industry-standard optimization
 
 **Next steps:**
+
 1. Continue with web deployment (already optimized)
 2. When you add mobile platforms, enable ProGuard (Android only)
 3. Focus on backend security (already excellent)

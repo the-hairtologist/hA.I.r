@@ -9,6 +9,7 @@
 ## 🔍 Executive Summary
 
 After year 2 of heavy production usage, we've identified **critical architectural issues** that are causing:
+
 - 🐌 Performance degradation (multiple realtime connections per user)
 - 🐛 Subtle bugs from duplicated state management
 - 🚫 Type safety issues leading to runtime errors
@@ -26,11 +27,12 @@ After year 2 of heavy production usage, we've identified **critical architectura
 **Problem**: Multiple components subscribe to the same tables independently.
 
 **Evidence**:
+
 ```typescript
 // Appointments.tsx - subscribes to "appointments"
-useRealtimeUpdates("appointments", loadData, stylistProfile?.id);
+useRealtimeUpdates('appointments', loadData, stylistProfile?.id);
 
-// Dashboard.tsx - also subscribes to "appointments" 
+// Dashboard.tsx - also subscribes to "appointments"
 // (via NotificationEnhancer)
 
 // Messages.tsx - subscribes to "messages"
@@ -39,6 +41,7 @@ useRealtimeUpdates("appointments", loadData, stylistProfile?.id);
 ```
 
 **Impact**:
+
 - 3-4 simultaneous connections per user instead of 1
 - Memory leaks when components unmount
 - Race conditions when multiple handlers update the same data
@@ -53,6 +56,7 @@ useRealtimeUpdates("appointments", loadData, stylistProfile?.id);
 **Problem**: Every page loads auth + roles independently.
 
 **Evidence**:
+
 ```typescript
 // Pattern repeated in 8+ pages:
 const { user, loading: authLoading } = useAuth();
@@ -66,6 +70,7 @@ useEffect(() => {
 ```
 
 **Impact**:
+
 - Multiple auth checks on navigation
 - Inconsistent auth state across pages
 - Flash of wrong content before role loads
@@ -80,18 +85,20 @@ useEffect(() => {
 **Problem**: Same queries repeated across components with no caching.
 
 **Evidence**:
+
 ```typescript
 // Pattern repeated everywhere:
 const { data: stylistProfile } = await supabase
-  .from("stylist_profiles")
-  .select("*")
-  .eq("user_id", session.user.id)
+  .from('stylist_profiles')
+  .select('*')
+  .eq('user_id', session.user.id)
   .single();
 
 // This query runs 5-10 times per user session!
 ```
 
 **Impact**:
+
 - Slow page transitions
 - Database load 3x higher than needed
 - Stale data issues when one component updates
@@ -105,6 +112,7 @@ const { data: stylistProfile } = await supabase
 **Problem**: Extensive use of `any` types, no proper interfaces.
 
 **Evidence**:
+
 ```typescript
 // From multiple files:
 const [appointments, setAppointments] = useState<any[]>([]);
@@ -113,6 +121,7 @@ const [selectedClient, setSelectedClient] = useState<any>(null);
 ```
 
 **Impact**:
+
 - Runtime errors that TypeScript could catch
 - Poor IDE autocomplete
 - Refactoring is dangerous
@@ -127,6 +136,7 @@ const [selectedClient, setSelectedClient] = useState<any>(null);
 **Problem**: Same validation logic repeated in 6+ forms.
 
 **Evidence**:
+
 ```typescript
 // Repeated pattern:
 if (!formData.full_name.trim()) {
@@ -140,6 +150,7 @@ if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
 ```
 
 **Impact**:
+
 - Inconsistent validation messages
 - Hard to update validation rules
 - More code to maintain
@@ -153,6 +164,7 @@ if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
 **Problem**: Multiple components manage overlapping state.
 
 **Evidence**:
+
 ```typescript
 // Dashboard.tsx manages appointments
 const [weekAppointments, setWeekAppointments] = useState([]);
@@ -164,6 +176,7 @@ const [appointments, setAppointments] = useState([]);
 ```
 
 **Impact**:
+
 - Data inconsistency between views
 - Duplicate state causes memory issues
 - Realtime updates don't sync properly
@@ -177,6 +190,7 @@ const [appointments, setAppointments] = useState([]);
 **Problem**: Some places handle errors well, others just console.error.
 
 **Evidence**:
+
 ```typescript
 // Good:
 catch (error: any) {
@@ -192,6 +206,7 @@ catch (error: any) {
 ```
 
 **Impact**:
+
 - Silent failures frustrate users
 - Hard to debug production issues
 - Inconsistent UX
@@ -205,6 +220,7 @@ catch (error: any) {
 ### Phase 1: Core Infrastructure (Week 1-2)
 
 #### 1.1 Unified Data Layer
+
 ```typescript
 // src/lib/data/unified-data-layer.ts
 // Single source for all Supabase queries
@@ -212,12 +228,14 @@ catch (error: any) {
 ```
 
 #### 1.2 Centralized Realtime Manager
+
 ```typescript
 // src/lib/realtime/subscription-manager.ts
 // Single subscription per table, event bus for notifications
 ```
 
 #### 1.3 Enhanced Auth Context
+
 ```typescript
 // src/contexts/AuthContext.tsx (enhanced)
 // Pre-loads user, role, profile in one request
@@ -229,6 +247,7 @@ catch (error: any) {
 ### Phase 2: Type Safety (Week 3)
 
 #### 2.1 Generate Proper Types
+
 ```typescript
 // src/types/database.types.ts
 // Auto-generated from Supabase schema
@@ -236,6 +255,7 @@ catch (error: any) {
 ```
 
 #### 2.2 Create Domain Models
+
 ```typescript
 // src/types/models.ts
 export interface Appointment {
@@ -251,6 +271,7 @@ export interface Appointment {
 ### Phase 3: Shared Hooks (Week 4)
 
 #### 3.1 useAppointments Enhancement
+
 ```typescript
 // Already exists but needs:
 // - Integration with realtime manager
@@ -259,12 +280,14 @@ export interface Appointment {
 ```
 
 #### 3.2 useClient Hook (NEW)
+
 ```typescript
 // Centralized client data management
 // Used by Clients, Appointments, Formulas pages
 ```
 
 #### 3.3 useFormulas Hook (NEW)
+
 ```typescript
 // Centralized formula management
 // Replaces duplicate logic
@@ -275,6 +298,7 @@ export interface Appointment {
 ### Phase 4: Form Infrastructure (Week 5)
 
 #### 4.1 Validation Utilities
+
 ```typescript
 // src/lib/validation/schemas.ts
 // Zod schemas for all forms
@@ -282,6 +306,7 @@ export interface Appointment {
 ```
 
 #### 4.2 Form State Hook
+
 ```typescript
 // src/hooks/useFormState.ts (enhance existing)
 // Handles validation, submission, errors
@@ -291,16 +316,16 @@ export interface Appointment {
 
 ## 📊 Technical Metrics - Before vs After
 
-| Metric | Current (Year 2) | After Refactor | Improvement |
-|--------|------------------|----------------|-------------|
-| **Realtime Connections** | 3-4 per user | 1 per user | 75% reduction |
-| **Auth Checks on Nav** | 1 per page | 1 cached | 90% faster |
-| **Duplicate Queries** | ~15 per session | ~3 per session | 80% reduction |
-| **Type Errors (Runtime)** | 5-10 per week | <1 per month | 98% reduction |
-| **Form Validation Code** | 300+ lines dupe | 50 lines shared | 83% less code |
-| **Bundle Size** | 450kb | 380kb | 15% smaller |
-| **First Load Time** | 2.8s | 1.9s | 32% faster |
-| **Time to Interactive** | 4.1s | 2.7s | 34% faster |
+| Metric                    | Current (Year 2) | After Refactor  | Improvement   |
+| ------------------------- | ---------------- | --------------- | ------------- |
+| **Realtime Connections**  | 3-4 per user     | 1 per user      | 75% reduction |
+| **Auth Checks on Nav**    | 1 per page       | 1 cached        | 90% faster    |
+| **Duplicate Queries**     | ~15 per session  | ~3 per session  | 80% reduction |
+| **Type Errors (Runtime)** | 5-10 per week    | <1 per month    | 98% reduction |
+| **Form Validation Code**  | 300+ lines dupe  | 50 lines shared | 83% less code |
+| **Bundle Size**           | 450kb            | 380kb           | 15% smaller   |
+| **First Load Time**       | 2.8s             | 1.9s            | 32% faster    |
+| **Time to Interactive**   | 4.1s             | 2.7s            | 34% faster    |
 
 ---
 
@@ -309,6 +334,7 @@ export interface Appointment {
 ### Problem: Components Don't "Talk" to Each Other
 
 **Example**: When you complete an appointment:
+
 1. ✅ Appointments page updates
 2. ❌ Dashboard doesn't refresh automatically
 3. ❌ Client list doesn't show new appointment count
@@ -317,6 +343,7 @@ export interface Appointment {
 **Root Cause**: No event system for cross-component communication.
 
 **Solution**: Event Bus + Realtime Manager
+
 ```typescript
 // When appointment completes:
 eventBus.emit('appointment:completed', { appointmentId, clientId });
@@ -332,11 +359,13 @@ eventBus.on('appointment:completed', () => {
 ### Problem: Hooks Don't Compose
 
 **Example**: `useAppointments` + `usePredictiveInsights` don't share data.
+
 - `useAppointments` loads all appointments
 - `usePredictiveInsights` loads appointments again for predictions
 - Result: 2x the queries, 2x the loading time
 
 **Solution**: Composable hooks with shared cache
+
 ```typescript
 function usePredictiveInsights(stylistId) {
   // Uses appointments from useAppointments cache
@@ -350,16 +379,19 @@ function usePredictiveInsights(stylistId) {
 ## 🚀 Implementation Priority
 
 ### Must Do (Week 1):
+
 1. ✅ Centralized Realtime Manager
 2. ✅ Enhanced Auth Context
 3. ✅ Unified Data Layer foundation
 
 ### Should Do (Week 2-3):
+
 4. ✅ Type Safety improvements
 5. ✅ Shared hooks refactor
 6. ✅ Event bus implementation
 
 ### Nice to Have (Week 4-5):
+
 7. ✅ Form validation utilities
 8. ✅ Error monitoring setup
 9. ✅ Performance optimizations
@@ -369,16 +401,19 @@ function usePredictiveInsights(stylistId) {
 ## 🧪 Testing Strategy
 
 ### Before Refactor:
+
 - [ ] Document all current behaviors
 - [ ] Create integration test suite
 - [ ] Benchmark performance metrics
 
 ### During Refactor:
+
 - [ ] Test each component in isolation
 - [ ] Ensure backwards compatibility
 - [ ] Monitor for regressions
 
 ### After Refactor:
+
 - [ ] Full regression testing
 - [ ] Performance validation
 - [ ] User acceptance testing
@@ -388,18 +423,21 @@ function usePredictiveInsights(stylistId) {
 ## 💡 Key Insights
 
 ### What Went Wrong:
+
 1. **Rapid feature development** led to copy-paste coding
 2. **No architectural review** during year 1
 3. **Missing code review process** for patterns
 4. **Time pressure** prevented proper refactoring
 
 ### What We Learned:
+
 1. **Architecture matters** - shortcuts create tech debt
 2. **Consistency is key** - duplication compounds problems
 3. **Type safety saves time** - runtime errors are expensive
 4. **Realtime is complex** - needs careful design
 
 ### What's Next:
+
 1. Implement the refactor plan
 2. Establish code review process
 3. Create architecture guidelines
@@ -410,21 +448,15 @@ function usePredictiveInsights(stylistId) {
 ## 🎬 Immediate Action Items
 
 **This Week**:
+
 1. Create `src/lib/realtime/SubscriptionManager.ts`
 2. Enhance `src/contexts/AuthContext.tsx`
 3. Create `src/lib/data/UnifiedDataLayer.ts`
 4. Update `useRealtimeUpdates` to use new manager
 
-**Next Week**:
-5. Generate TypeScript types from Supabase
-6. Create domain model interfaces
-7. Update all components to use new types
+**Next Week**: 5. Generate TypeScript types from Supabase 6. Create domain model interfaces 7. Update all components to use new types
 
-**Week 3-5**:
-8. Refactor shared hooks
-9. Implement validation utilities
-10. Set up error monitoring
-11. Performance optimization pass
+**Week 3-5**: 8. Refactor shared hooks 9. Implement validation utilities 10. Set up error monitoring 11. Performance optimization pass
 
 ---
 

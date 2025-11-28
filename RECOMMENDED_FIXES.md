@@ -3,6 +3,7 @@
 ## 🔴 CRITICAL (P0) - Launch Blockers
 
 ### **NONE** ✅
+
 All critical functionality is working. No P0 issues detected.
 
 ---
@@ -10,43 +11,45 @@ All critical functionality is working. No P0 issues detected.
 ## 🟡 HIGH PRIORITY (P1) - Fix Within 1 Week
 
 ### 1. Remove Console Statements from Production Build
+
 **Impact**: Security, Performance, Bundle Size  
 **Effort**: 15 minutes  
 **Files**: vite.config.ts
 
 **Issue**:
+
 - 138 console.log/error/warn statements found across 48 files
 - Exposed in production builds
 - Increases bundle size (~5-10KB)
 - Exposes internal logic
 
 **Fix**:
+
 ```typescript
 // vite.config.ts
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react-swc'
-import path from 'path'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react-swc';
+import path from 'path';
 import componentTagger from 'vite-plugin-component-tagger';
 
 export default defineConfig(({ mode }) => ({
   server: {
-    host: "::",
+    host: '::',
     port: 8080,
   },
-  plugins: [
-    react(),
-    mode === "development" && componentTagger()
-  ].filter(Boolean),
+  plugins: [react(), mode === 'development' && componentTagger()].filter(
+    Boolean
+  ),
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
+      '@': path.resolve(__dirname, './src'),
     },
   },
   build: {
     minify: 'terser',
     terserOptions: {
       compress: {
-        drop_console: mode === 'production',  // 🔥 ADD THIS
+        drop_console: mode === 'production', // 🔥 ADD THIS
         drop_debugger: true,
       },
     },
@@ -55,6 +58,7 @@ export default defineConfig(({ mode }) => ({
 ```
 
 **Validation**:
+
 ```bash
 # Build and check bundle
 npm run build
@@ -64,17 +68,20 @@ grep -r "console.log" dist/assets/*.js  # Should return nothing
 ---
 
 ### 2. Phone Number Validation Consistency
+
 **Impact**: Data Quality, UX  
 **Effort**: 2 hours  
 **Files**: Settings.tsx, AddClientDialog.tsx, Clients.tsx, Auth.tsx
 
 **Issue**:
+
 - Phone fields accept any format
 - No validation regex
 - Inconsistent user experience
 - Database may contain invalid phone numbers
 
 **Fix**:
+
 ```typescript
 // Create shared validation utility
 // src/lib/phoneValidation.ts
@@ -130,12 +137,14 @@ const handlePhoneChange = (value: string) => {
 ```
 
 **Apply to Files**:
+
 1. src/pages/Settings.tsx (profile phone)
 2. src/components/AddClientDialog.tsx (client phone)
 3. src/pages/Clients.tsx (edit client phone)
 4. src/pages/Auth.tsx (if phone field exists)
 
 **Test Cases**:
+
 - Empty string (should pass as optional)
 - "+1234567890" (should pass)
 - "1234567890" (should pass)
@@ -145,17 +154,20 @@ const handlePhoneChange = (value: string) => {
 ---
 
 ### 3. Text Input Max Length Limits
+
 **Impact**: Data Integrity, UX  
 **Effort**: 3 hours  
 **Files**: Multiple forms with textareas/long inputs
 
 **Issue**:
+
 - No character limits on text inputs
 - Could cause database errors if limits exist in schema
 - Poor UX for very long inputs
 - No visual feedback on character count
 
 **Fix**:
+
 ```typescript
 // Create reusable component
 // src/components/ui/textarea-with-counter.tsx
@@ -204,6 +216,7 @@ export const TextareaWithCounter = ({
 ```
 
 **Apply to Fields** (with recommended limits):
+
 1. Client request description - 2000 chars
 2. Stylist bio - 1000 chars
 3. Review text - 500 chars
@@ -213,9 +226,10 @@ export const TextareaWithCounter = ({
 7. Client profile notes - 2000 chars
 
 **Database Schema Check**:
+
 ```sql
 -- Verify column types support these limits
-SELECT 
+SELECT
   table_name,
   column_name,
   data_type,
@@ -230,24 +244,28 @@ WHERE table_schema = 'public'
 ## 🟠 MEDIUM PRIORITY (P2) - Fix Within 1 Month
 
 ### 4. Implement Route-Based Code Splitting
+
 **Impact**: Performance, Initial Load Time  
 **Effort**: 2 hours  
 **Files**: App.tsx, vite.config.ts
 
 **Issue**:
+
 - All routes loaded in initial bundle
 - Large initial JavaScript download
 - Slower time-to-interactive
 
 **Current Code**:
+
 ```typescript
 // App.tsx
-import Dashboard from "./pages/Dashboard";
-import Settings from "./pages/Settings";
+import Dashboard from './pages/Dashboard';
+import Settings from './pages/Settings';
 // ... all imports upfront
 ```
 
 **Fix**:
+
 ```typescript
 // App.tsx
 import { lazy, Suspense } from "react";
@@ -274,6 +292,7 @@ const Finance = lazy(() => import("./pages/Finance"));
 ```
 
 **Additional Vite Config**:
+
 ```typescript
 // vite.config.ts
 build: {
@@ -295,6 +314,7 @@ build: {
 ```
 
 **Expected Impact**:
+
 - Initial bundle: ~800KB → ~300KB (62% reduction)
 - Time to Interactive: -1.5s (estimated)
 - Subsequent page loads: <100ms (from cache)
@@ -302,11 +322,13 @@ build: {
 ---
 
 ### 5. Enable TypeScript Strict Mode (Gradual)
+
 **Impact**: Code Quality, Type Safety  
 **Effort**: 8+ hours (ongoing)  
 **Files**: tsconfig.json, all .ts/.tsx files
 
 **Issue**:
+
 - `noImplicitAny: false` allows untyped code
 - `strictNullChecks: false` allows null/undefined misuse
 - Higher risk of runtime errors
@@ -314,45 +336,52 @@ build: {
 **Migration Strategy** (do NOT enable all at once):
 
 **Step 1: Enable noImplicitAny (2 hours)**
+
 ```json
 // tsconfig.json
 {
   "compilerOptions": {
-    "noImplicitAny": true,  // 🔥 Enable first
+    "noImplicitAny": true // 🔥 Enable first
     // ... keep others false for now
   }
 }
 ```
+
 Fix errors one file at a time, starting with utilities/hooks.
 
 **Step 2: Enable noUnusedLocals/Parameters (1 hour)**
+
 ```json
 {
   "compilerOptions": {
     "noImplicitAny": true,
-    "noUnusedLocals": true,      // 🔥 Enable second
-    "noUnusedParameters": true,  // 🔥 Enable second
+    "noUnusedLocals": true, // 🔥 Enable second
+    "noUnusedParameters": true // 🔥 Enable second
   }
 }
 ```
+
 Remove dead code revealed by these flags.
 
 **Step 3: Enable strictNullChecks (4 hours)**
+
 ```json
 {
   "compilerOptions": {
-    "strictNullChecks": true,  // 🔥 Enable third
+    "strictNullChecks": true // 🔥 Enable third
     // ... others enabled
   }
 }
 ```
+
 Add null checks, use optional chaining (?.), nullish coalescing (??).
 
 **Step 4: Enable Full Strict Mode (ongoing)**
+
 ```json
 {
   "compilerOptions": {
-    "strict": true,  // 🔥 Enable last
+    "strict": true // 🔥 Enable last
   }
 }
 ```
@@ -362,16 +391,19 @@ Add null checks, use optional chaining (?.), nullish coalescing (??).
 ---
 
 ### 6. Implement Optimistic UI Updates
+
 **Impact**: Perceived Performance, UX  
 **Effort**: 4 hours  
 **Files**: Messages.tsx, TodoList.tsx, Clients.tsx, Appointments.tsx
 
 **Issue**:
+
 - UI waits for server response
 - App feels slower than necessary
 - Users experience lag
 
 **Example Fix - Messages**:
+
 ```typescript
 // src/pages/Messages.tsx - Before
 const sendMessage = async () => {
@@ -421,6 +453,7 @@ const sendMessage = async () => {
 ```
 
 **Apply to Actions**:
+
 1. Send message (Messages page)
 2. Add todo (Dashboard)
 3. Toggle todo complete (Dashboard)
@@ -428,6 +461,7 @@ const sendMessage = async () => {
 5. Cancel appointment (Appointments page)
 
 **Benefits**:
+
 - Instant UI feedback
 - Graceful error recovery
 - Better perceived performance
@@ -435,16 +469,19 @@ const sendMessage = async () => {
 ---
 
 ### 7. Add Form Reset on Dialog Close
+
 **Impact**: UX, Data Consistency  
 **Effort**: 2 hours  
 **Files**: All dialog components with forms
 
 **Issue**:
+
 - Form state persists when dialog closes
 - Stale data appears on re-open
 - Confusing user experience
 
 **Fix Pattern**:
+
 ```typescript
 // Before
 <Dialog open={open} onOpenChange={setOpen}>
@@ -477,6 +514,7 @@ const resetForm = () => {
 ```
 
 **Apply to Dialogs**:
+
 1. AddClientDialog
 2. QuickAppointmentDialog
 3. NewConversationDialog
@@ -489,16 +527,19 @@ const resetForm = () => {
 ---
 
 ### 8. Add Search Input Debouncing
+
 **Impact**: Performance, API Efficiency  
 **Effort**: 1 hour  
 **Files**: Clients.tsx, Services.tsx, Formulas.tsx
 
 **Issue**:
+
 - Search triggers on every keystroke
 - Excessive database queries
 - Potential rate limiting
 
 **Fix** (using existing useDebounce hook):
+
 ```typescript
 // Before
 <Input
@@ -527,6 +568,7 @@ useEffect(() => {
 ```
 
 **Apply to Searches**:
+
 1. Client search (Clients.tsx)
 2. Service search (Services.tsx)
 3. Formula search (Formulas.tsx)
@@ -537,6 +579,7 @@ useEffect(() => {
 ---
 
 ### 9. Add PWA Manifest
+
 **Impact**: Mobile UX, Installation  
 **Effort**: 30 minutes  
 **Files**: public/manifest.json, index.html
@@ -544,6 +587,7 @@ useEffect(() => {
 **Missing Feature**: No progressive web app support
 
 **Implementation**:
+
 ```json
 // public/manifest.json
 {
@@ -574,14 +618,18 @@ useEffect(() => {
 
 ```html
 <!-- index.html - add to <head> -->
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#9333ea">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="apple-touch-icon" href="/icon-192.png">
+<link rel="manifest" href="/manifest.json" />
+<meta name="theme-color" content="#9333ea" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta
+  name="apple-mobile-web-app-status-bar-style"
+  content="black-translucent"
+/>
+<link rel="apple-touch-icon" href="/icon-192.png" />
 ```
 
 **Benefits**:
+
 - Home screen installation
 - Native-like experience
 - Better mobile engagement
@@ -589,21 +637,24 @@ useEffect(() => {
 ---
 
 ### 10. Add Error Retry Logic
+
 **Impact**: UX, Reliability  
 **Effort**: 3 hours  
 **Files**: All data fetching hooks/components
 
 **Issue**:
+
 - Failed requests require page refresh
 - No automatic retry
 - Poor offline experience
 
 **Fix Pattern**:
+
 ```typescript
 // Before
 const { error } = await supabase.from('appointments').select();
 if (error) {
-  toast.error("Failed to load appointments");
+  toast.error('Failed to load appointments');
 }
 
 // After
@@ -611,12 +662,12 @@ const [retryCount, setRetryCount] = useState(0);
 
 const loadAppointments = async () => {
   const { error } = await supabase.from('appointments').select();
-  
+
   if (error) {
-    toast.error("Failed to load appointments", {
+    toast.error('Failed to load appointments', {
       action: {
-        label: "Retry",
-        onClick: () => setRetryCount((prev) => prev + 1),
+        label: 'Retry',
+        onClick: () => setRetryCount(prev => prev + 1),
       },
     });
   }
@@ -628,6 +679,7 @@ useEffect(() => {
 ```
 
 **Apply to**:
+
 - All custom data fetching hooks (useAppointments, etc.)
 - Page-level data loads
 - Form submissions (optional - may want user confirmation)
@@ -637,18 +689,22 @@ useEffect(() => {
 ## 🟢 LOW PRIORITY (P3) - Backlog
 
 ### 11. Add Unit Tests for Hooks/Utils
+
 **Effort**: 8 hours  
 **Impact**: Code confidence, regression prevention
 
 ### 12. Implement Keyboard Shortcuts
+
 **Effort**: 4 hours  
 **Impact**: Power user productivity
 
 ### 13. Add ARIA Live Regions
+
 **Effort**: 2 hours  
 **Impact**: Screen reader UX for dynamic updates
 
 ### 14. Implement Service Worker
+
 **Effort**: 6 hours  
 **Impact**: Offline support, caching
 
@@ -657,25 +713,30 @@ useEffect(() => {
 ## Implementation Timeline
 
 ### Week 1 - Quick Wins (P1)
+
 - ✅ Day 1: Console removal (15m)
 - ✅ Day 2: Phone validation (2h)
 - ✅ Day 3-4: Text length limits (3h)
 
 ### Week 2 - Performance (P2)
+
 - Day 1-2: Code splitting (2h)
 - Day 3: Optimistic updates (4h)
 - Day 4: PWA manifest (30m)
 - Day 5: Form reset (2h)
 
 ### Week 3-4 - Type Safety (P2)
+
 - Week 3: Enable noImplicitAny (2h)
 - Week 4: Enable strictNullChecks (4h)
 
 ### Month 2 - Polish (P2)
+
 - Search debouncing (1h)
 - Error retry logic (3h)
 
 ### Backlog (P3)
+
 - Unit tests (8h)
 - Keyboard shortcuts (4h)
 - Service worker (6h)
@@ -687,18 +748,21 @@ useEffect(() => {
 ## Success Criteria
 
 ### Phase 1 Complete (Week 1)
+
 - [ ] No console.log in production build
 - [ ] All phone inputs validated consistently
 - [ ] All text inputs have max length + counters
 - [ ] Zero P1 issues remaining
 
 ### Phase 2 Complete (Week 2)
+
 - [ ] Initial bundle < 400KB gzipped
 - [ ] Optimistic updates on 5+ actions
 - [ ] PWA installable on mobile
 - [ ] Forms reset on dialog close
 
 ### Phase 3 Complete (Month 1)
+
 - [ ] TypeScript strict mode enabled
 - [ ] Zero type errors
 - [ ] All searches debounced

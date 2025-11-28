@@ -1,4 +1,5 @@
 # Adaptive Brutalism Design System
+
 ## Hair AI Master Theme
 
 **Version:** 2.0.0  
@@ -15,6 +16,7 @@
 ## Core Visual Language (Apply Everywhere)
 
 ### 1. Brutalist Borders
+
 ```css
 /* Always use these border widths */
 --brutal-border-standard: 3px;
@@ -28,6 +30,7 @@
 ```
 
 ### 2. Hard Box Shadows
+
 ```css
 /* Brutalist shadow system */
 --brutal-shadow-sm: 2px 2px 0px 0px hsl(var(--foreground));
@@ -37,14 +40,16 @@
 ```
 
 ### 3. Bold Color Palette
+
 ```css
 /* LEGO-inspired pixelated colors */
---primary: 8 100% 55%;      /* Vibrant red/orange */
---secondary: 45 100% 50%;    /* Bold yellow */
---accent: 215 100% 50%;      /* Bright blue */
+--primary: 8 100% 55%; /* Vibrant red/orange */
+--secondary: 45 100% 50%; /* Bold yellow */
+--accent: 215 100% 50%; /* Bright blue */
 ```
 
 ### 4. High Contrast
+
 - Minimum contrast ratio: 4.5:1 for body text
 - All interactive elements must pass WCAG AAA
 
@@ -53,6 +58,7 @@
 ## Typography Hierarchy (Adaptive)
 
 ### Headers & Titles: Press Start 2P
+
 **When to use:** Page titles, section headers, card titles, dialog titles
 
 ```tsx
@@ -67,11 +73,13 @@
 ```
 
 **Guidelines:**
+
 - Always use Press Start 2P for anything that represents a "label" or "title"
 - Keep text short (Press Start 2P is hard to read in long passages)
 - Use uppercase sparingly - the font is already bold
 
 ### Buttons & CTAs: Bold Sans
+
 **When to use:** All interactive buttons, navigation items, badges
 
 ```tsx
@@ -87,11 +95,13 @@
 ```
 
 **Guidelines:**
+
 - Use DM Sans or Space Grotesk with `font-bold`
 - Always uppercase for primary CTAs
 - Add `tracking-wide` for better readability
 
 ### Body Text: DM Sans
+
 **When to use:** Paragraphs, descriptions, form labels, table data
 
 ```tsx
@@ -107,11 +117,13 @@
 ```
 
 **Guidelines:**
+
 - Use regular weight (400) for body text
 - Use medium weight (500) for emphasis
 - Use semibold (600) for form labels
 
 ### Data & Numbers: Space Grotesk
+
 **When to use:** Statistics, metrics, prices, dates
 
 ```tsx
@@ -129,6 +141,7 @@
 ## Component Patterns
 
 ### Brutalist Card
+
 ```tsx
 <Card className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-primary/5 to-secondary/5">
   <CardHeader>
@@ -145,8 +158,9 @@
 ```
 
 ### Brutalist Button
+
 ```tsx
-<Button 
+<Button
   variant="default"
   className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] font-bold uppercase tracking-wide"
 >
@@ -155,6 +169,7 @@
 ```
 
 ### Empty State
+
 ```tsx
 <Card className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-primary/5 to-secondary/5">
   <CardContent className="py-12 text-center">
@@ -165,9 +180,7 @@
     <p className="font-sans text-sm text-muted-foreground mb-6 max-w-md mx-auto">
       Readable description of the empty state.
     </p>
-    <Button className="font-bold uppercase tracking-wide">
-      Get Started
-    </Button>
+    <Button className="font-bold uppercase tracking-wide">Get Started</Button>
   </CardContent>
 </Card>
 ```
@@ -177,19 +190,22 @@
 ## Mobile Adaptations
 
 ### Touch Targets
+
 - **Minimum button height**: 44px (iOS standard)
 - **Comfortable button height**: 48px
 - All interactive elements must be easily tappable
 
 ### Typography Scaling
+
 ```tsx
 // Mobile-first responsive text
-"text-xs sm:text-sm lg:text-base"        // Body
-"text-base sm:text-lg lg:text-xl"        // Subheadings
-"text-xl sm:text-2xl lg:text-3xl"        // Headings
+'text-xs sm:text-sm lg:text-base'; // Body
+'text-base sm:text-lg lg:text-xl'; // Subheadings
+'text-xl sm:text-2xl lg:text-3xl'; // Headings
 ```
 
 ### Brutalist Elements on Mobile
+
 - Reduce shadow offset on mobile: `shadow-[3px_3px_0px_0px]` → `shadow-[2px_2px_0px_0px]`
 - Keep borders consistent: `border-[3px]`
 - Maintain color vibrancy
@@ -199,13 +215,17 @@
 ## Accessibility
 
 ### Focus States
+
 All interactive elements must have visible focus rings:
+
 ```css
 focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2
 ```
 
 ### Motion
+
 Respect `prefers-reduced-motion`:
+
 ```css
 @media (prefers-reduced-motion: reduce) {
   * {
@@ -216,6 +236,7 @@ Respect `prefers-reduced-motion`:
 ```
 
 ### Screen Readers
+
 - Use semantic HTML (`<header>`, `<main>`, `<nav>`, `<article>`)
 - Provide descriptive alt text for all images
 - Use ARIA labels for icon-only buttons
@@ -225,6 +246,7 @@ Respect `prefers-reduced-motion`:
 ## Do's and Don'ts
 
 ### ✅ DO
+
 - Use Press Start 2P for all titles and headers
 - Keep brutalist borders (3px) on all cards and buttons
 - Use bold, uppercase text for CTAs
@@ -233,6 +255,7 @@ Respect `prefers-reduced-motion`:
 - Keep the gradient backgrounds from landing page
 
 ### ❌ DON'T
+
 - Use Press Start 2P for long paragraphs
 - Remove or soften the brutalist borders
 - Use thin or light fonts
@@ -262,12 +285,14 @@ When creating new components or pages:
 ## Success Metrics
 
 ### Visual Consistency
+
 - 100% of headers use Press Start 2P
 - 100% of cards have brutalist borders
 - 100% of buttons have brutalist shadows
 - 0 instances of non-design-system colors
 
 ### Usability
+
 - All text meets WCAG AAA contrast (7:1)
 - All interactive elements ≥ 44px touch target
 - 0 accessibility violations in automated tests
@@ -277,6 +302,7 @@ When creating new components or pages:
 ## Example Pages
 
 See these pages for reference implementation:
+
 - Landing page (original brutalist design)
 - Dashboard (adaptive brutalist implementation)
 - Booking page (form-heavy with readable fonts)

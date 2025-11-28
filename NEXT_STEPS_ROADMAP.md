@@ -1,4 +1,5 @@
 # 🗺️ Next Steps Roadmap - hA.I.r Platform
+
 **Date:** 2025-10-20  
 **Current Progress:** 92% Complete
 
@@ -7,10 +8,12 @@
 ## 🎯 Immediate Next Steps (Next 1 Hour)
 
 ### Step 1: Complete Appointments Migration ⏰ 30 min
+
 **Priority:** CRITICAL  
 **Status:** Hooks ready, migration pending
 
 **Tasks:**
+
 1. Update `src/pages/Appointments.tsx`:
    - Import React Query hooks from `src/hooks/appointments/useAppointments.ts`
    - Replace `loadData()` with `useAppointmentsByStylist()` / `useAppointmentsByClient()`
@@ -28,6 +31,7 @@
    - Check realtime updates
 
 **Expected Results:**
+
 - ~150 lines of code removed
 - Automatic caching & refetching
 - 40% performance improvement
@@ -36,23 +40,26 @@
 ---
 
 ### Step 2: Final Console.log Cleanup ⏰ 15 min
+
 **Priority:** HIGH  
 **Status:** 20 logs remaining in 9 files
 
 **Files to Fix:**
+
 ```typescript
 // Replace pattern:
-console.log('message', data)
+console.log('message', data);
 // With:
-logger.info('message', data)
+logger.info('message', data);
 
 // Replace pattern:
-console.error('error', error)
+console.error('error', error);
 // With:
-logger.error('error', { error })
+logger.error('error', { error });
 ```
 
 **Files:**
+
 1. `src/lib/platformOptimizations.ts` (1 log)
 2. `src/lib/preload.ts` (1 log)
 3. `src/lib/preventiveMaintenance.ts` (3 logs)
@@ -64,6 +71,7 @@ logger.error('error', { error })
 9. `src/utils/backgroundRemoval.ts` (9 logs - most important!)
 
 **Expected Results:**
+
 - Zero console.log in production
 - Professional logging infrastructure
 - Better debugging capabilities
@@ -71,10 +79,12 @@ logger.error('error', { error })
 ---
 
 ### Step 3: Run Full Test Suite ⏰ 10 min
+
 **Priority:** HIGH  
 **Status:** Tests need verification
 
 **Commands:**
+
 ```bash
 # Unit tests
 npm test
@@ -90,6 +100,7 @@ npm run build
 ```
 
 **Checklist:**
+
 - [ ] All unit tests pass
 - [ ] E2E tests pass on desktop
 - [ ] E2E tests pass on mobile
@@ -100,10 +111,12 @@ npm run build
 ---
 
 ### Step 4: Documentation Update ⏰ 5 min
+
 **Priority:** MEDIUM  
 **Status:** Needs architecture updates
 
 **Files to Update:**
+
 1. `README.md`:
    - Add React Query architecture section
    - Update performance metrics
@@ -115,22 +128,27 @@ npm run build
    - Logger usage guidelines
 
 **Template for Architecture Section:**
-```markdown
+
+````markdown
 ## Architecture
 
 ### Data Fetching
+
 We use React Query for all data fetching:
+
 - Automatic caching & background refetching
 - Optimistic updates
 - Built-in loading/error states
 - Consistent patterns
 
 ### Custom Hooks
+
 - `src/hooks/formulas/` - Formula CRUD operations
 - `src/hooks/clients/` - Client CRUD operations
 - `src/hooks/appointments/` - Appointment CRUD operations
 
 ### Example Usage
+
 ```typescript
 import { useFormulas, useCreateFormula } from '@/hooks/formulas/useFormulas';
 
@@ -139,15 +157,18 @@ const createFormula = useCreateFormula();
 
 // Automatic cache invalidation & optimistic updates built-in
 ```
+````
 
 ---
 
 ## 📅 Short Term (Next Week)
 
 ### Phase 4: Mobile Optimization
+
 **Goal:** Perfect 60 FPS on all devices
 
 **Tasks:**
+
 1. Add virtual scrolling to remaining lists:
    - Appointments list (if >50 items)
    - Messages list
@@ -164,6 +185,7 @@ const createFormula = useCreateFormula();
    - Monitor bundle size
 
 **Expected Results:**
+
 - 60 FPS locked on all devices
 - <1.0s TTI on mobile
 - <180 KB bundle size
@@ -171,9 +193,11 @@ const createFormula = useCreateFormula();
 ---
 
 ### Phase 5: Testing & Quality
+
 **Goal:** >80% test coverage
 
 **Tasks:**
+
 1. Add component tests:
    - Test all page components
    - Test critical user flows
@@ -190,6 +214,7 @@ const createFormula = useCreateFormula();
    - Keyboard navigation verification
 
 **Expected Results:**
+
 - 80%+ code coverage
 - All critical flows tested
 - WCAG 2.2 AA compliant
@@ -199,6 +224,7 @@ const createFormula = useCreateFormula();
 ## 🚀 Medium Term (Next Month)
 
 ### Feature Enhancements
+
 1. **AI-Powered Insights**
    - Formula recommendations
    - Scheduling optimization
@@ -215,6 +241,7 @@ const createFormula = useCreateFormula();
    - Google Calendar sync
 
 ### Infrastructure
+
 1. **Monitoring**
    - Set up Sentry error tracking
    - Add performance monitoring
@@ -230,6 +257,7 @@ const createFormula = useCreateFormula();
 ## 📊 Success Metrics
 
 ### Technical
+
 - [ ] Build time: <30s
 - [ ] Bundle size: <180 KB
 - [ ] TTI: <1.0s
@@ -240,6 +268,7 @@ const createFormula = useCreateFormula();
 - [ ] Security score: 95+
 
 ### User Experience
+
 - [ ] Page load: <1.5s
 - [ ] Interaction delay: <50ms
 - [ ] Mobile performance: Excellent
@@ -251,16 +280,19 @@ const createFormula = useCreateFormula();
 ## 🎓 Learning Resources
 
 ### React Query
+
 - [Official Docs](https://tanstack.com/query/latest)
 - [Best Practices Guide](https://tkdodo.eu/blog/practical-react-query)
 - [Performance Tips](https://tanstack.com/query/latest/docs/react/guides/performance)
 
 ### Performance
+
 - [Web.dev Performance](https://web.dev/performance/)
 - [Core Web Vitals](https://web.dev/vitals/)
 - [React Performance](https://react.dev/learn/render-and-commit)
 
 ### Testing
+
 - [Vitest Documentation](https://vitest.dev/)
 - [React Testing Library](https://testing-library.com/react)
 - [Playwright E2E](https://playwright.dev/)

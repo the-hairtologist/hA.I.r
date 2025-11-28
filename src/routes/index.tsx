@@ -207,10 +207,7 @@ export const AppRoutes = () => (
         </ProtectedRoute>
       }
     />
-    <Route
-      path="/feedback"
-      element={<Navigate to="/help" replace />}
-    />
+    <Route path="/feedback" element={<Navigate to="/help" replace />} />
     <Route
       path="/subscription"
       element={

@@ -105,7 +105,6 @@ const Profile = () => {
         backTo="/dashboard"
       />
       <div className="space-y-6 max-w-3xl px-4 py-6">
-
         <Card>
           <CardHeader>
             <CardTitle>Profile Picture</CardTitle>

@@ -39,18 +39,23 @@ Open http://localhost:5173 in your browser. That's it! ✅
 ## Common Questions
 
 ### "Do I need to set up all those API keys?"
+
 **No!** The app works without them. Set them up later if you want extra features (emails, analytics, etc.)
 
 ### "Is the app ready?"
+
 **Yes!** It's 98% production-ready. The remaining 2% is optional enhancements.
 
 ### "What about all those status/audit/report files?"
+
 **Ignore them.** They're historical records. You don't need them.
 
 ### "How do I customize the app?"
+
 You're a developer! Edit files in the `src/` folder. It's React + TypeScript + Vite.
 
 ### "Where are the tests?"
+
 Run: `npm test`
 
 ---
@@ -61,7 +66,8 @@ Open [GETTING_STARTED.md](./GETTING_STARTED.md) - it has a complete decision tre
 
 ---
 
-**TL;DR**: 
+**TL;DR**:
+
 - **Local**: `npm install && npm run dev`
 - **Deploy**: Click "Publish" in Lovable
 - **Learn**: Read GETTING_STARTED.md

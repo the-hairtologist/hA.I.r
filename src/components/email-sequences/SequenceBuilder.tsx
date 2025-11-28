@@ -105,7 +105,7 @@ export const SequenceBuilder = ({
   const saveMutation = useMutation({
     mutationFn: async () => {
       if (!user?.id) throw new Error('Not authenticated');
-      
+
       // Get stylist profile
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')

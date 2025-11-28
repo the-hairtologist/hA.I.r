@@ -1,4 +1,5 @@
 # Rollback & Recovery Plan
+
 **hA.I.r - Emergency Deployment Rollback Procedures**
 
 ---
@@ -8,6 +9,7 @@
 This document outlines procedures for rolling back deployments when critical issues are detected in production.
 
 **Rollback Decision Criteria:**
+
 - Complete service outage (SEV-1)
 - Critical security vulnerability discovered
 - Data corruption or loss detected
@@ -22,11 +24,13 @@ This document outlines procedures for rolling back deployments when critical iss
 ### Current Setup (Lovable/Vercel)
 
 **Deployment Flow:**
+
 ```
 Code Change → Git Push → Automatic Build → Vercel Deploy → Production
 ```
 
 **Deployment Characteristics:**
+
 - **Auto-deploy:** Yes (on main branch push)
 - **Preview deploys:** Yes (on pull requests)
 - **Rollback capability:** Yes (via Vercel dashboard)
@@ -43,6 +47,7 @@ Code Change → Git Push → Automatic Build → Vercel Deploy → Production
 **Time to Complete:** 2-3 minutes
 
 **Steps:**
+
 1. Go to [Vercel Dashboard](https://vercel.com/dashboard)
 2. Select project: `hair-ai-app`
 3. Go to **Deployments** tab
@@ -51,6 +56,7 @@ Code Change → Git Push → Automatic Build → Vercel Deploy → Production
 6. Confirm promotion
 
 **Verification:**
+
 ```bash
 # Check current deployment
 curl -I https://yourdomain.com
@@ -64,6 +70,7 @@ curl -I https://yourdomain.com
 **Time to Complete:** 5-10 minutes
 
 **Steps:**
+
 ```bash
 # 1. Identify bad commit
 git log --oneline -10
@@ -78,6 +85,7 @@ git push origin main
 ```
 
 **Verification:**
+
 - Check Vercel deployment status
 - Test critical user flows
 - Monitor error rates
@@ -91,7 +99,9 @@ git push origin main
 **Time to Complete:** 10-20 minutes
 
 **Steps:**
+
 1. **Identify Migration:**
+
    ```sql
    SELECT * FROM supabase_migrations.schema_migrations
    ORDER BY version DESC
@@ -99,6 +109,7 @@ git push origin main
    ```
 
 2. **Create Rollback Migration:**
+
    ```sql
    -- Example: Rollback added column
    ALTER TABLE public.profiles DROP COLUMN IF EXISTS new_column;
@@ -111,10 +122,11 @@ git push origin main
    - Or run directly in Supabase SQL Editor
 
 5. **Verify Data Integrity:**
+
    ```sql
    -- Check row counts
    SELECT COUNT(*) FROM affected_table;
-   
+
    -- Check for null values
    SELECT COUNT(*) FROM affected_table WHERE critical_field IS NULL;
    ```
@@ -126,7 +138,9 @@ git push origin main
 **Prerequisite:** Daily Supabase backups (automatic)
 
 **Steps:**
+
 1. **Stop Writes:**
+
    ```sql
    -- Revoke INSERT/UPDATE/DELETE (emergency only)
    REVOKE INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public FROM authenticated;
@@ -144,13 +158,14 @@ git push origin main
    - Contact Supabase support for PITR restore
 
    **Option B: Partial Data Restore**
+
    ```sql
    -- Export affected data first
    COPY affected_table TO '/backup/corrupted_data.csv' CSV HEADER;
-   
+
    -- Delete corrupted rows
    DELETE FROM affected_table WHERE created_at > '2025-10-04 12:00:00';
-   
+
    -- Import from backup (if available)
    ```
 
@@ -171,13 +186,16 @@ git push origin main
 // Add to top of function
 export default async (req: Request) => {
   // Emergency kill switch
-  return new Response(JSON.stringify({
-    error: 'Service temporarily unavailable'
-  }), {
-    status: 503,
-    headers: { 'Content-Type': 'application/json' }
-  });
-}
+  return new Response(
+    JSON.stringify({
+      error: 'Service temporarily unavailable',
+    }),
+    {
+      status: 503,
+      headers: { 'Content-Type': 'application/json' },
+    }
+  );
+};
 ```
 
 Push change → Auto-deploys in ~30 seconds
@@ -207,16 +225,19 @@ Edge functions deploy automatically within 1-2 minutes.
 #### Stripe Payment Issues
 
 **Symptoms:**
+
 - Payments failing
 - Webhook errors
 - Subscription sync issues
 
 **Rollback Steps:**
+
 1. **Disable Payment Features:**
+
    ```typescript
    // Temporary flag in code
    const PAYMENTS_ENABLED = false;
-   
+
    if (!PAYMENTS_ENABLED) {
      return { error: 'Payments temporarily unavailable' };
    }
@@ -233,7 +254,9 @@ Edge functions deploy automatically within 1-2 minutes.
 #### Twilio SMS Issues
 
 **Rollback Steps:**
+
 1. **Disable SMS Notifications:**
+
    ```typescript
    const SMS_ENABLED = false;
    ```
@@ -281,6 +304,7 @@ Issue Detected
 **Purpose:** Ensure team can execute rollback under pressure
 
 **Drill Steps:**
+
 1. **Prepare:**
    - Schedule 1-hour maintenance window
    - Notify team members
@@ -298,6 +322,7 @@ Issue Detected
    - Update runbooks
 
 **Target Times:**
+
 - Frontend rollback: < 5 minutes
 - Database rollback: < 20 minutes
 - Edge function rollback: < 5 minutes
@@ -312,6 +337,7 @@ Issue Detected
 **Incident Channel:** `#incidents`
 
 **Message Template:**
+
 ```
 🚨 INCIDENT DETECTED
 Severity: SEV-X
@@ -325,20 +351,23 @@ Lead: @engineer-name
 ### External Communication (Status Page)
 
 **Users Should Know:**
+
 - What's affected
 - Estimated resolution time
 - Workarounds (if any)
 
 **Don't Include:**
+
 - Technical details
 - Root cause (until resolved)
 - Finger-pointing
 
 **Status Page Update Template:**
+
 ```
 🔧 Service Disruption
 
-We're experiencing issues with [feature]. Our team is 
+We're experiencing issues with [feature]. Our team is
 working on a fix. Estimated resolution: X minutes.
 
 Affected: [List features]
@@ -352,6 +381,7 @@ Updates: Every 15 minutes
 ## Post-Rollback Actions
 
 ### Immediate (Within 1 hour)
+
 - [ ] Verify all systems operational
 - [ ] Monitor error rates return to baseline
 - [ ] Check user reports
@@ -359,6 +389,7 @@ Updates: Every 15 minutes
 - [ ] Notify team: "All Clear"
 
 ### Short-Term (Within 24 hours)
+
 - [ ] Root cause analysis
 - [ ] Document incident in `INCIDENTS.md`
 - [ ] Identify preventive measures
@@ -366,6 +397,7 @@ Updates: Every 15 minutes
 - [ ] Schedule post-mortem meeting
 
 ### Long-Term (Within 1 week)
+
 - [ ] Write post-mortem (for SEV-1/2)
 - [ ] Implement fixes
 - [ ] Update rollback procedures if needed
@@ -379,6 +411,7 @@ Updates: Every 15 minutes
 ### Feature Flags
 
 **Implementation:**
+
 ```typescript
 // lib/featureFlags.ts
 export const features = {
@@ -397,6 +430,7 @@ if (features.NEW_DASHBOARD) {
 ```
 
 **Benefits:**
+
 - Instant rollback without deployment
 - A/B testing capability
 - Gradual rollouts
@@ -404,6 +438,7 @@ if (features.NEW_DASHBOARD) {
 ### Canary Deployments (Advanced)
 
 **Setup:**
+
 1. Deploy to 5% of traffic
 2. Monitor for 15 minutes
 3. If error rate normal → 25%
@@ -411,6 +446,7 @@ if (features.NEW_DASHBOARD) {
 5. If error rate normal → 100%
 
 **Abort if:**
+
 - Error rate > 2x baseline
 - Latency > 1.5x baseline
 - Any crash detected
@@ -420,17 +456,20 @@ if (features.NEW_DASHBOARD) {
 ## Emergency Contacts
 
 ### On-Call Rotation
+
 - **Primary:** [Engineer 1] - [Phone]
 - **Secondary:** [Engineer 2] - [Phone]
 - **Escalation:** [Tech Lead] - [Phone]
 
 ### External Vendors
+
 - **Supabase Support:** support@supabase.com
 - **Stripe Support:** https://support.stripe.com
 - **Vercel Support:** support@vercel.com
 - **Twilio Support:** help.twilio.com
 
 ### Critical Access
+
 - **Vercel Dashboard:** [Login URL]
 - **Supabase Dashboard:** [Login URL]
 - **Stripe Dashboard:** [Login URL]
@@ -441,6 +480,7 @@ if (features.NEW_DASHBOARD) {
 ## Rollback Checklist
 
 ### Before Rollback
+
 - [ ] Confirm issue severity (SEV-1 or SEV-2)
 - [ ] Identify last known good version
 - [ ] Notify team in #incidents
@@ -448,6 +488,7 @@ if (features.NEW_DASHBOARD) {
 - [ ] Document start time
 
 ### During Rollback
+
 - [ ] Execute rollback procedure
 - [ ] Monitor deployment progress
 - [ ] Test critical paths
@@ -455,6 +496,7 @@ if (features.NEW_DASHBOARD) {
 - [ ] Verify database integrity
 
 ### After Rollback
+
 - [ ] Confirm systems operational
 - [ ] Update status page: "Resolved"
 - [ ] Notify stakeholders
@@ -468,12 +510,14 @@ if (features.NEW_DASHBOARD) {
 ### Rollback Performance Metrics
 
 **Current Baseline:**
+
 - Mean Time to Detect (MTTD): < 5 minutes
 - Mean Time to Acknowledge (MTTA): < 2 minutes
 - Mean Time to Rollback (MTTR): < 10 minutes
 - Mean Time to Recovery (MTTR): < 30 minutes
 
 **Targets:**
+
 - MTTD: < 3 minutes (improve monitoring)
 - MTTA: < 1 minute (better alerting)
 - Mean Rollback Time: < 5 minutes (automation)
@@ -484,11 +528,13 @@ if (features.NEW_DASHBOARD) {
 ## Resources
 
 ### Documentation
+
 - [Vercel Deployments](https://vercel.com/docs/concepts/deployments)
 - [Supabase Backups](https://supabase.com/docs/guides/platform/backups)
 - [Git Revert Guide](https://git-scm.com/docs/git-revert)
 
 ### Tools
+
 - [Vercel Dashboard](https://vercel.com/dashboard)
 - [Supabase Dashboard](https://supabase.com/dashboard)
 - [Git History Viewer](https://github.com/yourusername/hair-ai-app/commits/main)

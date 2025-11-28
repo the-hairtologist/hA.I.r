@@ -59,7 +59,6 @@ export default function AdminRevenue() {
         }
       />
       <div className="space-y-6 pb-8 px-4 py-6">
-
         {/* Admin Notice */}
         <Card className="border-2 border-amber-500 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/30">
           <CardContent className="p-4">

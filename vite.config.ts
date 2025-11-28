@@ -20,13 +20,15 @@ export default defineConfig(({ mode }) => {
   ];
 
   const missingVars = requiredEnvVars.filter(key => !env[key]);
-  
+
   // Warn in development, fail in production/other modes
   if (missingVars.length > 0) {
     const message = `Missing required environment variables: ${missingVars.join(', ')}`;
     if (mode === 'development') {
       console.warn('⚠️', message);
-      console.warn('⚠️ Continuing in development mode, but app may not function correctly');
+      console.warn(
+        '⚠️ Continuing in development mode, but app may not function correctly'
+      );
     } else {
       console.error('❌', message);
       process.exit(1);

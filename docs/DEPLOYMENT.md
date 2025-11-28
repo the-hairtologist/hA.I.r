@@ -1,6 +1,7 @@
 # Deployment Guide
 
 ## Overview
+
 This guide covers deploying hA.I.r to production, including web hosting, mobile app stores, and post-deployment configuration.
 
 ---
@@ -8,6 +9,7 @@ This guide covers deploying hA.I.r to production, including web hosting, mobile 
 ## Quick Deploy (Web)
 
 ### Prerequisites
+
 - ✅ Lovable Cloud enabled
 - ✅ All tests passing (`npm test && npm run test:e2e`)
 - ✅ Production secrets configured (see Environment Variables section)
@@ -21,6 +23,7 @@ This guide covers deploying hA.I.r to production, including web hosting, mobile 
 4. **Verify deployment** - Check staging URL (yourapp.lovable.app)
 
 **That's it!** Your app is live with:
+
 - ✅ Global CDN (fast worldwide)
 - ✅ Automatic SSL certificate
 - ✅ Backend integrated (Lovable Cloud)
@@ -35,25 +38,26 @@ This guide covers deploying hA.I.r to production, including web hosting, mobile 
 
 ```sql
 -- Appointments table (most queried)
-CREATE INDEX IF NOT EXISTS appointments_stylist_date_idx 
+CREATE INDEX IF NOT EXISTS appointments_stylist_date_idx
 ON appointments(stylist_id, date);
 
-CREATE INDEX IF NOT EXISTS appointments_client_date_idx 
+CREATE INDEX IF NOT EXISTS appointments_client_date_idx
 ON appointments(client_id, date);
 
-CREATE INDEX IF NOT EXISTS appointments_status_idx 
+CREATE INDEX IF NOT EXISTS appointments_status_idx
 ON appointments(status);
 
 -- AI chat messages (frequent history queries)
-CREATE INDEX IF NOT EXISTS ai_chat_messages_user_created_idx 
+CREATE INDEX IF NOT EXISTS ai_chat_messages_user_created_idx
 ON ai_chat_messages(user_id, created_at DESC);
 
 -- Messages (if using messaging feature)
-CREATE INDEX IF NOT EXISTS messages_sender_created_idx 
+CREATE INDEX IF NOT EXISTS messages_sender_created_idx
 ON messages(sender_id, created_at DESC);
 ```
 
 **Why this matters:**
+
 - Without indexes: Dashboard loads in 3-5 seconds ❌
 - With indexes: Dashboard loads in <500ms ✅
 
@@ -78,6 +82,7 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 ### 3. Error Tracking (Highly Recommended)
 
 **Option 1: Sentry (Recommended)**
+
 ```bash
 # Already installed in project
 # Just add your DSN to secrets:
@@ -85,21 +90,24 @@ SENTRY_DSN=https://xxxxx@sentry.io/xxxxx
 ```
 
 **Option 2: Google Analytics 4**
+
 ```typescript
 // Already configured in src/lib/analytics.ts
 // Just add your measurement ID:
-VITE_GA_MEASUREMENT_ID=G-XXXXXXXXXX
+VITE_GA_MEASUREMENT_ID = G - XXXXXXXXXX;
 ```
 
 ### 4. Webhook Configuration
 
 **Stripe Webhook (for payments):**
+
 1. Go to Stripe Dashboard → Webhooks
 2. Add endpoint: `https://iyotklwiwyljospfqnoy.supabase.co/functions/v1/stripe-webhook`
 3. Select events: `payment_intent.succeeded`, `subscription.updated`, `subscription.deleted`
 4. Copy webhook secret to Lovable secrets (already done if you followed setup)
 
 **Resend Webhook (for email tracking):**
+
 1. Go to Resend Dashboard → Webhooks
 2. Add endpoint: `https://iyotklwiwyljospfqnoy.supabase.co/functions/v1/resend-webhook`
 3. Select events: `email.delivered`, `email.bounced`, `email.opened`
@@ -135,11 +143,13 @@ VITE_GA_MEASUREMENT_ID=G-XXXXXXXXXX
 ### iOS (App Store)
 
 **Prerequisites:**
+
 - Apple Developer Account ($99/year)
 - Xcode 15+ (macOS required)
 - App Store Connect access
 
 **Build Steps:**
+
 ```bash
 # 1. Build web assets
 npm run build
@@ -160,6 +170,7 @@ npx cap open ios
 ```
 
 **App Store Requirements:**
+
 - App icon (1024x1024px)
 - Screenshots (5.5", 6.5", 12.9" sizes)
 - Privacy policy URL
@@ -168,10 +179,12 @@ npx cap open ios
 ### Android (Google Play)
 
 **Prerequisites:**
+
 - Google Play Developer Account ($25 one-time)
 - Android Studio 2023+
 
 **Build Steps:**
+
 ```bash
 # 1. Build web assets
 npm run build
@@ -196,6 +209,7 @@ npx cap open android
 ```
 
 **Play Store Requirements:**
+
 - Feature graphic (1024x500px)
 - Screenshots (min 2, max 8)
 - App icon (512x512px)
@@ -209,6 +223,7 @@ npx cap open android
 ### Required Secrets (Already Configured in Lovable Cloud)
 
 **Backend (Edge Functions):**
+
 ```bash
 SUPABASE_URL=https://iyotklwiwyljospfqnoy.supabase.co
 SUPABASE_ANON_KEY=eyJhbGciOiJIUz...
@@ -220,6 +235,7 @@ STRIPE_WEBHOOK_SECRET=whsec_xxx # Webhook verification
 ```
 
 **Frontend (Vite):**
+
 ```bash
 VITE_SUPABASE_URL=https://iyotklwiwyljospfqnoy.supabase.co
 VITE_SUPABASE_PUBLISHABLE_KEY=eyJhbGciOiJIUz...
@@ -246,18 +262,22 @@ VITE_GA_MEASUREMENT_ID=G-XXXXXXXXXX
 ### Production Health Checks
 
 **1. Lovable Cloud Backend**
+
 - URL: Click "View Backend" in Lovable
 - Check: Edge function logs, database queries, storage usage
 
 **2. Error Tracking (Sentry)**
+
 - URL: https://sentry.io/organizations/{your-org}/projects/
 - Alerts: Configure for >10 errors/minute
 
 **3. Analytics (Google Analytics)**
+
 - URL: https://analytics.google.com
 - Key metrics: Active users, page views, conversions
 
 **4. Uptime Monitoring (Optional)**
+
 - Service: UptimeRobot (free tier)
 - Monitor: https://yourdomain.com/api/health
 
@@ -266,13 +286,16 @@ VITE_GA_MEASUREMENT_ID=G-XXXXXXXXXX
 ## Rollback Strategy
 
 ### Web Deployment
+
 **Option 1: Revert in Lovable**
+
 1. Click project name → Version History
 2. Find last known good version
 3. Click "Restore this version"
 4. Redeploy
 
 **Option 2: Git Revert** (if using GitHub integration)
+
 ```bash
 git revert HEAD
 git push origin main
@@ -280,7 +303,9 @@ git push origin main
 ```
 
 ### Database Migrations
+
 **Create a down migration:**
+
 ```sql
 -- supabase/migrations/YYYYMMDDHHMMSS_rollback_feature.sql
 
@@ -292,6 +317,7 @@ DROP TABLE IF EXISTS new_feature;
 ```
 
 ### Mobile Apps
+
 **iOS:** Submit hotfix build to App Store (~24-48 hours review)
 **Android:** Submit hotfix AAB to Play Store (~2-4 hours review)
 
@@ -302,12 +328,14 @@ DROP TABLE IF EXISTS new_feature;
 ## Performance Optimization
 
 ### Target Metrics
+
 - **LCP (Largest Contentful Paint):** <2.5s
 - **CLS (Cumulative Layout Shift):** <0.1
 - **INP (Interaction to Next Paint):** <200ms
 - **FCP (First Contentful Paint):** <1.8s
 
 ### Optimization Checklist
+
 - [x] Images optimized (WebP/AVIF format)
 - [x] Code splitting enabled (Vite automatic)
 - [x] Service worker caching (PWA)
@@ -316,6 +344,7 @@ DROP TABLE IF EXISTS new_feature;
 - [ ] Lazy load below-fold content
 
 ### Monitoring Performance
+
 ```typescript
 // Already implemented in src/lib/webVitals.ts
 import { onCLS, onFCP, onINP, onLCP } from 'web-vitals';
@@ -331,6 +360,7 @@ onLCP(console.log);
 ## Security Checklist
 
 ### Pre-Launch Verification
+
 - [x] RLS policies enabled on all tables
 - [x] Secrets stored in Lovable Cloud (not in code)
 - [x] HTTPS enforced (automatic with Lovable)
@@ -342,6 +372,7 @@ onLCP(console.log);
 - [ ] Security headers (CSP, X-Frame-Options)
 
 ### Post-Launch Monitoring
+
 - **Weekly:** Review Sentry errors for security issues
 - **Monthly:** Audit user permissions and RLS policies
 - **Quarterly:** Dependency updates (`npm audit fix`)
@@ -351,24 +382,30 @@ onLCP(console.log);
 ## Troubleshooting
 
 ### Issue: Build Fails
+
 **Symptoms:** "Failed to build" error in Lovable
 **Solution:**
+
 1. Check console logs for specific error
 2. Run `npm run build` locally to reproduce
 3. Fix TypeScript errors or missing dependencies
 4. Redeploy
 
 ### Issue: Database Connection Errors
+
 **Symptoms:** "Unable to connect to database"
 **Solution:**
+
 1. Verify Supabase URL and keys in secrets
 2. Check RLS policies (ensure user has access)
 3. Review edge function logs for specific error
 4. Test query in Lovable Cloud backend SQL editor
 
 ### Issue: Edge Functions Timing Out
+
 **Symptoms:** "Function execution timed out"
 **Solution:**
+
 1. Optimize database queries (add indexes)
 2. Reduce AI model complexity (use gemini-2.5-flash instead of pro)
 3. Increase timeout in `supabase/config.toml`:
@@ -378,8 +415,10 @@ onLCP(console.log);
    ```
 
 ### Issue: Mobile App White Screen
+
 **Symptoms:** Blank screen on iOS/Android
 **Solution:**
+
 1. Check Capacitor config (`capacitor.config.ts`):
    ```typescript
    server: {
@@ -395,12 +434,14 @@ onLCP(console.log);
 ## Support
 
 ### Getting Help
+
 - **Documentation:** Check `docs/` folder first
 - **Backend Issues:** View logs in Lovable Cloud backend
 - **Frontend Errors:** Check Sentry dashboard
 - **Community:** Lovable Discord server
 
 ### Emergency Contacts
+
 - **Critical Outage:** Use Lovable support (in-app chat)
 - **Security Issues:** security@yourcompany.com
 - **General Questions:** team@yourcompany.com
@@ -413,6 +454,7 @@ Use this before every production deployment:
 
 ```markdown
 ## Pre-Deployment
+
 - [ ] All tests passing locally (`npm test && npm run test:e2e`)
 - [ ] No console errors or warnings
 - [ ] Database migrations applied and tested
@@ -420,11 +462,13 @@ Use this before every production deployment:
 - [ ] Staging deploy successful
 
 ## Deployment
+
 - [ ] Click "Publish" in Lovable
 - [ ] Verify build completes without errors
 - [ ] Check staging URL loads correctly
 
 ## Post-Deployment
+
 - [ ] Add database indexes (if new tables)
 - [ ] Configure webhooks (Stripe, Resend)
 - [ ] Smoke test critical flows:
@@ -438,6 +482,7 @@ Use this before every production deployment:
 - [ ] Verify mobile app (if applicable)
 
 ## Final
+
 - [ ] Notify team of deployment
 - [ ] Update changelog/release notes
 - [ ] Monitor for 24 hours

@@ -44,7 +44,9 @@ export async function validatedInsert<T extends z.ZodTypeAny>(
       });
       return {
         data: null,
-        error: new Error(`Validation failed: ${error.issues.map(e => e.message).join(', ')}`),
+        error: new Error(
+          `Validation failed: ${error.issues.map(e => e.message).join(', ')}`
+        ),
       };
     }
 
@@ -68,7 +70,9 @@ export async function validatedUpdate<T extends z.ZodTypeAny>(
 ) {
   try {
     // Use partial schema for updates (all fields optional)
-    const partialSchema = (schema as any).partial ? (schema as any).partial() : schema;
+    const partialSchema = (schema as any).partial
+      ? (schema as any).partial()
+      : schema;
     const validatedData = partialSchema.parse(data);
 
     const { data: result, error } = await supabase
@@ -95,7 +99,9 @@ export async function validatedUpdate<T extends z.ZodTypeAny>(
       });
       return {
         data: null,
-        error: new Error(`Validation failed: ${error.issues.map(e => e.message).join(', ')}`),
+        error: new Error(
+          `Validation failed: ${error.issues.map(e => e.message).join(', ')}`
+        ),
       };
     }
 
@@ -117,7 +123,16 @@ export const ValidationSchemas = {
     client_id: z.string().uuid(),
     appointment_date: z.string(),
     duration_minutes: z.number().int().min(15).max(480),
-    status: z.enum(['scheduled', 'confirmed', 'in_progress', 'completed', 'cancelled', 'no_show']).optional(),
+    status: z
+      .enum([
+        'scheduled',
+        'confirmed',
+        'in_progress',
+        'completed',
+        'cancelled',
+        'no_show',
+      ])
+      .optional(),
     notes: z.string().max(500).optional(),
     service_type: z.string().max(100).optional(),
   }),

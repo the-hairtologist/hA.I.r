@@ -278,7 +278,9 @@ class OfflineQueue {
   }
 
   private async executeInsert(action: InsertAction) {
-    const { error } = await supabase.from(action.table as any).insert(action.data as any);
+    const { error } = await supabase
+      .from(action.table as any)
+      .insert(action.data as any);
 
     if (error) throw error;
   }

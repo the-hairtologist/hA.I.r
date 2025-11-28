@@ -5,12 +5,14 @@
 ### Prerequisites
 
 #### For iOS Development (Mac only)
+
 - macOS 11+
 - Xcode 13+
 - CocoaPods (`sudo gem install cocoapods`)
 - Apple Developer Account (for device testing)
 
 #### For Android Development
+
 - Android Studio
 - Java Development Kit (JDK) 11+
 - Android SDK (API level 28+)
@@ -18,11 +20,13 @@
 ### Initial Setup
 
 1. **Install Dependencies**
+
 ```bash
 npm install
 ```
 
 2. **Add Native Platforms** (first time only)
+
 ```bash
 # Add iOS (Mac only)
 npx cap add ios
@@ -32,11 +36,13 @@ npx cap add android
 ```
 
 3. **Build Web Assets**
+
 ```bash
 npm run build
 ```
 
 4. **Sync to Native Platforms**
+
 ```bash
 npx cap sync
 ```
@@ -48,6 +54,7 @@ npx cap sync
 ### Testing on Emulator/Simulator
 
 #### iOS Simulator (Mac only)
+
 ```bash
 # Open in Xcode
 npx cap open ios
@@ -57,6 +64,7 @@ npx cap run ios
 ```
 
 #### Android Emulator
+
 ```bash
 # Open in Android Studio
 npx cap open android
@@ -68,6 +76,7 @@ npx cap run android
 ### Testing on Physical Device
 
 #### iOS Device
+
 1. Connect iPhone/iPad via USB
 2. Open Xcode: `npx cap open ios`
 3. Select your device in Xcode
@@ -75,6 +84,7 @@ npx cap run android
 5. Trust developer certificate on device
 
 #### Android Device
+
 1. Enable Developer Mode on device
 2. Enable USB Debugging
 3. Connect via USB
@@ -87,6 +97,7 @@ npx cap run android
 ### iOS App Store
 
 1. **Prepare for Release**
+
 ```bash
 npm run build
 npx cap sync ios
@@ -94,12 +105,14 @@ npx cap open ios
 ```
 
 2. **In Xcode**
+
 - Product → Archive
 - Window → Organizer
 - Select archive → Distribute App
 - Follow App Store Connect upload flow
 
 3. **App Store Connect**
+
 - Create app listing
 - Upload screenshots (iPhone, iPad)
 - Submit for review
@@ -107,6 +120,7 @@ npx cap open ios
 ### Android Play Store
 
 1. **Generate Signed APK/Bundle**
+
 ```bash
 npm run build
 npx cap sync android
@@ -114,6 +128,7 @@ npx cap open android
 ```
 
 2. **In Android Studio**
+
 - Build → Generate Signed Bundle/APK
 - Create keystore (first time)
 - Select "Android App Bundle" (recommended)
@@ -121,6 +136,7 @@ npx cap open android
 - Sign with keystore
 
 3. **Play Console**
+
 - Create app listing
 - Upload .aab file
 - Submit for review
@@ -132,14 +148,18 @@ npx cap open android
 ### Required Assets
 
 #### iOS
+
 Place in `ios/App/App/Assets.xcassets/`:
+
 - App Icon (`AppIcon.appiconset/`)
   - Various sizes: 20x20 to 1024x1024
 - Launch Screen (`LaunchScreen.storyboard`)
 - Splash Screen images
 
 #### Android
+
 Place in `android/app/src/main/res/`:
+
 - Launcher icons:
   - `mipmap-hdpi/` (72x72)
   - `mipmap-mdpi/` (48x48)
@@ -149,7 +169,9 @@ Place in `android/app/src/main/res/`:
 - Splash screen (`drawable/splash.png`)
 
 ### App Icon Generator
+
 Use tools like:
+
 - https://www.appicon.co/
 - https://icon.kitchen/
 
@@ -160,6 +182,7 @@ Use tools like:
 ### App Information
 
 Edit `capacitor.config.ts`:
+
 ```typescript
 {
   appId: 'com.yourdomain.hairapp',  // Change this
@@ -171,6 +194,7 @@ Edit `capacitor.config.ts`:
 ### iOS Specific
 
 Edit `ios/App/App/Info.plist`:
+
 ```xml
 <key>CFBundleDisplayName</key>
 <string>hA.I.r</string>
@@ -185,11 +209,12 @@ Edit `ios/App/App/Info.plist`:
 ### Android Specific
 
 Edit `android/app/src/main/AndroidManifest.xml`:
+
 ```xml
 <application
     android:label="hA.I.r"
     android:theme="@style/AppTheme">
-    
+
     <!-- Permissions -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -203,13 +228,15 @@ Edit `android/app/src/main/AndroidManifest.xml`:
 ### Live Reload (Development)
 
 The app is currently configured for hot reload from the Lovable sandbox:
+
 ```typescript
 server: {
-  url: 'https://a1a18f9d-b2f9-4d81-aa8c-e28408bee3a2.lovableproject.com'
+  url: 'https://a1a18f9d-b2f9-4d81-aa8c-e28408bee3a2.lovableproject.com';
 }
 ```
 
 **For production**, remove the `server` config:
+
 ```typescript
 const config: CapacitorConfig = {
   appId: 'app.lovable.a1a18f9db2f94d81aa8ce28408bee3a2',
@@ -222,16 +249,19 @@ const config: CapacitorConfig = {
 ### Remote Debugging
 
 #### iOS (Safari)
+
 1. Enable Web Inspector on device
 2. Safari → Develop → [Device Name] → [App]
 
 #### Android (Chrome)
+
 1. `chrome://inspect` in Chrome
 2. Select your device/app
 
 ### Native Logs
 
 #### iOS
+
 ```bash
 # View console logs
 npx cap run ios --livereload --external
@@ -240,6 +270,7 @@ npx cap run ios --livereload --external
 ```
 
 #### Android
+
 ```bash
 # View Logcat
 adb logcat
@@ -253,6 +284,7 @@ adb logcat | grep Capacitor
 ## 📋 Pre-Release Checklist
 
 ### Functionality
+
 - [ ] All features work on iOS
 - [ ] All features work on Android
 - [ ] Camera access works
@@ -263,6 +295,7 @@ adb logcat | grep Capacitor
 - [ ] Offline functionality works
 
 ### UI/UX
+
 - [ ] Layouts render correctly on iPhone SE (smallest)
 - [ ] Layouts render correctly on iPhone 14 Pro Max (largest)
 - [ ] Layouts render correctly on iPad
@@ -274,6 +307,7 @@ adb logcat | grep Capacitor
 - [ ] App icon displays correctly
 
 ### Performance
+
 - [ ] App launches quickly (< 3 seconds)
 - [ ] Scrolling is smooth (60fps)
 - [ ] Transitions are smooth
@@ -282,12 +316,14 @@ adb logcat | grep Capacitor
 - [ ] Network requests optimized
 
 ### Security
+
 - [ ] API keys not hardcoded
 - [ ] HTTPS enforced
 - [ ] Sensitive data encrypted
 - [ ] Permissions properly requested
 
 ### Compliance
+
 - [ ] Privacy policy included
 - [ ] Terms of service included
 - [ ] GDPR compliant (if EU users)
@@ -300,6 +336,7 @@ adb logcat | grep Capacitor
 ## 🐛 Common Issues
 
 ### Build Fails
+
 ```bash
 # Clean and reinstall
 rm -rf node_modules package-lock.json
@@ -308,11 +345,13 @@ npx cap sync
 ```
 
 ### iOS Code Signing
+
 - Ensure valid provisioning profile
 - Check bundle identifier matches
 - Verify certificate is not expired
 
 ### Android Gradle Issues
+
 ```bash
 # Clean Gradle cache
 cd android
@@ -322,6 +361,7 @@ npx cap sync android
 ```
 
 ### White Screen on Launch
+
 - Check that `npm run build` completed
 - Verify `dist` folder has content
 - Run `npx cap sync` again

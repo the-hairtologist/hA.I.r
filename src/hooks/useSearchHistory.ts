@@ -13,7 +13,11 @@ export const useSearchHistory = () => {
       try {
         setHistory(JSON.parse(stored));
       } catch (e) {
-        logger.error('Failed to parse search history', 'useSearchHistory', e as Error);
+        logger.error(
+          'Failed to parse search history',
+          'useSearchHistory',
+          e as Error
+        );
       }
     }
   }, []);

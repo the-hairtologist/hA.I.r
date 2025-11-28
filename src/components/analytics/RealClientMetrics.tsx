@@ -132,7 +132,11 @@ export const RealClientMetrics = () => {
         topClients,
       });
     } catch (error) {
-      logger.error('Error loading client metrics', 'RealClientMetrics', error as Error);
+      logger.error(
+        'Error loading client metrics',
+        'RealClientMetrics',
+        error as Error
+      );
     } finally {
       setLoading(false);
     }

@@ -1,17 +1,20 @@
 # E2E Test Suite
 
 ## Overview
+
 End-to-end tests for critical user journeys using Playwright framework.
 
 ## Setup
 
 ### Installation
+
 ```bash
 npm install -D @playwright/test
 npx playwright install
 ```
 
 ### Running Tests
+
 ```bash
 # Run all tests
 npx playwright test
@@ -48,6 +51,7 @@ E2E/
 ## Test Coverage
 
 ### P0 Flows (Must Pass)
+
 - ✅ User sign up & sign in
 - ✅ Appointment creation & status updates
 - ✅ Client request posting
@@ -55,6 +59,7 @@ E2E/
 - ✅ Keyboard navigation in dialogs
 
 ### P1 Flows (Important)
+
 - Formula creation & saving
 - Message sending
 - Calendar view navigation
@@ -62,6 +67,7 @@ E2E/
 - Profile updates
 
 ### Accessibility Tests
+
 - Keyboard navigation
 - Screen reader compatibility
 - Focus management
@@ -71,6 +77,7 @@ E2E/
 ## Performance Budgets
 
 Tests will fail if:
+
 - Page load > 3s
 - First Contentful Paint > 1.8s
 - Largest Contentful Paint > 2.5s
@@ -84,35 +91,36 @@ Add to `.github/workflows/playwright.yml`:
 name: Playwright Tests
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
 jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 18
-    - name: Install dependencies
-      run: npm ci
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
-    - name: Run Playwright tests
-      run: npx playwright test
-    - uses: actions/upload-artifact@v3
-      if: always()
-      with:
-        name: playwright-report
-        path: playwright-report/
-        retention-days: 30
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+      - name: Run Playwright tests
+        run: npx playwright test
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
 ```
 
 ## Writing New Tests
 
 ### Template
+
 ```typescript
 import { test, expect } from '@playwright/test';
 
@@ -125,10 +133,10 @@ test.describe('Feature Name', () => {
   test('should do something', async ({ page }) => {
     // Arrange
     await page.fill('[name="email"]', 'test@example.com');
-    
+
     // Act
     await page.click('button[type="submit"]');
-    
+
     // Assert
     await expect(page.locator('.success-message')).toBeVisible();
   });
@@ -136,6 +144,7 @@ test.describe('Feature Name', () => {
 ```
 
 ### Best Practices
+
 1. Use data-testid for stable selectors
 2. Wait for network idle on navigation
 3. Test happy path + error states
@@ -146,14 +155,17 @@ test.describe('Feature Name', () => {
 ## Debugging
 
 ### Visual Debugging
+
 ```bash
 npx playwright test --headed --debug
 ```
 
 ### Screenshots on Failure
+
 Tests automatically capture screenshots on failure in `test-results/`
 
 ### Trace Viewer
+
 ```bash
 npx playwright show-trace trace.zip
 ```

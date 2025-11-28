@@ -47,7 +47,7 @@ export function NextAppointmentBanner() {
 
   const loadNextAppointment = async () => {
     if (!user?.id) return;
-    
+
     try {
       // Get stylist profile
       const { data: stylistProfile } = await supabase
@@ -94,7 +94,11 @@ export function NextAppointmentBanner() {
         updateTimeUntil(appointment.appointment_date);
       }
     } catch (error) {
-      logger.error('Error loading next appointment', 'NextAppointmentBanner', error as Error);
+      logger.error(
+        'Error loading next appointment',
+        'NextAppointmentBanner',
+        error as Error
+      );
     } finally {
       setLoading(false);
     }

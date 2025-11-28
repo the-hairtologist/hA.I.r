@@ -10,10 +10,11 @@
 ## ✅ ACTIVE AUTOMATED SYSTEMS
 
 ### 1. Smart Daily Appointment Reminders
+
 - **Frequency**: Daily at 9 AM
 - **Edge Function**: `smart-reminder`
 - **Cron Schedule**: `0 9 * * *`
-- **What It Does**: 
+- **What It Does**:
   - Sends personalized reminders for tomorrow's appointments
   - Includes last formula used for context
   - Email + SMS delivery
@@ -24,7 +25,8 @@
   - ✅ Auto-marks as sent to prevent duplicates
 
 ### 2. Post-Appointment Lifecycle Automation
-- **Frequency**: Daily at 9 AM  
+
+- **Frequency**: Daily at 9 AM
 - **Edge Function**: `automated-appointment-followup`
 - **Cron Schedule**: `0 9 * * *`
 - **What It Does**:
@@ -39,10 +41,11 @@
   - ✅ Checks for existing future bookings before sending rebook
 
 ### 3. No-Show Prevention System
+
 - **Frequency**: Twice daily at 8 AM and 8 PM
 - **Edge Function**: `no-show-prevention`
 - **Cron Schedule**: `0 8,20 * * *`
-- **What It Does**: 
+- **What It Does**:
   - **48-hour confirmation**: First reminder to confirm attendance
   - **24-hour urgent confirmation**: Final reminder for unconfirmed appointments
   - Updates `confirmation_requested_48h`, `confirmation_requested_24h` flags
@@ -53,10 +56,11 @@
   - ✅ Prevents duplicate confirmations
 
 ### 4. Weekly Client Retention Campaign
+
 - **Frequency**: Weekly on Mondays at 9 AM
 - **Edge Function**: `retention-messages`
 - **Cron Schedule**: `0 9 * * 1` (Monday 9 AM)
-- **What It Does**: 
+- **What It Does**:
   - Analyzes all clients using retention scoring
   - Identifies critical/high-risk clients
   - Sends personalized win-back messages
@@ -72,12 +76,14 @@
 ## 🤖 SUPPORTING EDGE FUNCTIONS
 
 ### 5. Smart Upsell AI (Triggered on Demand)
+
 - **Edge Function**: `ai-smart-upsell`
 - **Trigger**: Manual via cron or frontend call
 - **What It Does**: Generates personalized upsell recommendations based on client history
 - **Status**: ✅ Deployed, can be scheduled if needed
 
 ### 6. Aftercare Instructions (Event-Triggered)
+
 - **Edge Function**: `auto-send-aftercare`
 - **Trigger**: When appointment status changes to "completed"
 - **What It Does**: Automatically sends aftercare instructions for the service performed
@@ -88,10 +94,12 @@
 ## 📊 UTILITY EDGE FUNCTIONS (Always Available)
 
 ### Email & SMS Senders
+
 - `send-email` - Email delivery via Resend
 - `send-sms` - SMS delivery via Twilio (function: `send-sms-notification`)
 
 ### Webhooks
+
 - `resend-webhook` - Email tracking (opens, clicks, bounces)
 - `stripe-webhook` - Payment event tracking
 - `zapier-trigger` - External automation triggers
@@ -101,6 +109,7 @@
 ## 🔄 DATABASE MAINTENANCE (Automated)
 
 ### Cleanup Jobs (10 total)
+
 Configured via pg_cron:
 
 1. **Error Logs Cleanup** - Daily (delete logs >30 days)
@@ -119,6 +128,7 @@ Configured via pg_cron:
 ## ⚠️ REDUNDANCY IDENTIFIED
 
 ### ❌ DUPLICATE: `automated-reminders` Function
+
 - **Issue**: Overlaps with `smart-reminder` functionality
 - **Both Send**: Appointment reminders 24-48h before appointments
 - **Difference**: `smart-reminder` is superior (includes formula history)
@@ -129,12 +139,12 @@ Configured via pg_cron:
 
 ## 📋 CRON JOBS STATUS
 
-| Job Name | Schedule | Function | Status |
-|----------|----------|----------|--------|
-| Smart Reminder | Daily 9 AM | `smart-reminder` | ✅ Active |
-| Appointment Followup | Daily 9 AM | `automated-appointment-followup` | ✅ Active |
-| No-Show Prevention | 2x Daily (8 AM, 8 PM) | `no-show-prevention` | ✅ Active |
-| Retention Messages | Weekly Mon 9 AM | `retention-messages` | ✅ Active |
+| Job Name             | Schedule              | Function                         | Status    |
+| -------------------- | --------------------- | -------------------------------- | --------- |
+| Smart Reminder       | Daily 9 AM            | `smart-reminder`                 | ✅ Active |
+| Appointment Followup | Daily 9 AM            | `automated-appointment-followup` | ✅ Active |
+| No-Show Prevention   | 2x Daily (8 AM, 8 PM) | `no-show-prevention`             | ✅ Active |
+| Retention Messages   | Weekly Mon 9 AM       | `retention-messages`             | ✅ Active |
 
 ---
 
@@ -144,12 +154,14 @@ Configured via pg_cron:
 **Status:** Optimized & Production-Ready
 
 ### Recent Upgrades (2025-01-19)
+
 - ✅ Upgraded 3 critical functions to gemini-2.5-pro
 - ✅ Added confidence scoring to all AI responses
 - ✅ Implemented needs_review flagging system
 - ✅ Enhanced metadata tracking (model_used, confidence_score)
 
 **Optimized Functions:**
+
 1. `ai-visual-analysis` → gemini-2.5-pro (+25% accuracy)
 2. `analyze-hair-photo` → gemini-2.5-pro (+30% accuracy)
 3. `ai-formula-analyzer` → gemini-2.5-pro (+35% accuracy)
@@ -177,27 +189,32 @@ See `AI_OPTIMIZATION_COMPLETE.md` for full details.
 ## 🛠️ MANUAL SETUP STILL NEEDED (Optional)
 
 ### 1. Resend Domain Verification
+
 - **Required For**: Email delivery reliability
 - **Action**: Verify domain at https://resend.com/domains
 - **Impact**: Without this, emails may go to spam
 
-### 2. Resend Webhook Configuration  
+### 2. Resend Webhook Configuration
+
 - **Required For**: Email tracking (opens, clicks, bounces)
 - **Action**: Add webhook URL in Resend dashboard
 - **Webhook URL**: `https://iyotklwiwyljospfqnoy.supabase.co/functions/v1/resend-webhook`
 - **Impact**: Currently logs show "No email_id in webhook payload" (non-critical)
 
 ### 3. Stripe Customer Portal Setup
+
 - **Required For**: Subscription management
 - **Action**: Activate portal at https://dashboard.stripe.com/settings/billing/portal
 - **Impact**: Users can't manage subscriptions until configured
 
 ### 4. Google OAuth Consent Screen
+
 - **Required For**: Google Calendar sync & social login
 - **Action**: Configure at https://console.cloud.google.com/apis/credentials/consent
 - **Impact**: Calendar integration won't work until configured
 
 ### 5. Supabase Leaked Password Protection
+
 - **Required For**: Enhanced security
 - **Action**: Enable in Supabase Dashboard → Authentication → Password Protection
 - **Impact**: Non-critical, but recommended for production
@@ -207,18 +224,21 @@ See `AI_OPTIMIZATION_COMPLETE.md` for full details.
 ## 🔍 MONITORING
 
 ### View Automation Status
+
 - **Dashboard**: `/admin/automation` (Admin only)
 - **Shows**: All 6 edge functions + cron jobs status
 - **Updated**: Real-time
 
 ### Check Cron Jobs
+
 ```sql
-SELECT jobname, schedule, active, last_run 
-FROM cron.job 
+SELECT jobname, schedule, active, last_run
+FROM cron.job
 ORDER BY jobname;
 ```
 
 ### View Edge Function Logs
+
 Open backend → Edge Functions → Select function → View logs
 
 ---
@@ -237,18 +257,21 @@ Open backend → Edge Functions → Select function → View logs
 ## 🚀 TESTING COMMANDS
 
 ### Test Smart Reminder
+
 ```bash
 curl -X POST https://iyotklwiwyljospfqnoy.supabase.co/functions/v1/smart-reminder \
   -H "Authorization: Bearer YOUR_ANON_KEY"
 ```
 
 ### Test Retention Messages
+
 ```bash
 curl -X POST https://iyotklwiwyljospfqnoy.supabase.co/functions/v1/retention-messages \
   -H "Authorization: Bearer YOUR_ANON_KEY"
 ```
 
 ### Test No-Show Prevention
+
 ```bash
 curl -X POST https://iyotklwiwyljospfqnoy.supabase.co/functions/v1/no-show-prevention \
   -H "Authorization: Bearer YOUR_ANON_KEY"
@@ -259,6 +282,7 @@ curl -X POST https://iyotklwiwyljospfqnoy.supabase.co/functions/v1/no-show-preve
 ## 🔒 SECURITY & PRIVACY
 
 All automated systems:
+
 - ✅ Use service role key (not exposed to clients)
 - ✅ Respect email preferences (`email_preferences` table)
 - ✅ Respect SMS preferences (`communication_preference` field)
@@ -281,19 +305,19 @@ All automated systems:
 
 ## 🎉 AUTOMATION COVERAGE
 
-| Category | Automation Level | Status |
-|----------|------------------|--------|
-| Appointment Reminders | 100% | ✅ Fully Automated |
-| Post-Appointment Follow-ups | 100% | ✅ Fully Automated |
-| No-Show Prevention | 100% | ✅ Fully Automated |
-| Client Retention | 100% | ✅ Fully Automated |
-| Birthday Greetings | 100% | ✅ Fully Automated |
-| Rebooking Reminders | 100% | ✅ Fully Automated |
-| Aftercare Instructions | 90% | ⚡ Event-Triggered |
-| Database Maintenance | 100% | ✅ Fully Automated |
+| Category                    | Automation Level | Status             |
+| --------------------------- | ---------------- | ------------------ |
+| Appointment Reminders       | 100%             | ✅ Fully Automated |
+| Post-Appointment Follow-ups | 100%             | ✅ Fully Automated |
+| No-Show Prevention          | 100%             | ✅ Fully Automated |
+| Client Retention            | 100%             | ✅ Fully Automated |
+| Birthday Greetings          | 100%             | ✅ Fully Automated |
+| Rebooking Reminders         | 100%             | ✅ Fully Automated |
+| Aftercare Instructions      | 90%              | ⚡ Event-Triggered |
+| Database Maintenance        | 100%             | ✅ Fully Automated |
 
 **Overall Automation Score: 98/100** 🏆
 
 ---
 
-*This automation system is enterprise-grade and production-ready! All critical workflows are automated with proper error handling, rate limiting, and preference respect.* 🚀
+_This automation system is enterprise-grade and production-ready! All critical workflows are automated with proper error handling, rate limiting, and preference respect._ 🚀

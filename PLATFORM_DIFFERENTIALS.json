@@ -262,11 +262,7 @@
       "jailbreak_detection": "Available via plugins",
       "code_obfuscation": "ProGuard (Android), Native (iOS)"
     },
-    "shared_security": [
-      "Supabase RLS",
-      "JWT tokens",
-      "HTTPS only"
-    ],
+    "shared_security": ["Supabase RLS", "JWT tokens", "HTTPS only"],
     "compatibility": "80%"
   },
   "testing": {
@@ -280,10 +276,7 @@
       "unit": "Vitest (shared)",
       "accessibility": "Native accessibility tools"
     },
-    "shared_tests": [
-      "Unit tests for business logic",
-      "API integration tests"
-    ],
+    "shared_tests": ["Unit tests for business logic", "API integration tests"],
     "compatibility": "75%"
   },
   "build_and_deployment": {

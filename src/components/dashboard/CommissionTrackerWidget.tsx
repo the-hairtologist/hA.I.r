@@ -45,12 +45,18 @@ export function CommissionTrackerWidget() {
         .limit(5);
 
       if (error) throw error;
-      setCommissions((data || []).map(c => ({
-        ...c,
-        status: c.status || 'pending'
-      })));
+      setCommissions(
+        (data || []).map(c => ({
+          ...c,
+          status: c.status || 'pending',
+        }))
+      );
     } catch (error) {
-      logger.error('Error loading commissions', 'CommissionTrackerWidget', error as Error);
+      logger.error(
+        'Error loading commissions',
+        'CommissionTrackerWidget',
+        error as Error
+      );
     } finally {
       setLoading(false);
     }

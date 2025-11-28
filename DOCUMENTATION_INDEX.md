@@ -50,17 +50,20 @@ For people using the app (stylists and clients):
 For developers modifying the code:
 
 ### Getting Started
+
 - **[BUILD_GUIDE.md](./BUILD_GUIDE.md)** - Development setup
 - **[QUICK_REFERENCE.md](./QUICK_REFERENCE.md)** - Quick commands
 - **[PROJECT_GUIDELINES.md](./PROJECT_GUIDELINES.md)** - Coding standards
 
 ### Testing
+
 - **[TESTING.md](./TESTING.md)** - Testing overview
 - **[TESTING_COMMANDS.md](./TESTING_COMMANDS.md)** - Test commands
 - **[TESTING_METHODOLOGY.md](./TESTING_METHODOLOGY.md)** - Testing approach
 - **[README_TESTING.md](./README_TESTING.md)** - Test documentation
 
 ### Architecture
+
 - **[DESIGN_SYSTEM.md](./DESIGN_SYSTEM.md)** - UI design system
 - **[SHARED_CORE.md](./SHARED_CORE.md)** - Shared components
 - **[DATA_MAP.md](./DATA_MAP.md)** - Database structure
@@ -132,21 +135,25 @@ WCAG compliance and accessibility:
 **You can skip these!** They're historical records of work completed:
 
 ### Audit Reports (100+ files)
+
 - Files ending in `_AUDIT.md`
 - Files ending in `_REPORT.md`
 - Files ending in `_REVIEW.md`
 
 ### Completion Reports (100+ files)
+
 - Files ending in `_COMPLETE.md`
 - Files ending in `_IMPLEMENTED.md`
 - Files ending in `_APPLIED.md`
 
 ### Status Reports (50+ files)
+
 - Files ending in `_STATUS.md`
 - Files ending in `_SUMMARY.md`
 - Files ending in `_VERIFICATION.md`
 
 ### Examples of files you can skip:
+
 - 12_CATEGORY_QA_EXECUTION.md
 - 99_PERCENT_UPGRADE_COMPLETE.md
 - ABSOLUTE_FINAL_STATUS.md
@@ -200,6 +207,7 @@ Task lists and checklists:
 ### By Task
 
 **Want to:**
+
 - Get started? → [GETTING_STARTED.md](./GETTING_STARTED.md)
 - Deploy? → [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)
 - Build mobile? → [MOBILE_BUILD_GUIDE.md](./MOBILE_BUILD_GUIDE.md)
@@ -211,6 +219,7 @@ Task lists and checklists:
 ### By Role
 
 **I'm a:**
+
 - **New user?** → [GETTING_STARTED.md](./GETTING_STARTED.md)
 - **Stylist/Client?** → [QUICK_START_GUIDE.md](./QUICK_START_GUIDE.md)
 - **Developer?** → [BUILD_GUIDE.md](./BUILD_GUIDE.md)
@@ -223,6 +232,7 @@ Task lists and checklists:
 ## 📁 File Organization
 
 ### Current Structure (Needs Improvement)
+
 ```
 /
 ├── 495+ .md files in root (overwhelming!)
@@ -233,6 +243,7 @@ Task lists and checklists:
 ```
 
 ### Recommended Structure (Future Improvement)
+
 ```
 /
 ├── README.md ⭐
@@ -268,12 +279,14 @@ Task lists and checklists:
 ## 🆘 Still Can't Find It?
 
 **Search tips:**
+
 1. Look for the task (e.g., "deployment", "testing", "mobile")
 2. Check the category above
 3. Use your IDE's file search (Ctrl+P or Cmd+P)
 4. Search file contents (Ctrl+Shift+F or Cmd+Shift+F)
 
 **Common searches:**
+
 - "How to deploy" → DEPLOYMENT_GUIDE.md
 - "Run tests" → TESTING.md
 - "API keys" → MANUAL_ACTION_ITEMS.md

@@ -58,7 +58,15 @@
       "fullDescription": "Transform Your Hair Business with hA.I.r\n\nhA.I.r is the complete hair salon management solution designed for modern stylists and their clients.\n\n🎨 FOR HAIR PROFESSIONALS:\n✓ Smart Appointment Scheduling - Manage your calendar with ease\n✓ Custom Formula Library - Save and organize client color formulas\n✓ Digital Portfolio - Showcase your best work\n✓ Financial Tracking - Monitor payments and earnings\n✓ Client Communication - Direct messaging built-in\n✓ AI Hair Assistant - Get intelligent consultation support\n✓ Subscription Plans - Grow your business with premium features\n\n✨ FOR CLIENTS:\n✓ Discover Local Stylists - Find top-rated professionals near you\n✓ View Portfolios & Reviews - Make informed decisions\n✓ Hair History Tracking - Keep all your formulas in one place\n✓ SMS Reminders - Never miss an appointment\n✓ Easy Booking - Schedule appointments in seconds\n✓ Secure Messaging - Stay connected with your stylist\n\n💼 BUSINESS TOOLS:\n→ Client Management System\n→ Automated Appointment Notifications\n→ Stripe Payment Integration\n→ Google Calendar Sync\n→ Professional Workflow Management\n→ Access Control for Beta Launch\n\n🔒 PRIVACY FIRST:\n• GDPR & CCPA Compliant\n• Bank-Level Encryption\n• Secure Authentication\n• Complete Data Control\n• Export Your Data Anytime\n\n🤖 AI-POWERED FEATURES:\n• Smart Formula Recommendations\n• Personalized Stylist Matching\n• Hair Care Advice Bot\n• Intelligent Search\n\nWhy Choose hA.I.r?\n→ Built by hair professionals, for hair professionals\n→ Intuitive interface requiring zero training\n→ Mobile-first design for on-the-go management\n→ Regular updates with new features\n→ Dedicated customer support\n→ Free for clients, affordable for stylists\n\nJoin the Revolution\nThousands of stylists and clients are already using hA.I.r to streamline their hair care experience. Whether you're managing a busy salon or looking for your perfect stylist, hA.I.r has everything you need.\n\nDownload now and experience the future of hair care management!",
       "category": {
         "primary": "Lifestyle",
-        "tags": ["hair", "salon", "beauty", "appointment", "booking", "business", "professional"]
+        "tags": [
+          "hair",
+          "salon",
+          "beauty",
+          "appointment",
+          "booking",
+          "business",
+          "professional"
+        ]
       },
       "contentRating": "Everyone",
       "graphics": {
@@ -163,15 +171,8 @@
     }
   },
   "localization": {
-    "supportedLanguages": [
-      "English (US)"
-    ],
-    "plannedLanguages": [
-      "Spanish",
-      "French",
-      "German",
-      "Portuguese"
-    ]
+    "supportedLanguages": ["English (US)"],
+    "plannedLanguages": ["Spanish", "French", "German", "Portuguese"]
   },
   "accessibility": {
     "features": [
