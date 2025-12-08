@@ -143,7 +143,7 @@
     "rimraf": "^6.0.1",
     "tailwindcss": "^4.1.17",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.38.0",
+    "typescript-eslint": "^8.48.1",
     "vite": "^7.1.12",
     "vitest": "^4.0.6"
   }
