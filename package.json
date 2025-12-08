@@ -139,7 +139,7 @@
     "jsdom": "^27.1.0",
     "lovable-tagger": "^1.1.10",
     "postcss": "^8.5.6",
-    "prettier": "^3.6.2",
+    "prettier": "^3.7.4",
     "rimraf": "^6.0.1",
     "tailwindcss": "^4.1.17",
     "typescript": "^5.8.3",
